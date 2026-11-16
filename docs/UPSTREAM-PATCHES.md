@@ -1,6 +1,9 @@
 # What this fork changes compared with upstream Vibe v3.2.2
 
 Base: `thewh1teagle/vibe` tag **v3.2.2**, commit `23eae78b864088202e4e3b9987d269fe4da5ebb3`.
+
+> **v3.3.0 update:** section 6 lists the MCP agent interface and the other changes shipped after
+> the v3.2.2 release. The file counts in sections 1–5 describe the v3.2.2 fork delta.
 Everything below is a deliberate delta. The upstream tree stays untouched in
 `upstream/vibe-3.2.2/` for reference; this document is generated from a file-by-file hash
 comparison between that snapshot and the fork.
@@ -93,6 +96,28 @@ the fork copyright.
 | `site/` | **new** — bilingual static landing page (Arabic first, English under `/en/`) with JSON-LD (WebSite, SoftwareApplication, FAQPage), Open Graph/Twitter metadata, `robots.txt`, `sitemap.xml`, local OFL fonts and `llms.txt` |
 
 The upstream engine, model handling and audio pipeline remain untouched by this section.
+
+## 6. MCP agent interface and v3.3.0 delta (added by Sada)
+
+| File | Change |
+| --- | --- |
+| `desktop/src-tauri/src/mcp/mod.rs` | **new** — stdio MCP server: protocol negotiation (2025-06-18 / 2025-03-26 / 2024-11-05), `initialize`, `ping`, `tools/list`, `tools/call`, empty `resources/list`/`prompts/list`, JSON-RPC errors, Arabic-first server instructions |
+| `desktop/src-tauri/src/mcp/tools.rs` | **new** — `sada_transcribe`, `sada_transcripts`, `sada_transcript`, `sada_info`; config/model/engine/FFmpeg/transcripts resolution; actionable errors; unit tests |
+| `desktop/src-tauri/src/mcp/transcripts.rs` | **new** — project-folder and legacy flat transcript scanning, rendering with `HH:MM:SS.mmm` timecodes, previews, tests |
+| `desktop/src-tauri/src/arabic.rs` | **new** — Rust twin of `desktop/src/lib/arabic-text.ts` (same punctuation, whitespace and acronym rules; parity tests) |
+| `desktop/src-tauri/src/main.rs` | `mod arabic;` / `mod mcp;` and an early `mcp::run_if_requested()` hook before any Tauri setup; `--config` override |
+| `desktop/src-tauri/src/cmd/skill.rs` | installed skill folder and metadata renamed to **sada** (`.claude|.codex/skills/sada/SKILL.md`); tests updated |
+| `desktop/src/lib/skill.ts` (+ `skill.test.ts`) | MCP section added before the CLI section: `--mcp`, Claude Code command, Codex TOML and generic JSON registration, four tools, `--config`; `AgentPaths.sada`, `sadaBinary`; frontmatter `name: sada` |
+| `desktop/src/lib/config.ts` | branding URLs point at the Sada repository/releases/issues/privacy instead of upstream Vibe |
+| `desktop/src/mock-tauri/handlers/media-misc.ts` | mock agent paths, skill path and Documents folder renamed for Sada |
+| `docs/AGENT-MCP.md`, `docs/AGENT-MCP.ar.md` | **new** — English and Arabic agent guide (quick start, registration, tool reference, resolution order, protocol, security, troubleshooting) |
+| `docs/VOICEBOX-REVIEW.md`, `docs/VOICEBOX-REVIEW.ar.md` | **new** — Qiyas Council review of Voicebox, verdict table and the criteria for any future TTS work |
+| `docs/releases/v3.3.0.md` | **new** — bilingual release notes |
+| `desktop/src-tauri/tauri.conf.json`, `desktop/src-tauri/Cargo.toml`, `Cargo.lock`, `CITATION.cff` | version `3.2.2` → `3.3.0` |
+| `README.md`, `README.ar.md`, `CHANGELOG.md`, `AGENTS.md`, `llms.txt`, `site/` | MCP feature, agent FAQ, 3.3.0 installer names, version and release-note links |
+
+No dependency was added: the MCP server uses the existing Rust std, `serde`/`serde_json` and the
+existing engine binary. The transport is stdio only — no port, no listener, no network endpoint.
 
 ## Deliberately not changed
 

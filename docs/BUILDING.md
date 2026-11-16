@@ -219,6 +219,21 @@ This fork uses the upstream build unchanged, with three practical additions:
 3. Pin pnpm 10 (the repository uses pnpm 10.4.1; `pnpm install` with pnpm 11 changes the lockfile
    and can break the Tauri CLI invocation).
 
+4. `cargo build --release` in `desktop/src-tauri` produces `target/release/vibe.exe` (the crate
+   name is still `vibe`); `pnpm exec tauri build` copies it to the bundled `Sada.exe` and builds the
+   NSIS installer. The MCP server is part of that executable, so a plain cargo build is enough to
+   test it headlessly:
+
+   ```console
+   cargo build --release
+   cargo test --release mcp::
+   cargo test --release arabic::
+   target/release/vibe.exe --mcp --config <scratch-config.json> < requests.jsonl
+   ```
+
+   Requests/responses are one JSON line each; stdout carries protocol frames only and stderr carries
+   diagnostics. No port is opened, so nothing needs firewall rules.
+
 The Windows build was verified with Rust 1.100.0, Node.js 24.11.1, pnpm 10.4.1 and the MSVC
 2022 Build Tools; it produces `desktop/src-tauri/target/release/bundle/nsis/*-setup.exe`.
 `beforeBuildCommand` runs `pnpm build` (paraglide compile → tsc → vite) automatically, so a

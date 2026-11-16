@@ -4,6 +4,37 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.3.0 — 2026-11-16
+
+Agent interface release: Sada can now act as an MCP server for AI agents, with Arabic-first defaults.
+
+### Added
+
+- **MCP server** (`Sada.exe --mcp`): JSON-RPC over stdio — initialize, ping, tools/list,
+  tools/call, empty resources/prompts; protocol revisions 2025-06-18 / 2025-03-26 / 2024-11-05.
+  No port, no network, no GUI.
+- **Four tools**: `sada_transcribe` (local audio/video to Arabic transcript, optional
+  timestamps, language auto, normalization on by default), `sada_transcripts` (list saved
+  transcripts), `sada_transcript` (read one, optional timecodes and speakers), `sada_info`
+  (install diagnostics).
+- **Rust twin of the Arabic normaliser** (`desktop/src-tauri/src/arabic.rs`) shared by MCP
+  output, with parity tests against the TypeScript rules.
+- **Documentation**: [docs/AGENT-MCP.md](docs/AGENT-MCP.md),
+  [docs/AGENT-MCP.ar.md](docs/AGENT-MCP.ar.md), [docs/VOICEBOX-REVIEW.md](docs/VOICEBOX-REVIEW.md)
+  and [docs/VOICEBOX-REVIEW.ar.md](docs/VOICEBOX-REVIEW.ar.md).
+
+### Changed
+
+- The installed agent skill is now **sada** (`.claude|.codex/skills/sada/SKILL.md`) and leads
+  with MCP registration, keeping the transcript-folder, local-API and engine-CLI routes as
+  fallbacks.
+- Settings About/repository/privacy links point at the Sada repository instead of upstream Vibe.
+- Version bumped to 3.3.0.
+
+### Removed
+
+- Nothing. No new dependencies, no extra binaries, no extra models.
+
 ## v3.2.2 — 2026-11-16
 
 First public release of Sada, built from Vibe v3.2.2 (commit `23eae78`).

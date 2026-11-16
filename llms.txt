@@ -3,19 +3,23 @@
 > Sada is an Arabic-first, fully offline speech-to-text desktop app for Windows. It is an
 > independent fork of Vibe v3.2.2 (MIT) with a complete Arabic (ar-IQ) interface, RTL layout,
 > Arabic transcription defaults, Arabic transcript normalization and Arabic PDF export. Audio never
-> leaves the machine. No telemetry, no updater, no account, no phone relay.
+> leaves the machine. No telemetry, no updater, no account, no phone relay. Since 3.3.0 the same
+> executable is a local MCP server, so AI agents can transcribe Arabic audio and read saved
+> transcripts over stdio with no port and no network.
 
 ## Key facts
 
 - Name: Sada (صدى) — "echo"
-- Version: 3.2.2
+- Version: 3.3.0
 - Platform: Windows 10/11 x64 (Tauri 2 desktop app)
 - License: MIT (fork of Vibe v3.2.2, MIT); bundled FFmpeg is GPLv3 (mere aggregation, see notices)
 - Engine: whisper.cpp via the bundled `vibe-server` sidecar; models are NOT bundled
-- Installer: `Sada_3.2.2_x64-setup.exe` from GitHub Releases, unsigned, per-user
+- Installer: `Sada_3.3.0_x64-setup.exe` from GitHub Releases, unsigned, per-user
   (`%LOCALAPPDATA%\Sada\`)
 - Languages: Arabic `ar-IQ` first; 20+ inherited upstream locales available
 - Network: only user-requested actions (model download, pasted URL, optional summary provider)
+- MCP server: `Sada.exe --mcp` (stdio, no port) with four tools: `sada_transcribe`,
+  `sada_transcripts`, `sada_transcript`, `sada_info`; Arabic transcription defaults preserved
 
 ## Documentation
 
@@ -26,7 +30,9 @@
 - [Building from source](docs/BUILDING.md)
 - [Privacy](PRIVACY.md)
 - [Third-party notices and licences](THIRD-PARTY-NOTICES.md)
-- [Release notes v3.2.2](docs/releases/v3.2.2.md)
+- [MCP guide](docs/AGENT-MCP.md) · [MCP guide in Arabic](docs/AGENT-MCP.ar.md)
+- [Voicebox review (why MCP, what was not copied)](docs/VOICEBOX-REVIEW.md)
+- [Release notes v3.3.0](docs/releases/v3.3.0.md)
 - [Website](https://alshahia.github.io/sada/)
 
 ## For AI agents and researchers
@@ -34,8 +40,10 @@
 - Source layout: `desktop/` (React + Tauri shell), `i18n/desktop/` (catalogues incl.
   `ar-IQ.json`, 704 keys), `server/` (Rust whisper.cpp sidecar), `docs/`, `site/`.
 - Build/test: `chore setup x86_64-pc-windows-msvc`, `cd desktop && pnpm install && pnpm test && pnpm build`.
-- Tests: `pnpm test` = vitest; 26 files / 130 tests at release time.
+- Tests: `pnpm test` = vitest (26 files / 132 tests); `cargo test --release` = 83 Rust tests.
 - Do not assume the model is included; a `ggml-*.bin` is required at runtime.
+- Agent integration: run `Sada.exe --mcp` as a stdio MCP server; no HTTP port is opened. The
+  installed agent skill lives at `.claude|.codex/skills/sada/SKILL.md`.
 - The fork keeps upstream MIT copyright notices; cite upstream Vibe as well as this repository
   (see `CITATION.cff`).
 

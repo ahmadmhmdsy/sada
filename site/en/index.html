@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sada (صدى) — Arabic-first offline speech-to-text for Windows</title>
-  <meta name="description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe." />
-  <meta name="keywords" content="Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, Whisper Windows app, RTL interface, Arabic transcription, Iraqi Arabic, SRT VTT PDF export, local transcription, private, Sada, صدى" />
+  <meta name="description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe. Since 3.3.0 it also ships a built-in MCP server for AI agents." />
+  <meta name="keywords" content="Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, Whisper Windows app, RTL interface, Arabic transcription, Iraqi Arabic, SRT VTT PDF export, local transcription, private, Sada, صدى, MCP, AI agents, Model Context Protocol, agent tools" />
   <meta name="author" content="Ahmad Mahmoud" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#0f6b62" />
@@ -20,14 +20,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sada (صدى)" />
   <meta property="og:title" content="Sada (صدى) — Arabic-first offline speech-to-text for Windows" />
-  <meta property="og:description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe." />
+  <meta property="og:description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe. Since 3.3.0 it also ships a built-in MCP server for AI agents." />
   <meta property="og:url" content="https://alshahia.github.io/sada/en/" />
   <meta property="og:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:locale:alternate" content="ar_IQ" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Sada (صدى) — Arabic-first offline speech-to-text for Windows" />
-  <meta name="twitter:description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe." />
+  <meta name="twitter:description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe. Since 3.3.0 it also ships a built-in MCP server for AI agents." />
   <meta name="twitter:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
 
   <script type="application/ld+json">
@@ -58,11 +58,11 @@
         "صدى (Sada)",
         "Sada Arabic transcription"
       ],
-      "description": "Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe.",
+      "description": "Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe. Since 3.3.0 it also ships a built-in MCP server for AI agents.",
       "applicationCategory": "UtilitiesApplication",
       "applicationSubCategory": "Speech-to-text",
       "operatingSystem": "Windows 10, Windows 11",
-      "softwareVersion": "3.2.2",
+      "softwareVersion": "3.3.0",
       "datePublished": "2026-11-16",
       "inLanguage": [
         "ar",
@@ -140,7 +140,7 @@
           "name": "How is it different from Vibe?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Sada is a fork of Vibe v3.2.2 with full Arabic localization and RTL, Arabic defaults, Arabic PDF export, and removal of telemetry, auto-update and the phone relay, plus its own name and icon."
+            "text": "Sada is a fork of Vibe v3.2.2 with full Arabic localization and RTL, Arabic defaults, Arabic PDF export, and removal of telemetry, auto-update and the phone relay, plus its own name and icon, and since 3.3.0 a built-in MCP server for agents."
           }
         },
         {
@@ -183,9 +183,9 @@
         <div>
           <p class="eyebrow">Free · Open source · MIT</p>
           <h1>Arabic-first transcription, <span class="accent">on your own computer</span>.</h1>
-          <p class="lead">Sada turns audio and video into text on Windows, with Arabic first: a right-to-left interface, Arabic transcription defaults, IBM Plex Sans Arabic typography and Arabic-aware transcript cleanup. The Whisper engine runs locally — nothing is uploaded.</p>
+          <p class="lead">Sada turns audio and video into text on Windows, with Arabic first: a right-to-left interface, Arabic transcription defaults, IBM Plex Sans Arabic typography and Arabic-aware transcript cleanup. The Whisper engine runs locally — nothing is uploaded. Since 3.3.0 a built-in MCP server gives agents Arabic ears with no port and no account.</p>
           <div class="cta">
-            <a class="btn btn-primary" href="https://github.com/alshahia/sada/releases/latest" rel="noopener">Download Sada 3.2.2</a>
+            <a class="btn btn-primary" href="https://github.com/alshahia/sada/releases/latest" rel="noopener">Download Sada 3.3.0</a>
             <a class="btn btn-ghost" href="https://github.com/alshahia/sada" rel="noopener">Source on GitHub</a>
           </div>
           <ul class="chips">
@@ -237,6 +237,12 @@
             <h3>Private by design</h3>
             <p>No analytics, no updater, no account, no phone relay. The network is used only for actions you request.</p>
           </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">7</div>
+            <h3>Agent-ready (MCP)</h3>
+            <p>The app executable is a local MCP server over stdio: <code>Sada.exe --mcp</code> transcribes files, lists and reads saved transcripts and reports install details for Claude Code, Codex and other MCP clients.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -247,7 +253,7 @@
         <p class="section-lead">The app installs per user and needs no administrator rights. The model is downloaded once.</p>
         <div class="install-grid">
           <ol class="steps">
-          <li><div><strong>Download the installer</strong><span>From the releases page: Sada_3.2.2_x64-setup.exe.</span></div></li>
+          <li><div><strong>Download the installer</strong><span>From the releases page: Sada_3.3.0_x64-setup.exe.</span></div></li>
           <li><div><strong>Verify the checksum</strong><span>Compare the SHA-256 with the attached SHA256SUMS.txt.</span></div></li>
           <li><div><strong>Run the installer</strong><span>Installs into %LOCALAPPDATA%\Sada — no admin rights. SmartScreen may warn because it is unsigned.</span></div></li>
           <li><div><strong>Download a model once</strong><span>Settings → Models: large-v3-turbo (~1.6GB) or an existing ggml-*.bin file.</span></div></li>
@@ -294,8 +300,12 @@
           <p>The installer is not code-signed. Verify the published SHA-256 checksum, or build the app from source yourself.</p>
         </details>
         <details>
+          <summary>Can AI agents use Sada?</summary>
+          <p>Yes, since 3.3.0. <code>Sada.exe --mcp</code> is a local MCP server over stdio: transcribe a file, list and read saved transcripts, and report install details. Register it in Claude Code or any MCP client. Local only: no port, no account, no network. See <a href="https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.md" rel="noopener">docs/AGENT-MCP.md</a>.</p>
+        </details>
+        <details>
           <summary>How is it different from Vibe?</summary>
-          <p>Sada is a fork of Vibe v3.2.2 with full Arabic localization and RTL, Arabic defaults, Arabic PDF export, and removal of telemetry, auto-update and the phone relay, plus its own name and icon.</p>
+          <p>Sada is a fork of Vibe v3.2.2 with full Arabic localization and RTL, Arabic defaults, Arabic PDF export, and removal of telemetry, auto-update and the phone relay, plus its own name and icon, and since 3.3.0 a built-in MCP server for agents.</p>
         </details>
         <details>
           <summary>Where are my files?</summary>
@@ -320,7 +330,7 @@
         </div>
       </div>
       <p class="attribution">Sada is an independent fork of <a href="https://github.com/thewh1teagle/vibe" rel="noopener">Vibe</a> (MIT), not affiliated with or endorsed by the Vibe author. “Vibe” remains the property of its author.</p>
-      <small>© 2026 Sada · <a href="https://github.com/alshahia/sada/releases/latest" rel="noopener">v3.2.2</a> · <a href="https://github.com/alshahia/sada" rel="noopener">GitHub</a></small>
+      <small>© 2026 Sada · <a href="https://github.com/alshahia/sada/releases/latest" rel="noopener">v3.3.0</a> · <a href="https://github.com/alshahia/sada" rel="noopener">GitHub</a></small>
     </div>
   </footer>
 </body>

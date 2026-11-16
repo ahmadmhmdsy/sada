@@ -26,8 +26,13 @@ tag **v3.2.2**, with the telemetry, auto-updater and phone relay removed and a c
 localization added. Nothing is uploaded: the Whisper engine runs locally through the bundled
 `vibe-server` sidecar, and the installer bundles its own FFmpeg for audio decoding.
 
+Since 3.3.0 Sada is also **agent-ready**: `Sada.exe --mcp` runs a local MCP server over stdio,
+so Claude Code, Codex and other agents can transcribe Arabic audio and read saved transcripts
+directly — no server port, no account, no network. See [docs/AGENT-MCP.md](docs/AGENT-MCP.md).
+
 - **Keywords:** offline speech-to-text, Arabic ASR, whisper.cpp, Whisper large-v3-turbo, RTL UI,
-  MSA and Iraqi Arabic, Windows transcription app, private voice-to-text, SRT/VTT/PDF/DOCX export.
+  MSA and Iraqi Arabic, Windows transcription app, private voice-to-text, SRT/VTT/PDF/DOCX export,
+  MCP server for AI agents, local agent tools.
 
 ## Why Sada
 
@@ -45,6 +50,8 @@ that:
 - **Truly offline and private** — no account, no analytics, no crash reporting, no auto-update, no
   phone relay. The only network calls happen when *you* ask for them (model download, a URL you
   paste, or a summary provider you configure with your own key).
+- **Agent-ready (MCP)** — `Sada.exe --mcp` gives agents Arabic ears over stdio: transcribe a
+  file, list or read saved transcripts, inspect the install. No port, no toggle, no window.
 
 ## Features
 
@@ -58,11 +65,12 @@ that:
 | **Recording** | Microphone and system-audio capture. |
 | **Projects** | Saved transcripts with search, reopen and re-export. |
 | **Optional summaries** | Claude or local Ollama, with your own key — off by default. |
+| **Agents (MCP)** | `Sada.exe --mcp` — four stdio tools for Claude Code, Codex and other MCP clients; Arabic defaults, local only. |
 | **Languages** | Arabic (`ar-IQ`) plus 20+ inherited locales. |
 
 ## Install
 
-1. Download **`Sada_3.2.2_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
+1. Download **`Sada_3.3.0_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
    and verify its SHA-256 against the attached `SHA256SUMS.txt`.
 2. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator rights
    are required.
@@ -101,8 +109,13 @@ source, not switched off at runtime.
 
 This release was built from the source in this repository and checked end-to-end:
 
-- 26 test files / 130 unit tests passing (`pnpm test`, exit 0), including Arabic text
+- 26 test files / 132 unit tests passing (`pnpm test`, exit 0), including Arabic text
   normalization, Arabic PDF export, boot-locale and RTL tests.
+- Rust: 83 tests passing (`cargo test --release`), including 19 MCP protocol/tools tests and 9
+  Arabic normaliser tests.
+- MCP verified end-to-end: `Sada.exe --mcp` answered initialize, tools/list, sada_info,
+  sada_transcripts, sada_transcript and sada_transcribe over pipes with a real model and Arabic
+  audio.
 - Fresh-profile launch verified Arabic/RTL (`lang=ar-IQ`, `dir=rtl`) by inspecting the running
   WebView, not just the source.
 - Arabic transcription verified with the app's own engine on Modern Standard Arabic and Iraqi
@@ -134,7 +147,7 @@ pinned release from the upstream server tag in [.server-version](.server-version
 desktop/          React 19 + Tauri 2 desktop app (frontend, Rust shell, icons, fonts)
 i18n/desktop/     Translation catalogues, including ar-IQ.json (704 keys)
 server/           vibe-server: Rust sidecar around whisper.cpp (upstream engine)
-docs/             Architecture, building, verification, licences, release notes
+docs/             Architecture, building, verification, licences, release notes, MCP guide, Voicebox review
 site/             Bilingual static landing page (GitHub Pages, with llms.txt for agents)
 .github/workflows CI (build + tests), Release (tag → Windows installer + GitHub release), Deploy site
 ```
@@ -150,6 +163,14 @@ Yes. MIT-licensed source; the Windows installer is free. No account, no subscrip
 <summary><strong>Does it work without internet?</strong></summary>
 Yes, after the one-time model download. Transcription is fully local; network is used only for
 what you explicitly request.
+</details>
+
+<details>
+<summary><strong>Can AI agents use Sada?</strong></summary>
+Yes. `Sada.exe --mcp` is a local MCP server over stdio with four tools: transcribe a file, list
+saved transcripts, read one transcript and report install info. Register it in Claude Code with
+`claude mcp add sada -- ".../Sada.exe" --mcp`, or in any MCP client JSON config. It is local
+only: no port, no account, no network. See [docs/AGENT-MCP.md](docs/AGENT-MCP.md).
 </details>
 
 <details>

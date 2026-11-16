@@ -1,8 +1,10 @@
-# Vibe Architecture
+# Sada Architecture
 
 ## Overview
 
-Vibe is a desktop transcription app built with **Tauri** (Rust + TypeScript frontend).
+Sada is a desktop transcription app built with **Tauri** (Rust + TypeScript frontend). It is a fork
+of Vibe v3.2.2; the sections below describe the upstream architecture first, then the Sada-specific
+additions (Arabic first-run/normalisation and the MCP agent interface).
 
 ## Components
 
@@ -35,8 +37,32 @@ Vibe is a desktop transcription app built with **Tauri** (Rust + TypeScript fron
 3. Binaries placed in `desktop/src-tauri/binaries/`
 4. Tauri bundles `vibe-server` and, where configured, `ffmpeg` into the final app
 
+## Agent interface — MCP (Sada 3.3.0)
+
+`Sada.exe --mcp` starts a local MCP server before any Tauri builder or window is created, so it
+works headlessly with no GUI, no port and no network.
+
+- `desktop/src-tauri/src/mcp/mod.rs` — stdio JSON-RPC loop: `initialize` (protocol revisions
+  2025-06-18 / 2025-03-26 / 2024-11-05), `ping`, `tools/list`, `tools/call`, empty
+  `resources/list`/`prompts/list`, parse and method errors. One flushed JSON line per frame on
+  stdout; diagnostics on stderr.
+- `desktop/src-tauri/src/mcp/tools.rs` — four tools (`sada_transcribe`, `sada_transcripts`,
+  `sada_transcript`, `sada_info`) and install resolution.
+- `desktop/src-tauri/src/mcp/transcripts.rs` — scans saved project folders and legacy flat
+  records, renders them with `HH:MM:SS.mmm` timecodes.
+- `desktop/src-tauri/src/arabic.rs` — Rust twin of `desktop/src/lib/arabic-text.ts`; same
+  normalisation rules so live UI text and MCP output cannot drift.
+- Resolution order: config file (`--config`, `SADA_CONFIG_PATH`, `%APPDATA%|%LOCALAPPDATA%` +
+  legacy Vibe folders, flat dotted keys such as `model.path`), model (`model.path` or the tool
+  argument), engine (`SADA_ENGINE`, exe-relative `vibe-server*.exe`, `binaries/` ancestors, PATH),
+  FFmpeg (`VIBE_SERVER_FFMPEG_PATH` or next to the engine) and transcripts folder
+  (`transcription.projectsPath`, `SADA_TRANSCRIPTS_DIR`, Documents/Sada).
+- Language defaults to the app language (`transcription.modelOptions.lang`), which is `ar` on a
+  fresh profile; the tool schema offers `language: "auto"` and optional translation.
+- Tests: `cargo test --release` covers `mcp::` and `arabic::`.
+
 ## Key Point for Agents
 
-Native runtime compatibility issues for transcription usually come from the server or its linked ggml libraries, not the Vibe UI code.
+Native runtime compatibility issues for transcription usually come from the server or its linked ggml libraries, not the UI code. MCP/transcription integration issues almost always come from install resolution (config path, model path, sidecar location) — check that first, and keep the transport stdio-only: no HTTP server, port or listener may be added to MCP.
 
 To fix one, change `server/` (a ggml fix goes in `server/libs/patches/` with a revision bump), tag a `server-v*` release, then bump `.server-version` here.

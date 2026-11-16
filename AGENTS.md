@@ -12,7 +12,7 @@ desktop app (React 19 frontend, Rust shell) around the upstream `vibe-server` si
 | `desktop/` | The app: React 19 + Vite frontend, Tauri shell under `desktop/src-tauri/`, icons and fonts |
 | `i18n/desktop/` | UI catalogues; `ar-IQ.json` is the Arabic-first catalogue (704 keys, must stay complete) |
 | `server/` | `vibe-server` engine (upstream Rust code around whisper.cpp); not modified by this fork |
-| `docs/` | Architecture, building, verification, licences, release notes, upstream delta |
+| `docs/` | Architecture, building, verification, licences, release notes, upstream delta, MCP guide, Voicebox review |
 | `site/` | Static bilingual landing page deployed to GitHub Pages (includes `llms.txt` for agents) |
 | `.github/workflows/` | `ci.yml` (build + tests), `release.yml` (tag → Windows installer + GitHub release), `pages.yml` |
 
@@ -22,13 +22,18 @@ desktop app (React 19 frontend, Rust shell) around the upstream `vibe-server` si
 chore setup x86_64-pc-windows-msvc   # fetch pinned vibe-server + ffmpeg sidecars (not in git)
 cd desktop
 pnpm install
-pnpm test                            # vitest, 26 files / 130 tests at release time
+pnpm test                            # vitest, 26 files / 132 tests at release time
 pnpm build                           # paraglide compile → tsc → vite build
 pnpm exec tauri build                # NSIS installer under target/release/bundle/nsis/
 ```
 
 CI runs `pnpm install --frozen-lockfile`, `pnpm build` and `pnpm test` on every push and PR.
 Do not add a model to the repository: `*.bin` is ignored and models are downloaded by users.
+
+The MCP server lives in Rust and must keep working headlessly: `Sada.exe --mcp` is handled
+before any Tauri setup, speaks JSON-RPC over stdin/stdout, and must never open a port or touch the
+GUI. It is covered by `cargo test --release` (the mcp:: and arabic:: modules). Keep the agent
+skill text in `desktop/src/lib/skill.ts` in sync when tool names or registration steps change.
 
 ## Invariants of this fork
 
@@ -61,7 +66,9 @@ inside both `index.html` files in sync with the repository facts (version, links
 
 - [README English](README.md) · [README Arabic](README.ar.md)
 - [Architecture](docs/ARCHITECTURE.md) · [Building](docs/BUILDING.md)
+- [MCP guide](docs/AGENT-MCP.md) · [MCP guide in Arabic](docs/AGENT-MCP.ar.md)
 - [Upstream delta](docs/UPSTREAM-PATCHES.md) · [Verification](docs/VERIFICATION.md)
+- [Voicebox review](docs/VOICEBOX-REVIEW.md) · [Voicebox review in Arabic](docs/VOICEBOX-REVIEW.ar.md)
 - [Translations](docs/TRANSLATIONS.md) · [Privacy](PRIVACY.md) · [Security](SECURITY.md)
 - [Release notes](docs/releases/) · [Third-party notices](THIRD-PARTY-NOTICES.md)
 

@@ -1,16 +1,16 @@
-export const aboutURL = 'https://github.com/thewh1teagle/vibe'
-export const repoURL = 'https://github.com/thewh1teagle/vibe'
-export const updateVersionURL = 'https://github.com/thewh1teagle/vibe/releases/latest'
-export const modelsDocURL = 'https://github.com/thewh1teagle/vibe#models'
+export const aboutURL = 'https://github.com/alshahia/sada'
+export const repoURL = 'https://github.com/alshahia/sada'
+export const updateVersionURL = 'https://github.com/alshahia/sada/releases/latest'
+export const modelsDocURL = 'https://github.com/alshahia/sada#first-run-and-models'
 /**
  * Release notes. With a version it opens that release, otherwise the whole list —
  * the page falls back to English for a release this locale has not translated.
  */
 /** Upstream release notes, for the version this fork is based on. */
-export const changelogURL = (_version?: string) => 'https://github.com/thewh1teagle/vibe/releases'
-export const discordURL = 'https://github.com/thewh1teagle/vibe'
-export const supportVibeURL = 'https://github.com/thewh1teagle/vibe'
-export const privacyPolicyURL = 'https://github.com/thewh1teagle/vibe'
+export const changelogURL = (_version?: string) => 'https://github.com/alshahia/sada/releases'
+export const discordURL = 'https://github.com/alshahia/sada/issues'
+export const supportVibeURL = 'https://github.com/alshahia/sada/issues'
+export const privacyPolicyURL = 'https://github.com/alshahia/sada/blob/master/PRIVACY.md'
 export const storeFilename = 'app_config.json'
 
 /** What the catalog knows about a finished download, beyond the bytes themselves. */

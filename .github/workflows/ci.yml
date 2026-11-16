@@ -41,6 +41,19 @@ jobs:
           cache: pnpm
           cache-dependency-path: desktop/pnpm-lock.yaml
 
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri
+
+      - name: Setup chore (sidecar fetcher)
+        uses: getchore/setup-chore@v1
+        with:
+          version: v1.6.0
+
       - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
 
@@ -49,3 +62,11 @@ jobs:
 
       - name: Run unit tests
         run: pnpm test
+
+      - name: Fetch the pinned sidecars (vibe-server + ffmpeg)
+        working-directory: .
+        run: chore setup x86_64-pc-windows-msvc
+
+      - name: Run Rust tests (MCP, Arabic normaliser, app)
+        working-directory: desktop/src-tauri
+        run: cargo test --release

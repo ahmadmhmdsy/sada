@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag to publish (for example v3.2.2). Defaults to the selected ref."
+        description: "Tag to publish (for example v3.3.0). Defaults to the selected ref."
         required: false
         type: string
 
@@ -86,6 +86,14 @@ jobs:
 
       - name: Fetch the pinned sidecars (vibe-server + ffmpeg)
         run: chore setup x86_64-pc-windows-msvc
+
+      - name: Build the frontend once for the Rust test build
+        working-directory: desktop
+        run: pnpm build
+
+      - name: Run Rust tests (MCP, Arabic normaliser, app)
+        working-directory: desktop/src-tauri
+        run: cargo test --release
 
       - name: Build the NSIS installer
         working-directory: desktop

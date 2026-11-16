@@ -8,7 +8,7 @@ import { transcriptsFolder } from './transcripts-store'
 /** Executables an agent can drive, as resolved by `cmd::skill::get_agent_paths`. */
 interface AgentPaths {
 	server: string | null
-	vibe: string | null
+	sada: string | null
 }
 
 /**
@@ -42,7 +42,7 @@ export interface SkillContext {
 	/** Absolute path of the bundled `server` binary, or null when it cannot be resolved. */
 	serverBinary: string | null
 	/** Absolute path of the Sada executable, or null when it cannot be resolved. */
-	vibeBinary: string | null
+	sadaBinary: string | null
 }
 
 /**
@@ -69,6 +69,51 @@ function baseUrlSection(context: SkillContext) {
 	].join('\n')
 }
 
+/** How to put Sada in front of an agent as an MCP server. Preferred over the HTTP API: one
+ * process, no port, no stale base URL, and the GUI does not need to be running. */
+function mcpSection(context: SkillContext) {
+	const executable = context.sadaBinary ?? 'Sada.exe'
+	return [
+		'# MCP: Sada as an agent tool (preferred)',
+		'',
+		'Sada is itself an MCP server. Start the app executable with the --mcp argument:',
+		'',
+		'  ' + executable + ' --mcp',
+		'',
+		'It speaks JSON-RPC over stdin/stdout: no port, no running GUI, and no network. Register it',
+		'in your MCP client once and it stays available:',
+		'',
+		'Claude Code:',
+		'',
+		'  claude mcp add sada -- "' + executable + '" --mcp',
+		'',
+		'Codex (~/.codex/config.toml):',
+		'',
+		'  [mcp_servers.sada]',
+		'  command = "' + executable + '"',
+		'  args = ["--mcp"]',
+		'',
+		'Any other MCP client (JSON configuration):',
+		'',
+		'  { "mcpServers": { "sada": { "command": "' + executable + '", "args": ["--mcp"] } } }',
+		'',
+		'Tools:',
+		'',
+		'- sada_transcribe: transcribe a local audio or video file. Defaults to the configured',
+		'  language (Arabic), never uploads media and normalises Arabic punctuation; pass',
+		'  language: "auto" to detect, timestamps: true for [start --> end] lines.',
+		'- sada_transcripts: list saved transcripts, newest first, with previews.',
+		'- sada_transcript: read one saved transcript, newest by default; optional timestamps',
+		'  and speakers.',
+		'- sada_info: report the model, engine, transcript folder and config path, and whether',
+		'  each file resolves.',
+		'',
+		'Use --config <path> after --mcp to point the server at a non-default app_config.json.',
+		'When MCP is not configured, fall back to reading the transcript folder directly (next',
+		'sections) or to running the bundled engine from the command line.',
+	].join('\n')
+}
+
 /** The bundled binaries: what an agent can actually run, and what it must ask before running. */
 function commandLineSection(context: SkillContext) {
 	return [
@@ -83,10 +128,10 @@ function commandLineSection(context: SkillContext) {
 		'`devices`, and `transcribe` needs a local whisper.cpp ggml model (the one Sada uses is under',
 		'`model.path` in the config file).',
 		'',
-		context.vibeBinary
-			? `The Sada app itself is at \`${context.vibeBinary}\`. It takes no useful command line flags —`
-			: 'The Sada app itself takes no useful command line flags —',
-		'`--help` prints nothing and exits 0, so never drive Sada from the shell. If the user would be',
+		context.sadaBinary
+			? `The Sada app itself is at \`${context.sadaBinary}\`. It takes one useful mode, --mcp (above), and no other command line features.`
+			: 'The Sada app itself takes no useful command line flags apart from --mcp —',
+		'`--help` prints nothing and exits 0, so do not drive Sada from the shell outside MCP. If the user would be',
 		'better off in the app, say so and let them open it: do not launch a GUI application on someone',
 		"else's machine without asking first.",
 	].join('\n')
@@ -188,9 +233,9 @@ function settingsSection(context: SkillContext) {
 		'~~~json',
 		'{',
 		'  "general.theme": "dark",',
-		'  "general.displayLanguage": "en-US",',
+		'  "general.displayLanguage": "ar-IQ",',
 		'  "transcription.recognizeSpeakers": false,',
-		'  "transcription.modelOptions": { "lang": "en", "n_threads": 4 },',
+		'  "transcription.modelOptions": { "lang": "ar", "n_threads": 4 },',
 		`  "dictation.shortcut": "${context.dictationShortcut}"`,
 		'}',
 		'~~~',
@@ -207,6 +252,7 @@ function settingsSection(context: SkillContext) {
 export function composeSkill(context: SkillContext) {
 	return [
 		context.serverSkill.trimEnd(),
+		mcpSection(context),
 		baseUrlSection(context),
 		commandLineSection(context),
 		transcriptsSection(context),
@@ -219,8 +265,8 @@ export function composeSkill(context: SkillContext) {
 export function withFrontmatter(body: string) {
 	return [
 		'---',
-		'name: vibe',
-		'description: Work with Sada — read saved transcripts, transcribe audio through the local Sada API, and read or change Sada settings.',
+		'name: sada',
+		"description: Work with Sada — transcribe local media and read saved transcripts through Sada's MCP server, local API or bundled engine, and read or change Sada settings.",
 		'---',
 		'',
 		body,
@@ -230,7 +276,7 @@ export function withFrontmatter(body: string) {
 /** Gather everything the document needs. Throws only when the local API is unreachable. */
 async function skillContext(baseUrl: string): Promise<SkillContext> {
 	const response = await tauriFetch(`${baseUrl}/skill`)
-	const paths = await invoke<AgentPaths>('get_agent_paths').catch(() => ({ server: null, vibe: null }))
+	const paths = await invoke<AgentPaths>('get_agent_paths').catch(() => ({ server: null, sada: null }))
 	return {
 		baseUrl,
 		serverSkill: await response.text(),
@@ -238,7 +284,7 @@ async function skillContext(baseUrl: string): Promise<SkillContext> {
 		configPath: await invoke<string>('get_config_path').catch(() => null),
 		dictationShortcut: config.getDefaultHotkeyShortcut(),
 		serverBinary: paths.server,
-		vibeBinary: paths.vibe,
+		sadaBinary: paths.sada,
 	}
 }
 
@@ -248,7 +294,7 @@ export async function buildSkill(baseUrl: string) {
 }
 
 /**
- * Write the skill to `<home>/.claude|.codex/skills/vibe/SKILL.md`, overwriting any earlier install
+ * Write the skill to `<home>/.claude|.codex/skills/sada/SKILL.md`, overwriting any earlier install
  * (a reinstall is how a stale base URL gets refreshed).
  * @returns the absolute path written.
  */

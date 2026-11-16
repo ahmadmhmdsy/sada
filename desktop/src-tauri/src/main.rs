@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod analytics;
+mod arabic;
 mod cleaner;
 mod cli;
 mod cmd;
@@ -14,6 +15,7 @@ mod ffmpeg;
 mod handoff;
 mod keepawake;
 mod logging;
+mod mcp;
 mod meeting_prompt;
 mod server;
 mod setup;
@@ -38,6 +40,12 @@ static EXIT_REPORTED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicB
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // --mcp turns this same binary into a stdio MCP server instead of the GUI. Check it before
+    // anything GUI-shaped happens: no window, no tray, no console flash, nothing on a port.
+    if let Some(code) = mcp::run_if_requested() {
+        std::process::exit(code);
+    }
+
     // Attach console in Windows:
     #[cfg(all(windows, not(debug_assertions)))]
     cli::attach_console();

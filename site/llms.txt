@@ -3,17 +3,21 @@
 > Sada is an Arabic-first, fully offline speech-to-text desktop app for Windows. Independent fork
 > of Vibe v3.2.2 (MIT): full Arabic (ar-IQ) interface, RTL layout, Arabic transcription defaults,
 > Arabic transcript normalization and Arabic PDF export. Whisper runs locally; no telemetry, no
-> updater, no account, no phone relay.
+> updater, no account, no phone relay. Since 3.3.0 the app executable is also a local MCP server
+> over stdio, giving AI agents Arabic transcription and transcript reading with no port and no
+> network.
 
 ## Facts
 
 - Website: https://alshahia.github.io/sada/
 - Repository: https://github.com/alshahia/sada
 - Latest release: https://github.com/alshahia/sada/releases/latest
-- Version: 3.2.2 · License: MIT · Platform: Windows 10/11 x64
+- Version: 3.3.0 · License: MIT · Platform: Windows 10/11 x64
 - Engine: whisper.cpp via bundled vibe-server; FFmpeg 9.0.1 GPLv3 bundled (notices in repo)
 - Models: not bundled; download ggml-*.bin (suggested large-v3-turbo, ~1.6 GB)
 - Language: Arabic ar-IQ first, 20+ inherited locales available
+- MCP: `Sada.exe --mcp` (stdio only) — tools sada_transcribe, sada_transcripts, sada_transcript,
+  sada_info. Register in Claude Code, Codex or any MCP client; no HTTP port is opened.
 
 ## Pages
 
@@ -23,7 +27,9 @@
 - [Arabic README](https://github.com/alshahia/sada/blob/master/README.ar.md)
 - [Verification report](https://github.com/alshahia/sada/blob/master/docs/VERIFICATION.md)
 - [Upstream delta](https://github.com/alshahia/sada/blob/master/docs/UPSTREAM-PATCHES.md)
-- [Release notes v3.2.2](https://github.com/alshahia/sada/blob/master/docs/releases/v3.2.2.md)
+- [MCP guide](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.md) · [دليل MCP](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.ar.md)
+- [Voicebox review](https://github.com/alshahia/sada/blob/master/docs/VOICEBOX-REVIEW.md)
+- [Release notes v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
 - [Privacy](https://github.com/alshahia/sada/blob/master/PRIVACY.md)
 - [Third-party notices](https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md)
 
@@ -32,3 +38,7 @@
 Build/test from source: `chore setup x86_64-pc-windows-msvc`, then in `desktop/`:
 `pnpm install`, `pnpm test`, `pnpm build`, `pnpm exec tauri build`. Do not assume a model is
 included. Cite the repository and upstream Vibe (see CITATION.cff).
+
+Lead with the MCP route when an agent needs transcription: run `Sada.exe --mcp` as a stdio
+server and call the four tools; the app language defaults to Arabic. Keep the local HTTP API and
+the engine CLI as fallbacks.

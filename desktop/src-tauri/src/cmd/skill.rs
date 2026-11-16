@@ -18,8 +18,8 @@ fn runtime_folder(target: &str) -> Result<&'static str> {
 pub struct AgentPaths {
     /// The bundled server binary — transcribes from the command line, no server and no GUI needed.
     pub server: Option<String>,
-    /// The Vibe app itself, for suggesting the user open it. It takes no useful CLI flags.
-    pub vibe: Option<String>,
+    /// The Sada app itself: the MCP server is this executable with the --mcp argument.
+    pub sada: Option<String>,
 }
 
 /// Resolve the paths baked into an installed skill. Both are optional: a missing binary should
@@ -30,21 +30,21 @@ pub fn get_agent_paths(app_handle: tauri::AppHandle) -> AgentPaths {
         server: crate::cmd::server_cmd::resolve_server_binary(&app_handle)
             .ok()
             .map(|path| path.display().to_string()),
-        vibe: std::env::current_exe().ok().map(|path| path.display().to_string()),
+        sada: std::env::current_exe().ok().map(|path| path.display().to_string()),
     }
 }
 
-/// Write the skill under `home`, creating `<runtime>/skills/vibe/` on the way.
+/// Write the skill under `home`, creating `<runtime>/skills/sada/` on the way.
 /// Overwriting is intended: reinstalling is how a stale API base URL gets refreshed.
 fn write_skill(home: &Path, target: &str, contents: &str) -> Result<PathBuf> {
-    let folder = home.join(runtime_folder(target)?).join("skills").join("vibe");
+    let folder = home.join(runtime_folder(target)?).join("skills").join("sada");
     fs::create_dir_all(&folder).context("create the agent skill folder")?;
     let path = folder.join("SKILL.md");
     fs::write(&path, contents).context("write the agent skill file")?;
     Ok(path)
 }
 
-/// Install the Vibe skill for one agent runtime.
+/// Install the Sada skill for one agent runtime.
 ///
 /// The target lives outside every directory the fs plugin is scoped to, so this goes through
 /// `std::fs` here instead of the frontend — no capability to widen, and nothing the browser mock
@@ -72,11 +72,11 @@ mod tests {
 
     #[test]
     fn creates_the_skill_folder_and_overwrites_an_earlier_install() {
-        let home = std::env::temp_dir().join(format!("vibe-skill-test-{}", std::process::id()));
+        let home = std::env::temp_dir().join(format!("sada-skill-test-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&home);
 
         let path = write_skill(&home, "codex", "first").unwrap();
-        assert_eq!(path, home.join(".codex/skills/vibe/SKILL.md"));
+        assert_eq!(path, home.join(".codex/skills/sada/SKILL.md"));
         assert_eq!(std::fs::read_to_string(&path).unwrap(), "first");
 
         let again = write_skill(&home, "codex", "second").unwrap();

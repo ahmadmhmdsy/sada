@@ -9,7 +9,7 @@ const context: SkillContext = {
 	configPath: '/Users/me/Library/Application Support/vibe/app_config.json',
 	dictationShortcut: 'Alt+Space',
 	serverBinary: '/Applications/vibe.app/Contents/MacOS/server',
-	vibeBinary: '/Applications/vibe.app/Contents/MacOS/vibe',
+	sadaBinary: '/Applications/vibe.app/Contents/MacOS/vibe',
 }
 
 describe('composeSkill', () => {
@@ -31,11 +31,27 @@ describe('composeSkill', () => {
 		expect(skill).toContain(CONFIG_KEYS.apiBaseUrl)
 		expect(skill).toContain('/health')
 		expect(skill).toContain(context.serverBinary!)
-		expect(skill).toContain(context.vibeBinary!)
+		expect(skill).toContain(context.sadaBinary!)
+	})
+
+	// MCP is the route that works without a port or a running GUI: it must stay documented.
+	it('documents the stdio MCP server and how to register it', () => {
+		const skill = composeSkill(context)
+		expect(skill).toContain('--mcp')
+		expect(skill).toContain('claude mcp add sada')
+		expect(skill).toContain('[mcp_servers.sada]')
+		expect(skill).toContain('sada_transcribe')
+		expect(skill).toContain('sada_info')
+		expect(skill).toContain(context.sadaBinary!)
+	})
+
+	it('falls back to the executable name when the app path cannot be resolved', () => {
+		const skill = composeSkill({ ...context, sadaBinary: null })
+		expect(skill).toContain('Sada.exe --mcp')
 	})
 
 	it('still names both transcript layouts when the folder cannot be resolved', () => {
-		const skill = composeSkill({ ...context, transcriptsFolder: null, configPath: null, serverBinary: null, vibeBinary: null })
+		const skill = composeSkill({ ...context, transcriptsFolder: null, configPath: null, serverBinary: null, sadaBinary: null })
 		expect(skill).toContain('$HOME/Documents/Sada')
 		expect(skill).toContain('Settings → API & Agents → Config file')
 		expect(skill).toContain('bundles the `server` engine')
@@ -44,6 +60,6 @@ describe('composeSkill', () => {
 
 describe('withFrontmatter', () => {
 	it('opens with the frontmatter the agent runtimes index by', () => {
-		expect(withFrontmatter(composeSkill(context)).split('\n').slice(0, 4)).toEqual(['---', 'name: vibe', expect.stringContaining('description:'), '---'])
+		expect(withFrontmatter(composeSkill(context)).split('\n').slice(0, 4)).toEqual(['---', 'name: sada', expect.stringContaining('description:'), '---'])
 	})
 })
