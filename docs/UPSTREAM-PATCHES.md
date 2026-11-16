@@ -6,7 +6,7 @@ Everything below is a deliberate delta. The upstream tree stays untouched in
 comparison between that snapshot and the fork.
 
 ```
-107 upstream files differ (55 text/code + 52 generated icon files), 51 new files, 9 upstream files removed
+106 upstream files differ (54 text/code + 52 generated icon files), 51 new files, 9 upstream files removed
 ```
 
 ## 1. Arabic locale and first-run Arabic
