@@ -1,0 +1,21 @@
+صدى (Sada)
+===========
+
+Sada is an independent, Arabic-first fork of Vibe.
+
+Original project: Vibe — https://github.com/thewh1teagle/vibe
+Original author: thewh1teagle
+Upstream version this fork is based on: v3.2.2 (commit 23eae78b864088202e4e3b9987d269fe4da5ebb3)
+Original licence: MIT (see LICENSE; the original copyright notice is preserved there)
+
+This fork is not affiliated with, endorsed by, or published by the original Vibe author.
+It keeps the upstream MIT licence and adds its own copyright for the modifications:
+
+    Copyright (c) 2026 the Sada fork authors
+
+The name "صدى"/"Sada", the Sada icon and the Arabic locale are this fork's own work and are
+not covered by the upstream project's trademark or branding.
+
+Bundled third-party components and their licences are listed in THIRD-PARTY-NOTICES.md.
+The most important one: this build bundles an FFmpeg binary that is licensed under the
+GNU General Public License version 3. Read that file before redistributing a build.

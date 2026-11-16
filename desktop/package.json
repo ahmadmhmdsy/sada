@@ -1,5 +1,5 @@
 {
-	"name": "vibe",
+	"name": "sada",
 	"private": true,
 	"version": "0.0.0",
 	"packageManager": "pnpm@10.4.1",
@@ -96,5 +96,6 @@
 		"onlyBuiltDependencies": [
 			"esbuild"
 		]
-	}
+	},
+	"description": "Sada — Arabic-first offline transcription (fork of Vibe)"
 }

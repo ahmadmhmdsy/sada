@@ -16,10 +16,16 @@ const PALETTES = {
 
 type Palette = (typeof PALETTES)[keyof typeof PALETTES]
 
-function sheet(palette: Palette, direction: 'rtl' | 'ltr') {
+function sheet(palette: Palette, direction: 'rtl' | 'ltr', hasArabic: boolean) {
 	const align = direction === 'rtl' ? ('right' as const) : ('left' as const)
+	// The script picks the face, never the direction alone: a right-to-left document can be
+	// Hebrew (Rubik has Hebrew) or Arabic (Rubik has none), so only Arabic switches to the Arabic
+	// face. It also carries Latin and Western digits, so an English document quoting Arabic shapes
+	// in one font. Hebrew text in a document with Arabic switches too, but mixed Arabic/Hebrew
+	// transcripts are out of scope for both faces.
+	const bodyFont = hasArabic ? PDF_FONT_AR : PDF_FONT
 	return StyleSheet.create({
-		page: { paddingVertical: 52, paddingHorizontal: 52, backgroundColor: palette.background, fontFamily: direction === 'rtl' ? PDF_FONT_AR : PDF_FONT },
+		page: { paddingVertical: 52, paddingHorizontal: 52, backgroundColor: palette.background, fontFamily: bodyFont },
 		title: { fontSize: 20, fontWeight: 700, color: palette.accent, textAlign: 'center', marginBottom: 10 },
 		heading: { fontSize: 13, fontWeight: 700, color: palette.ink, textAlign: align, direction, marginTop: 18, marginBottom: 2 },
 		block: { marginTop: 12 },
@@ -56,7 +62,8 @@ export interface TranscriptDocumentProps {
  */
 export function TranscriptDocument({ segments, summary, options, labels }: TranscriptDocumentProps) {
 	const palette = PALETTES[options.theme === 'dark' ? 'dark' : 'light']
-	const styles = sheet(palette, options.direction)
+	const hasArabic = /[\u0600-\u06FF]/.test([options.title, summary, ...segments.map((segment) => segment.text)].join(' '))
+	const styles = sheet(palette, options.direction, hasArabic)
 	const title = options.title.trim()
 	const both = options.content === 'both'
 	const showTranscript = includesTranscript(options.content)

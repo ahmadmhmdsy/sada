@@ -11,7 +11,7 @@ import { gpuOutOfMemoryBefore } from '~/lib/gpu-memory'
 import { usePersisted } from '~/lib/config-store'
 import { createClient, fillPrompt } from '~/lib/ai'
 import { withoutUnsupportedOptions } from '~/lib/model'
-import { normalizeSegments } from '~/lib/arabic-text'
+import { normalizeArabicText, normalizeSegments } from '~/lib/arabic-text'
 import { isUserError } from '~/lib/server-errors'
 import * as transcript from '~/lib/transcript'
 import { usePreferenceProvider } from '~/providers/preference'
@@ -218,6 +218,9 @@ export function HotkeyProvider({ children }: { children: ReactNode }) {
 				}
 
 				resultText = hotkeyNormalizeOutputRef.current ? transcript.normalizeWhitespace(resultText) : resultText.trim()
+				// Dictation output gets the same Arabic punctuation/acronym polish as a transcript,
+				// whether the clean-up model ran or not.
+				resultText = normalizeArabicText(resultText)
 				// Output result
 				if (hotkeyOutputModeRef.current === 'type') {
 					await invoke('type_text', { text: resultText })

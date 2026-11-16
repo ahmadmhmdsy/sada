@@ -105,7 +105,7 @@ describe('project media ownership', () => {
 		expect(disk.files.has('/temp/meeting.wav')).toBe(false)
 	})
 
-	it('moves Vibe-created media into the selected projects folder', async () => {
+	it('moves Sada-created media into the selected projects folder', async () => {
 		disk.files.set('/temp/capture.wav', new Uint8Array([1, 2, 3]))
 
 		const recordPath = await saveTranscript({

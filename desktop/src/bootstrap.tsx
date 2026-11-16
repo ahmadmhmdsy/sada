@@ -5,16 +5,10 @@ import './globals.css'
 import { CONFIG_KEYS } from './lib/config-keys'
 import { loadConfigStore, readConfig } from './lib/config-store'
 import { runMigrations } from './lib/migrations'
-import { supportedLanguages } from './lib/i18n'
+import { DEFAULT_DISPLAY_LANGUAGE, supportedLanguages } from './lib/i18n'
 import { getLocale, getTextDirection, setLocale } from './paraglide/runtime.js'
 import Root from './root'
 
-/**
- * The Arabic-first build opens in Arabic: the catalogue ships as a first-class locale, not an
- * opt-in, and a fresh profile starts right-to-left. A stored choice still wins, so a user who
- * switches to English is remembered like any other setting.
- */
-export const DEFAULT_DISPLAY_LANGUAGE = 'ar-IQ'
 
 /**
  * Paraglide resolves the locale through its strategies (localStorage, then the base locale), so

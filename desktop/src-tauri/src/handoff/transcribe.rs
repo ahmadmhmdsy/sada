@@ -35,7 +35,7 @@ fn required_vad_model(requires_vad: bool, models_folder: &std::path::Path) -> Re
     if !path.metadata().is_ok_and(|metadata| metadata.is_file() && metadata.len() > 0) {
         return Err(TransferError::new(
             "invalid_request",
-            "The selected model requires Silero VAD. Select the model again in Vibe's model settings to download it.",
+            "The selected model requires Silero VAD. Select the model again in Sada's model settings to download it.",
         ));
     }
     Ok(Some(path.to_string_lossy().into_owned()))
@@ -138,7 +138,7 @@ impl HandoffHandler {
         // has no way to do that, so the handoff path does it here. Without this,
         // capabilities would promise a model that Server was never told to load.
         let Some(settings) = model_settings(&self.app_handle) else {
-            return Err(TransferError::new("no_model", "No model is selected in Vibe on the desktop"));
+            return Err(TransferError::new("no_model", "No model is selected in Sada on the desktop"));
         };
 
         // Loading a large model takes real time, and the phone would otherwise sit

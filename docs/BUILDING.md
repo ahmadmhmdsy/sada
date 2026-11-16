@@ -205,3 +205,21 @@ CARGO_PROFILE_DEV_CODEGEN_BACKEND="cranelift" cargo +nightly build -Zcodegen-bac
 # Powershell
 $env:CARGO_PROFILE_DEV_CODEGEN_BACKEND="cranelift" ; cargo +nightly build -Zcodegen-backend
 ```
+
+## Sada fork build notes
+
+This fork uses the upstream build unchanged, with three practical additions:
+
+1. `desktop/src-tauri/binaries/` must contain `vibe-server-x86_64-pc-windows-msvc.exe` and
+   `ffmpeg-x86_64-pc-windows-msvc.exe` before `tauri build`; they are not committed (see the
+   README in that folder).
+2. The source tree must be a git repository with at least one commit: `desktop/src-tauri/build.rs`
+   calls `git rev-parse` to embed the commit hash, and fails outside a repo. Run
+   `git init && git add -A && git commit -m init` in a fresh export.
+3. Pin pnpm 10 (the repository uses pnpm 10.4.1; `pnpm install` with pnpm 11 changes the lockfile
+   and can break the Tauri CLI invocation).
+
+The Windows build was verified with Rust 1.100.0, Node.js 24.11.1, pnpm 10.4.1 and the MSVC
+2022 Build Tools; it produces `desktop/src-tauri/target/release/bundle/nsis/*-setup.exe`.
+`beforeBuildCommand` runs `pnpm build` (paraglide compile → tsc → vite) automatically, so a
+single `pnpm exec tauri build` is enough.

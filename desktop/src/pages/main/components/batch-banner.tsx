@@ -58,7 +58,7 @@ export default function BatchBanner() {
 									summary.failed > 0 && m.batchCountFailed({ count: String(summary.failed) }),
 								]
 									.filter(Boolean)
-									.join(', ')
+									.join('، ')
 							: m.batchFinishedFiles({ count: String(summary.total) })}
 						{summary.exceptions.length > 0 && (
 							<>

@@ -4,6 +4,13 @@ import { m } from '~/paraglide/messages.js'
 
 type MessageFunction = (params?: Record<string, unknown>) => unknown
 
+/**
+ * The Arabic-first build starts in Arabic on a fresh profile; a stored choice still wins.
+ * Shared by every webview (main window, setup, meeting prompt) because they share localStorage,
+ * and a window that falls back to `en-US` would overwrite the chosen locale for all of them.
+ */
+export const DEFAULT_DISPLAY_LANGUAGE = 'ar-IQ'
+
 export const supportedLanguages = Object.fromEntries(localeRegistry.filter((locale) => locale.desktop).map(({ code, name }) => [code, name]))
 export const supportedLanguageKeys = Object.keys(supportedLanguages)
 export const supportedLanguageValues = Object.values(supportedLanguages)

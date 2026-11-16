@@ -14,7 +14,7 @@ import {
 	type MeetingRecordingOptions,
 	type MeetingSource,
 } from '~/lib/meeting-prompt'
-import { supportedLanguages } from '~/lib/i18n'
+import { DEFAULT_DISPLAY_LANGUAGE, supportedLanguages } from '~/lib/i18n'
 import { cn } from '~/lib/style'
 import { m } from '~/paraglide/messages.js'
 import { getLocale, getTextDirection, setLocale } from '~/paraglide/runtime.js'
@@ -70,7 +70,7 @@ function SourceChoice({
 }
 
 export default function MeetingPromptWindow() {
-	const configuredLocale = readConfig(CONFIG_KEYS.displayLanguage, 'en-US')
+	const configuredLocale = readConfig(CONFIG_KEYS.displayLanguage, DEFAULT_DISPLAY_LANGUAGE)
 	if (supportedLanguages[configuredLocale] && configuredLocale !== getLocale()) {
 		setLocale(configuredLocale as never, { reload: false })
 	}

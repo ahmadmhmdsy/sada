@@ -8,6 +8,7 @@ import { waitFor } from '@testing-library/react'
 const mocks = vi.hoisted(() => ({
 	windowLabel: 'main',
 	loadConfigStore: vi.fn(),
+	readConfig: vi.fn(() => undefined),
 	runMigrations: vi.fn(),
 	unregisterAll: vi.fn(),
 	render: vi.fn(),
@@ -15,7 +16,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock('@tauri-apps/api/window', () => ({ getCurrentWindow: () => ({ label: mocks.windowLabel }) }))
 vi.mock('@tauri-apps/plugin-global-shortcut', () => ({ unregisterAll: mocks.unregisterAll }))
-vi.mock('./lib/config-store', () => ({ loadConfigStore: mocks.loadConfigStore }))
+vi.mock('./lib/config-store', () => ({ loadConfigStore: mocks.loadConfigStore, readConfig: mocks.readConfig }))
 vi.mock('./lib/migrations', () => ({ runMigrations: mocks.runMigrations }))
 vi.mock('./root', () => ({ default: () => null }))
 vi.mock('react-dom/client', () => ({ default: { createRoot: () => ({ render: mocks.render }) } }))
@@ -54,6 +55,13 @@ describe('shortcut recovery after a webview reload', () => {
 		await import('./bootstrap')
 		await waitFor(() => expect(mocks.render).toHaveBeenCalledOnce())
 		expect(log).toHaveBeenCalledWith('Failed to clear shortcuts from the previous webview:', error)
+	})
+
+	it('boots Arabic-first when no language has been chosen yet', async () => {
+		await import('./bootstrap')
+		await waitFor(() => expect(mocks.render).toHaveBeenCalledOnce())
+		expect(document.documentElement.lang).toBe('ar-IQ')
+		expect(document.documentElement.dir).toBe('rtl')
 	})
 
 	it('grants the native cleanup command used during startup', () => {

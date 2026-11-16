@@ -44,7 +44,7 @@ pub fn setup(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     crate::cleaner::clean_old_logs(app.handle()).log_error();
     crate::cleaner::clean_old_files().log_error();
     crate::cleaner::clean_updater_files().log_error();
-    tracing::debug!("Vibe App Running");
+    tracing::debug!("Sada App Running");
 
     // Re-applying an existing registration upgrades installs created before the hidden launch
     // argument was added. `enable` overwrites the platform entry while preserving its enabled
@@ -88,12 +88,11 @@ pub fn setup(app: &App) -> Result<(), Box<dyn std::error::Error>> {
             if let Some(app_handle) = STATIC_APP.lock().expect("lock").as_ref() {
                 app_handle
                     .dialog()
-                    .message("App crashed with error. Please register to Github and then click report.")
+                    .message("توقف صدى بشكل غير متوقع. أعد تشغيله وأرسل ملف السجل للمطوّر إن تكرر ذلك.\n\nSada stopped unexpectedly. Restart it, and send the log file to the maintainer if it happens again.")
                     .kind(tauri_plugin_dialog::MessageDialogKind::Error)
-                    .title("Vibe Crashed")
-                    .buttons(MessageDialogButtons::OkCustom("Report".into()))
+                    .title("صدى — توقف غير متوقع")
+                    .buttons(MessageDialogButtons::Ok)
                     .show(|_| {});
-                let _ = tauri_plugin_opener::open_url(get_issue_url(format!("{:?}", info)), None::<&str>);
             }
 
             crash_handler::CrashEventResult::Handled(true)
@@ -133,7 +132,7 @@ pub fn setup(app: &App) -> Result<(), Box<dyn std::error::Error>> {
             .inner_size(800.0, 700.0)
             .min_inner_size(800.0, 700.0)
             .center()
-            .title("Vibe")
+            .title("صدى")
             .resizable(true)
             .focused(!background_launch)
             .shadow(true)

@@ -82,8 +82,8 @@ impl KeepAwake {
                     match keepawake::Builder::default()
                         .display(flags.display)
                         .idle(flags.idle)
-                        .reason("Vibe is working")
-                        .app_name("Vibe")
+                        .reason("Sada is working")
+                        .app_name("Sada")
                         .app_reverse_domain("github.com.thewh1teagle.vibe")
                         .create()
                     {

@@ -22,7 +22,7 @@ export function useDeepLinks({ setFiles }: UseDeepLinksProps) {
 			if (url.startsWith('vibe://download/?url=')) {
 				const downloadURL = url.replace('vibe://download/?url=', '')
 				const host = new URL(downloadURL).hostname
-				const confirm = await ask(`${m.askForDownloadModel()} ${host}`, { kind: 'info', title: m.downloadModel() })
+				const confirm = await ask(`${m.askForDownloadModel()} ${host}؟`, { kind: 'info', title: m.downloadModel() })
 				if (confirm) {
 					navigate('/setup', { state: { downloadURL } })
 				}

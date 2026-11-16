@@ -29,7 +29,7 @@ export function useSingleInstance({ setFiles }: UseSingleInstanceProps) {
 				if (url) {
 					const downloadURL = url.replace('vibe://download/?url=', '')
 					const hostname = new URL(url).hostname
-					const confirm = await ask(`${m.askForDownloadModel()} ${hostname}?`, { title: m.downloadModel(), kind: 'info' })
+					const confirm = await ask(`${m.askForDownloadModel()} ${hostname}؟`, { title: m.downloadModel(), kind: 'info' })
 					if (confirm) {
 						navigate('/setup', { state: { downloadURL } })
 					}

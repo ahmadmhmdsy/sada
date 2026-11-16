@@ -153,7 +153,7 @@ impl HandoffHandler {
         if devices::authorize(&self.app_handle, &header.token)?.is_none() {
             return Err(TransferError::new(
                 "unauthorized",
-                "Phone access was revoked or pairing is required. Scan a new code in Vibe.",
+                "Phone access was revoked or pairing is required. Scan a new code in Sada.",
             ));
         }
         let token = header.token.clone();
