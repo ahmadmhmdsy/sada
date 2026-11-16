@@ -68,16 +68,18 @@ stdin/stdout only.
 
 ### Artifacts
 
-The CI-built installer is attached to the `v3.3.0` GitHub release with `SHA256SUMS.txt`; verify
-the downloaded file against that checksum.
+The CI-built installer is attached to the [v3.3.0 GitHub release](https://github.com/alshahia/sada/releases/tag/v3.3.0)
+with `SHA256SUMS.txt`; verify the downloaded file against that checksum.
 
 | Artifact | SHA-256 |
 | --- | --- |
 | Local release binary `target/release/vibe.exe` (14,011,904 bytes; `tauri build` bundles it as `Sada.exe`) | `0A8F707B99D5BA0CCB0019AEC8794AFD4A1A64156E7D4D5C88C69741AB1E04A6` |
+| Published installer `Sada_3.3.0_x64-setup.exe` (43,949,601 bytes, built by the Release workflow, downloaded again and re-hashed) | `9EBCB62FF37FCC67AE795D3FCE3ED81D43BF10F6836BB5A0220D8D8F54FE6C32` |
 
-This local binary answered the MCP frames above; CI rebuilds the same source, so the shipped
-installer hash differs (build paths/timestamps) and must be checked against the attached
-`SHA256SUMS.txt`.
+The published installer hash matches the `SHA256SUMS.txt` asset byte for byte. It is not code
+signed (`Get-AuthenticodeSignature` reports `NotSigned`), so Windows SmartScreen will warn on
+first run; that is the expected state described in the release notes. The local binary above
+answered the MCP frames and CI rebuilt the same source for the installer.
 
 ### Known limitations (3.3.0)
 
