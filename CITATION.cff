@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use Sada in research, please cite this repository. Sada is a fork of Vibe; please also cite the upstream project."
+title: "Sada (صدى): Arabic-first, offline speech-to-text for Windows"
+abstract: >-
+  Sada is an Arabic-first desktop application for fully offline speech-to-text on Windows.
+  It provides a right-to-left Arabic interface, Arabic transcription defaults, Arabic transcript
+  normalization and Arabic PDF export, built on the Whisper engine (whisper.cpp) and a Tauri shell.
+  This repository is an independent fork of Vibe v3.2.2 (MIT).
+type: software
+authors:
+  - given-names: Ahmad
+    family-names: Mahmoud
+    alias: alshahia
+repository-code: "https://github.com/alshahia/sada"
+url: "https://alshahia.github.io/sada/"
+version: 3.2.2
+date-released: "2026-11-16"
+license: MIT
+keywords:
+  - Arabic
+  - speech-to-text
+  - automatic speech recognition
+  - offline
+  - Whisper
+  - whisper.cpp
+  - Tauri
+  - RTL
+  - Windows
+  - transcription
+references:
+  - type: software
+    title: "Vibe: offline transcription desktop app (upstream)"
+    repository-code: "https://github.com/thewh1teagle/vibe"
+    version: 3.2.2
+    license: MIT

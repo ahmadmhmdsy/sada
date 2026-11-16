@@ -1,26 +1,29 @@
-# Security Policy
+# Security policy
 
-## Reporting Security Issues
+## Reporting a vulnerability
 
-If you find a security issue in Vibe, please report it responsibly.  
-We take security reports seriously and will do my best to review and address valid issues.
+Please report security issues privately through GitHub's
+[Security Advisories](https://github.com/alshahia/sada/security/advisories/new) ("Report a
+vulnerability"). Do **not** open a public issue for a security report.
 
-The preferred way to report a vulnerability is via GitHub’s **Security Advisory – “Report a Vulnerability”** feature.
+Include: affected version, Windows version, steps to reproduce, impact, and any relevant logs
+(remove personal audio paths and transcripts first). You will get an acknowledgement as soon as
+possible and credit in the advisory once a fix ships, unless you prefer to stay anonymous.
 
-- Please do NOT open a public GitHub issue for security-related reports.
-- Include as much detail as possible so I can understand and reproduce the issue.
+## Supported versions
 
-If you can’t use GitHub Security Advisories, you can also reach out to me directly via **Vibe’s Discord channel** (linked on the Vibe website) and send me a DM.  
-Please use this channel only for security-related matters.
+Security fixes target the latest released `3.2.x` build. Older builds are not maintained.
 
-After the initial report, I’ll reply with next steps and may ask for more details if needed.
+## Scope
 
-## Supported Versions
+Sada runs entirely locally: audio, transcripts and settings stay on the machine, and there is no
+telemetry, account or updater. In-scope issues include the Tauri shell, IPC between the app and the
+bundled `vibe-server` sidecar, local file handling, and the Windows installer.
 
-Security fixes are provided only for the latest released version of Vibe.
+Reports about the upstream Vibe project or its engine code should also be raised upstream
+(thewh1teagle/vibe) where appropriate; this fork will pick up upstream fixes when it rebases.
 
-## Third-Party Dependencies
+## Third-party dependencies
 
-If the issue is in a third-party dependency, it’s usually best to report it directly to the maintainers of that project as well.
-
-Thanks for helping keep Vibe secure.
+If the issue is in a third-party dependency (Tauri, React, whisper.cpp/ggml, FFmpeg, Rust/Node
+crates), please report it to that project's maintainers as well.

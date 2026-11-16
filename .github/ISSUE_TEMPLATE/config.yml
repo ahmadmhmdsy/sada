@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: أسئلة واستخدام / Questions and usage
+    url: https://github.com/alshahia/sada/discussions
+    about: للأسئلة العامة والمساعدة — ask the community instead of opening an issue

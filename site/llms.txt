@@ -1,0 +1,34 @@
+# Sada (صدى)
+
+> Sada is an Arabic-first, fully offline speech-to-text desktop app for Windows. Independent fork
+> of Vibe v3.2.2 (MIT): full Arabic (ar-IQ) interface, RTL layout, Arabic transcription defaults,
+> Arabic transcript normalization and Arabic PDF export. Whisper runs locally; no telemetry, no
+> updater, no account, no phone relay.
+
+## Facts
+
+- Website: https://alshahia.github.io/sada/
+- Repository: https://github.com/alshahia/sada
+- Latest release: https://github.com/alshahia/sada/releases/latest
+- Version: 3.2.2 · License: MIT · Platform: Windows 10/11 x64
+- Engine: whisper.cpp via bundled vibe-server; FFmpeg 9.0.1 GPLv3 bundled (notices in repo)
+- Models: not bundled; download ggml-*.bin (suggested large-v3-turbo, ~1.6 GB)
+- Language: Arabic ar-IQ first, 20+ inherited locales available
+
+## Pages
+
+- [Arabic landing page](https://alshahia.github.io/sada/)
+- [English landing page](https://alshahia.github.io/sada/en/)
+- [English README](https://github.com/alshahia/sada/blob/master/README.md)
+- [Arabic README](https://github.com/alshahia/sada/blob/master/README.ar.md)
+- [Verification report](https://github.com/alshahia/sada/blob/master/docs/VERIFICATION.md)
+- [Upstream delta](https://github.com/alshahia/sada/blob/master/docs/UPSTREAM-PATCHES.md)
+- [Release notes v3.2.2](https://github.com/alshahia/sada/blob/master/docs/releases/v3.2.2.md)
+- [Privacy](https://github.com/alshahia/sada/blob/master/PRIVACY.md)
+- [Third-party notices](https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md)
+
+## For agents
+
+Build/test from source: `chore setup x86_64-pc-windows-msvc`, then in `desktop/`:
+`pnpm install`, `pnpm test`, `pnpm build`, `pnpm exec tauri build`. Do not assume a model is
+included. Cite the repository and upstream Vibe (see CITATION.cff).

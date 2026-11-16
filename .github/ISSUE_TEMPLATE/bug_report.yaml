@@ -1,53 +1,55 @@
-name: Bug Report
-description: File a bug report
+name: تقرير خطأ / Bug report
+description: أبلغ عن مشكلة في صدى (Sada) — Report a problem with the app
+title: "[Bug]: "
 labels: ["bug"]
-assignees:
-    - octocat
 body:
-    - type: markdown
-      attributes:
-          value: |
-              Thanks for taking the time to fill out this bug report!
-              One second before you create, search if it's already reported [issues](https://github.com/thewh1teagle/vibe/issues?q=is:issue+label:bug+)
+  - type: markdown
+    attributes:
+      value: |
+        شكراً لوقتك! قبل الإرسال ابحث في [المشكلات المفتوحة](https://github.com/alshahia/sada/issues?q=is%3Aissue).
+        اذكر إصدار صدى ونظام Windows وخطوات إعادة المشكلة.
+        للأسئلة والاستخدام استخدم [المناقشات](https://github.com/alshahia/sada/discussions).
 
-              Please, if possible, just open settings in vibe, and click 'Report Bug'
-              This way I'll get all the relevant info required
-
-              If not reported, if possible please check [DEBUG.md](https://github.com/thewh1teagle/vibe/blob/main/docs/DEBUG.md) and add comments with more info.
-
-    - type: textarea
-      id: what-happened
-      attributes:
-          label: What happened?
-          description: Also tell us, what did you expect to happen?
-          placeholder: What you did, what happened instead, and what you expected.
-      validations:
+        Thanks for taking the time. Search existing issues first, and include the app version,
+        Windows version and reproduction steps.
+  - type: input
+    id: version
+    attributes:
+      label: إصدار صدى / Sada version
+      description: الإعدادات ← حول (Settings → About)
+      placeholder: "3.2.2"
+    validations:
+      required: true
+  - type: dropdown
+    id: windows
+    attributes:
+      label: إصدار Windows / Windows version
+      options:
+        - Windows 11
+        - Windows 10
+        - Other / أخرى
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: ماذا حدث؟ / What happened?
+      description: ما فعلته، وما توقعته.
+      placeholder: "1. ...\n2. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: سجلات أو لقطات / Logs or screenshots
+      description: يمكنك لصق السجلات أو إرفاق لقطات. لا تُرفق تسجيلات خاصة.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: تأكيدات / Checks
+      options:
+        - label: بحثت عن مشكلة مشابهة / I searched existing issues
           required: true
-    - type: textarea
-      id: steps-to-reproduce
-      attributes:
-          label: Steps to reproduce
-          description: The shortest path from a fresh start to the bug.
-          placeholder: |
-              1. Open Vibe and pick a model
-              2. Drop in a 3 minute mp3
-              3. Transcription stops at 40%
-      validations:
-          required: true
-    - type: dropdown
-      id: browsers
-      attributes:
-          label: What OS are you seeing the problem on?
-          multiple: true
-          options:
-              - Window
-              - Linux
-              - MacOS
-    - type: textarea
-      id: logs
-      attributes:
-          label: Relevant log output
-          description: |
-              Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-
-          render: shell
+        - label: الإصدار هو أحدث إصدار عام / This is the latest public release
+          required: false

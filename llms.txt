@@ -1,0 +1,46 @@
+# Sada (صدى)
+
+> Sada is an Arabic-first, fully offline speech-to-text desktop app for Windows. It is an
+> independent fork of Vibe v3.2.2 (MIT) with a complete Arabic (ar-IQ) interface, RTL layout,
+> Arabic transcription defaults, Arabic transcript normalization and Arabic PDF export. Audio never
+> leaves the machine. No telemetry, no updater, no account, no phone relay.
+
+## Key facts
+
+- Name: Sada (صدى) — "echo"
+- Version: 3.2.2
+- Platform: Windows 10/11 x64 (Tauri 2 desktop app)
+- License: MIT (fork of Vibe v3.2.2, MIT); bundled FFmpeg is GPLv3 (mere aggregation, see notices)
+- Engine: whisper.cpp via the bundled `vibe-server` sidecar; models are NOT bundled
+- Installer: `Sada_3.2.2_x64-setup.exe` from GitHub Releases, unsigned, per-user
+  (`%LOCALAPPDATA%\Sada\`)
+- Languages: Arabic `ar-IQ` first; 20+ inherited upstream locales available
+- Network: only user-requested actions (model download, pasted URL, optional summary provider)
+
+## Documentation
+
+- [English README](README.md)
+- [Arabic README](README.ar.md)
+- [What differs from upstream Vibe](docs/UPSTREAM-PATCHES.md)
+- [Verification report](docs/VERIFICATION.md)
+- [Building from source](docs/BUILDING.md)
+- [Privacy](PRIVACY.md)
+- [Third-party notices and licences](THIRD-PARTY-NOTICES.md)
+- [Release notes v3.2.2](docs/releases/v3.2.2.md)
+- [Website](https://alshahia.github.io/sada/)
+
+## For AI agents and researchers
+
+- Source layout: `desktop/` (React + Tauri shell), `i18n/desktop/` (catalogues incl.
+  `ar-IQ.json`, 704 keys), `server/` (Rust whisper.cpp sidecar), `docs/`, `site/`.
+- Build/test: `chore setup x86_64-pc-windows-msvc`, `cd desktop && pnpm install && pnpm test && pnpm build`.
+- Tests: `pnpm test` = vitest; 26 files / 130 tests at release time.
+- Do not assume the model is included; a `ggml-*.bin` is required at runtime.
+- The fork keeps upstream MIT copyright notices; cite upstream Vibe as well as this repository
+  (see `CITATION.cff`).
+
+## Optional
+
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)

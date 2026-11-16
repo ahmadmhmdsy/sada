@@ -6,7 +6,7 @@ Everything below is a deliberate delta. The upstream tree stays untouched in
 comparison between that snapshot and the fork.
 
 ```
-102 upstream files differ (50 text/code + 52 generated icon files), 22 new files, 2 upstream files removed
+107 upstream files differ (55 text/code + 52 generated icon files), 51 new files, 9 upstream files removed
 ```
 
 ## 1. Arabic locale and first-run Arabic
@@ -72,6 +72,27 @@ New: `README.ar.md` (main Arabic README), `NOTICE`, `PRIVACY.md`,
 Apache-2.0, OFL for IBM Plex Sans Arabic, Rubik and Inter), sidecar README.
 `README.md` and `LICENSE` were repurposed: MIT kept with the original copyright notice plus
 the fork copyright.
+
+## 5. Packaging, CI, release and discovery (added by Sada)
+
+| File | Change |
+| --- | --- |
+| `.github/workflows/ci.yml` | **new** — CI: frozen install, frontend build (`pnpm build`), unit tests (`pnpm test`) |
+| `.github/workflows/release.yml` | **rewritten** — tag `v*` → Windows build (`chore setup`, Rust, Tauri NSIS) → GitHub Release with installer, `SHA256SUMS.txt`, `LICENSE`, `NOTICE` and `THIRD-PARTY-NOTICES.md`; requires `docs/releases/v<version>.md` |
+| `.github/workflows/pages.yml` | **new** — deploys `site/` to GitHub Pages |
+| `.github/workflows/{lint_rust,server-libs,server-release,server-test,test-release,website}.yml` | **removed** — upstream workflows that do not apply to this fork (and one of which would run on our release) |
+| `.github/FUNDING.yml` | **removed** — upstream author's funding accounts; a fork must not redirect them |
+| `.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md` | rewritten/added for Sada (Arabic + English) |
+| `docs/releases/v3.2.2.md` | **new** — bilingual release notes used by the release workflow |
+| `docs/VERIFICATION.md` | **new** — public verification report (build, hashes, ASR evidence, limitations) |
+| `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md` | **new/rewritten** — Sada-specific contributing, security and changelog |
+| `CITATION.cff`, `llms.txt` | **new** — citation metadata and an agent/research index (llms.txt format) |
+| `AGENTS.md` | **rewritten** — Sada repository guide for humans/AI agents, upstream dev notes retained |
+| `README.md`, `README.ar.md` | rewritten — badges, screenshots, install, FAQ, verification, attribution and discovery keywords |
+| `docs/media/` | **new** — screenshots used by the README and the website |
+| `site/` | **new** — bilingual static landing page (Arabic first, English under `/en/`) with JSON-LD (WebSite, SoftwareApplication, FAQPage), Open Graph/Twitter metadata, `robots.txt`, `sitemap.xml`, local OFL fonts and `llms.txt` |
+
+The upstream engine, model handling and audio pipeline remain untouched by this section.
 
 ## Deliberately not changed
 

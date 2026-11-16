@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>صدى (Sada) — تفريغ صوتي عربي بدون إنترنت | Arabic-first offline speech-to-text for Windows</title>
+  <meta name="description" content="صدى: تطبيق تفريغ صوتي وفيديو إلى نص، عربي أولاً، يعمل محلياً على Windows بلا إنترنت وبلا حساب. واجهة RTL، تصدير PDF عربي، ودعم Whisper — مجاني ومفتوح المصدر (MIT)." />
+  <meta name="keywords" content="تفريغ صوتي, تفريغ عربي, تحويل الصوت إلى نص, التعرف على الكلام العربي, whisper عربي, تفريغ بدون إنترنت, Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, RTL, Windows, صدى, Sada" />
+  <meta name="author" content="Ahmad Mahmoud" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#0f6b62" />
+  <link rel="canonical" href="https://alshahia.github.io/sada/" />
+  <link rel="alternate" hreflang="ar" href="https://alshahia.github.io/sada/" />
+  <link rel="alternate" hreflang="en" href="https://alshahia.github.io/sada/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://alshahia.github.io/sada/" />
+  <link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt" />
+  <link rel="icon" type="image/svg+xml" href="assets/sada-icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="صدى (Sada)" />
+  <meta property="og:title" content="صدى (Sada) — تفريغ صوتي عربي بدون إنترنت | Arabic-first offline speech-to-text for Windows" />
+  <meta property="og:description" content="صدى: تطبيق تفريغ صوتي وفيديو إلى نص، عربي أولاً، يعمل محلياً على Windows بلا إنترنت وبلا حساب. واجهة RTL، تصدير PDF عربي، ودعم Whisper — مجاني ومفتوح المصدر (MIT)." />
+  <meta property="og:url" content="https://alshahia.github.io/sada/" />
+  <meta property="og:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
+  <meta property="og:locale" content="ar_IQ" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="صدى (Sada) — تفريغ صوتي عربي بدون إنترنت | Arabic-first offline speech-to-text for Windows" />
+  <meta name="twitter:description" content="صدى: تطبيق تفريغ صوتي وفيديو إلى نص، عربي أولاً، يعمل محلياً على Windows بلا إنترنت وبلا حساب. واجهة RTL، تصدير PDF عربي، ودعم Whisper — مجاني ومفتوح المصدر (MIT)." />
+  <meta name="twitter:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://alshahia.github.io/sada/#website",
+      "url": "https://alshahia.github.io/sada/",
+      "name": "صدى (Sada)",
+      "description": "تفريغ صوتي عربي على جهازك، بلا إنترنت.",
+      "inLanguage": [
+        "ar",
+        "en"
+      ],
+      "publisher": {
+        "@type": "Person",
+        "name": "Ahmad Mahmoud",
+        "url": "https://github.com/alshahia"
+      }
+    },
+    {
+      "@id": "https://alshahia.github.io/sada/#app",
+      "@type": "SoftwareApplication",
+      "name": "صدى (Sada)",
+      "alternateName": [
+        "Sada",
+        "Sada Arabic transcription"
+      ],
+      "description": "صدى: تطبيق تفريغ صوتي وفيديو إلى نص، عربي أولاً، يعمل محلياً على Windows بلا إنترنت وبلا حساب. واجهة RTL، تصدير PDF عربي، ودعم Whisper — مجاني ومفتوح المصدر (MIT).",
+      "applicationCategory": "UtilitiesApplication",
+      "applicationSubCategory": "Speech-to-text",
+      "operatingSystem": "Windows 10, Windows 11",
+      "softwareVersion": "3.2.2",
+      "datePublished": "2026-11-16",
+      "inLanguage": [
+        "ar",
+        "en"
+      ],
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "license": "https://github.com/alshahia/sada/blob/master/LICENSE",
+      "codeRepository": "https://github.com/alshahia/sada",
+      "downloadUrl": "https://github.com/alshahia/sada/releases/latest",
+      "screenshot": "https://alshahia.github.io/sada/assets/sada-main.png",
+      "featureList": [
+        "عربي أولاً و RTL",
+        "تفريغ محلي بالكامل",
+        "نماذج Whisper",
+        "تصدير متعدد",
+        "إملاء وتسجيل",
+        "خصوصية مطلقة"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Ahmad Mahmoud",
+        "url": "https://github.com/alshahia"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Ahmad Mahmoud",
+        "url": "https://github.com/alshahia"
+      },
+      "url": "https://alshahia.github.io/sada/"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://alshahia.github.io/sada/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "هل صدى مجاني؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "نعم. المصدر برخصة MIT والمثبّت مجاني. لا حساب ولا اشتراك ولا إعلانات."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هل يعمل بدون إنترنت؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "نعم، بعد تنزيل نموذج Whisper مرة واحدة. التفريغ يجري محلياً بالكامل، ولا تُستخدم الشبكة إلا لأشياء تطلبها أنت."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هل يدعم اللهجة العراقية؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Whisper يتعامل مع العراقية ضمن العربية، والتنظيف العربي يوحّد علامات الترقيم. الدقة تعتمد على النموذج وجودة الصوت؛ ابدأ بـ large-v3-turbo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "لماذا يحذّر Windows من المثبّت؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "المثبّت غير موقّع رقمياً. تحقّق من بصمة SHA-256 المرفقة مع الإصدار، أو ابنِ التطبيق من المصدر بنفسك."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ما الفرق عن Vibe؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "صدى شوكة من Vibe v3.2.2: تعريب كامل وRTL وافتراضيات عربية وتصدير PDF عربي وإزالة القياسات والتحديث التلقائي ومرحّل الهاتف، مع اسم وأيقونة جديدة."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "أين تُحفظ ملفاتي؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "الإعدادات والسجلات والمشاريع في %APPDATA%\\app.sada.desktop، والنموذج وبيانات WebView في %LOCALAPPDATA%\\app.sada.desktop. لا يُرسل شيء إلى أي خادم."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./" aria-label="صدى (Sada)">
+        <img src="assets/sada-icon.svg" alt="" width="34" height="34" />
+        <span>صدى<small>Arabic-first transcription</small></span>
+      </a>
+      <nav class="nav" aria-label="التنقل">
+        <a href="#features">المزايا</a>
+        <a href="#install">التثبيت</a>
+        <a href="#privacy">الخصوصية</a>
+        <a href="#faq">الأسئلة</a>
+        <a href="https://github.com/alshahia/sada" rel="noopener">GitHub</a>
+        <a class="lang" href="en/" hreflang="en" lang="en">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">مجاني · مفتوح المصدر · رخصة MIT</p>
+          <h1>تفريغ صوتي عربي… <span class="accent">على جهازك</span>، بلا إنترنت.</h1>
+          <p class="lead">صدى يفرّغ الصوت والفيديو إلى نص على Windows، عربي أولاً: واجهة من اليمين إلى اليسار، افتراضيات تفريغ عربية، خط IBM Plex Sans Arabic، وتنظيف نص يراعي العربية. محرّك Whisper يعمل محلياً — لا يُرسل شيء إلى أي خادم.</p>
+          <div class="cta">
+            <a class="btn btn-primary" href="https://github.com/alshahia/sada/releases/latest" rel="noopener">حمّل صدى 3.2.2</a>
+            <a class="btn btn-ghost" href="https://github.com/alshahia/sada" rel="noopener">المصدر على GitHub</a>
+          </div>
+          <ul class="chips">
+            <li>Windows 10/11 (64-bit)</li>
+            <li>يعمل دون إنترنت</li>
+            <li>بلا حساب</li>
+            <li>MIT</li>
+          </ul>
+        </div>
+        <figure class="hero-figure">
+          <img src="assets/sada-main.png" width="1000" height="875" alt="نافذة صدى الرئيسية: واجهة عربية من اليمين إلى اليسار مع منطقة إفلات الملفات وقائمة التفريغات الأخيرة." />
+          <figcaption>واجهة صدى — عربية من اليمين إلى اليسار، وبأول تشغيل عربي افتراضي.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="wrap">
+        <h2>لماذا صدى؟</h2>
+        <p class="section-lead">معظم تطبيقات التفريغ تتعامل مع العربية كلغة ترجمة. صدى يعكس ذلك ويرتّب تجربة Windows حول العربية أولاً.</p>
+        <div class="features">
+          <article class="card">
+            <div class="icon" aria-hidden="true">1</div>
+            <h3>عربي أولاً و RTL</h3>
+            <p>لغة الواجهة ar-IQ، تفريغ ar، ترجمة معطّلة، حرارة 0 و beam 5، وخط عربي للمحتوى وتصدير PDF.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">2</div>
+            <h3>تفريغ محلي بالكامل</h3>
+            <p>محرّك whisper.cpp مع FFmpeg مضمّن؛ الصوت والفيديو لا يغادران جهازك.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">3</div>
+            <h3>نماذج Whisper</h3>
+            <p>استخدم أي نموذج ggml-*.bin. المقترح للعربية large-v3-turbo بحجم ~1.6GB؛ النماذج لا تُشحن مع المثبّت.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">4</div>
+            <h3>تصدير متعدد</h3>
+            <p>SRT وVTT وTXT وHTML وPDF عربي بخط مضمّن، وDOCX وJSON.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">5</div>
+            <h3>إملاء وتسجيل</h3>
+            <p>اختصار عام للكتابة بالإملاء في أي تطبيق، وتسجيل من الميكروفون ومن صوت النظام.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">6</div>
+            <h3>خصوصية مطلقة</h3>
+            <p>بلا قياسات، بلا تحديث تلقائي، بلا حساب، وبلا مرحّل هاتف. الشبكة لما تطلبه أنت فقط.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <div class="wrap">
+        <h2>التثبيت في أربع خطوات</h2>
+        <p class="section-lead">يُثبّت التطبيق لكل مستخدم ولا يحتاج صلاحيات مدير. النموذج يُنزّل مرة واحدة فقط.</p>
+        <div class="install-grid">
+          <ol class="steps">
+          <li><div><strong>نزّل المثبّت</strong><span>من صفحة الإصدارات: Sada_3.2.2_x64-setup.exe.</span></div></li>
+          <li><div><strong>تحقّق من البصمة</strong><span>قارن SHA-256 مع الملف SHA256SUMS.txt المرفق بالإصدار.</span></div></li>
+          <li><div><strong>شغّل المثبّت</strong><span>في %LOCALAPPDATA%\Sada — لا يحتاج مديراً. قد يظهر تحذير SmartScreen لأنه غير موقّع.</span></div></li>
+          <li><div><strong>نزّل النموذج مرة واحدة</strong><span>من الإعدادات ← النماذج: large-v3-turbo (~1.6GB) أو ملف ggml-*.bin موجود.</span></div></li>
+          </ol>
+          <div class="note">
+            <strong>تنبيه SmartScreen:</strong> المثبّت غير موقّع رقمياً. اضغط More info ← Run anyway فقط بعد التحقق من بصمة الملف.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="privacy">
+      <div class="wrap">
+        <div class="privacy">
+          <h2>خصوصية بالتصميم</h2>
+          <p>صدى لا يجمع شيئاً عنك، وليس لديه ما يجمعه.</p>
+          <div class="grid3">
+          <div><strong>بلا قياسات</strong><span>لا تحليلات ولا تقارير أعطال ولا حساب. مكوّن Aptabase أُزيل من المصدر.</span></div>
+          <div><strong>بلا تحديث تلقائي</strong><span>لا تحديثات صامتة ولا اتصال بخادم تحديث. التحديث يدوي من صفحة الإصدارات.</span></div>
+          <div><strong>بياناتك عندك</strong><span>الصوت والنصوص والإعدادات في ملف التعريف الخاص بك فقط. لا يُرسل شيء إلى أي خادم.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="wrap">
+        <h2>أسئلة شائعة</h2>
+        <div class="faq">
+        <details>
+          <summary>هل صدى مجاني؟</summary>
+          <p>نعم. المصدر برخصة MIT والمثبّت مجاني. لا حساب ولا اشتراك ولا إعلانات.</p>
+        </details>
+        <details>
+          <summary>هل يعمل بدون إنترنت؟</summary>
+          <p>نعم، بعد تنزيل نموذج Whisper مرة واحدة. التفريغ يجري محلياً بالكامل، ولا تُستخدم الشبكة إلا لأشياء تطلبها أنت.</p>
+        </details>
+        <details>
+          <summary>هل يدعم اللهجة العراقية؟</summary>
+          <p>Whisper يتعامل مع العراقية ضمن العربية، والتنظيف العربي يوحّد علامات الترقيم. الدقة تعتمد على النموذج وجودة الصوت؛ ابدأ بـ large-v3-turbo.</p>
+        </details>
+        <details>
+          <summary>لماذا يحذّر Windows من المثبّت؟</summary>
+          <p>المثبّت غير موقّع رقمياً. تحقّق من بصمة SHA-256 المرفقة مع الإصدار، أو ابنِ التطبيق من المصدر بنفسك.</p>
+        </details>
+        <details>
+          <summary>ما الفرق عن Vibe؟</summary>
+          <p>صدى شوكة من Vibe v3.2.2: تعريب كامل وRTL وافتراضيات عربية وتصدير PDF عربي وإزالة القياسات والتحديث التلقائي ومرحّل الهاتف، مع اسم وأيقونة جديدة.</p>
+        </details>
+        <details>
+          <summary>أين تُحفظ ملفاتي؟</summary>
+          <p>الإعدادات والسجلات والمشاريع في %APPDATA%\app.sada.desktop، والنموذج وبيانات WebView في %LOCALAPPDATA%\app.sada.desktop. لا يُرسل شيء إلى أي خادم.</p>
+        </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="grid">
+        <p>صدى — تطبيق مفتوح المصدر برخصة MIT. لا يُجمع أي شيء عنك.</p>
+        <div class="links">
+          <a href="https://github.com/alshahia/sada/blob/master/README.ar.md" rel="noopener">README عربي</a>
+          <a href="https://github.com/alshahia/sada/blob/master/README.md" rel="noopener">English README</a>
+          <a href="https://github.com/alshahia/sada/blob/master/docs/BUILDING.md" rel="noopener">دليل البناء</a>
+          <a href="https://github.com/alshahia/sada/blob/master/LICENSE" rel="noopener">الترخيص</a>
+          <a href="https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md" rel="noopener">إشعارات الأطراف الثالثة</a>
+          <a href="llms.txt" rel="noopener">llms.txt</a>
+        </div>
+      </div>
+      <p class="attribution">صدى شوكة مستقلة من <a href="https://github.com/thewh1teagle/vibe" rel="noopener">Vibe</a> (رخصة MIT)؛ غير مرتبطة بمؤلف Vibe ولا معتمدة منه. «Vibe» ملك مؤلفه.</p>
+      <small>© 2026 Sada · <a href="https://github.com/alshahia/sada/releases/latest" rel="noopener">v3.2.2</a> · <a href="https://github.com/alshahia/sada" rel="noopener">GitHub</a></small>
+    </div>
+  </footer>
+</body>
+</html>

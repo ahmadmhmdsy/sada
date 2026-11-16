@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sada (صدى) — Arabic-first offline speech-to-text for Windows</title>
+  <meta name="description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe." />
+  <meta name="keywords" content="Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, Whisper Windows app, RTL interface, Arabic transcription, Iraqi Arabic, SRT VTT PDF export, local transcription, private, Sada, صدى" />
+  <meta name="author" content="Ahmad Mahmoud" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#0f6b62" />
+  <link rel="canonical" href="https://alshahia.github.io/sada/en/" />
+  <link rel="alternate" hreflang="ar" href="https://alshahia.github.io/sada/" />
+  <link rel="alternate" hreflang="en" href="https://alshahia.github.io/sada/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://alshahia.github.io/sada/" />
+  <link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt" />
+  <link rel="icon" type="image/svg+xml" href="../assets/sada-icon.svg" />
+  <link rel="stylesheet" href="../styles.css" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sada (صدى)" />
+  <meta property="og:title" content="Sada (صدى) — Arabic-first offline speech-to-text for Windows" />
+  <meta property="og:description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe." />
+  <meta property="og:url" content="https://alshahia.github.io/sada/en/" />
+  <meta property="og:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="ar_IQ" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sada (صدى) — Arabic-first offline speech-to-text for Windows" />
+  <meta name="twitter:description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe." />
+  <meta name="twitter:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://alshahia.github.io/sada/en/#website",
+      "url": "https://alshahia.github.io/sada/en/",
+      "name": "Sada (صدى)",
+      "description": "Arabic-first offline speech-to-text for Windows.",
+      "inLanguage": [
+        "ar",
+        "en"
+      ],
+      "publisher": {
+        "@type": "Person",
+        "name": "Ahmad Mahmoud",
+        "url": "https://github.com/alshahia"
+      }
+    },
+    {
+      "@id": "https://alshahia.github.io/sada/en/#app",
+      "@type": "SoftwareApplication",
+      "name": "Sada (صدى)",
+      "alternateName": [
+        "صدى (Sada)",
+        "Sada Arabic transcription"
+      ],
+      "description": "Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe.",
+      "applicationCategory": "UtilitiesApplication",
+      "applicationSubCategory": "Speech-to-text",
+      "operatingSystem": "Windows 10, Windows 11",
+      "softwareVersion": "3.2.2",
+      "datePublished": "2026-11-16",
+      "inLanguage": [
+        "ar",
+        "en"
+      ],
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "license": "https://github.com/alshahia/sada/blob/master/LICENSE",
+      "codeRepository": "https://github.com/alshahia/sada",
+      "downloadUrl": "https://github.com/alshahia/sada/releases/latest",
+      "screenshot": "https://alshahia.github.io/sada/assets/sada-main.png",
+      "featureList": [
+        "Arabic-first and RTL",
+        "Fully local transcription",
+        "Whisper models",
+        "Many export formats",
+        "Dictation and recording",
+        "Private by design"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Ahmad Mahmoud",
+        "url": "https://github.com/alshahia"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Ahmad Mahmoud",
+        "url": "https://github.com/alshahia"
+      },
+      "url": "https://alshahia.github.io/sada/en/"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://alshahia.github.io/sada/en/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is Sada free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. MIT-licensed source and a free Windows installer, with no account, subscription or ads."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, after a one-time Whisper model download. Transcription is fully local; the network is used only for actions you request."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it support Iraqi Arabic?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Whisper handles Iraqi Arabic as part of Arabic, and the Arabic cleanup normalizes punctuation. Accuracy depends on the model and audio; start with large-v3-turbo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does Windows warn about the installer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The installer is not code-signed. Verify the published SHA-256 checksum, or build the app from source yourself."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is it different from Vibe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sada is a fork of Vibe v3.2.2 with full Arabic localization and RTL, Arabic defaults, Arabic PDF export, and removal of telemetry, auto-update and the phone relay, plus its own name and icon."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where are my files?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Settings, logs and projects live in %APPDATA%\\app.sada.desktop; the model and WebView data in %LOCALAPPDATA%\\app.sada.desktop. Nothing is sent to a server."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../" aria-label="Sada (صدى)">
+        <img src="../assets/sada-icon.svg" alt="" width="34" height="34" />
+        <span>صدى<small>Arabic-first transcription</small></span>
+      </a>
+      <nav class="nav" aria-label="Navigation">
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/alshahia/sada" rel="noopener">GitHub</a>
+        <a class="lang" href="../" hreflang="ar" lang="ar">العربية</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Free · Open source · MIT</p>
+          <h1>Arabic-first transcription, <span class="accent">on your own computer</span>.</h1>
+          <p class="lead">Sada turns audio and video into text on Windows, with Arabic first: a right-to-left interface, Arabic transcription defaults, IBM Plex Sans Arabic typography and Arabic-aware transcript cleanup. The Whisper engine runs locally — nothing is uploaded.</p>
+          <div class="cta">
+            <a class="btn btn-primary" href="https://github.com/alshahia/sada/releases/latest" rel="noopener">Download Sada 3.2.2</a>
+            <a class="btn btn-ghost" href="https://github.com/alshahia/sada" rel="noopener">Source on GitHub</a>
+          </div>
+          <ul class="chips">
+            <li>Windows 10/11 (64-bit)</li>
+            <li>Works offline</li>
+            <li>No account</li>
+            <li>MIT</li>
+          </ul>
+        </div>
+        <figure class="hero-figure">
+          <img src="../assets/sada-main.png" width="1000" height="875" alt="The Sada main window: an Arabic right-to-left interface with a file drop area and recent transcripts." />
+          <figcaption>Sada’s main window — Arabic, right-to-left, on a fresh profile.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="wrap">
+        <h2>Why Sada?</h2>
+        <p class="section-lead">Most transcription apps treat Arabic as a translation target. Sada inverts that and builds the Windows experience around Arabic first.</p>
+        <div class="features">
+          <article class="card">
+            <div class="icon" aria-hidden="true">1</div>
+            <h3>Arabic-first and RTL</h3>
+            <p>Display language ar-IQ, transcription language ar, translation off, temperature 0 and beam 5, Arabic typography and Arabic PDF export.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">2</div>
+            <h3>Fully local transcription</h3>
+            <p>whisper.cpp engine with bundled FFmpeg; audio and video never leave your computer.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">3</div>
+            <h3>Whisper models</h3>
+            <p>Use any ggml-*.bin model. Recommended for Arabic: large-v3-turbo (~1.6GB). Models are not bundled with the installer.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">4</div>
+            <h3>Many export formats</h3>
+            <p>SRT, VTT, TXT, HTML, Arabic PDF with an embedded font, DOCX and JSON.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">5</div>
+            <h3>Dictation and recording</h3>
+            <p>A global dictation shortcut types into any app, plus microphone and system-audio recording.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">6</div>
+            <h3>Private by design</h3>
+            <p>No analytics, no updater, no account, no phone relay. The network is used only for actions you request.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <div class="wrap">
+        <h2>Install in four steps</h2>
+        <p class="section-lead">The app installs per user and needs no administrator rights. The model is downloaded once.</p>
+        <div class="install-grid">
+          <ol class="steps">
+          <li><div><strong>Download the installer</strong><span>From the releases page: Sada_3.2.2_x64-setup.exe.</span></div></li>
+          <li><div><strong>Verify the checksum</strong><span>Compare the SHA-256 with the attached SHA256SUMS.txt.</span></div></li>
+          <li><div><strong>Run the installer</strong><span>Installs into %LOCALAPPDATA%\Sada — no admin rights. SmartScreen may warn because it is unsigned.</span></div></li>
+          <li><div><strong>Download a model once</strong><span>Settings → Models: large-v3-turbo (~1.6GB) or an existing ggml-*.bin file.</span></div></li>
+          </ol>
+          <div class="note">
+            <strong>SmartScreen:</strong> The installer is not code-signed. Choose More info → Run anyway only after verifying the checksum.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="privacy">
+      <div class="wrap">
+        <div class="privacy">
+          <h2>Private by design</h2>
+          <p>Sada collects nothing about you — there is nothing to collect.</p>
+          <div class="grid3">
+          <div><strong>No analytics</strong><span>No trackers, no crash reporting, no account. The upstream Aptabase client is removed from source.</span></div>
+          <div><strong>No auto-update</strong><span>No silent updates and no update server. Updates are manual from the releases page.</span></div>
+          <div><strong>Your data stays yours</strong><span>Audio, transcripts and settings live in your own user profile. Nothing is sent to a server.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="wrap">
+        <h2>Frequently asked questions</h2>
+        <div class="faq">
+        <details>
+          <summary>Is Sada free?</summary>
+          <p>Yes. MIT-licensed source and a free Windows installer, with no account, subscription or ads.</p>
+        </details>
+        <details>
+          <summary>Does it work offline?</summary>
+          <p>Yes, after a one-time Whisper model download. Transcription is fully local; the network is used only for actions you request.</p>
+        </details>
+        <details>
+          <summary>Does it support Iraqi Arabic?</summary>
+          <p>Whisper handles Iraqi Arabic as part of Arabic, and the Arabic cleanup normalizes punctuation. Accuracy depends on the model and audio; start with large-v3-turbo.</p>
+        </details>
+        <details>
+          <summary>Why does Windows warn about the installer?</summary>
+          <p>The installer is not code-signed. Verify the published SHA-256 checksum, or build the app from source yourself.</p>
+        </details>
+        <details>
+          <summary>How is it different from Vibe?</summary>
+          <p>Sada is a fork of Vibe v3.2.2 with full Arabic localization and RTL, Arabic defaults, Arabic PDF export, and removal of telemetry, auto-update and the phone relay, plus its own name and icon.</p>
+        </details>
+        <details>
+          <summary>Where are my files?</summary>
+          <p>Settings, logs and projects live in %APPDATA%\app.sada.desktop; the model and WebView data in %LOCALAPPDATA%\app.sada.desktop. Nothing is sent to a server.</p>
+        </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="grid">
+        <p>Sada — open source under the MIT licence. Nothing about you is collected.</p>
+        <div class="links">
+          <a href="https://github.com/alshahia/sada/blob/master/README.ar.md" rel="noopener">Arabic README</a>
+          <a href="https://github.com/alshahia/sada/blob/master/README.md" rel="noopener">English README</a>
+          <a href="https://github.com/alshahia/sada/blob/master/docs/BUILDING.md" rel="noopener">Building guide</a>
+          <a href="https://github.com/alshahia/sada/blob/master/LICENSE" rel="noopener">License</a>
+          <a href="https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md" rel="noopener">Third-party notices</a>
+          <a href="../llms.txt" rel="noopener">llms.txt</a>
+        </div>
+      </div>
+      <p class="attribution">Sada is an independent fork of <a href="https://github.com/thewh1teagle/vibe" rel="noopener">Vibe</a> (MIT), not affiliated with or endorsed by the Vibe author. “Vibe” remains the property of its author.</p>
+      <small>© 2026 Sada · <a href="https://github.com/alshahia/sada/releases/latest" rel="noopener">v3.2.2</a> · <a href="https://github.com/alshahia/sada" rel="noopener">GitHub</a></small>
+    </div>
+  </footer>
+</body>
+</html>

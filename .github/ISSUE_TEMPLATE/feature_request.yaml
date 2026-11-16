@@ -1,22 +1,36 @@
-name: Feature request
-description: Suggest an idea for this project
-title: '[Title here. keep it short]'
-labels: ['feature']
-assignees:
-    - thewh1teagle
+name: اقتراح ميزة / Feature request
+description: اقترح فكرة أو تحسيناً لصدى — Suggest an idea for Sada
+title: "[Feature]: "
+labels: ["feature"]
 body:
-    - type: markdown
-      attributes:
-          value: |
-              💚💜 Thank you for interest. ❤️💛
-              *Please prioritize checking existing issues first*. [features](https://github.com/thewh1teagle/vibe/issues?q=is:issue+label:feature+)
-              I will repay with higher-quality code.
-              
-    - type: textarea
-      id: describe-the-feature
-      attributes:
-          label: Describe the feature
-          description: Also tell us why you think it useful
-          placeholder: Description...
-      validations:
-          required: true
+  - type: markdown
+    attributes:
+      value: |
+        شكراً لاهتمامك! اشرح الفكرة والسبب، واذكر هل تخص العربية/RTL أم ميزة عامة.
+        Thanks! Describe the idea, why it matters, and whether it is Arabic/RTL-specific.
+  - type: textarea
+    id: describe
+    attributes:
+      label: الوصف / Describe the feature
+      description: ماذا تريد أن يحدث؟ ولماذا؟
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: بدائل / Alternatives considered
+      description: هل هناك حلول أو تطبيقات أخرى تفعل ذلك؟
+  - type: dropdown
+    id: area
+    attributes:
+      label: المجال / Area
+      options:
+        - Arabic / RTL
+        - Transcription quality
+        - Export (PDF, SRT, DOCX…)
+        - UI / UX
+        - Performance
+        - Packaging / installer
+        - Other
+    validations:
+      required: true
