@@ -55,7 +55,7 @@ args = ["--mcp"]
 ~~~
 
 أعد تشغيل العميل بعد تعديل إعداده. الملف المثبَّت موجود في **%LOCALAPPDATA%\Sada\**، والبناء من
-المصدر يستخدم **target/release/Sada.exe**.
+المصدر ينتج **desktop/src-tauri/target/release/vibe.exe** (ونسخة Tauri تحزمه باسم **Sada.exe**).
 
 ## الأدوات
 

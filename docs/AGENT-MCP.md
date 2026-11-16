@@ -64,8 +64,8 @@ Claude Desktop, Cursor, Windsurf, Cline and most others accept the same shape:
 ~~~
 
 Restart the client after editing its configuration. On Windows the installed executable is under
-**%LOCALAPPDATA%\Sada\** (per-user install, no administrator rights needed); a build from source
-uses **target/release/Sada.exe**.
+**%LOCALAPPDATA%\Sada\** (per-user install, no administrator rights needed); a build from source writes **desktop/src-tauri/target/release/vibe.exe** (a Tauri bundle copies it in
+as **Sada.exe**).
 
 ## Tools
 
