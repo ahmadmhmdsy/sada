@@ -5,7 +5,7 @@ It records what is in flight, what each milestone promises, and the evidence rul
 model questions: **no model is curated without a licence, a size, a SHA-256 and timestamps** — and no
 Arabic claim is made without the benchmark.
 
-Status: `P0 → release in progress` (v3.3.1 tagged and building). Last updated 2026-11-17.
+Status: `P0 complete` — v3.3.1 shipped 2026-11-17. Next: P1 (v3.4.0, due 2026-12-08). Last updated 2026-11-17.
 
 ## Milestones
 
@@ -24,7 +24,10 @@ Status: `P0 → release in progress` (v3.3.1 tagged and building). Last updated 
 - [x] #2 Migrate diarization to `nemotron-3-diarization-Q8_0.gguf` + hide the legacy Sortformer file.
 - [x] #1 Arabic smoke set on the new engine: text, SRT/VTT, language, GPU and CPU-only.
 - [x] #3 GPU/Vulkan documentation in `README.md`, `README.ar.md`, `docs/BUILDING.md`, `docs/DEBUG.md`.
-- [ ] #4 Release v3.3.1 (bilingual notes, tag, installer verification).
+- [x] #4 Release v3.3.1 (bilingual notes, tag, installer verification):
+  [release](https://github.com/alshahia/sada/releases/tag/v3.3.1) · installer 44,996,972 bytes ·
+  SHA-256 `dee8bfb313947df2fd90ca1c99f38680a102e342753436dfb087afc2fdfae669` (re-downloaded and
+  matched against `SHA256SUMS.txt`).
 
 **E1 evidence (2026-11-17):** sidecar `vibe-server v0.6.16` (77,900,288 B) + FFmpeg 9.0.2
 (105,423,872 B). The four Arabic clips produced byte-identical text to v0.6.10 on

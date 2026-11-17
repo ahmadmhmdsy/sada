@@ -6,8 +6,8 @@ It is written in English for reviewers; the Arabic summary follows.
 ## Sada 3.3.1 — engine v0.6.16 and GPU documentation
 
 - **Date:** 17 November 2026 (Asia/Baghdad)
-- **Source:** `master` with `.server-version` = `server-v0.6.16`; CI rebuilds the installer from
-  the same tree.
+- **Source:** `master` at `45c3697`, tagged `v3.3.1`, with `.server-version` = `server-v0.6.16`;
+  CI rebuilds the installer from the same tree.
 - **Host:** Windows 10.0.26300 · WebView2 157.0.4341.46 · AVX2 available · NVIDIA Quadro RTX 4000
   (Vulkan0) and Intel UHD Graphics 630 (Vulkan1)
 - **Build:** Tauri 2.10.3, sidecar `vibe-server` v0.6.16 (upstream `master`, whisper.cpp with the
@@ -19,7 +19,7 @@ It is written in English for reviewers; the Arabic summary follows.
 | --- | --- |
 | `pnpm test` (vitest) | **26 files / 134 tests passed**, exit 0 (adds the auxiliary/legacy model filter tests) |
 | `pnpm build` | paraglide compile → tsc → vite build, exit 0 |
-| `cargo test --release` | no Rust source changed in this release; 83 tests passed at 3.3.0 and CI reruns them |
+| `cargo test --release` | no Rust source changed in this release; CI re-ran the 83 tests and passed |
 
 ### Engine smoke test (E1)
 
@@ -49,13 +49,19 @@ uses (`POST /v1/audio/transcriptions`), with `ggml-large-v3-turbo.bin` and `lang
 ### Artifacts
 
 The CI-built installer and its `SHA256SUMS.txt` are attached to the
-[v3.3.1 GitHub release](https://github.com/alshahia/sada/releases/tag/v3.3.1). Re-download the
-published installer and verify it against the checksum before running it; the hash recorded for
-the published file follows after the Release workflow ran.
+[v3.3.1 GitHub release](https://github.com/alshahia/sada/releases/tag/v3.3.1). The published files
+were re-downloaded on 17 November 2026 and compared with the published checksums:
 
-| Artifact | SHA-256 |
-| --- | --- |
-| Published `Sada_3.3.1_x64-setup.exe` | _recorded after the Release workflow_ |
+| Artifact | Size | SHA-256 |
+| --- | --- | --- |
+| `Sada_3.3.1_x64-setup.exe` | 44,996,972 bytes | `dee8bfb313947df2fd90ca1c99f38680a102e342753436dfb087afc2fdfae669` |
+| `SHA256SUMS.txt` | 90 bytes | `68099effae9b23f6cf654c7154744b17841987b7b6055dd5ac8e193f28635310` |
+
+- The re-downloaded installer matched `SHA256SUMS.txt` and the digest GitHub recorded for the
+  asset; the NSIS package reports product version `3.3.1` and is unsigned (SmartScreen warns
+  "unknown publisher"; verify the hash before choosing *More info → Run anyway*).
+- CI on the tagged commit re-ran the full suite: `pnpm build`, `pnpm test` and
+  `cargo test --release` all passed before the release job uploaded the assets.
 
 ---
 
