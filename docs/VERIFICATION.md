@@ -3,6 +3,62 @@
 This page summarises how the Windows builds in this repository were verified.
 It is written in English for reviewers; the Arabic summary follows.
 
+## Sada 3.3.1 — engine v0.6.16 and GPU documentation
+
+- **Date:** 17 November 2026 (Asia/Baghdad)
+- **Source:** `master` with `.server-version` = `server-v0.6.16`; CI rebuilds the installer from
+  the same tree.
+- **Host:** Windows 10.0.26300 · WebView2 157.0.4341.46 · AVX2 available · NVIDIA Quadro RTX 4000
+  (Vulkan0) and Intel UHD Graphics 630 (Vulkan1)
+- **Build:** Tauri 2.10.3, sidecar `vibe-server` v0.6.16 (upstream `master`, whisper.cpp with the
+  Vulkan backend), FFmpeg 9.0.2 (gyan.dev essentials, GPLv3), pnpm 10.4.1, Node 24, Rust stable.
+
+### Tests
+
+| Suite | Result |
+| --- | --- |
+| `pnpm test` (vitest) | **26 files / 134 tests passed**, exit 0 (adds the auxiliary/legacy model filter tests) |
+| `pnpm build` | paraglide compile → tsc → vite build, exit 0 |
+| `cargo test --release` | no Rust source changed in this release; 83 tests passed at 3.3.0 and CI reruns them |
+
+### Engine smoke test (E1)
+
+The v0.6.16 sidecar was started as a local server and driven over the same multipart route the app
+uses (`POST /v1/audio/transcriptions`), with `ggml-large-v3-turbo.bin` and `language=ar`:
+
+| Check | Result |
+| --- | --- |
+| Arabic parity with v0.6.10 | **identical text** on all four clips (short MSA, MSA news, Iraqi dialogue, Arabic/English technical mix) |
+| Timed segments | SRT and VTT output carried correct start/end times |
+| Diarization with the new Nemotron-3 GGUF | 12/12 transcript segments attributed on the combined clip (two speakers) |
+| Nemotron 3.5 ASR + Silero VAD | metadata reports `requires_vad: true` with `ar-AR`; loaded and transcribed behind VAD |
+| CPU-only path | `{"no_gpu": true}` model load and transcription completed on the CPU (14 s clip: 26.9 s CPU vs ≈0.5 s on the RTX 4000) |
+| GPU device list | `vibe-server … devices` reports `Vulkan0` Quadro RTX 4000 and `Vulkan1` Intel UHD 630 |
+| Diarization file integrity | 108,541,632 bytes, SHA-256 `a25f026847d765c8661fd5095c73a0e5f20d310dcb8249c654e3828592a2fc73` — matches `desktop/src/lib/config.ts` |
+
+### Configuration migration and invariants
+
+- Diarization now points at `nemotron-3-diarization-Q8_0.gguf`; the retired
+  `diar_streaming_sortformer_4spk-v2.q8_0.gguf` is filtered out of the model list (unit-tested)
+  and is never deleted from disk.
+- No model is bundled and no hard-coded UI string was added: `ar-IQ` still has 704/704 keys, and
+  no telemetry, updater or network endpoint was introduced.
+- The GPU path stays optional: without Vulkan the same engine transcribes on the CPU, and a failed
+  GPU load is retried once with `no_gpu` and remembered.
+
+### Artifacts
+
+The CI-built installer and its `SHA256SUMS.txt` are attached to the
+[v3.3.1 GitHub release](https://github.com/alshahia/sada/releases/tag/v3.3.1). Re-download the
+published installer and verify it against the checksum before running it; the hash recorded for
+the published file follows after the Release workflow ran.
+
+| Artifact | SHA-256 |
+| --- | --- |
+| Published `Sada_3.3.1_x64-setup.exe` | _recorded after the Release workflow_ |
+
+---
+
 ## Sada 3.3.0 — agent interface
 
 - **Date:** 16 November 2026 (Asia/Baghdad)

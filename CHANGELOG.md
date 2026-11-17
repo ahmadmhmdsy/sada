@@ -4,6 +4,27 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.3.1 — 2026-11-17
+
+Engine and GPU foundation release: the bundled engine moves to upstream vibe-server v0.6.16, the
+diarization model is replaced, and the GPU/Vulkan support that was already in the engine is
+finally documented with a user-facing device story.
+
+### Changed
+
+- Engine sidecar `.server-version` v0.6.10 → v0.6.16: Vulkan and large-file crash fixes, non-AVX
+  (SSE4.2) CPU support, sentence/paragraph reconstruction, repeated-line retries.
+- Diarization model: the retired Sortformer ONNX file is replaced by `nemotron-3-diarization-Q8_0.gguf`
+  (108,541,632 bytes, SHA-256 pinned); the old filename is filtered out of the model list so it no
+  longer looks like a transcription model. Users who had it keep the file on disk — nothing is deleted.
+- Bundled FFmpeg 9.0.1 → 9.0.2 (GPLv3; notices and source offer updated).
+
+### Added
+
+- GPU/Vulkan documentation: README.md, README.ar.md, docs/BUILDING.md and docs/DEBUG.md now explain
+  the Settings → Models → Hardware device picker, what Auto means, CPU fallback when Vulkan is
+  missing, the out-of-memory retry-and-remember behaviour, and the Vulkan runtime requirement.
+- `docs/VERIFICATION.md` section for 3.3.1 and bilingual `docs/releases/v3.3.1.md`.
 ## v3.3.0 — 2026-11-16
 
 Agent interface release: Sada can now act as an MCP server for AI agents, with Arabic-first defaults.

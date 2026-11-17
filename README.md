@@ -70,7 +70,7 @@ that:
 
 ## Install
 
-1. Download **`Sada_3.3.0_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
+1. Download **`Sada_3.3.1_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
    and verify its SHA-256 against the attached `SHA256SUMS.txt`.
 2. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator rights
    are required.
@@ -94,6 +94,28 @@ On first launch Sada opens with an Arabic setup screen. Pick a model in **Settin
 Models are **not bundled** with the installer; they are distributed by their own publishers under
 their own terms. The model is loaded locally and never leaves your machine.
 
+## GPU acceleration (optional)
+
+Sada ships the Vulkan build of its whisper.cpp engine, so a Vulkan-capable GPU can speed up
+transcription without CUDA, ROCm or any extra download. GPU is an **optional accelerator, never a
+requirement**: every model still runs on the CPU.
+
+- **Device picker:** **Settings → Models → Hardware**. **Auto** (the default) lets the engine pick
+  its default Vulkan device; choose a specific one if you have more than one GPU. **Transcribe on
+  CPU** forces the CPU path.
+- **What you need:** a GPU driver that provides Vulkan 1.1+ (current NVIDIA/AMD/Intel drivers do;
+  on a machine without the Vulkan loader, install the
+  [Vulkan Runtime](https://sdk.lunarg.com/sdk/download/1.3.290.0/windows/VulkanRT-1.3.290.0-Installer.exe)).
+  When Vulkan is unavailable the engine quietly uses the CPU — the app does not refuse to run.
+- **Out of memory:** if a model fails to load on the GPU, Sada retries it on the CPU, tells you it
+  did, and remembers that model so later runs start on the CPU instead of failing again.
+- **Speed:** on the reference machine (NVIDIA Quadro RTX 4000 with Vulkan), 38 s of Arabic audio
+  transcribed in ~4.9 s including model load (~12.5× realtime). CPU-only is a compatibility path,
+  not a speed path.
+- **Diagnostics:** the engine lists the devices it sees with
+  `vibe-server-x86_64-pc-windows-msvc.exe devices`; see [docs/DEBUG.md](docs/DEBUG.md) for
+  `vulkan-1.dll` errors and [docs/BUILDING.md](docs/BUILDING.md) for build details.
+
 ## Privacy
 
 - No analytics, telemetry, crash reporting or account.
@@ -109,8 +131,11 @@ source, not switched off at runtime.
 
 This release was built from the source in this repository and checked end-to-end:
 
-- 26 test files / 132 unit tests passing (`pnpm test`, exit 0), including Arabic text
+- 26 test files / 134 unit tests passing (`pnpm test`, exit 0), including Arabic text
   normalization, Arabic PDF export, boot-locale and RTL tests.
+- Engine v0.6.16 smoke test: the four Arabic clips produced exactly the same text as on v0.6.10,
+  SRT/VTT timings were correct, Nemotron-3 diarization labelled 12/12 segments, and the CPU-only
+  path still transcribed.
 - Rust: 83 tests passing (`cargo test --release`), including 19 MCP protocol/tools tests and 9
   Arabic normaliser tests.
 - MCP verified end-to-end: `Sada.exe --mcp` answered initialize, tools/list, sada_info,

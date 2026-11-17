@@ -12,8 +12,10 @@
 - Website: https://alshahia.github.io/sada/
 - Repository: https://github.com/alshahia/sada
 - Latest release: https://github.com/alshahia/sada/releases/latest
-- Version: 3.3.0 · License: MIT · Platform: Windows 10/11 x64
-- Engine: whisper.cpp via bundled vibe-server; FFmpeg 9.0.1 GPLv3 bundled (notices in repo)
+- Version: 3.3.1 · License: MIT · Platform: Windows 10/11 x64
+- Engine: whisper.cpp via bundled vibe-server v0.6.16; FFmpeg 9.0.2 GPLv3 bundled (notices in repo)
+- GPU: optional Vulkan acceleration (device picker in Settings → Models → Hardware), CPU fallback,
+  no CUDA/ROCm download
 - Models: not bundled; download ggml-*.bin (suggested large-v3-turbo, ~1.6 GB)
 - Language: Arabic ar-IQ first, 20+ inherited locales available
 - MCP: `Sada.exe --mcp` (stdio only) — tools sada_transcribe, sada_transcripts, sada_transcript,
@@ -30,7 +32,7 @@
 - [MCP guide](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.md) · [دليل MCP](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.ar.md)
 - [Voicebox review](https://github.com/alshahia/sada/blob/master/docs/VOICEBOX-REVIEW.md)
 - [Models council](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.md) · [مجلس النماذج](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.ar.md)
-- [Release notes v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
+- [Release notes v3.3.1](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.1.md) · [v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
 - [Privacy](https://github.com/alshahia/sada/blob/master/PRIVACY.md)
 - [Third-party notices](https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md)
 

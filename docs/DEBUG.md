@@ -111,6 +111,12 @@ For `vcomp140.dll` install [vc_redist.x64.exe](https://aka.ms/vs/17/release/vc_r
 
 For `vulkan-1.dll` install [VulkanRT-Installer.exe](https://sdk.lunarg.com/sdk/download/1.3.290.0/windows/VulkanRT-1.3.290.0-Installer.exe)
 
+Vulkan is optional: without it Sada still transcribes on the CPU. To check what the engine sees, run
+`desktop/src-tauri/binaries/vibe-server-x86_64-pc-windows-msvc.exe devices`; an empty list means
+no Vulkan device is usable. Update the GPU driver from NVIDIA/AMD/Intel (the generic Microsoft
+display driver usually has no Vulkan), or leave **Transcribe on CPU** enabled. A model that fails to
+load on the GPU is retried on the CPU automatically.
+
 </details>
 
 After you finished, share you results by opening [new issue](https://github.com/thewh1teagle/vibe/issues/new?assignees=octocat&labels=bug&projects=&template=bug_report.yaml&title=[Short+title]) or just comment in the issue.

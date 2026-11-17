@@ -11,7 +11,7 @@ is a summary; the authoritative licence texts are in [docs/licenses/](./docs/lic
 The installer bundles an FFmpeg executable used to decode audio and video:
 
 - Binary: `ffmpeg-x86_64-pc-windows-msvc.exe`
-- Build: **FFmpeg 9.0.1**, "essentials" build by gyan.dev (https://www.gyan.dev/ffmpeg/builds/)
+- Build: **FFmpeg 9.0.2**, "essentials" build by gyan.dev (https://www.gyan.dev/ffmpeg/builds/)
 - Reported configuration: `--enable-gpl --enable-version3 --enable-static ...`
   (full `ffmpeg -version` output is recorded in the build verification report)
 - Licence: **GNU General Public License, version 3** (GPLv3). The `--enable-gpl` and
@@ -20,9 +20,9 @@ The installer bundles an FFmpeg executable used to decode audio and video:
 
 GPLv3 requires that anyone who receives the binary can also get its source. If you distribute a
 Sada installer, either ship the corresponding FFmpeg source, or include a written offer valid for
-three years. The exact corresponding source is the FFmpeg 9.0.1 release source, obtainable from:
+three years. The exact corresponding source is the FFmpeg 9.0.2 release source, obtainable from:
 
-- https://ffmpeg.org/releases/ffmpeg-9.0.1.tar.xz
+- https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz
 - https://www.gyan.dev/ffmpeg/builds/ (source archives for the gyan.dev builds)
 
 Sada itself remains a separate MIT-licensed program; the FFmpeg executable is a separate

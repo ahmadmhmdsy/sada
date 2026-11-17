@@ -129,6 +129,26 @@ No code changes accompany this review: it is a decision record for the next rele
 records the verified sizes and SHA-256 values that were filled into `desktop/src/lib/config.ts`
 in the same round.
 
+## 8. Engine v0.6.16, diarization migration and GPU documentation (added by Sada, v3.3.1)
+
+| File | Change |
+| --- | --- |
+| `.server-version` | `server-v0.6.10` → `server-v0.6.16` (upstream `master`; prebuilt Windows x64 sidecar with the Vulkan backend, FFmpeg 9.0.2 alongside) |
+| `desktop/src/lib/config.ts` | diarization moves from the retired Sortformer ONNX file to `nemotron-3-diarization-Q8_0.gguf` (size + SHA-256 pinned from upstream's v3.3.3 config); `legacyDiarizeModelFilenames` keeps the old file out of the model list |
+| `desktop/src/lib/model.ts`, `model.test.ts` | auxiliary-model filter covers the new GGUF diarization file and the legacy filename, with tests |
+| `README.md`, `README.ar.md` | new **GPU acceleration (optional)** section: device picker, CPU fallback, Vulkan runtime, out-of-memory retry, measured speed |
+| `docs/BUILDING.md` | **GPU acceleration (runtime)** section: Vulkan is baked into the pinned sidecar, no CUDA/ROCm build step, `devices` diagnostics, `no_gpu` behaviour |
+| `docs/DEBUG.md` | `vulkan-1.dll` entry now says Vulkan is optional and how to list devices |
+| `THIRD-PARTY-NOTICES.md` | bundled FFmpeg 9.0.1 → 9.0.2 (GPLv3 source offer updated) |
+| `docs/releases/v3.3.1.md`, `docs/VERIFICATION.md` | bilingual release notes and verification report for the engine bump |
+| `desktop/src-tauri/tauri.conf.json`, `Cargo.toml`, `Cargo.lock`, `CITATION.cff` | version `3.3.0` → `3.3.1` |
+
+The bump was accepted after the E1 smoke test in [MODELS-COUNCIL.md](MODELS-COUNCIL.md): the four
+Arabic clips produced the same text as v0.6.10, SRT/VTT keeps timed segments, the new Nemotron-3
+diarization GGUF labels transcript segments (12/12 on the combined clip), Nemotron 3.5 ASR still
+loads behind the Silero VAD, and the CPU-only path still transcribes. The engine source in
+`server/` was not modified.
+
 ## Deliberately not changed
 
 - The Whisper engine, model handling and audio pipeline are upstream code; no model is bundled.

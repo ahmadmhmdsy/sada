@@ -65,6 +65,32 @@ chore server-build     # fetch the ggml libraries, build server/, stage it as th
 `tauri dev` and `tauri build` pick it up unchanged. See `server/docs/BUILDING.md`
 for the engine on its own.
 
+## GPU acceleration (runtime)
+
+The pinned sidecar (`.server-version`) is upstream's prebuilt `vibe-server` release with the ggml
+**Vulkan** backend statically linked. There is no CUDA/ROCm build step and no GPU SDK in the build
+requirements — the same binary also runs on the CPU.
+
+- Runtime requirement: a GPU driver exposing Vulkan 1.1+, or no GPU at all (the engine falls back to
+  CPU). If `vulkan-1.dll` is missing, install the Vulkan Runtime — see [DEBUG.md](DEBUG.md).
+- List the devices the engine sees:
+
+  ```console
+  desktop/src-tauri/binaries/vibe-server-x86_64-pc-windows-msvc.exe devices
+  ```
+
+  It prints JSON per device: `index`, `name` (`Vulkan0`), `description` (the adapter name) and
+  `type` (`gpu` / `igpu`). An empty list means Vulkan is not usable and transcription runs on CPU.
+- The app selects the device per transcription in **Settings → Models → Hardware → GPU Device
+  number**. **Auto** sends no device and the engine picks its default. The **Transcribe on CPU**
+  switch sends `no_gpu` when the model is loaded.
+- If a model fails to load on the GPU, the shell retries the same file once with `no_gpu`, warns
+  the user, and remembers the model so later runs start on the CPU
+  (`desktop/src-tauri/src/cmd/server_cmd.rs`).
+- Building the engine from source is unchanged: `chore server-build` compiles the same crate with
+  whatever ggml backend its release features enable. The shipped Windows sidecar bundles Vulkan,
+  not CUDA.
+
 ## Test
 
 ```console
