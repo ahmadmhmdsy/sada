@@ -32,6 +32,7 @@
 - [Third-party notices and licences](THIRD-PARTY-NOTICES.md)
 - [MCP guide](docs/AGENT-MCP.md) · [MCP guide in Arabic](docs/AGENT-MCP.ar.md)
 - [Voicebox review (why MCP, what was not copied)](docs/VOICEBOX-REVIEW.md)
+- [Models council (models, features and tools worth adding, with licences)](docs/MODELS-COUNCIL.md)
 - [Release notes v3.3.0](docs/releases/v3.3.0.md)
 - [Website](https://alshahia.github.io/sada/)
 

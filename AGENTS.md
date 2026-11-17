@@ -69,6 +69,7 @@ inside both `index.html` files in sync with the repository facts (version, links
 - [MCP guide](docs/AGENT-MCP.md) · [MCP guide in Arabic](docs/AGENT-MCP.ar.md)
 - [Upstream delta](docs/UPSTREAM-PATCHES.md) · [Verification](docs/VERIFICATION.md)
 - [Voicebox review](docs/VOICEBOX-REVIEW.md) · [Voicebox review in Arabic](docs/VOICEBOX-REVIEW.ar.md)
+- [Models council](docs/MODELS-COUNCIL.md) · [Models council in Arabic](docs/MODELS-COUNCIL.ar.md)
 - [Translations](docs/TRANSLATIONS.md) · [Privacy](PRIVACY.md) · [Security](SECURITY.md)
 - [Release notes](docs/releases/) · [Third-party notices](THIRD-PARTY-NOTICES.md)
 

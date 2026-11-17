@@ -119,6 +119,16 @@ The upstream engine, model handling and audio pipeline remain untouched by this 
 No dependency was added: the MCP server uses the existing Rust std, `serde`/`serde_json` and the
 existing engine binary. The transport is stdio only — no port, no listener, no network endpoint.
 
+## 7. Model and feature research (added by Sada, docs only)
+
+| File | Change |
+| --- | --- |
+| `docs/MODELS-COUNCIL.md`, `docs/MODELS-COUNCIL.ar.md` | **new** — Qiyas Council Mode C review of models/features/tools worth adopting (GPU/Vulkan support, verified model catalog, engine v0.6.16 bump, Nemotron 3.5, Arabic Whisper fine-tunes, Qwen3-ASR/Cohere/transcribe.cpp, read-aloud, local LLM), with the licence gate, measured evidence on this host, falsification tests and a phased plan |
+
+No code changes accompany this review: it is a decision record for the next releases. It also
+records the verified sizes and SHA-256 values that were filled into `desktop/src/lib/config.ts`
+in the same round.
+
 ## Deliberately not changed
 
 - The Whisper engine, model handling and audio pipeline are upstream code; no model is bundled.
