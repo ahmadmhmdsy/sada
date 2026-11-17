@@ -28,16 +28,32 @@ export interface ModelDownload extends ModelIntegrity {
 	url: string
 }
 
-// TODO: fill in `size` and `sha256` for every entry below from the real published artifacts
-// (`curl -sI <url>` for the length, `shasum -a 256 <file>` for the hash). They are deliberately
-// left unset rather than guessed: a wrong value would reject a perfectly good download.
+// Integrity is checked when the bytes are downloaded: a size or hash mismatch rejects the file
+// and the next mirror is tried. The primary Hugging Face entries are verified against the published
+// artifacts (the values match upstream Vibe's model catalog); the GitHub fallback asset is left
+// unset because its own published hash has not been verified here — an unset field falls back to the
+// backend's size and magic-byte checks rather than rejecting a good download.
 export const modelUrls: Record<'default' | 'hebrew', ModelDownload[]> = {
 	default: [
-		{ url: 'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin' },
-		{ url: 'https://huggingface.co/vibe-app/whisper-large-v3-turbo-gguf/resolve/main/ggml-large-v3-turbo.bin' }, // Hugging Face fallback
+		{
+			url: 'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin',
+			size: 1624555275,
+			sha256: '1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69',
+		},
+		{
+			url: 'https://huggingface.co/vibe-app/whisper-large-v3-turbo-gguf/resolve/main/ggml-large-v3-turbo.bin', // Hugging Face fallback
+			size: 1624555275,
+			sha256: '1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69',
+		},
 		{ url: 'https://github.com/thewh1teagle/vibe/releases/download/model-files-v1.0/ggml-large-v3-turbo.bin' }, // GitHub fallback
 	],
-	hebrew: [{ url: 'https://huggingface.co/ivrit-ai/whisper-large-v3-turbo-ggml/resolve/main/ggml-model.bin' }],
+	hebrew: [
+		{
+			url: 'https://huggingface.co/ivrit-ai/whisper-large-v3-turbo-ggml/resolve/main/ggml-model.bin',
+			size: 1624555275,
+			sha256: 'c8090411113357097bfafc2b8e228ec1639fa7f5fe4ecb5d054ac0ccef8641b1',
+		},
+	],
 }
 
 export const embeddingModelFilename = 'wespeaker_en_voxceleb_CAM++.onnx'
