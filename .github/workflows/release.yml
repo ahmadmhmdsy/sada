@@ -106,7 +106,7 @@ jobs:
 
       - name: Test the engine request guard
         working-directory: server
-        run: cargo test --release -p vibe-server guard::
+        run: "cargo test --release -p vibe-server guard::"
 
       - name: Build the frontend once for the Rust test build
         working-directory: desktop
