@@ -63,7 +63,7 @@ export const segmentModelUrl = 'https://github.com/thewh1teagle/vibe/releases/do
 
 /**
  * Diarization runs NVIDIA Nemotron-3-Diarization (up to 8 speakers) on ggml, a GGUF exported from
- * the HF safetensors by `server/crates/nemotron-diarize-rs/scripts/export.py --dtype q8_0`.
+ * the HF safetensors by upstream's `nemotron-diarize-rs` converter (`export.py --dtype q8_0`).
  * Q8_0 matches F32 segments on upstream checks at a quarter of the size.
  *
  * Mirrored into the vibe-app org from `nvidia/Nemotron-3-Diarization` (OpenMDW 1.1).
