@@ -70,6 +70,11 @@ jobs:
 
       - name: Cache Rust build
         uses: swatinem/rust-cache@v2
+        with:
+          # The engine is a separate cargo workspace under server/.
+          workspaces: |
+            . -> target
+            server -> target
 
       - name: Setup chore (sidecar fetcher)
         uses: getchore/setup-chore@v1
@@ -86,6 +91,22 @@ jobs:
 
       - name: Fetch the pinned sidecars (vibe-server + ffmpeg)
         run: chore setup x86_64-pc-windows-msvc
+
+      # The installer must ship the guarded engine, not the upstream sidecar the setup step just
+      # downloaded: server/ carries the loopback Host/Origin check (see SECURITY.md), and the
+      # sidecar fetch does not build from source. This overwrites the binary in place.
+      - name: Build the patched engine sidecar from server/
+        shell: pwsh
+        env:
+          VIBE_SERVER_COMMIT: ${{ github.sha }}
+        run: |
+          $version = (Get-Content .server-version -Raw).Trim()
+          $env:VIBE_SERVER_VERSION = "$version-sada.1"
+          chore server-build x86_64-pc-windows-msvc
+
+      - name: Test the engine request guard
+        working-directory: server
+        run: cargo test --release -p vibe-server guard::
 
       - name: Build the frontend once for the Rust test build
         working-directory: desktop

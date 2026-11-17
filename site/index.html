@@ -62,7 +62,7 @@
       "applicationCategory": "UtilitiesApplication",
       "applicationSubCategory": "Speech-to-text",
       "operatingSystem": "Windows 10, Windows 11",
-      "softwareVersion": "3.3.1",
+      "softwareVersion": "3.4.0",
       "datePublished": "2026-11-17",
       "inLanguage": [
         "ar",
@@ -185,7 +185,7 @@
           <h1>تفريغ صوتي عربي… <span class="accent">على جهازك</span>، بلا إنترنت.</h1>
           <p class="lead">صدى يفرّغ الصوت والفيديو إلى نص على Windows، عربي أولاً: واجهة من اليمين إلى اليسار، افتراضيات تفريغ عربية، خط IBM Plex Sans Arabic، وتنظيف نص يراعي العربية. محرّك Whisper يعمل محلياً — لا يُرسل شيء إلى أي خادم. ومنذ 3.3.0 خادم MCP مدمج يمنح الوكلاء أذناً عربية بلا منفذ ولا حساب.</p>
           <div class="cta">
-            <a class="btn btn-primary" href="https://github.com/alshahia/sada/releases/latest" rel="noopener">حمّل صدى 3.3.1</a>
+            <a class="btn btn-primary" href="https://github.com/alshahia/sada/releases/latest" rel="noopener">حمّل صدى 3.4.0</a>
             <a class="btn btn-ghost" href="https://github.com/alshahia/sada" rel="noopener">المصدر على GitHub</a>
           </div>
           <ul class="chips">
@@ -219,8 +219,8 @@
           </article>
           <article class="card">
             <div class="icon" aria-hidden="true">3</div>
-            <h3>نماذج Whisper</h3>
-            <p>استخدم أي نموذج ggml-*.bin. المقترح للعربية large-v3-turbo بحجم ~1.6GB؛ النماذج لا تُشحن مع المثبّت.</p>
+            <h3>كتالوج نماذج موثّق</h3>
+            <p>تعرض الإعدادات ← النماذج ترخيص كل نموذج وحجمه وبصمة SHA-256 ولغاته، وتتحقق من البصمة عند التنزيل. ويمكن استخدام أي ملف ggml-*.bin. المقترح للعربية large-v3-turbo بحجم ~1.6GB؛ النماذج لا تُشحن مع المثبّت.</p>
           </article>
           <article class="card">
             <div class="icon" aria-hidden="true">4</div>
@@ -235,13 +235,13 @@
           <article class="card">
             <div class="icon" aria-hidden="true">6</div>
             <h3>خصوصية مطلقة</h3>
-            <p>بلا قياسات، بلا تحديث تلقائي، بلا حساب، وبلا مرحّل هاتف. الشبكة لما تطلبه أنت فقط.</p>
+            <p>بلا قياسات، بلا تحديث تلقائي، بلا حساب، وبلا مرحّل هاتف. الشبكة لما تطلبه أنت فقط، والمحرّك المحلي لا يستجيب إلا لطلبات loopback.</p>
           </article>
 
           <article class="card">
             <div class="icon" aria-hidden="true">7</div>
             <h3>جاهز للوكلاء (MCP)</h3>
-            <p>ملف التطبيق نفسه يشغّل خادم MCP محلياً عبر stdio: <code>Sada.exe --mcp</code> — تفريغ، وقراءة نصوص محفوظة، وفحص التثبيت، لـ Claude Code وCodex وغيرهما.</p>
+            <p>ملف التطبيق نفسه يشغّل خادم MCP محلياً عبر stdio: <code>Sada.exe --mcp</code> — تفريغ، وقراءة نصوص محفوظة، وتقرير بقدرات النموذج المضبوط (المحرك واللغات وVAD والترجمة والتوجيه)، لـ Claude Code وCodex وغيرهما.</p>
           </article>
         </div>
       </div>
@@ -253,10 +253,10 @@
         <p class="section-lead">يُثبّت التطبيق لكل مستخدم ولا يحتاج صلاحيات مدير. النموذج يُنزّل مرة واحدة فقط.</p>
         <div class="install-grid">
           <ol class="steps">
-          <li><div><strong>نزّل المثبّت</strong><span>من صفحة الإصدارات: Sada_3.3.1_x64-setup.exe.</span></div></li>
+          <li><div><strong>نزّل المثبّت</strong><span>من صفحة الإصدارات: Sada_3.4.0_x64-setup.exe.</span></div></li>
           <li><div><strong>تحقّق من البصمة</strong><span>قارن SHA-256 مع الملف SHA256SUMS.txt المرفق بالإصدار.</span></div></li>
           <li><div><strong>شغّل المثبّت</strong><span>في %LOCALAPPDATA%\Sada — لا يحتاج مديراً. قد يظهر تحذير SmartScreen لأنه غير موقّع.</span></div></li>
-          <li><div><strong>نزّل النموذج مرة واحدة</strong><span>من الإعدادات ← النماذج: large-v3-turbo (~1.6GB) أو ملف ggml-*.bin موجود.</span></div></li>
+          <li><div><strong>نزّل النموذج مرة واحدة</strong><span>من الإعدادات ← النماذج: اختر إدخالاً موثّقاً مثل large-v3-turbo (~1.6GB)، أو ملف ggml-*.bin موجود.</span></div></li>
           </ol>
           <div class="note">
             <strong>تنبيه SmartScreen:</strong> المثبّت غير موقّع رقمياً. اضغط More info ← Run anyway فقط بعد التحقق من بصمة الملف.
@@ -330,7 +330,7 @@
         </div>
       </div>
       <p class="attribution">صدى شوكة مستقلة من <a href="https://github.com/thewh1teagle/vibe" rel="noopener">Vibe</a> (رخصة MIT)؛ غير مرتبطة بمؤلف Vibe ولا معتمدة منه. «Vibe» ملك مؤلفه.</p>
-      <small>© 2026 Sada · <a href="https://github.com/alshahia/sada/releases/latest" rel="noopener">v3.3.1</a> · <a href="https://github.com/alshahia/sada" rel="noopener">GitHub</a></small>
+      <small>© 2026 Sada · <a href="https://github.com/alshahia/sada/releases/latest" rel="noopener">v3.4.0</a> · <a href="https://github.com/alshahia/sada" rel="noopener">GitHub</a></small>
     </div>
   </footer>
 </body>

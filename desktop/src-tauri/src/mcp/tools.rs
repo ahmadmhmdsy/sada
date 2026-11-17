@@ -8,6 +8,7 @@
 use super::transcripts::{
     display_path, entry_name, format_centiseconds, read_record, resolve_record_path, scan_transcripts,
 };
+use super::model_caps::{self, LanguageChoice};
 use super::Ctx;
 use crate::arabic;
 use serde_json::{json, Value};
@@ -35,6 +36,7 @@ pub struct SadaInfo {
     pub engine: Option<PathBuf>,
     pub ffmpeg: Option<PathBuf>,
     pub model: Option<PathBuf>,
+    pub models_folder: PathBuf,
     pub transcripts_dir: PathBuf,
     pub language: String,
 }
@@ -44,20 +46,20 @@ pub fn tool_definitions() -> Vec<Value> {
     vec![
         json!({
             "name": "sada_transcribe",
-            "description": "Transcribe a local audio or video file with Sada's configured Whisper model. Arabic-first: defaults to the user's configured language (Arabic unless changed), never uploads media, and normalises Arabic punctuation and Latin acronyms. Returns the transcript text; set timestamps for [start --> end] lines.",
+            "description": "Transcribe a local audio or video file with Sada's configured model (Whisper, Parakeet or Nemotron). Arabic-first: defaults to the user's configured language (Arabic unless changed), never uploads media, and normalises Arabic punctuation and Latin acronyms. The model's capabilities decide whether translation, prompts and a Silero VAD model are used. Returns the transcript text; set timestamps for [start --> end] lines.",
             "inputSchema": {
                 "type": "object",
                 "properties": {
                     "path": { "type": "string", "description": "Absolute path to a local audio or video file (mp3, wav, m4a, mp4, mkv, ...). URLs are not supported." },
-                    "language": { "type": "string", "description": "Two-letter Whisper language code such as 'ar' or 'en', or 'auto' to detect. Defaults to the user's Sada language setting." },
-                    "translate": { "type": "boolean", "description": "Translate the speech to English instead of transcribing it in the source language. Off by default." },
+                    "language": { "type": "string", "description": "Language to transcribe: a Whisper code such as 'ar' or 'en', a model code such as 'ar-AR', or 'auto' to detect. Base codes are mapped onto what the configured model advertises. Defaults to the user's Sada language setting." },
+                    "translate": { "type": "boolean", "description": "Translate the speech to English instead of transcribing it in the source language (Whisper only; models without translation ignore it). Off by default." },
                     "timestamps": { "type": "boolean", "description": "Prefix every segment with its [start --> end] timecode. Off by default." },
                     "normalize": { "type": "boolean", "description": "Apply Sada's Arabic normalization (Arabic punctuation, Latin acronyms). Default true." },
                     "model": { "type": "string", "description": "Absolute path of a ggml model to use instead of the configured one (advanced)." },
-                    "prompt": { "type": "string", "description": "Initial prompt passed to Whisper (advanced; the app keeps its own configured prompt when this is omitted)." },
+                    "prompt": { "type": "string", "description": "Initial prompt passed to the engine (Whisper only; models without text prompts ignore it). Defaults to the app's configured prompt." },
                     "threads": { "type": "integer", "description": "CPU threads for the engine; 0 or omitted uses the app's configured/default value." },
                     "enhance_audio": { "type": "boolean", "description": "Normalise loudness with FFmpeg before transcribing. Off by default." },
-                    "vad_model": { "type": "string", "description": "Absolute path of a Silero VAD model, for engines that need one (advanced)." }
+                    "vad_model": { "type": "string", "description": "Absolute path of a Silero VAD model, for engines that need one (advanced; found automatically next to the configured model when omitted)." }
                 },
                 "required": ["path"],
                 "additionalProperties": false
@@ -138,6 +140,12 @@ pub fn resolve_info(config_override: Option<PathBuf>) -> SadaInfo {
         .get("transcription.modelOptions")
         .and_then(|options| config_string(options, "lang"))
         .unwrap_or_else(|| "ar".to_string());
+    // The GUI stores the models folder in the same app_config.json; its default is the app's
+    // local data folder, which is where download_model() writes when nothing was chosen.
+    let models_folder = config_string(&config, "models_folder")
+        .map(PathBuf::from)
+        .or_else(|| app_local_data_dir())
+        .unwrap_or_else(|| PathBuf::from("."));
     let engine = find_engine();
     let ffmpeg = find_ffmpeg(engine.as_deref());
 
@@ -148,9 +156,22 @@ pub fn resolve_info(config_override: Option<PathBuf>) -> SadaInfo {
         engine,
         ffmpeg,
         model,
+        models_folder,
         transcripts_dir,
         language,
     }
+}
+
+/// The default models folder on this platform: the app-local data directory Tauri hands
+/// the GUI when no custom folder was chosen.
+fn app_local_data_dir() -> Option<PathBuf> {
+    if let Some(base) = env::var_os("LOCALAPPDATA").map(PathBuf::from) {
+        return Some(base.join("app.sada.desktop"));
+    }
+    if let Some(base) = env::var_os("APPDATA").map(PathBuf::from) {
+        return Some(base.join("app.sada.desktop"));
+    }
+    None
 }
 
 fn config_candidates(config_override: Option<PathBuf>) -> Vec<PathBuf> {
@@ -327,7 +348,9 @@ fn info_text(info: &SadaInfo) -> Result<String, String> {
         "model": {
             "path": info.model.as_ref().map(|path| display_path(path)),
             "present": info.model.as_ref().is_some_and(|path| path.is_file()),
+            "capabilities": model_capabilities(info),
         },
+        "models_folder": display_path(&info.models_folder),
         "transcription": {
             "default_language": info.language,
             "normalizes_arabic": true,
@@ -346,6 +369,26 @@ fn info_text(info: &SadaInfo) -> Result<String, String> {
     serde_json::to_string_pretty(&payload).map_err(|error| format!("Could not serialise info: {error}"))
 }
 
+/// Capabilities of the configured model, probed from the file itself. A probe failure is
+/// reported as a value rather than an error: sada_info must still describe the rest of the
+/// install when the selected model happens to be unreadable.
+fn model_capabilities(info: &SadaInfo) -> Value {
+    let Some(model) = info.model.as_ref().filter(|path| path.is_file()) else {
+        return Value::Null;
+    };
+    match model_caps::model_caps(model) {
+        Ok(caps) => json!({
+            "engine": caps.engine.as_str(),
+            "requires_vad": caps.requires_vad,
+            "languages": caps.languages,
+            "language_detection": caps.language_detection,
+            "translation": caps.translation,
+            "text_prompts": caps.text_prompts,
+        }),
+        Err(error) => json!({ "error": error }),
+    }
+}
+
 // ---------------------------------------------------------------------------------------------
 // sada_transcribe
 // ---------------------------------------------------------------------------------------------
@@ -358,7 +401,7 @@ fn transcribe(arguments: &Value, info: &SadaInfo) -> Result<String, String> {
         .ok_or_else(|| model_missing_error(info))?;
     if !model.is_file() {
         return Err(format!(
-            "The configured Whisper model does not exist:\n  {}\n\nOpen Sada -> Settings -> Models, download or select a ggml model, then retry. If the config file was edited by hand, check its model.path value:\n  {}",
+            "The configured model does not exist:\n  {}\n\nOpen Sada -> Settings -> Models, download or select a model, then retry. If the config file was edited by hand, check its model.path value:\n  {}",
             display_path(&model),
             display_path(&info.config_path),
         ));
@@ -369,33 +412,48 @@ fn transcribe(arguments: &Value, info: &SadaInfo) -> Result<String, String> {
         .filter(|path| path.is_file())
         .ok_or_else(engine_missing_error)?;
 
-    let language = string_argument(arguments, "language")
-        .unwrap_or_else(|| info.language.clone())
-        .trim()
-        .to_lowercase();
-    let auto_language = matches!(language.as_str(), "auto" | "detect" | "automatic");
-    if !auto_language
-        && (language.chars().count() != 2
-            || !language.chars().all(|character| character.is_ascii_alphabetic()))
-    {
-        return Err(format!(
-            "language must be a two-letter Whisper code such as 'ar' or 'en', or 'auto' to detect. Got: {language}"
-        ));
+    // What the configured model can do decides the command line: the GGUF engines reject
+    // Whisper-only flags, need a Silero VAD model, and advertise full language codes instead
+    // of Whisper's two-letter ones. Reading this from the file keeps MCP port-free.
+    let caps = model_caps::model_caps(&model)?;
+    let requested_language = string_argument(arguments, "language").unwrap_or_else(|| info.language.clone());
+    let language = model_caps::resolve_language(&requested_language, &caps).map_err(|error| {
+        format!(
+            "{error}\n\nThe configured model is {} ({}). Open Sada -> Settings -> Models to change it, or Settings -> Transcription to change the language.",
+            caps.engine.as_str(),
+            display_path(&model),
+        )
+    })?;
+    let vad_model = match string_argument(arguments, "vad_model") {
+        Some(path) => Some(PathBuf::from(path)),
+        None => model_caps::resolve_vad_model(&caps, &model, &info.models_folder)?,
+    };
+    if let Some(path) = vad_model.as_ref() {
+        let usable = path.metadata().is_ok_and(|metadata| metadata.is_file() && metadata.len() > 0);
+        if !usable {
+            return Err(format!(
+                "The VAD model at {} is missing or empty. Open Sada -> Settings -> Models and select the model again so the VAD file is downloaded.",
+                display_path(path),
+            ));
+        }
     }
 
     let options = model_options(info);
     let mut command = Command::new(engine);
     command.arg("transcribe").arg(&model).arg(&audio);
-    if auto_language {
-        command.arg("--detect-language");
-    } else {
-        command.args(["--language", &language]);
+    match language {
+        LanguageChoice::Detect => {
+            command.arg("--detect-language");
+        }
+        LanguageChoice::Code(code) => {
+            command.args(["--language", &code]);
+        }
     }
 
     let translate = bool_argument(arguments, "translate")
         .or_else(|| config_bool(options, "translate"))
         .unwrap_or(false);
-    if translate {
+    if translate && caps.translation {
         command.arg("--translate");
     }
 
@@ -415,7 +473,10 @@ fn transcribe(arguments: &Value, info: &SadaInfo) -> Result<String, String> {
 
     let prompt = string_argument(arguments, "prompt").or_else(|| config_string(options, "init_prompt"));
     if let Some(prompt) = prompt.filter(|prompt| !prompt.trim().is_empty()) {
-        command.args(["--prompt", &prompt]);
+        // Nemotron and Parakeet reject --prompt; the capability probe knows which engine this is.
+        if caps.text_prompts {
+            command.args(["--prompt", &prompt]);
+        }
     }
 
     // Match the app's decoding settings, so MCP output is what the same file produces in the UI
@@ -441,8 +502,8 @@ fn transcribe(arguments: &Value, info: &SadaInfo) -> Result<String, String> {
     if bool_argument(arguments, "enhance_audio").unwrap_or(false) {
         command.arg("--enhance-audio");
     }
-    if let Some(vad_model) = string_argument(arguments, "vad_model") {
-        command.args(["--vad-model", &vad_model]);
+    if let Some(vad_model) = vad_model.as_ref() {
+        command.args(["--vad-model", &vad_model.to_string_lossy().into_owned()]);
     }
     if let Some(ffmpeg) = info.ffmpeg.as_ref().filter(|path| path.is_file()) {
         command.env("VIBE_SERVER_FFMPEG_PATH", ffmpeg);
@@ -497,7 +558,7 @@ fn engine_missing_error() -> String {
 
 fn model_missing_error(info: &SadaInfo) -> String {
     format!(
-        "No Whisper model is configured for Sada, so transcription cannot start.\n\nOpen Sada -> Settings -> Models, download or select a ggml model (large-v3-turbo is the recommendation), then retry.\n\nConfig file checked:\n  {}",
+        "No model is configured for Sada, so transcription cannot start.\n\nOpen Sada -> Settings -> Models, download or select a model (large-v3-turbo is the recommendation), then retry.\n\nConfig file checked:\n  {}",
         display_path(&info.config_path),
     )
 }
@@ -726,7 +787,7 @@ mod tests {
 
         let error = call_tool("sada_transcribe", &json!({ "path": audio }), &mut ctx(&folder))
             .expect_err("must fail before starting the engine");
-        assert!(error.contains("Whisper model"), "unexpected error: {error}");
+        assert!(error.contains("No model is configured"), "unexpected error: {error}");
 
         fs::remove_dir_all(&folder).unwrap();
     }

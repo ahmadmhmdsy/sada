@@ -147,11 +147,35 @@ The bump was accepted after the E1 smoke test in [MODELS-COUNCIL.md](MODELS-COUN
 Arabic clips produced the same text as v0.6.10, SRT/VTT keeps timed segments, the new Nemotron-3
 diarization GGUF labels transcript segments (12/12 on the combined clip), Nemotron 3.5 ASR still
 loads behind the Silero VAD, and the CPU-only path still transcribes. The engine source in
-`server/` was not modified.
+`server/` was not modified for v3.3.1 (the loopback guard landed in v3.4.0, see section 9).
 
+## 9. Verified model catalog, engine capability gating and the loopback guard (added by Sada, v3.4.0)
+
+| File | Change |
+| --- | --- |
+| `desktop/src/lib/model-catalog.ts`, `version.ts`, `model-catalog-source.ts` (+ test) | **new** — bundled-only catalog manifest: strict entry validation (licence allowlist MIT/Apache-2.0/CC-BY-4.0/OpenMDW-1.1, size, SHA-256, languages), upstream-version gate, no network source |
+| `desktop/src/assets/model-catalog.json` | **new** — three curated entries (Whisper large-v3-turbo, Parakeet v3, Nemotron 3.5) with pinned hashes; no model is bundled or committed |
+| `desktop/src/lib/model-install.ts`, `desktop/src/pages/settings/use-model-catalog.ts`, `desktop/src/pages/settings/sections/model-catalog.tsx` | **new** — catalog install flow in Settings → Models replaces the plain model list (`sections/models.tsx` removed) |
+| `docs/MODELS.md`, `docs/MODELS.ar.md` | **new** — model guide: sizes, licenses, hardware, VAD requirement, catalog policy |
+| `desktop/src-tauri/src/mcp/model_caps.rs` | **new** — GGUF metadata probe without the engine: engine kind (Whisper / Parakeet v3 / Nemotron), VAD requirement, language list, detection, translation and prompt support, VAD model resolution, tests |
+| `desktop/src-tauri/src/mcp/tools.rs` | `sada_transcribe` probes the model, maps the language to the model (`ar` → `ar-AR`, `auto` only with detection), passes `--vad-model` for VAD engines, and only sends `--translate`/`--prompt` when supported; `sada_info` reports capabilities and the models folder |
+| `desktop/src/lib/model-capabilities.ts` (+ test) | **new** — pure language reconciliation (nearest advertised code, exact/base match, `auto` only with detection) and VAD gate decision |
+| `desktop/src/lib/vad-gate.ts` | **new** — single-flight Silero VAD download/validation used by every model-selection and run path |
+| `desktop/src/lib/model.ts` | `readModelMetadata` shared wrapper over the `get_model_metadata` command |
+| `desktop/src/providers/preference.tsx`, `pages/settings/view-model.ts`, `pages/setup/view-model.ts`, `pages/main/hooks/use-transcribe-queue.ts`, `providers/hotkey.tsx` | language reconciliation on metadata change; VAD gate before model selection, queue start, retries and dictation; removes the hard-coded English prompts |
+| `i18n/desktop/en-US.json`, `ar-IQ.json` | five VAD keys (`vadRequiredTitle`, `vadRequiredMessage`, `vadDownloading`, `vadDownloadFailed`, `vadRequiredToTranscribe`) |
+| `server/crates/vibe-server/src/server/guard.rs` | **new** — loopback request guard for the engine: `Host` must be a loopback name for the bound port, an `Origin` header must be a loopback (or Tauri webview) origin; unit tests for rebinding hosts and cross-origin pages |
+| `server/crates/vibe-server/src/server/mod.rs` | applies the guard to loopback listeners only; the guard state carries the listener port |
+| `server/crates/vibe-server/Cargo.toml` | dev-dependencies for the guard tests (`tower`, `http-body-util`) |
+| `desktop/src-tauri/src/server/process.rs` | engine is started with an explicit `--host 127.0.0.1` and an ephemeral port |
+| `.github/workflows/release.yml` | builds the engine from `server/` after fetching the pinned sidecars (version `v0.6.16-sada.1`), runs the guard tests, and caches the engine workspace; the installer therefore ships the guarded engine, not the upstream binary |
+| `SECURITY.md` | new **Local engine boundary** section: threat, guard rules, residual local-process risk |
+
+This is the first release that changes `server/`. The engine tree is otherwise upstream v0.6.16
+code; the guard is the only behavioural delta and is upstreamable as-is.
 ## Deliberately not changed
 
-- The Whisper engine, model handling and audio pipeline are upstream code; no model is bundled.
+- The Whisper engine, model handling and audio pipeline are upstream code apart from the loopback request guard in section 9; no model is bundled.
 - The transcription defaults changed only at the application default-config layer
   (`preference.tsx`), not in the engine, so a user can still pick any language/values.
 - Upstream i18n catalogues for the other 21 locales are untouched and still selectable.

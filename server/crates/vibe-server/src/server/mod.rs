@@ -1,6 +1,7 @@
 mod diarization;
 mod form;
 pub(crate) mod format;
+mod guard;
 mod routes;
 mod stream;
 mod transcription;
@@ -152,6 +153,16 @@ pub async fn serve(
 
     let listener = tokio::net::TcpListener::bind((host.as_str(), port)).await?;
     let addr = listener.local_addr()?;
+    // Loopback listeners get the browser guard: pages on the internet must not be able to drive
+    // the local engine. Binding to another address is an explicit opt-in to network serving.
+    let app = if addr.ip().is_loopback() {
+        app.layer(axum::middleware::from_fn_with_state(
+            guard::LoopbackGuard { port: addr.port() },
+            guard::guard,
+        ))
+    } else {
+        app
+    };
     print_ready(addr, ready_config)?;
 
     axum::serve(listener, app).with_graceful_shutdown(shutdown_signal()).await?;

@@ -3,6 +3,74 @@
 This page summarises how the Windows builds in this repository were verified.
 It is written in English for reviewers; the Arabic summary follows.
 
+## Sada 3.4.0 — verified catalog, MCP capabilities and endpoint hardening
+
+- **Date:** 17 November 2026 (Asia/Baghdad)
+- **Source:** `master`, tagged `v3.4.0`; the release workflow rebuilds the engine from `server/` and
+  packages that binary as the sidecar (`vibe-server v0.6.16-sada.1`).
+- **Host:** Windows 10.0.26300 · WebView2 157.0.4341.46 · NVIDIA Quadro RTX 4000 (Vulkan0) and
+  Intel UHD Graphics 630 (Vulkan1) · local LLVM 23.1.5 for the bindgen build.
+
+### Tests
+
+| Suite | Result |
+| --- | --- |
+| `pnpm test` (vitest) | **28 files / 179 tests passed**, exit 0 |
+| `pnpm build` | paraglide compile → tsc → vite build, exit 0 |
+| `cargo test --release` (Rust) | **91 passed**, exit 0 (incl. 27 `mcp::`) |
+| `cargo test --release -p vibe-server guard::` | **8 passed**, exit 0 |
+| i18n audit (`check_i18n.py`) | passed; the five new VAD strings exist in `en-US` and `ar-IQ` |
+
+### Verified catalog (#5, #6)
+
+`desktop/src/assets/model-catalog.json` carries three commercially reusable entries and is
+validated on load:
+
+| Entry | Licence | Bytes | SHA-256 (prefix) |
+| --- | --- | --- | --- |
+| `whisper-large-v3-turbo` | MIT | 1,624,555,275 | `1fc70f774d38…` |
+| `whisper-tiny` | MIT | 77,691,713 | `be07e048e1e5…` |
+| `whisper-large-v3-turbo-he` | Apache-2.0 | 1,624,555,275 | `c80904111133…` |
+
+Strict entry validation (licence allowlist, size, SHA-256 format, language codes) and the download
+checks are covered by unit tests; the Settings → Models section reads the catalog at runtime.
+
+### MCP capabilities (#7)
+
+The patched app binary was driven as a stdio MCP server (`--mcp --config <scratch config>`) against
+the guarded engine rebuilt from `server/`:
+
+| Check | Result |
+| --- | --- |
+| `sada_info` with a Nemotron GGUF | `engine: nemotron`, `requires_vad: true`, 32 languages incl. `ar-AR`, `translation: false`, `text_prompts: false` |
+| Nemotron transcription, Arabic, `timestamps: true` | Arabic text returned with `[00:00:00.320 --> …]` timecodes; VAD model located automatically |
+| Whisper with configured `ar-AR` | succeeded after mapping to the Whisper code `ar` |
+| Nemotron with `translate: true` and `prompt` | call succeeded; both flags were dropped because the model does not declare them |
+
+### Loopback guard (#9)
+
+The rebuilt engine (`serve --host 127.0.0.1 --port 0`) answered a live `curl` matrix:
+
+| Request | Result |
+| --- | --- |
+| `Host: 127.0.0.1:<port>` → `GET /health` | **200** |
+| `Host: localhost:<port>` → `GET /health` | **200** |
+| `Host: attacker.example:<port>` → `GET /health` | **403** |
+| `Host: attacker.example:<port>` → `POST /v1/models/load` | **403** (state-changing route) |
+| `Origin: http://attacker.example` → `GET /health` | **403** |
+| `Origin: http://127.0.0.1:1420` → `GET /health` | **200** |
+| missing `Host` → `GET /health` | **403** |
+
+The engine was rebuilt locally from `server/` with `VIBE_SERVER_VERSION=v0.6.16-sada.1`
+(75,686,912 bytes, SHA-256 `48308753614AA6B2D7C8BF587234569791A121F53D19EB006B2A9A5986FA29CF`) and
+staged as `desktop/src-tauri/binaries/vibe-server-x86_64-pc-windows-msvc.exe`; the upstream binary
+remains available as a local backup and CI rebuilds the same way in the Release workflow.
+
+### Artifacts
+
+_(installer size and SHA-256 are added after the v3.4.0 release workflow finishes.)_
+
+---
 ## Sada 3.3.1 — engine v0.6.16 and GPU documentation
 
 - **Date:** 17 November 2026 (Asia/Baghdad)

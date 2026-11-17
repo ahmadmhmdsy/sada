@@ -1,7 +1,7 @@
 export const aboutURL = 'https://github.com/alshahia/sada'
 export const repoURL = 'https://github.com/alshahia/sada'
 export const updateVersionURL = 'https://github.com/alshahia/sada/releases/latest'
-export const modelsDocURL = 'https://github.com/alshahia/sada#first-run-and-models'
+export const modelsDocURL = 'https://github.com/alshahia/sada/blob/master/docs/MODELS.md'
 /**
  * Release notes. With a version it opens that release, otherwise the whole list —
  * the page falls back to English for a release this locale has not translated.

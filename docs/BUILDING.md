@@ -65,6 +65,13 @@ chore server-build     # fetch the ggml libraries, build server/, stage it as th
 `tauri dev` and `tauri build` pick it up unchanged. See `server/docs/BUILDING.md`
 for the engine on its own.
 
+Since 3.4.0 the release workflow runs the same two steps: the installer ships an engine
+built from this tree, because the fork's loopback request guard lives in
+`server/crates/vibe-server/src/server/guard.rs` (see [SECURITY.md](../SECURITY.md)).
+That build is versioned `<.server-version>-sada.1`; the upstream sidecar fetched by
+`setup` is only used for FFmpeg and for local dev before `server-build` runs.
+The guard has unit tests (`cargo test -p vibe-server guard::`) that the release workflow runs.
+
 ## GPU acceleration (runtime)
 
 The pinned sidecar (`.server-version`) is upstream's prebuilt `vibe-server` release with the ggml

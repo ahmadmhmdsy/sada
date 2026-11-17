@@ -184,6 +184,20 @@ export interface ModelMetadata {
 	capabilities: ModelCapabilities
 }
 
+/**
+ * Capabilities of one model file, read through the backend's metadata endpoint. Unknown GGUF
+ * formats are expected to fail here (Whisper GGML is validated by the engine instead), so a
+ * failure is reported as `null` rather than thrown at every caller.
+ */
+export async function readModelMetadata(modelPath: string): Promise<ModelMetadata | null> {
+	try {
+		return await invoke<ModelMetadata>('get_model_metadata', { modelPath })
+	} catch (error) {
+		console.error('failed to read model metadata:', error)
+		return null
+	}
+}
+
 /** The subset of transcribe options that only some engines honour. */
 interface EngineSpecificOptions {
 	init_prompt?: string

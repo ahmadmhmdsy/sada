@@ -1,0 +1,72 @@
+{
+	"models": [
+		{
+			"id": "whisper-large-v3-turbo",
+			"name": "Whisper Large v3 Turbo",
+			"languages": [
+				"*"
+			],
+			"tags": [
+				"recommended",
+				"accurate"
+			],
+			"publisher": {
+				"name": "OpenAI",
+				"url": "https://openai.com"
+			},
+			"license": "MIT",
+			"url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin",
+			"size": 1624555275,
+			"sha256": "1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69",
+			"description": {
+				"en-US": "The default model in Sada: strong accuracy on Modern Standard Arabic and Iraqi dialect, keeps Latin technical terms intact, and gives word timestamps. Best with a Vulkan GPU.",
+				"ar-IQ": "النموذج الافتراضي في صدى: دقة عالية في الفصحى واللهجة العراقية، ويحافظ على المصطلحات التقنية بالإنجليزية، ويعطي أزمنة للكلمات. الأفضل مع بطاقة رسومات تدعم Vulkan."
+			}
+		},
+		{
+			"id": "whisper-tiny",
+			"name": "Whisper Tiny",
+			"languages": [
+				"*"
+			],
+			"tags": [
+				"small",
+				"fast"
+			],
+			"publisher": {
+				"name": "OpenAI",
+				"url": "https://openai.com"
+			},
+			"license": "MIT",
+			"url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin",
+			"size": 77691713,
+			"sha256": "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21",
+			"description": {
+				"en-US": "A 78 MB model that runs on any machine, with or without a GPU. Less accurate, useful for a quick trial or an old laptop.",
+				"ar-IQ": "نموذج بحجم 78 ميغابايت يعمل على أي جهاز، ببطاقة رسومات أو بدونها. دقّته أقل، ومناسب للتجربة السريعة أو الأجهزة القديمة."
+			}
+		},
+		{
+			"id": "whisper-large-v3-turbo-he",
+			"name": "Whisper Large v3 Turbo Hebrew",
+			"languages": [
+				"he"
+			],
+			"tags": [
+				"accurate"
+			],
+			"publisher": {
+				"name": "ivrit.ai",
+				"url": "https://ivrit.ai"
+			},
+			"license": "Apache-2.0",
+			"url": "https://huggingface.co/ivrit-ai/whisper-large-v3-turbo-ggml/resolve/main/ggml-model.bin",
+			"size": 1624555275,
+			"sha256": "c8090411113357097bfafc2b8e228ec1639fa7f5fe4ecb5d054ac0ccef8641b1",
+			"description": {
+				"en-US": "A Hebrew-specialised Whisper model with high accuracy on Hebrew text. It does not understand Arabic.",
+				"ar-IQ": "نموذج Whisper متخصّص بالعبرية بدقة عالية في النصوص العبرية، لكنه لا يفهم العربية."
+			}
+		}
+	]
+}

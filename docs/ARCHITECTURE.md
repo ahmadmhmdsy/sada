@@ -23,7 +23,8 @@ additions (Arabic first-run/normalisation and the MCP agent interface).
 - Bundled as the `vibe-server` sidecar with the desktop app
 - Diarization is in-process via `diarize-rs`; Vibe does not bundle or spawn a separate binary
 - **Build**: `server-libs.yml` publishes the prebuilt ggml libraries (`libraries-ggml-<version>-r<revision>`, inputs under `server/libs/`); `server-release.yml` publishes `server-v*` prereleases; `server-test.yml` runs a release across platforms
-- **Distribution**: the app downloads the release named by `.server-version` at build time (`setup` task in the root `chorefile`); `chore server-build` stages an in-tree build instead
+- **Request guard (Sada)**: loopback listeners reject requests whose `Host` is not `127.0.0.1`/`localhost`/`[::1]` for the bound port, and requests whose `Origin` is not a loopback/Tauri origin. This blocks DNS rebinding and cross-origin pages from driving the engine; see [SECURITY.md](../SECURITY.md)
+- **Distribution**: the app downloads the release named by `.server-version` at build time (`setup` task in the root `chorefile`) for FFmpeg and dev use; since Sada 3.4.0 the **Release** workflow also runs `chore server-build` so the installer ships the guarded engine built from this tree
 
 ### FFmpeg Helper
 
@@ -35,7 +36,8 @@ additions (Arabic first-run/normalisation and the MCP agent interface).
 1. Vibe CI runs `chore setup <target-triple>`
 2. It downloads the prebuilt `vibe-server` from the `server-v*` release in `.server-version`
 3. Binaries placed in `desktop/src-tauri/binaries/`
-4. Tauri bundles `vibe-server` and, where configured, `ffmpeg` into the final app
+4. Sada 3.4.0+: `chore server-build <triple>` rebuilds the engine from `server/` (with the request guard) over the downloaded sidecar, and its guard tests run before packaging
+5. Tauri bundles `vibe-server` and, where configured, `ffmpeg` into the final app
 
 ## Agent interface — MCP (Sada 3.3.0)
 

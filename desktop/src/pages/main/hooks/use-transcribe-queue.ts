@@ -32,7 +32,8 @@ import {
 } from '~/lib/transcripts-store'
 import type { NamedPath, ProjectSource } from '~/lib/types'
 import { ErrorModalContext } from '~/providers/error-modal'
-import { withoutUnsupportedOptions } from '~/lib/model'
+import { readModelMetadata, withoutUnsupportedOptions } from '~/lib/model'
+import { ensureVadModel } from '~/lib/vad-gate'
 import { type Preference, usePreferenceProvider } from '~/providers/preference'
 
 export type JobStatus = 'queued' | 'running' | 'done' | 'error' | 'cancelled'
@@ -385,6 +386,16 @@ export function useTranscribeQueue(): TranscribeQueue {
 			if (!current.modelPath) {
 				failPending(m.noModelSelected())
 				toast.error(m.noModelSelected(), { position: 'bottom-center' })
+				return
+			}
+
+			// A model that needs Silero VAD cannot run without the file. Gate every run here, not
+			// only the picker: a run can start from a retry or an old selection made before the
+			// gate existed. `confirm: false` keeps a queue moving — the file is required, not optional.
+			const runMetadata = current.modelMetadata ?? (await readModelMetadata(current.modelPath))
+			if (!(await ensureVadModel(runMetadata, { confirm: false }))) {
+				failPending(m.vadRequiredToTranscribe())
+				toast.error(m.vadRequiredToTranscribe(), { position: 'bottom-center' })
 				return
 			}
 

@@ -150,7 +150,10 @@ impl ServerProcess {
             format!("{unload_timeout_minutes}m")
         };
         let mut cmd = Command::new(binary_path);
-        cmd.args(["serve", "--port", "0"])
+        // The engine defaults to 127.0.0.1, and the request guard only applies to loopback
+        // listeners; naming the host makes that explicit so a future default change cannot
+        // silently expose the engine to the network.
+        cmd.args(["serve", "--host", "127.0.0.1", "--port", "0"])
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .env("VIBE_SERVER_UNLOAD_TIMEOUT", unload_timeout)

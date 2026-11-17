@@ -5,10 +5,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ErrorModalContext } from '~/providers/error-modal'
 import { usePreferenceProvider } from '~/providers/preference'
 import * as utils from '~/lib/model'
+import { readModelMetadata } from '~/lib/model'
+import { ensureVadModel } from '~/lib/vad-gate'
 import * as osExt from '@tauri-apps/plugin-os'
 import * as config from '~/lib/config'
-import { ask } from '@tauri-apps/plugin-dialog'
-import { join } from '@tauri-apps/api/path'
 
 export function viewModel() {
 	const location = useLocation()
@@ -34,31 +34,12 @@ export function viewModel() {
 		})
 	}
 
-	async function readModelMetadata(modelPath: string) {
-		return invoke<utils.ModelMetadata>('get_model_metadata', { modelPath }).catch((error) => {
-			console.warn('No specialized GGUF metadata available:', error)
-			return null
-		})
-	}
-
-	async function ensureRequiredVad(metadata: utils.ModelMetadata | null) {
-		if (!metadata?.capabilities.requires_vad) return true
-		const modelsFolder = await invoke<string>('get_models_folder')
-		const vadPath = await join(modelsFolder, config.vadModelFilename)
-		if (await utils.isModelFileUsable(vadPath)) return true
-
-		const confirmed = await ask('This transcription model requires Silero VAD. Download it before selecting the model?', {
-			title: 'Download required VAD model',
-			kind: 'info',
-		})
-		if (!confirmed) return false
-		await invoke('download_model', { url: config.vadModelUrl, path: vadPath })
-		return true
-	}
-
 	async function selectDownloadedModel(modelPath: string) {
 		const metadata = await readModelMetadata(modelPath)
-		if (!(await ensureRequiredVad(metadata))) return false
+		// Selecting the model is what starts using it, so the VAD gate belongs here: the setup
+		// flow must not leave a model active that cannot run. Language reconciliation happens in
+		// the preference provider once the capabilities arrive.
+		if (!(await ensureVadModel(metadata))) return false
 		preference.setModelMetadata(metadata)
 		preference.setModelPath(modelPath)
 		return true

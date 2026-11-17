@@ -15,6 +15,7 @@
 //! stderr, and every response is written as one flushed line, which is what stdio transports
 //! expect.
 
+mod model_caps;
 mod tools;
 mod transcripts;
 
@@ -147,7 +148,7 @@ fn handle_initialize(id: Option<Value>, params: Option<Value>) -> String {
 fn instructions() -> &'static str {
     "Sada is an Arabic-first, fully offline speech-to-text app for Windows. \
 Prefer sada_transcribe to transcribe a local audio or video file: it uses the user's configured \
-Whisper model, never uploads media, and normalises Arabic punctuation and Latin acronyms. \
+model, never uploads media, and normalises Arabic punctuation and Latin acronyms. \
 Read saved transcripts with sada_transcript, list them with sada_transcripts, and check paths \
 with sada_info. Media must be local absolute file paths. The user's UI is Arabic (RTL); keep \
 any Arabic text you return in Arabic."

@@ -10,7 +10,8 @@ import { CONFIG_KEYS } from '~/lib/config-keys'
 import { gpuOutOfMemoryBefore } from '~/lib/gpu-memory'
 import { usePersisted } from '~/lib/config-store'
 import { createClient, fillPrompt } from '~/lib/ai'
-import { withoutUnsupportedOptions } from '~/lib/model'
+import { readModelMetadata, withoutUnsupportedOptions } from '~/lib/model'
+import { ensureVadModel } from '~/lib/vad-gate'
 import { normalizeArabicText, normalizeSegments } from '~/lib/arabic-text'
 import { isUserError } from '~/lib/server-errors'
 import * as transcript from '~/lib/transcript'
@@ -183,17 +184,24 @@ export function HotkeyProvider({ children }: { children: ReactNode }) {
 					throw new Error('No model selected')
 				}
 
+				// Dictation runs the same model as the main window, so it needs the same VAD gate;
+				// the download happens quietly here because a modal would interrupt the dictation.
+				const metadata = preferenceRef.current.modelMetadata ?? (await readModelMetadata(modelPath))
+				if (!(await ensureVadModel(metadata, { confirm: false }))) {
+					throw new Error(m.vadRequiredToTranscribe())
+				}
+
 				await invoke('load_model', {
 					modelPath,
 					gpuDevice: preferenceRef.current.gpuDevice,
 					noGpu: preferenceRef.current.noGpu || gpuOutOfMemoryBefore(modelPath),
 					unloadTimeoutMinutes: preferenceRef.current.unloadTimeoutMinutes,
 				})
-				const requiresVad = preferenceRef.current.modelMetadata?.capabilities.requires_vad ?? false
+				const requiresVad = metadata?.capabilities.requires_vad ?? false
 				const modelsFolder = requiresVad ? await invoke<string>('get_models_folder') : null
 				const options = {
 					path,
-					...withoutUnsupportedOptions(preferenceRef.current.modelOptions, preferenceRef.current.modelMetadata?.capabilities),
+					...withoutUnsupportedOptions(preferenceRef.current.modelOptions, metadata?.capabilities),
 					...(requiresVad ? { vad_model: `${modelsFolder}/${config.vadModelFilename}` } : {}),
 				}
 				const startedAt = performance.now()

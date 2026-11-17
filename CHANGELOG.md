@@ -4,6 +4,40 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.4.0 — 2026-11-17
+
+Verified model catalog, model-capability gating and local endpoint hardening. The installer still
+ships no model; the engine sidecar is now built from this repository with the loopback guard.
+
+### Added
+
+- **Verified model catalog** (`desktop/src/assets/model-catalog.json`) with a Get models experience
+  in Settings → Models. Three commercially reusable entries — large-v3-turbo and tiny Whisper
+  (MIT) and the Hebrew large-v3-turbo (Apache-2.0) — and compact engine models for users who choose
+  them; each entry is validated for licence (MIT / Apache-2.0 / CC-BY-4.0 / OpenMDW-1.1), byte size,
+  SHA-256 and language coverage before it can appear. Guides: `docs/MODELS.md`, `docs/MODELS.ar.md`.
+- **Model capabilities everywhere.** `sada_info` reports the configured model's engine class,
+  language list, Silero VAD requirement, and whether it supports translation and text prompts.
+  `sada_transcribe` probes the model locally (no port), maps language codes to the model's list,
+  finds the required VAD model automatically, and passes `--translate` / `--prompt` only when the
+  model declares support. Documented in `docs/AGENT-MCP.md` and `docs/AGENT-MCP.ar.md`.
+- **Language and VAD gating in the app.** Choosing a model reconciles the transcription language to
+  the nearest supported one, and Settings, Setup, the transcription queue and the global hotkey all
+  ensure the Silero VAD model is present before loading an engine that requires it. Five new
+  strings in `en-US` and `ar-IQ`.
+
+### Security
+
+- **Loopback request guard in the bundled engine** (`server/crates/vibe-server/src/server/guard.rs`):
+  only loopback `Host` values are accepted (DNS-rebinding defence) and browser `Origin` values must be
+  loopback or the Tauri scheme, so a web page or a rebound hostname cannot drive the local API.
+  Requests without `Host` are rejected. The guard applies only when the listener binds loopback; an
+  explicit `--host` elsewhere remains opt-in network serving. Residual risk: a same-user local process
+  can still reach the API (a per-run token is the next step). See `SECURITY.md`.
+- The app now starts the engine with an explicit `--host 127.0.0.1 --port 0` instead of relying on the
+  engine default, and the Release workflow rebuilds the engine from `server/` (`chore server-build`)
+  and runs `cargo test -p vibe-server guard::` before packaging. `docs/UPSTREAM-PATCHES.md` §9 and
+  `docs/ARCHITECTURE.md`, `docs/BUILDING.md` record the new delta.
 ## v3.3.1 — 2026-11-17
 
 Engine and GPU foundation release: the bundled engine moves to upstream vibe-server v0.6.16, the

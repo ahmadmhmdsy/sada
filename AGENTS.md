@@ -11,7 +11,7 @@ desktop app (React 19 frontend, Rust shell) around the upstream `vibe-server` si
 | --- | --- |
 | `desktop/` | The app: React 19 + Vite frontend, Tauri shell under `desktop/src-tauri/`, icons and fonts |
 | `i18n/desktop/` | UI catalogues; `ar-IQ.json` is the Arabic-first catalogue (704 keys, must stay complete) |
-| `server/` | `vibe-server` engine (upstream Rust code around whisper.cpp); not modified by this fork |
+| `server/` | `vibe-server` engine (upstream Rust code around whisper.cpp); the fork's only change is the loopback Host/Origin request guard (see [Security](SECURITY.md)), and the release workflow builds it from source |
 | `docs/` | Architecture, building, verification, licences, release notes, upstream delta, MCP guide, Voicebox review |
 | `site/` | Static bilingual landing page deployed to GitHub Pages (includes `llms.txt` for agents) |
 | `.github/workflows/` | `ci.yml` (build + tests), `release.yml` (tag → Windows installer + GitHub release), `pages.yml` |
@@ -22,7 +22,7 @@ desktop app (React 19 frontend, Rust shell) around the upstream `vibe-server` si
 chore setup x86_64-pc-windows-msvc   # fetch pinned vibe-server + ffmpeg sidecars (not in git)
 cd desktop
 pnpm install
-pnpm test                            # vitest, 26 files / 132 tests at release time
+pnpm test                            # vitest, 28 files / 179 tests at release time
 pnpm build                           # paraglide compile → tsc → vite build
 pnpm exec tauri build                # NSIS installer under target/release/bundle/nsis/
 ```
@@ -53,8 +53,9 @@ skill text in `desktop/src/lib/skill.ts` in sync when tool names or registration
 
 1. Bump `desktop/src-tauri/tauri.conf.json` version (and `desktop/src-tauri/Cargo.toml`).
 2. Write bilingual notes in `docs/releases/v<version>.md` (the release workflow requires the file).
-3. Commit, tag `v<version>`, push the tag. The **Release** workflow builds on Windows and creates
-   the GitHub release with installer, `SHA256SUMS.txt`, licence and notices. No manual upload.
+3. Commit, tag `v<version>`, push the tag. The **Release** workflow builds on Windows, rebuilds
+   the engine from `server/` so the installer ships the guarded sidecar, and creates the GitHub
+   release with installer, `SHA256SUMS.txt`, licence and notices. No manual upload.
 
 ## Website / discovery
 
@@ -66,6 +67,7 @@ inside both `index.html` files in sync with the repository facts (version, links
 
 - [README English](README.md) · [README Arabic](README.ar.md)
 - [Architecture](docs/ARCHITECTURE.md) · [Building](docs/BUILDING.md)
+- [Models guide](docs/MODELS.md) · [Models guide in Arabic](docs/MODELS.ar.md)
 - [MCP guide](docs/AGENT-MCP.md) · [MCP guide in Arabic](docs/AGENT-MCP.ar.md)
 - [Upstream delta](docs/UPSTREAM-PATCHES.md) · [Verification](docs/VERIFICATION.md)
 - [Voicebox review](docs/VOICEBOX-REVIEW.md) · [Voicebox review in Arabic](docs/VOICEBOX-REVIEW.ar.md)

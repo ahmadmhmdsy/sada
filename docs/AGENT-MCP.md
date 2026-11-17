@@ -81,15 +81,15 @@ as **Sada.exe**).
 | Argument | Type | Notes |
 | --- | --- | --- |
 | path | string, required | Absolute path to a local file (mp3, wav, m4a, mp4, mkv, ...). URLs are rejected. |
-| language | string | Two-letter Whisper code, or **auto** to detect. Defaults to the app's language setting (Arabic). |
-| translate | boolean | Translate speech to English instead of transcribing in the source language. Off by default. |
+| language | string | Language code: two-letter (**ar**) or BCP-47 (**ar-AR**), mapped to the nearest language the configured model supports; **auto** asks the model to detect. Defaults to the app's language setting (Arabic). |
+| translate | boolean | Translate speech to English instead of transcribing in the source language. Off by default; ignored by models that cannot translate (Nemotron, Parakeet). |
 | timestamps | boolean | Prefix segments with [start --> end] timecodes. Off by default. |
 | normalize | boolean | Apply Sada's Arabic cleanup. Default **true**. |
 | model | string | Absolute path of a ggml model, overriding the configured one (advanced). |
-| prompt | string | Initial prompt for Whisper (advanced; the configured prompt is used when omitted). |
+| prompt | string | Initial prompt for engines that accept one — Whisper only for now (advanced; the configured prompt is used when omitted). |
 | threads | integer | Engine CPU threads; 0 or omitted uses the configured/default value. |
 | enhance_audio | boolean | Normalise loudness with the bundled FFmpeg first. Off by default. |
-| vad_model | string | Silero VAD model path, for engines that need one (advanced). |
+| vad_model | string | Silero VAD model path. Resolved automatically next to the configured model for engines that require VAD (Nemotron, Parakeet); pass this only to override (advanced). |
 
 Example call:
 
@@ -97,8 +97,11 @@ Example call:
 {"jsonrpc":"2.0","id":10,"method":"tools/call","params":{"name":"sada_transcribe","arguments":{"path":"C:/Users/you/Desktop/meeting.mp3","timestamps":true}}}
 ~~~
 
-The configured decoding settings (beam size, temperature, threads, prompt) are reused, so MCP output
-matches what the same file produces in the app rather than the engine's bare defaults.
+Before running, **sada_transcribe** asks the engine for the model's metadata and adapts the request:
+language codes are mapped to the model's list, **--translate** and **--prompt** are passed only when the
+model declares those capabilities, and a Silero VAD model is located automatically when the engine
+requires one. The configured decoding settings (beam size, temperature, threads, prompt) are reused, so
+MCP output matches what the same file produces in the app rather than the engine's bare defaults.
 
 ### sada_transcripts
 
@@ -131,12 +134,22 @@ No arguments. Returns JSON about this install:
 ~~~json
 {
   "app": "Sada",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "platform": "windows",
   "arabic_first": true,
   "engine": { "path": "...", "present": true },
   "ffmpeg": { "path": "...", "present": true },
-  "model": { "path": "...", "present": true },
+  "model": {
+    "path": "...",
+    "present": true,
+    "capabilities": {
+      "engine": "nemotron",
+      "languages": ["en-US", "ar-AR", "..."],
+      "requires_vad": true,
+      "translation": false,
+      "text_prompts": false
+    }
+  },
   "transcription": { "default_language": "ar", "normalizes_arabic": true, "media_stays_local": true },
   "config_path": "...",
   "config_present": true,
@@ -216,7 +229,7 @@ Projects page shows.
 
 | Symptom | What to do |
 | --- | --- |
-| "No Whisper model is configured" | Open Sada → Settings → Models, download or select a ggml model (large-v3-turbo recommended), then retry. Or pass an absolute **model** path. |
+| "No model is configured for Sada" or "The configured model does not exist" | Open Sada → Settings → Models, download or select a ggml model (large-v3-turbo recommended), then retry. Or pass an absolute **model** path. |
 | "engine (vibe-server.exe) was not found" | Reinstall Sada, or set **SADA_ENGINE** to the engine binary. Bundled installs keep it next to Sada.exe. |
 | Empty result or "returned no text" | The clip may be silent or undecodable. Check it plays; try **enhance_audio: true**; confirm the bundled FFmpeg resolved in **sada_info**. |
 | Wrong language | Pass **language: "ar"** (or the right code) explicitly; **auto** can misdetect short clips. Check **transcription.modelOptions.lang** in the config. |

@@ -14,8 +14,8 @@ import { m } from '~/paraglide/messages.js'
 import { DEFAULT_AI, migrateLegacy, type AiSettings } from '~/lib/ai'
 import { readConfig } from '~/lib/config-store'
 import { message } from '@tauri-apps/plugin-dialog'
-import { invoke } from '@tauri-apps/api/core'
-import type { ModelMetadata } from '~/lib/model'
+import { readModelMetadata, type ModelMetadata } from '~/lib/model'
+import { reconcileLanguage } from '~/lib/model-capabilities'
 
 /** Which build of the engine's CPU backend to run; `auto` lets CPUID decide. */
 export type CpuVariant = 'auto' | 'avx2' | 'baseline'
@@ -308,13 +308,19 @@ export function PreferenceProvider({ children }: { children: ReactNode }) {
 			setModelMetadata(null)
 			return
 		}
-		invoke<ModelMetadata>('get_model_metadata', { modelPath })
-			.then(setModelMetadata)
-			.catch((error) => {
-				console.error('failed to read model metadata:', error)
-				setModelMetadata(null)
-			})
+		readModelMetadata(modelPath).then(setModelMetadata)
 	}, [modelPath])
+
+	// A different engine accepts a different language vocabulary: Whisper wants `ar`, the GGUF
+	// engines advertise `ar-AR`. Reconcile as soon as the capabilities arrive, so every path that
+	// reads `modelOptions.lang` (queue, dictation, saved transcripts) sees a code the model accepts.
+	useEffect(() => {
+		if (!modelMetadata) return
+		setModelOptions((options) => {
+			const { lang, changed } = reconcileLanguage(options.lang, modelMetadata.capabilities)
+			return changed ? { ...options, lang } : options
+		})
+	}, [modelMetadata, setModelOptions])
 
 	useEffect(() => {
 		load(config.storeFilename).then((store) => {

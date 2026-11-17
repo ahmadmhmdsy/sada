@@ -70,7 +70,7 @@ that:
 
 ## Install
 
-1. Download **`Sada_3.3.1_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
+1. Download **`Sada_3.4.0_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
    and verify its SHA-256 against the attached `SHA256SUMS.txt`.
 2. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator rights
    are required.
@@ -85,14 +85,18 @@ for a Whisper model.
 
 ## First run and models
 
-On first launch Sada opens with an Arabic setup screen. Pick a model in **Settings → Models**:
+On first launch Sada opens with an Arabic setup screen. Open **Settings → Models → Get models**. The catalogue ships inside the app, so it works on a
+fresh offline install, and every download is checked against the SHA-256 in the catalogue:
 
-- `large-v3-turbo` (~1.6GB) — best Arabic quality/ speed balance for most users;
-- `medium` / `small` for weaker machines;
-- or **choose a file** if you already have a `ggml-*.bin` on disk.
+- **Whisper Large v3 Turbo** (~1.6 GB, MIT) — the default: best Arabic quality/speed balance, with
+  word timestamps;
+- **Whisper Tiny** (78 MB, MIT) — for slow machines, lower accuracy;
+- **Whisper Large v3 Turbo Hebrew** (Apache-2.0) — for Hebrew audio;
+- or **Add a model… / choose a file** if you already have a `ggml-*.bin` on disk.
 
 Models are **not bundled** with the installer; they are distributed by their own publishers under
-their own terms. The model is loaded locally and never leaves your machine.
+their own terms and downloaded once by you. The model is loaded locally and never leaves your
+machine. Sizes, licences, hashes, GPU notes and how to verify a download: **[docs/MODELS.md](docs/MODELS.md)**.
 
 ## GPU acceleration (optional)
 

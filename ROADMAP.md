@@ -5,7 +5,8 @@ It records what is in flight, what each milestone promises, and the evidence rul
 model questions: **no model is curated without a licence, a size, a SHA-256 and timestamps** — and no
 Arabic claim is made without the benchmark.
 
-Status: `P0 complete` — v3.3.1 shipped 2026-11-17. Next: P1 (v3.4.0, due 2026-12-08). Last updated 2026-11-17.
+Status: `P0 complete`, `P1 in progress` — v3.3.1 shipped 2026-11-17; P1 code, tests and local verification are
+done and the v3.4.0 release is being prepared (due 2026-12-08). Last updated 2026-11-17.
 
 ## Milestones
 
@@ -36,6 +37,38 @@ Status: `P0 complete` — v3.3.1 shipped 2026-11-17. Next: P1 (v3.4.0, due 2026-
 3.5 ASR still loads behind the Silero VAD; the CPU-only path (`no_gpu`) transcribes; `devices`
 lists Vulkan0 (Quadro RTX 4000) and Vulkan1 (Intel UHD 630). No Rust or i18n source changed.
 
+## P1 — verified model catalog, MCP capabilities and endpoint hardening (v3.4.0)
+
+- [x] #5 Bundled verified catalog (`desktop/src/assets/model-catalog.json`): three commercial-safe
+  entries — `whisper-large-v3-turbo` (MIT, 1,624,555,275 B, SHA-256 `1fc70f77…2bc69`),
+  `whisper-tiny` (MIT, 77,691,713 B, SHA-256 `be07e048…`) and `whisper-large-v3-turbo-he`
+  (Apache-2.0, SHA-256 `c8090411…`) — guarded by strict entry validation (licence allowlist, size,
+  SHA-256, languages) with unit tests; documented in `docs/MODELS.md` and `docs/MODELS.ar.md`.
+- [x] #6 "Get models" experience: catalog-backed Settings section (`use-model-catalog.ts`,
+  `sections/model-catalog.tsx`), language combobox and download-and-verify install flow.
+- [x] #7 MCP capability plumbing: `sada_info` now reports `model.capabilities` (engine, languages,
+  `requires_vad`, `translation`, `text_prompts`) and `sada_transcribe` probes the model locally
+  (engine `transcribe` CLI, no port) to map languages, pass `--translate`/`--prompt` only when the
+  model supports them, and locate the Silero VAD model the engine requires. Documented in
+  `docs/AGENT-MCP.md` and `docs/AGENT-MCP.ar.md`.
+- [x] #8 Language and VAD gating in the UI: shared `model-capabilities.ts` (`nearestLanguage`,
+  `reconcileLanguage`, `vadGate`) and `vad-gate.ts` (`ensureVadModel`) wired into Settings, Setup,
+  the transcription queue and the hotkey path; 5 new strings in `en-US` and `ar-IQ`.
+- [x] #9 Local endpoint hardening: loopback Host/Origin guard in `server/`
+  (`server/crates/vibe-server/src/server/guard.rs`), the app spawns the engine with an explicit
+  `--host 127.0.0.1 --port 0`, the release workflow now builds the engine from source and runs the
+  guard tests; documented in `SECURITY.md` and `docs/UPSTREAM-PATCHES.md` §9.
+
+**P1 evidence (2026-11-17):** engine rebuilt from `server/` as `vibe-server v0.6.16-sada.1`
+(75,686,912 B, SHA-256 `48308753614AA6B2D7C8BF587234569791A121F53D19EB006B2A9A5986FA29CF`) and
+staged as the sidecar. Live MCP run against the patched sidecar: `sada_info` reported the Nemotron
+capabilities (`engine: nemotron`, `requires_vad: true`, 32 languages incl. `ar-AR`, no translation or
+prompts); Nemotron transcribed the Arabic clip with timestamps; Whisper accepted the configured
+`ar-AR` and mapped it to `ar`; `translate`/`prompt` were dropped for Nemotron and the call still
+succeeded. Guard tests 8/8 passed and a live `curl` matrix returned 200 for native loopback
+requests, 200 for `localhost`, and 403 for a DNS-rebinding `Host`, a page `Origin`, and a missing
+`Host` — including a state-changing `POST /v1/models/load`. Frontend 28 files / 179 tests pass,
+Rust `mcp::` 27 tests pass, `pnpm build` and the i18n audit pass.
 ## Step Zero tests (define "done" before code)
 
 1. **E1 — engine bump smoke test.** Four Arabic clips (short MSA, MSA news, Iraqi dialogue,

@@ -48,7 +48,9 @@ utoipa-axum = "0.2"
 utoipa-swagger-ui = { version = "9", features = ["axum"] }
 
 [dev-dependencies]
+http-body-util = "0.1"
 tokio = { version = "1", features = ["test-util"] }
+tower = { version = "0.5", features = ["util"] }
 
 [target.'cfg(windows)'.dependencies]
 windows-sys = { version = "0.61", features = [
