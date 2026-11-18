@@ -91,26 +91,30 @@ function readsInOrder(rawText: string, rawSentence: string) {
 	return true
 }
 
+// Rendering and extracting a PDF takes about 4 s on the maintainer's machine, but the same work
+// has taken 30+ s on a shared two-core Windows CI runner while other test files run in parallel.
+// Keep a wide per-test budget so a slow runner reports a real failure, not a timeout.
+
 describe('transcript pdf', () => {
 	it('lays right-to-left text down in visual order', async () => {
 		const text = await extractText(await renderPdf(HEBREW, 'rtl'))
 		for (const segment of HEBREW) {
 			expect(readsInOrder(text, segment.text), `"${segment.text}" should read in order`).toBe(true)
 		}
-	}, 30_000)
+	}, 90_000)
 
 	// A right-to-left document reorders an all-English sentence — correctly, and exactly as the
 	// preview does — so the left-to-right case is checked under a left-to-right document.
 	it('leaves a left-to-right document alone', async () => {
 		const text = await extractText(await renderPdf(ENGLISH, 'ltr'))
 		expect(readsInOrder(text, ENGLISH[0].text)).toBe(true)
-	}, 30_000)
+	}, 90_000)
 
 	it('keeps the fonts embedded, so the text is real rather than an image', async () => {
 		const pdf = await renderPdf(HEBREW, 'rtl')
 		expect(Buffer.from(pdf).subarray(0, 5).toString()).toBe('%PDF-')
 		expect(await extractText(pdf)).toContain('SaferPlace')
-	}, 30_000)
+	}, 90_000)
 })
 
 /** Kept next to the fixtures: proves the font ships the scripts the fixtures use. */

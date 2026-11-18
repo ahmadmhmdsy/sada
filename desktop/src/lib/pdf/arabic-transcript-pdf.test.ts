@@ -108,6 +108,10 @@ function readsInOrder(text: string, sentence: string) {
 	return true
 }
 
+// Rendering and extracting a PDF takes about 4 s on the maintainer's machine, but the same work
+// has taken 30+ s on a shared two-core Windows CI runner while other test files run in parallel.
+// Keep a wide per-test budget so a slow runner reports a real failure, not a timeout.
+
 describe('arabic transcript pdf', () => {
 	it('lays Arabic right-to-left text down in visual order', async () => {
 		const pdf = await renderPdf(ARABIC, 'rtl')
@@ -124,14 +128,14 @@ describe('arabic transcript pdf', () => {
 			const tmp = join(tmpdir(), 'sada-arabic-transcript.pdf')
 			writeFileSync(tmp, pdf)
 		}
-	}, 30_000)
+	}, 90_000)
 
 	it('embeds the Arabic font so the text is real rather than an image', async () => {
 		const pdf = await renderPdf(ARABIC, 'rtl')
 		const raw = Buffer.from(pdf).toString('latin1')
 		expect(raw.startsWith('%PDF-')).toBe(true)
 		expect(raw).toContain('IBMPlexSansArabic')
-	}, 30_000)
+	}, 90_000)
 
 	it('keeps a mixed English sentence readable', async () => {
 		const text = await extractText(await renderPdf(ENGLISH, 'ltr'))
@@ -140,5 +144,5 @@ describe('arabic transcript pdf', () => {
 		expect(text).toContain('An English line with')
 		expect(text).toContain('inside it and 42 numbers.')
 		expect(/[\u0600-\u06FF]/.test(text)).toBe(true)
-	}, 30_000)
+	}, 90_000)
 })
