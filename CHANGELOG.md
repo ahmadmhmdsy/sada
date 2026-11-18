@@ -4,6 +4,50 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.7.0 — 2026-11-18
+
+Benchmark coverage and prompt-biasing evidence release. **No app runtime change**: the engine,
+models, catalogue and UI behaviour are identical to v3.6.0 (the version bump is what produces a new
+installer). The release extends the Arabic benchmark to 90 clips with measured Gulf and technical
+code-switch slices from a commercial-use corpus, records the corpus licence matrix and the still-missing
+Iraqi/Levantine coverage, and reports a **negative** prompt-biasing result instead of shipping it.
+
+### Added
+
+- **Gulf and technical slices** in `benchmarks/arabic-asr/manifest.json` (v1 format, 90 clips):
+  15 Saudi Arabic (Najdi/Hijazi)–English and 15 Egyptian Arabic–English code-switch clips from
+  [Perle-ai/ASR_Code_Switch](https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch) (MIT; audio
+  recorded by native voice actors, human reference transcripts, pinned revision,
+  `prompt`/`transcript` reference support). Audio is still fetched, never committed.
+- **Prompt-biasing experiment support** in the harness: `prompt_file`/`prompt` per model,
+  `--slices` filter, `prompt_sha256` in result metadata, committed prompt variants under
+  `benchmarks/arabic-asr/prompts/`, and `build-manifest --reuse` so extending one slice does not
+  re-walk the Common Voice test split (110 pages) under a rate-limited viewer. Retries on the
+  dataset viewer now tolerate 429/5xx bursts (12 attempts, jitter, Retry-After).
+- **Licence matrix and plan** `docs/P4-PLAN.md`: accepted corpora and every examined/rejected
+  corpus with its licence reason (QASR CC BY-NC, ArSyra CC BY-NC-SA, SADA licence contradiction,
+  MADIS5 ambiguous metadata, MASC YouTube provenance and missing dialect labels, Lahgtna synthetic
+  TTS audio, LDC/ELRA paid research licences).
+
+### Measured
+
+- Initial-prompt biasing on `latin-mixed` + `msa` (40 clips, same weights): raw WER
+  turbo 29.38% vs Arabic+Latin glossary 31.92% vs English-only glossary 38.42% vs Arabic-only
+  instruction 31.36%. Every prompt variant is **worse** on latin-mixed (glossary 55.21% vs
+  48.96%) and MSA is flat-to-worse, and Latin-name preservation does not improve (25% in every
+  variant). Decision: no prompt preset is shipped; the existing user-editable prompt field stays
+  as-is. Numbers: `benchmarks/arabic-asr/results/prompt-spike-v1.md`.
+- Full 90-clip corpus rerun on five models (four previous models + the prompt variant) is recorded
+  in `benchmarks/arabic-asr/results/results-2026-11-18-v2.md`; Iraqi and Levantine remain pending
+  because no free commercial-use corpus with human transcripts was found.
+
+### Verification
+
+`pnpm test` 31 files / 193 tests, `pnpm build` (paraglide + tsc + vite), `cargo test --release`
+101 tests, `cargo test --release -p vibe-server guard::` 8 tests, `cargo check --tests`, the i18n
+audit and the Python benchmark suite (52 tests) all pass on 2026-11-18. The installer is built by CI
+from the same source; its hash is recorded in `docs/VERIFICATION.md` after the release.
+
 ## v3.6.0 — 2026-11-18
 
 Transcript quality and security hardening. No engine or model change (still

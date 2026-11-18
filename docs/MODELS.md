@@ -31,13 +31,20 @@ Verified file facts (checked against the publishers on 2026-11-17):
 ## Which model should I pick?
 
 - **Arabic — the default:** Whisper Large v3 Turbo. It is the model the app was tuned and measured
-  on: Modern Standard Arabic, Iraqi dialect, and Arabic/English technical speech (Latin terms such
-  as GPU, CPU, PDF, SRT, VTT stay Latin), with word timestamps for exports and transcript editing.
+  on: a 90-clip Arabic benchmark covering Modern Standard Arabic, Egyptian, Gulf and Latin-mixed
+  read speech plus Arabic/English technical code-switch speech, with word timestamps for exports
+  and transcript editing. It keeps more Latin names and terms than any other measured model
+  (27% of Latin words overall, 34% on the technical slice) and is the only one that keeps a
+  quarter of the Latin proper nouns in real read speech.
 - **Faster Arabic dictation, smaller download:** NVIDIA Nemotron 3.5 ASR Streaming 0.6B. In the
-  Arabic benchmark (60 clips) it beat Turbo on read Modern Standard Arabic (17.8% vs 22.1% WER) and
-  read Egyptian Arabic (9.1% vs 11.0%), adds punctuation, runs faster and is 496 MB instead of
-  1.62 GB. It transliterates Latin technical terms (GPU becomes جي بي يو) and needs the Silero VAD
-  file, so keep Turbo when your audio mixes Arabic with English terms.
+  same 90-clip benchmark it beat Turbo on read Modern Standard Arabic (17.8% vs 22.1% WER) and read
+  Egyptian Arabic (9.1% vs 11.0%), adds punctuation, runs faster and is 496 MB instead of 1.62 GB.
+  On code-switched Gulf and technical speech it trails Turbo by 17–19 pp and transliterates Latin
+  words (0% kept, GPU becomes جي بي يو), and it needs the Silero VAD file — keep Turbo when your
+  audio mixes Arabic with English terms.
+- **Unmeasured dialects:** Iraqi and Levantine are not measured yet — no commercial-use corpus with
+  human transcripts was found as of 2026-11-18 (see `docs/MODELS-DECISIONS.md`); nothing is claimed
+  about them either way.
 - **A slow or old machine:** Whisper Tiny. It runs on the CPU only and fits in 78 MB, but its
   accuracy is much lower, especially on dialect and technical terms. Use it for a trial or for a
   laptop that cannot run the large model.

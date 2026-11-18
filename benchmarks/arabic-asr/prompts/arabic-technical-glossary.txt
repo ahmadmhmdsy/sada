@@ -1,0 +1,1 @@
+المصطلحات التقنية والأسماء الأجنبية تبقى بالحروف الإنجليزية كما هي: GPU CPU API HTTP HTTPS HTML CSS JSON SQL URL PDF SRT VTT USB VPN Wi-Fi GitHub FFmpeg Whisper. لا تترجمها إلى حروف عربية.

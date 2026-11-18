@@ -10,6 +10,7 @@ Commands:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -28,7 +29,14 @@ def _parser() -> argparse.ArgumentParser:
     build.add_argument("--msa", type=int, default=30, help="number of MSA clips")
     build.add_argument("--egyptian", type=int, default=20, help="number of Egyptian clips")
     build.add_argument("--latin", type=int, default=10, help="number of Latin-mixed clips")
-    build.add_argument("--technical", type=int, default=10, help="number of technical clips")
+    build.add_argument("--gulf", type=int, default=15, help="number of Gulf (Saudi, Perle) clips")
+    build.add_argument("--technical", type=int, default=15, help="number of Arabic/English technical clips")
+    build.add_argument(
+        "--reuse",
+        type=Path,
+        default=None,
+        help="existing manifest whose unchanged slices are reused instead of re-scanned",
+    )
 
     fetch = sub.add_parser("fetch", help="download and convert clip audio")
     fetch.add_argument("--manifest", type=Path, default=Path("manifest.json"))
@@ -44,6 +52,7 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--out", type=Path, required=True)
     run.add_argument("--baseline", default="whisper-large-v3-turbo")
     run.add_argument("--only", default="", help="comma separated model ids to run")
+    run.add_argument("--slices", default="", help="comma separated slice names to run")
     run.add_argument("--limit", type=int, default=0, help="run the first N clips only")
 
     render = sub.add_parser("report", help="aggregate results into tables")
@@ -64,11 +73,14 @@ def _engine_version(engine_path: str) -> str:
 
 
 def cmd_build_manifest(args: argparse.Namespace) -> int:
+    reuse = datasets.load_manifest(args.reuse) if args.reuse else None
     manifest = datasets.build_manifest(
         msa_count=args.msa,
         egyptian_count=args.egyptian,
         latin_count=args.latin,
+        gulf_count=args.gulf,
         technical_count=args.technical,
+        reuse_manifest=reuse,
     )
     datasets.write_json(args.out, manifest)
     counts: dict[str, int] = {}
@@ -102,6 +114,9 @@ def cmd_run(args: argparse.Namespace) -> int:
         return 2
 
     clips = manifest["clips"][: args.limit] if args.limit else manifest["clips"]
+    if args.slices:
+        wanted_slices = {item.strip() for item in args.slices.split(",") if item.strip()}
+        clips = [clip for clip in clips if clip["slice"] in wanted_slices]
     lock = {}
     lock_path = Path(args.audio_dir) / "manifest.lock.json"
     if lock_path.exists():

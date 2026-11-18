@@ -22,25 +22,34 @@ included.
 | `msa` | 30 | Common Voice 18 Arabic, `validation` split (read MSA sentences, multi-speaker) | CC0-1.0 | Common Voice 18.0 Arabic (Mozilla) |
 | `latin-mixed` | 10 | Common Voice 18 Arabic, `test` split, rows whose reference contains Latin proper nouns | CC0-1.0 | Common Voice 18.0 Arabic (Mozilla) |
 | `egyptian` | 20 | FLEURS `ar_eg`, `test` split (read Egyptian Arabic, multi-speaker) | CC-BY-4.0 | FLEURS (Google), Conneau et al. 2022 |
+| `gulf` | 15 | Perle AI code-switch benchmark, `train` split, Saudi Arabic (Najdi/Hijazi)--English rows | MIT | Perle AI, [ASR_Code_Switch](https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch), Abdoli et al. 2026 |
+| `technical` | 15 | Perle AI code-switch benchmark, `train` split, Egyptian Arabic--English rows (the remainder uses unused Saudi rows) | MIT | Perle AI, [ASR_Code_Switch](https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch), Abdoli et al. 2026 |
+
+The Perle corpus is **conversational but scripted**: the paper (arXiv:2605.19069, section 3.2)
+describes transcripts collected from native speakers and audio recorded by recruited voice
+actors, so provenance is clean (no scraped broadcast audio) and the references are human, not
+machine, transcripts. The two Perle slices are code-switched by construction: the Gulf slice is
+Saudi Arabic + English, the technical slice is Egyptian Arabic + English. They are labelled as
+code-switch slices, not as "pure dialect" measurements.
 
 Pending slices (no clip yet, kept visible so the gap is not mistaken for a measurement):
 
-* `technical` -- Common Voice 18 Arabic references contain no tracked Latin acronyms
-  (only 16 of 10,471 `test` rows contain any Latin text, all proper nouns), and no
-  Arabic/English code-switching speech corpus with a commercial-use licence was found
-  (LDC/ELRA corpora and research-only sets are excluded by the fork licence policy).
-  `latin-mixed` is the closest available proxy: real read speech with Latin names, scored
-  with the Latin-name preservation metric below. Adding a permissive code-switching corpus
-  is a manifest entry away.
-* `iraqi`, `gulf`, `levantine` -- no corpus with a commercial-use licence was found.
-  Research-only corpora such as MADAR are excluded by the fork licence policy
-  (`THIRD-PARTY-NOTICES.md`, `docs/MODELS-COUNCIL.md` section 7).
+* `iraqi`, `levantine` -- still no free, commercial-use-permissive corpus with human
+  transcripts found as of 2026-11-18. Examined and rejected: QASR (CC BY-NC), ArSyra
+  iraqi/levantine (CC BY-NC-SA, gated), m6011/sada2022 (licence contradiction between card
+  tag and README), MADIS5 (ambiguous `cc` + dialect-ID labels only), MASC and its derivative
+  feature sets (YouTube provenance; distributed CSVs carry no dialect labels), Ghadeer (no
+  explicit data licence), UFAL Levantine and IWSLT Levantine data (research licences), Lahgtna
+  (synthetic TTS audio), LDC/ELRA (paid research licences). A paid vendor corpus (for example
+  SpeechDataAI) remains an owner purchase decision, not an engineering one.
+  `latin-mixed` stays as the real read-speech proxy for Latin proper nouns.
 
 ## Layout
 
 ```
 benchmarks/arabic-asr/
-  manifest.json          committed clip selection (60 clips, 3 slices): reference, offset, licence
+  manifest.json          committed clip selection (90 clips, 5 slices + 2 pending): reference, offset, licence
+  prompts/               initial-prompt variants measured for prompt biasing (issue #20)
   models.example.json    template for models.local.json (machine paths, not committed)
   fixtures/              shared post-processing fixtures asserted by Python and vitest
   sadabench/             harness package (pure Python standard library)
@@ -68,14 +77,17 @@ benchmarks/arabic-asr/
 
 ```powershell
 cd benchmarks/arabic-asr
-python -m sadabench build-manifest --out manifest.json   # only when extending the clip set
+python -m sadabench build-manifest --out manifest.json --reuse manifest.json   # only when extending the clip set
 python -m sadabench fetch --ffmpeg ffmpeg                # downloads + converts clips into audio/
 Copy-Item models.example.json models.local.json          # then edit paths/sizes
 python -m sadabench run --engine "$env:LOCALAPPDATA\Sada\vibe-server.exe" --out results/results-2026-11-18.json
 python -m sadabench report --results results/results-2026-11-18.json
 ```
 
-`run` reads `models.local.json`, transcribes each clip, and writes every transcript,
+`build-manifest --reuse existing.json` keeps the clips of slices whose count did not change
+(they are deterministic on a pinned revision) and only re-scans the slices being extended, so a
+single extension does not re-walk 110 pages of Common Voice and does not trip the viewer's rate
+limits. `run` reads `models.local.json`, transcribes each clip, and writes every transcript,
 latency and timestamp flag to the results JSON. `report` prints the Markdown tables and
 writes them next to the JSON. `--only model-a,model-b` and `--limit N` shorten a run;
 `--baseline` sets the model the curation rule compares against.
@@ -89,30 +101,80 @@ and `sadabench/postprocess.py` mirrors that module. The two implementations asse
 a test instead of drifting; `tests/test_postprocess.py` also proves the glossary never rewrites
 the committed reference sentences.
 
-## Results (2026-11-18, milestone v3.5.0)
+## Results (2026-11-18, milestone v3.7.0)
 
-60 clips (30 MSA + 10 Latin-mixed + 20 Egyptian), four models, bundled engine
-`vibe-server v0.6.16-sada.1` on Vulkan, RTX 4000. Committed artefacts:
-`results/results-2026-11-18.json` (raw transcripts, timings, flags) and
-`results/results-2026-11-18.md` (tables) and the app-level section added in milestone v3.6.0.
-Decisions and the curation outcome are recorded in
-[`docs/MODELS-DECISIONS.md`](../../docs/MODELS-DECISIONS.md).
+90 clips (30 MSA + 10 Latin-mixed + 20 Egyptian + 15 Gulf + 15 technical), five model variants,
+bundled engine `vibe-server v0.6.16-sada.1` on Vulkan, RTX 4000. Committed artefacts:
+`results/results-2026-11-18-v2.json` (raw transcripts, timings, flags) and
+`results/results-2026-11-18-v2.md` (tables); the earlier 60-clip run is kept as
+`results/results-2026-11-18.json`/`.md` for history. Decisions and the curation outcome are
+recorded in [`docs/MODELS-DECISIONS.md`](../../docs/MODELS-DECISIONS.md) and the plan in
+[`docs/P4-PLAN.md`](../../docs/P4-PLAN.md).
 
 | Model | Size MB | WER % | CER % | Latin names kept % | Timestamps % | RTF |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| whisper-large-v3-turbo (baseline, default) | 1624.6 | 19.46 | 8.34 | 25.0 | 100.0 | 0.35 |
-| nemotron-3.5-asr-streaming-0.6b-q4-k-m | 495.8 | 17.12 | 8.28 | 0.0 | 100.0 | 0.234 |
-| whisper-large-v3-turbo-arabic-dialectal-v2-q5 | 574.0 | 23.09 | 9.53 | 0.0 | 100.0 | 0.265 |
-| whisper-tiny | 77.7 | 70.56 | 29.46 | 0.0 | 100.0 | 0.186 |
+| whisper-large-v3-turbo (baseline, default) | 1624.6 | 30.27 | 18.84 | 27.3 | 100.0 | 0.38 |
+| whisper-tiny | 77.7 | 78.48 | 42.28 | 4.4 | 100.0 | 0.188 |
+| nemotron-3.5-asr-streaming-0.6b-q4-k-m | 495.8 | 35.16 | 24.06 | 0.0 | 100.0 | 0.215 |
+| whisper-large-v3-turbo-arabic-dialectal-v2-q5 | 574.0 | 32.60 | 21.71 | 10.4 | 100.0 | 0.384 |
+| whisper-large-v3-turbo-prompt (glossary prompt) | 1624.6 | 31.44 | 18.95 | 38.8 | 100.0 | 0.352 |
 
 WER % by slice:
 
-| Model | msa | egyptian | latin-mixed |
+| Model | msa | latin-mixed | egyptian | gulf | technical |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| whisper-large-v3-turbo | 22.09 | 48.96 | 11.03 | 42.74 | 46.18 |
+| whisper-tiny | 72.09 | 94.79 | 64.03 | 90.31 | 86.35 |
+| nemotron-3.5-asr-streaming-0.6b-q4-k-m | 17.83 | 50.00 | 9.11 | 59.83 | 56.22 |
+| whisper-large-v3-turbo-arabic-dialectal-v2-q5 | 23.64 | 59.38 | 14.39 | 41.60 | 49.40 |
+| whisper-large-v3-turbo-prompt (glossary prompt) | 23.26 | 55.21 | 11.75 | 42.45 | 48.19 |
+
+Latin-name preservation % by slice (share of Latin-script words in the reference that survive):
+
+| Model | latin-mixed | gulf | technical |
 | --- | ---: | ---: | ---: |
-| whisper-large-v3-turbo | 22.09 | 11.03 | 48.96 |
-| nemotron-3.5-asr-streaming-0.6b-q4-k-m | 17.83 | 9.11 | 50.00 |
-| whisper-large-v3-turbo-arabic-dialectal-v2-q5 | 23.64 | 14.39 | 59.38 |
-| whisper-tiny | 72.09 | 64.03 | 94.79 |
+| whisper-large-v3-turbo | 25.0 | 22.6 | 34.3 |
+| whisper-tiny | 0.0 | 2.2 | 8.6 |
+| nemotron-3.5-asr-streaming-0.6b-q4-k-m | 0.0 | 0.0 | 0.0 |
+| whisper-large-v3-turbo-arabic-dialectal-v2-q5 | 0.0 | 12.9 | 10.0 |
+| whisper-large-v3-turbo-prompt (glossary prompt) | 25.0 | 35.5 | 47.1 |
+
+How to read the new slices:
+
+* **Gulf (42.74%) and technical (46.18%) are genuinely hard.** They are conversational,
+  code-switched speech: the Gulf slice is Saudi Arabic + English, the technical slice is Egyptian
+  Arabic + English, both recorded by voice actors from collected conversational transcripts
+  (human references). WER is roughly double the Egyptian read-speech number for the same model,
+  which is the honest measure of the gap rather than a claim of dialect coverage.
+* **Nemotron confirms the v3.5 decision.** It still wins MSA (17.83%) and Egyptian (9.11%) but is
+  17-19 pp behind Turbo on both code-switch slices and keeps **0%** of Latin words. It stays an
+  optional dictation entry, not the default.
+* **The dialectal fine-tune has the raw Gulf edge, not a significant one.** It is 1.14 pp better
+  than Turbo on the Gulf slice at corpus level (41.60% vs 42.74%), which technically clears the
+  1.0 pp rule, but a per-clip bootstrap (10,000 resamples) puts the WER delta at -0.90 pp with a
+  95% CI of [-10.06, +8.28] — it spans zero, so it is **not curated**; it stays a documented
+  experiment. It also loses on every other slice.
+* **The glossary prompt trades accuracy for Latin terms.** It raises Latin-word preservation
+  (technical 47.1% vs 34.3%, Gulf 35.5% vs 22.6%) but costs WER overall (31.44% vs 30.27%) and on
+  latin-mixed (55.21% vs 48.96%), so no prompt preset is shipped; the decision and numbers are in
+  the prompt spike below and in [`docs/MODELS-DECISIONS.md`](../../docs/MODELS-DECISIONS.md).
+
+## Prompt biasing spike (issue #20, 2026-11-18)
+
+Four variants on 40 clips (10 latin-mixed + 30 MSA), same `ggml-large-v3-turbo.bin` weights,
+engine `--prompt` support, committed prompt texts under `prompts/`:
+
+| Variant | WER % overall | WER % latin-mixed | WER % msa | Latin names kept % | RTF |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| no prompt (baseline) | 29.38 | 48.96 | 22.09 | 25.0 | 0.407 |
+| Arabic + Latin glossary (`arabic-technical-glossary.txt`) | 31.92 | 55.21 | 23.26 | 25.0 | 0.431 |
+| English-only glossary (`english-terms.txt`) | 38.42 | 72.92 | 25.58 | 30.0 | 0.468 |
+| Arabic-only instruction (`arabic-only-terms.txt`) | 31.36 | 48.96 | 24.81 | 25.0 | 0.497 |
+
+Every variant is worse or neutral: an initial prompt does not fix transliterated Latin terms in
+this engine/model, it biases the decoder enough to cost WER. Raw results:
+`results/prompt-spike-v1.json`/`.md`. The app's existing user-editable prompt field stays
+available and unchanged; no preset is wired.
 
 ## Second-engine spike (issue #13)
 
@@ -131,9 +193,13 @@ Latin-mixed 48.96%), Latin names 10%, **no timestamps** (`TIMESTAMPS_NONE`), no 
 | `whisper-tiny` | whisper | 77.7 MB | `ar` | slow-machine fallback |
 | `nemotron-3.5-asr-streaming-0.6b-q4-k-m` | nemotron | 495.8 MB | `ar-AR` | requires `--vad-model`; no translate/prompt |
 | `whisper-large-v3-turbo-arabic-dialectal-v2-q5` | whisper-finetune | 574.0 MB | `ar` | Arabic dialectal fine-tune candidate |
+| `whisper-large-v3-turbo-prompt` | whisper | 1624.6 MB | `ar` | same Turbo weights with a `prompt_file` initial prompt |
 
 Model files are referenced only from `models.local.json`; nothing model-sized is added to
-git. `run` checks that every path exists before starting.
+git. `run` checks that every path exists before starting. A model entry may carry
+`prompt` (inline text) or `prompt_file` (path relative to the models file, for example
+`prompts/arabic-technical-glossary.txt`); the harness passes it as one `--prompt=<text>`
+argument and records its SHA-256 in the results metadata.
 
 ## Metrics
 

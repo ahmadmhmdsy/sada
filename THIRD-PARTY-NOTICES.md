@@ -46,6 +46,21 @@ SHA-256 and keeps the publisher's name and licence visible before download. The 
 model is MIT (ggml build from ggml-org/whisper-vad) and the diarization model is OpenMDW-1.1 (NVIDIA).
 OpenMDW-1.1 asks that its notices be kept when the model is redistributed — Sada never bundles it.
 
+## Benchmark data — not bundled
+
+The development benchmark under `benchmarks/arabic-asr/` downloads evaluation audio at run time
+and never commits or redistributes it. Its corpora are commercial-use-permissive and attributed in
+`manifest.json` and `sadabench/datasets.py`:
+
+- **Common Voice 18.0 Arabic** (Mozilla), CC0 1.0 — MSA and Latin-mixed read speech
+  (https://commonvoice.mozilla.org/).
+- **FLEURS `ar_eg`** (Google), CC BY 4.0; Conneau et al. 2022 — Egyptian read speech
+  (https://huggingface.co/datasets/google/fleurs).
+- **ASR Code-Switching Benchmark (Perle AI)**, MIT; Abdoli et al. 2026, arXiv:2605.19069 —
+  Saudi and Egyptian Arabic–English code-switch speech
+  (https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch). Only 30 clips (15 Gulf, 15 technical)
+  are referenced by the committed manifest; the audio is fetched from the dataset at run time.
+
 ## Application frontend and Rust crates
 
 - Tauri 2, React 19, Vite 7, Tailwind CSS 4, Radix UI, paraglide-js and the rest of the

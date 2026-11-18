@@ -42,6 +42,7 @@ def aggregate(results: dict, hypothesis_filter: HypothesisFilter | None = None) 
             "family": meta.get("family", ""),
             "size_mb": meta.get("size_mb"),
             "language": meta.get("language", ""),
+            "prompt_sha256": meta.get("prompt_sha256"),
             "overall": overall.as_dict(),
             "slices": {name: score.as_dict() for name, score in per_slice.items()},
         }
@@ -216,9 +217,11 @@ def render_markdown(report: dict, app_report: dict | None = None) -> str:
             )
         lines.append("")
         lines.append(
-            "On the committed clips this changes punctuation only: no permissive Arabic technical "
-            "corpus exists yet, so the reference transcripts carry no Latin acronyms to restore. "
-            "The section exists so the next technical slice is scored against what users see."
+            "On the committed clips this changes punctuation only: the code-switched Latin words "
+            "in the corpus (proper nouns in Common Voice, everyday English such as integrate or "
+            "deadline in the Perle slices) do not include any tracked acronym from the restoration "
+            "list (GPU, PDF, SRT, ...), so there is nothing for the term rules to rewrite yet. The "
+            "section exists so a clip that does carry an acronym is scored against what users see."
         )
         lines.append("")
     lines.append("## Method")

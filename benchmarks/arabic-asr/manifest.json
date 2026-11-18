@@ -5,10 +5,11 @@
   "slices": {
     "msa": "Modern Standard Arabic read speech (Common Voice ar)",
     "egyptian": "Egyptian Arabic read speech (FLEURS ar_eg)",
-    "technical": "Arabic sentences containing Latin technical acronyms (Common Voice ar)",
-    "iraqi": "pending: no commercial-use-permissive Iraqi corpus found",
-    "gulf": "pending: no commercial-use-permissive Gulf corpus found",
-    "levantine": "pending: no commercial-use-permissive Levantine corpus found"
+    "latin-mixed": "Arabic read speech whose reference contains Latin proper nouns (Common Voice ar)",
+    "technical": "Arabic/English code-switched technical speech (Perle AI Benchmark, MIT; scripted by native speakers)",
+    "gulf": "Gulf Arabic (Saudi Najdi/Hijazi) conversational code-switched speech (Perle AI Benchmark, MIT)",
+    "iraqi": "pending: no commercial-use-permissive Iraqi corpus with transcripts found",
+    "levantine": "pending: no commercial-use-permissive Levantine corpus with transcripts found"
   },
   "clips": [
     {
@@ -909,6 +910,456 @@
         "license": "CC-BY-4.0",
         "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
         "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "gulf-perle-001",
+      "slice": "gulf",
+      "reference": "لا تنسى إن success بالسوشيال يبيله process، جرّب A/B بسيط بالعناوين، تابع analytics أسبوعيًا، وخلك سريع بالـ response عشان الثقة تزيد وتطلع conversion أحسن.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 0,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-002",
+      "slice": "gulf",
+      "reference": "وقت التنفيذ أهم شي team alignment، نوزع tasks بوضوح ونسوي priority صح، وإذا صار delay نرجع للـ baseline ونشوف وين bottleneck ونحلّه بسرعة.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 21,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-003",
+      "slice": "gulf",
+      "reference": "قبل لا نطلق أي مشروع، أسوي kickoff مرتب، نتفق على KPIs ونضبط ال deliverables، وبعدها نمشي sprint sprint لين نوصل لنتيجة High Quality.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 43,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-004",
+      "slice": "gulf",
+      "reference": "إذا بتبدأ مشروعك لا تحرق فلوسك على hype، خلّك على MVP بسيط، وخل الـ launch سريع، ومع كل feedback عدّل المنتج، ومع الوقت تضبط الـ branding وتصير growth طبيعي.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 64,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-005",
+      "slice": "gulf",
+      "reference": "في عالم الستارتبس أهم شي Team Work، كل واحد يعرف دوره، ونمشي بالـ process خطوة بخطوة، ونقيس performance عشان نطلع بنتيجة solid.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 85,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-006",
+      "slice": "gulf",
+      "reference": "أنا أرتب اجتماعاتي على الـ calendar بدري، وأرسل pre-read بسيط، وبالاجتماع أمشي بـ time box عشان نخلص بقرار واضح ونقفل الـ next steps.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 107,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-007",
+      "slice": "gulf",
+      "reference": "قبل لا نبدأ أي مشروع أسوي kickoff سريع وأوضح scope، وبعدها نمشي sprint sprint ونقيس progress بالـ KPI، وإذا فيه risk نرفعه بدري ولا ننتظر.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 128,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-008",
+      "slice": "gulf",
+      "reference": "أكثر شيء يفرق معي هو automation، أخلي test يشتغل لحاله وأتابع coverage، وإذا فيه refactor أسويه على دفعات عشان ما أخرب flow الشغل.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 150,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-009",
+      "slice": "gulf",
+      "reference": "وقت التمرين أحب أشتغل full body أحياناً، وأوزع sets بطريقة smart، وأحط intensity على قدّي، ومع cardio بسيط أطلع بنتيجة clean بدون ضغط زيادة.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 171,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-010",
+      "slice": "gulf",
+      "reference": "وقت انقطاع الخدمة، أهم شي نسوي status update للفريق ونراجع monitoring، وبعدها نوزع tasks بسرعة عشان نرجع service بأقل downtime.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 192,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-011",
+      "slice": "gulf",
+      "reference": "التنسيق عندي يعتمد على color palette ثابتة، وأحب أضيف statement piece وحدة بس عشان ما يصير overload، ومع accessories بسيطة يطلع اللوك premium.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 214,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-012",
+      "slice": "gulf",
+      "reference": "قبل أطلب، أتأكد من size chart وأشيك delivery time، وإذا فيه discount code أستفيد، أهم شي secure payment عشان أكون مرتاح.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 235,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-013",
+      "slice": "gulf",
+      "reference": "أنا إذا دخلت قيمينغ أحب أسوي warm up خفيف وبعدين أركز على timing، وأضبط settings عشان الأداء يكون smooth وأطلع best build بدون ما أضيع وقت.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 256,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-014",
+      "slice": "gulf",
+      "reference": "إذا هدفي تنشيف ما أعتمد بس على التمرين، لازم nutrition مضبوط وtracking للسعرات، ومع شوية discipline يصير الجسم in shape.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 278,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "gulf-perle-015",
+      "slice": "gulf",
+      "reference": "إذا تبي المشروع يمشي صح، خل الـ team يكون على نفس الصفحة، نحدد priorities، ونسوي risk assessment بدري، ونوثق كل شي في tracker.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 299,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-001",
+      "slice": "technical",
+      "reference": "الـ task الجديدة دي محتاجة نعمل integrate مع payment gateway، فلازم نقرا الـ documentation كويس أوي.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 600,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-002",
+      "slice": "technical",
+      "reference": "الـ algorithm بتاع انستجرام اتغير تاني، لازم نركز نعمل content فيه value عالية عشان الـ reach ميموتش.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 621,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-003",
+      "slice": "technical",
+      "reference": "أنا لسه عامل بوش للكود الجديد على الريبو وهستنى الـ build يخلص، hopefully the automated tests will pass without any critical failures this time, عشان نقدر نعمل ديپلوي للـ staging environment النهاردة بالليل.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 643,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-004",
+      "slice": "technical",
+      "reference": "الـ client بعت الـ feedback بتاعه ولازم نعمل meeting عشان نناقش كل الـ points اللي قال عليها.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 664,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-005",
+      "slice": "technical",
+      "reference": "الـ presentation الجاية لازم تكون perfect عشان نقنع الـ investors بالمشروع.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 685,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-006",
+      "slice": "technical",
+      "reference": "الـ collection الجديدة بتاعتهم فيها حاجات كتير out of the box، بس الأسعار محتاجة discount.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 707,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-007",
+      "slice": "technical",
+      "reference": "لازم أخلص الـ presentation دي قبل الـ deadline عشان المدير يلحق يديني feedback عليها.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 728,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-008",
+      "slice": "technical",
+      "reference": "الـ new collection بتاعة الـ brand دي تحفة، بس حاسس إن الأسعار over priced شوية.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 750,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-009",
+      "slice": "technical",
+      "reference": "عشان تزود الـ engagement لازم تعمل content جديد ومختلف وتتابع كل الـ trends الجديدة.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 771,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-010",
+      "slice": "technical",
+      "reference": "عندي تسليم project مهم الأسبوع الجاي والـ deadline قرب وأنا لسه معملتش research كفاية.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 792,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-011",
+      "slice": "technical",
+      "reference": "الـ soft skills زي الـ communication والـ leadership بقت مطلوبة أكتر من أي وقت فات في سوق العمل.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 814,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-012",
+      "slice": "technical",
+      "reference": "لازم كل فترة تعمل refactoring للكود بتاعك عشان تحافظ على الـ performance وتخليه high quality.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 835,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-013",
+      "slice": "technical",
+      "reference": "الـ post بتاعي جاب reach عالي جداً امبارح، واضح إن الـ algorithm كان في صفي.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 856,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-014",
+      "slice": "technical",
+      "reference": "مش عارف أنزل الـ application الجديد ده، كل مرة بيطلعلي error message غريب كده ومش بيكمل الـ download.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 878,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
+      }
+    },
+    {
+      "id": "technical-perle-015",
+      "slice": "technical",
+      "reference": "المشروع ده واخد high priority عندي والـ stress اللي أنا فيه مش طبيعي عشان لازم يطلع perfect.",
+      "source": {
+        "dataset": "Perle-ai/ASR_Code_Switch",
+        "config": "default",
+        "split": "train",
+        "offset": 899,
+        "revision": "1cc5950241e02500c43e39e8f37cce93c2dca5fb",
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch"
       }
     }
   ]

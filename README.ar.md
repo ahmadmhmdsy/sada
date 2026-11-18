@@ -69,7 +69,7 @@
 
 ## التثبيت
 
-1. نزّل **`Sada_3.6.0_x64-setup.exe`** من [أحدث إصدار](https://github.com/alshahia/sada/releases/latest)
+1. نزّل **`Sada_3.7.0_x64-setup.exe`** من [أحدث إصدار](https://github.com/alshahia/sada/releases/latest)
    وتحقّق من بصمة SHA-256 مقابل ملف `SHA256SUMS.txt` المرفق.
 2. شغّل المثبّت. يُثبّت لكل مستخدم في `%LOCALAPPDATA%\Sada\` ولا يحتاج صلاحيات مدير.
 3. افتح **صدى** من قائمة ابدأ.

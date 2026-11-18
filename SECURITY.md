@@ -12,7 +12,9 @@ possible and credit in the advisory once a fix ships, unless you prefer to stay 
 
 ## Supported versions
 
-Security fixes target the latest released `3.6.x` build. Older builds are not maintained.
+Security fixes target the latest released `3.7.x` build. Older builds are not maintained.
+(3.7.0 is a measurement/documentation release with no runtime change; the 3.6.0 defence-in-depth
+work below is unchanged and still applies.)
 
 ## Scope
 

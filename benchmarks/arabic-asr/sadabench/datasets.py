@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import random
 import re
 import subprocess
 import sys
@@ -50,6 +51,11 @@ DATASET_LICENCES = {
         "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
         "url": "https://huggingface.co/datasets/google/fleurs",
     },
+    "Perle-ai/ASR_Code_Switch": {
+        "license": "MIT",
+        "attribution": "ASR Code-Switching Benchmark (Perle AI), MIT; Abdoli et al. 2026, arXiv:2605.19069",
+        "url": "https://huggingface.co/datasets/Perle-ai/ASR_Code_Switch",
+    },
 }
 
 # Slices of the benchmark. 'pending' slices have no clip yet because no
@@ -59,10 +65,10 @@ SLICES = {
     "msa": "Modern Standard Arabic read speech (Common Voice ar)",
     "egyptian": "Egyptian Arabic read speech (FLEURS ar_eg)",
     "latin-mixed": "Arabic read speech whose reference contains Latin proper nouns (Common Voice ar)",
-    "technical": "pending: no commercial-use-permissive Arabic/English technical speech corpus found",
-    "iraqi": "pending: no commercial-use-permissive Iraqi corpus found",
-    "gulf": "pending: no commercial-use-permissive Gulf corpus found",
-    "levantine": "pending: no commercial-use-permissive Levantine corpus found",
+    "technical": "Arabic/English code-switched technical speech (Perle AI Benchmark, MIT; scripted by native speakers)",
+    "gulf": "Gulf Arabic (Saudi Najdi/Hijazi) conversational code-switched speech (Perle AI Benchmark, MIT)",
+    "iraqi": "pending: no commercial-use-permissive Iraqi corpus with transcripts found",
+    "levantine": "pending: no commercial-use-permissive Levantine corpus with transcripts found",
 }
 
 _LATIN_TOKEN = re.compile(r"[A-Za-z][A-Za-z0-9]*(?:[-'][A-Za-z0-9]+)*")
@@ -75,21 +81,34 @@ _DIGITS_RE = re.compile(r"[0-9\u0660-\u0669\u06F0-\u06F9]")
 
 
 def _open(url: str, timeout: float) -> bytes:
-    """Open a URL with retries for transient rate limiting and server errors."""
+    """Open a URL with retries for transient rate limiting and server errors.
+
+    The Hugging Face dataset viewer returns 429/5xx in bursts while its parquet
+    conversion queues work; a build scans many pages, so give it a dozen tries
+    with backoff, jitter and Retry-After support before failing.
+    """
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     delay = 2.0
-    for attempt in range(1, 7):
+    for attempt in range(1, 13):
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:  # noqa: S310 - https only
                 return response.read()
         except urllib.error.HTTPError as error:
             if error.code != 429 and error.code < 500:
                 raise
-            if attempt == 6:
+            if attempt == 12:
                 raise
             retry_after = error.headers.get("Retry-After")
-            wait = float(retry_after) if retry_after and retry_after.isdigit() else delay
-            print(f"  rate limited ({error.code}); retrying in {wait:.0f}s", file=sys.stderr)
+            base = float(retry_after) if retry_after and retry_after.isdigit() else delay
+            wait = base + random.uniform(0.0, 1.0)
+            print(f"  rate limited ({error.code}); retrying in {wait:.1f}s", file=sys.stderr)
+            time.sleep(wait)
+            delay = min(delay * 2, 60.0)
+        except (urllib.error.URLError, TimeoutError, OSError) as error:
+            if attempt == 12:
+                raise
+            wait = delay + random.uniform(0.0, 1.0)
+            print(f"  network error ({error}); retrying in {wait:.1f}s", file=sys.stderr)
             time.sleep(wait)
             delay = min(delay * 2, 60.0)
     raise RuntimeError("unreachable")
@@ -159,7 +178,7 @@ def _row_audio_url(row: dict) -> str:
 
 def _row_reference(row: dict, kind: str) -> str:
     field = "sentence" if kind == "common_voice" else "transcription"
-    value = row.get(field) or ""
+    value = row.get(field) or row.get("transcript") or ""
     return " ".join(str(value).split())
 
 
@@ -316,30 +335,157 @@ def _fleurs_clips(count: int) -> list[ClipSpec]:
     return clips
 
 
+def _perle_clips(counts: dict[str, int]) -> list[ClipSpec]:
+    """Select Perle AI code-switch clips for the gulf and technical slices.
+
+    The benchmark records which language pair each row belongs to; rows are
+    picked evenly across the pair so the slice is not biased to the first page
+    of the file. Saudi rows fill the gulf slice first, then the technical
+    remainder; Egyptian rows fill the technical remainder. Every clip is a
+    single utterance with a human reference transcript, recorded by native
+    speakers (the audio is not scraped from other corpora).
+    """
+    dataset = "Perle-ai/ASR_Code_Switch"
+    config, split = "default", "train"
+    revision = dataset_revision(dataset)
+    pair_for_slice = {
+        "gulf": "Saudi Arabic (Najdi/Hijazi)–English",
+        "egyptian": "Egyptian Arabic–English",
+    }
+    remaining = dict(counts)
+    rows_by_pair: dict[str, list[tuple[int, dict]]] = {pair: [] for pair in pair_for_slice.values()}
+    offset = 0
+    page = 100
+    while True:
+        rows = dataset_rows(dataset, config, split, offset, page)
+        if not rows:
+            break
+        for row_idx, row in rows:
+            pair = str(row.get("language_pair", ""))
+            if pair in rows_by_pair:
+                rows_by_pair[pair].append((row_idx, row))
+        offset += page
+        time.sleep(0.5)
+    clips: list[ClipSpec] = []
+    # Gulf first: Saudi code-switched speech.
+    saudi = rows_by_pair[pair_for_slice["gulf"]]
+    need = remaining.get("gulf", 0)
+    for position, (row_idx, row) in enumerate(_evenly_spaced(saudi, need)):
+        reference = _row_reference(row, "perle")
+        clips.append(
+            ClipSpec(
+                f"gulf-perle-{position + 1:03d}",
+                "gulf",
+                reference,
+                dataset,
+                config,
+                split,
+                row_idx,
+                revision,
+            )
+        )
+    # Technical remainder: Egyptian first, then any Saudi rows not used above.
+    used_saudi = {row_idx for row_idx, _ in _evenly_spaced(saudi, need)}
+    technical: list[tuple[int, dict, str]] = []
+    egyptian = rows_by_pair[pair_for_slice["egyptian"]]
+    technical_need = remaining.get("technical", 0)
+    egyptian_need = min(len(egyptian), technical_need)
+    for row_idx, row in _evenly_spaced(egyptian, egyptian_need):
+        technical.append((row_idx, row, "egyptian"))
+    extra_saudi = [item for item in saudi if item[0] not in used_saudi]
+    for row_idx, row in _evenly_spaced(extra_saudi, technical_need - len(technical)):
+        technical.append((row_idx, row, "saudi"))
+    for position, (row_idx, row, origin) in enumerate(technical):
+        reference = _row_reference(row, "perle")
+        clips.append(
+            ClipSpec(
+                f"technical-perle-{position + 1:03d}",
+                "technical",
+                reference,
+                dataset,
+                config,
+                split,
+                row_idx,
+                revision,
+            )
+        )
+    return clips
+
+
+def _evenly_spaced(rows: list[tuple[int, dict]], count: int) -> list[tuple[int, dict]]:
+    """Pick count rows spread evenly across a list."""
+    if count <= 0 or not rows:
+        return []
+    count = min(count, len(rows))
+    if count == 1:
+        return [rows[0]]
+    step = (len(rows) - 1) / (count - 1)
+    return [rows[round(index * step)] for index in range(count)]
+
+
+SLICE_COUNTS = {"msa": "msa_count", "latin-mixed": "latin_count", "egyptian": "egyptian_count"}
+
+
+def reused_clips(reuse_manifest: dict, counts: dict[str, int]) -> dict[str, list[dict]]:
+    """Clip entries an existing manifest already pins for the given slice counts.
+
+    Rebuilding the manifest re-scans the Common Voice test split for Latin-mixed
+    rows (up to 110 pages on a rate-limited viewer) only to find the same rows
+    again. When an existing manifest already selected exactly the requested
+    number of clips for a slice, those entries are reproducible and are reused;
+    only slices whose count changed are rebuilt.
+    """
+    by_slice: dict[str, list[dict]] = {}
+    for clip in reuse_manifest.get("clips", []):
+        slice_name = clip.get("slice")
+        if slice_name in SLICE_COUNTS:
+            by_slice.setdefault(slice_name, []).append(clip)
+    reused: dict[str, list[dict]] = {}
+    for slice_name, attribute in SLICE_COUNTS.items():
+        wanted = counts[attribute]
+        if wanted > 0 and len(by_slice.get(slice_name, [])) == wanted:
+            reused[slice_name] = by_slice[slice_name]
+    return reused
+
+
 def build_manifest(
     msa_count: int = 30,
     egyptian_count: int = 20,
     latin_count: int = 10,
-    technical_count: int = 10,
+    gulf_count: int = 15,
+    technical_count: int = 15,
+    reuse_manifest: dict | None = None,
 ) -> dict:
-    """Build a new clip manifest by selecting rows from the pinned datasets.
-
-    The technical slice is only populated when a permissive code-switching
-    corpus is available; by default it selects nothing and stays pending.
-    """
-    clips = _common_voice_clips(msa_count, "msa")
-    clips += _latin_clips(latin_count)
-    clips += _fleurs_clips(egyptian_count)
-    if technical_count:
-        clips += _common_voice_clips(technical_count, "technical")
-    if not clips:
+    """Build a new clip manifest by selecting rows from the pinned datasets."""
+    counts = {
+        "msa_count": msa_count,
+        "egyptian_count": egyptian_count,
+        "latin_count": latin_count,
+    }
+    reused = reused_clips(reuse_manifest, counts) if reuse_manifest else {}
+    fresh: dict[str, list[ClipSpec]] = {}
+    if "msa" not in reused:
+        fresh["msa"] = _common_voice_clips(msa_count, "msa")
+    if "latin-mixed" not in reused:
+        fresh["latin-mixed"] = _latin_clips(latin_count)
+    if "egyptian" not in reused:
+        fresh["egyptian"] = _fleurs_clips(egyptian_count)
+    if gulf_count or technical_count:
+        perle = _perle_clips({"gulf": gulf_count, "technical": technical_count})
+        fresh["gulf"] = [clip for clip in perle if clip.slice == "gulf"]
+        fresh["technical"] = [clip for clip in perle if clip.slice == "technical"]
+    entries: list[dict] = []
+    for slice_name in ("msa", "latin-mixed", "egyptian", "gulf", "technical"):
+        entries.extend(reused.get(slice_name, []))
+        entries.extend(clip.to_manifest() for clip in fresh.get(slice_name, []))
+    if not entries:
         raise RuntimeError("no clips selected; check dataset availability")
     return {
         "version": 1,
         "created": time.strftime("%Y-%m-%d"),
         "policy": "commercial-use-permissive corpora only; audio is fetched, never committed",
         "slices": SLICES,
-        "clips": [clip.to_manifest() for clip in clips],
+        "clips": entries,
     }
 
 
@@ -388,7 +534,9 @@ def fetch_clips(
             row = next((row for offset, row in rows if offset == source["offset"]), None)
             if row is None:
                 raise ValueError("row not found at stored offset")
-            reference = " ".join(str(row.get("sentence") or row.get("transcription") or "").split())
+            reference = " ".join(
+                str(row.get("sentence") or row.get("transcription") or row.get("transcript") or "").split()
+            )
             if reference != clip["reference"]:
                 raise ValueError("dataset row text no longer matches the manifest reference")
             audio_url = _row_audio_url(row)

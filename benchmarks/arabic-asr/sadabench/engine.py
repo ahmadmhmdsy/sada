@@ -21,6 +21,7 @@ class ModelSpec:
     family: str = "whisper"
     args: list[str] = field(default_factory=list)
     size_bytes: int | None = None
+    prompt: str | None = None
 
     @property
     def size_mb(self) -> float | None:
@@ -32,13 +33,25 @@ def load_models(path: Path, engine: str) -> dict:
     payload = json.loads(path.read_text(encoding="utf-8"))
     models: dict[str, ModelSpec] = {}
     for model_id, item in payload.get("models", {}).items():
+        prompt = item.get("prompt")
+        prompt_file = item.get("prompt_file")
+        if prompt_file:
+            prompt_path = Path(prompt_file)
+            if not prompt_path.is_absolute():
+                prompt_path = path.parent / prompt_path
+            prompt = prompt_path.read_text(encoding="utf-8").strip()
+        args = list(item.get("args", []))
+        if prompt:
+            # clap accepts --prompt=value, so a multi-word prompt stays one argv entry.
+            args.append(f"--prompt={prompt}")
         model = ModelSpec(
             id=model_id,
             path=item["path"],
             language=item["language"],
             family=item.get("family", "whisper"),
-            args=list(item.get("args", [])),
+            args=args,
             size_bytes=item.get("size_bytes"),
+            prompt=prompt,
         )
         if not Path(model.path).exists():
             raise FileNotFoundError(f"{model_id}: model file not found at {model.path}")

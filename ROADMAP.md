@@ -5,8 +5,8 @@ It records what is in flight, what each milestone promises, and the evidence rul
 model questions: **no model is curated without a licence, a size, a SHA-256 and timestamps** — and no
 Arabic claim is made without the benchmark.
 
-Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17,
-v3.5.0 shipped 2026-11-18 and v3.6.0 shipped 2026-11-18 (all before their due dates).
+Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 in progress` — v3.3.1 and
+v3.4.0 shipped 2026-11-17, v3.5.0 and v3.6.0 shipped 2026-11-18 (all before their due dates).
 Last updated 2026-11-18.
 
 ## Milestones
@@ -17,6 +17,7 @@ Last updated 2026-11-18.
 | **v3.4.0 — verified model catalog** | 2026-12-08 | Bundled verified catalog + Get models, Arabic entries and docs, MCP/capability plumbing, local endpoint hardening | #5 #6 #7 #8 #9 |
 | **v3.5.0 — Arabic model evaluation** | 2027-01-15 | Arabic WER/CER harness, fine-tune/Nemotron decisions, read-aloud test, second-engine spike | #10 #11 #12 #13 — **complete**, evidence below |
 | **v3.6.0 — transcript quality & hardening** | 2027-02-15 | Arabic transcript post-processing earned in the benchmark, upstream v3.3.6 security audit ported, clean-machine offline acceptance + signing decision | #14 #15 #16 — **complete**, evidence below |
+| **v3.7.0 — dialect coverage & prompt biasing** | 2027-04-15 | Measured Gulf + Arabic/English technical code-switch slices from a commercial-use corpus, prompt-biasing measurement and app wiring if it wins, honest remaining-gap matrix | #19 #20 #21 — in progress (plan: [P4](docs/P4-PLAN.md)) |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -159,6 +160,34 @@ Markdown, and sada: deep links. Installer hash recorded after the release below.
   installed sidecar `vibe-server v0.6.16-sada.1`, installed MCP ready (`sada-mcp 3.6.0`); CI run
   [44262019603](https://github.com/alshahia/sada/actions/runs/44262019603) is green including the
   benchmark-harness job, and the site deploy run is green.
+
+## P4 — dialect coverage and prompt biasing (in progress, v3.7.0)
+
+Plan with the full licence matrix and experiment design: [docs/P4-PLAN.md](docs/P4-PLAN.md).
+
+- [x] #19 Add 15 Gulf (Saudi code-switch) and 15 technical (Egyptian code-switch) Perle AI clips
+  (MIT, audio recorded by native voice actors — clean provenance) to manifest v2; keep Iraqi and
+  Levantine visible as pending and record every rejected corpus with its licence reason. Fetch,
+  run and report per-slice WER/CER + Latin preservation.
+- [x] #20 Measure `--prompt` glossary biasing (no prompt vs Arabic+Latin glossary vs English-only
+  vs Arabic-only) on the Latin-mixed/MSA slices, then on the full corpus if it wins; wire a
+  one-click glossary prompt into Settings only if the numbers justify it and no slice regresses.
+  Measured negative: no preset shipped (numbers below).
+- [ ] #21 Docs/decisions, version bumps, bilingual v3.7.0 notes, full test matrix and release;
+  verify installer re-download, silent install, sidecar and MCP banner.
+
+**P4 evidence (2026-11-18):** manifest v2 = 90 clips (30 MSA, 10 Latin-mixed, 20 Egyptian, 15 Gulf,
+15 technical), Perle revision `1cc59502…`, 30 distinct rows, audio fetched (90/90 WAVs, 0 failed)
+and never committed. Full run on five model variants × 90 clips = 450 transcriptions, engine
+`vibe-server v0.6.16-sada.1` on Vulkan: Turbo WER 30.27% overall (MSA 22.09, Latin-mixed 48.96,
+Egyptian 11.03, Gulf 42.74, technical 46.18), Latin names 27.3%; Nemotron 35.16% (wins MSA/Egyptian,
+loses 17–19 pp on both code-switch slices, 0% Latin names); dialectal fine-tune 32.60% with a
+1.14 pp corpus-level Gulf edge whose per-clip bootstrap 95% CI is [-10.06, +8.28] — too weak to
+curate; glossary prompt 31.44% overall while preserving more Latin terms (technical 47.1% vs 34.3%)
+— prompt spike WER 31.92% vs 29.38% no-prompt on 40 clips, so no app preset. Artefacts:
+[`results/results-2026-11-18-v2.md`](benchmarks/arabic-asr/results/results-2026-11-18-v2.md),
+[`results/prompt-spike-v1.md`](benchmarks/arabic-asr/results/prompt-spike-v1.md); decisions in
+[`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md), plan in [`docs/P4-PLAN.md`](docs/P4-PLAN.md).
 
 ## Step Zero tests (define "done" before code)
 

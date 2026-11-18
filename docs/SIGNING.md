@@ -1,6 +1,6 @@
 # Windows code signing
 
-The Windows installer and the app executable are **not signed** as of Sada v3.6.0. This page records
+The Windows installer and the app executable are **not signed** as of Sada v3.7.0. This page records
 the options, their real costs, what the fork already has in the repository, and the recommendation
 for when signing is funded. Nothing is purchased or enabled without the owner's decision.
 
@@ -84,7 +84,7 @@ release workflow so an unsigned artifact cannot be published by accident.
 
 ## Arabic summary
 
-الملف غير موقّع حتى الإصدار 3.6.0، لذلك يظهر تحذير SmartScreen ("ناشر غير معروف"). الحماية الحالية
+الملف غير موقّع حتى الإصدار 3.7.0، لذلك يظهر تحذير SmartScreen ("ناشر غير معروف"). الحماية الحالية
 هي نشر بصمة SHA-256 مع كل إصدار. الخيار الموصى به هو التقدّم إلى **SignPath Foundation** المجاني
 للمشاريع مفتوحة المصدر، ثم **Azure Artifact Signing** بحدود 10 دولارات شهرياً إذا كان الكيان مؤهلاً؛
 ولا تُشترى شهادة OV/EV قبل قرار المالك. سكربت scripts/sign.py الموجود جاهز للتوصيل عبر signCommand

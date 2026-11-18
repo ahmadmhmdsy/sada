@@ -70,7 +70,7 @@ that:
 
 ## Install
 
-1. Download **`Sada_3.6.0_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
+1. Download **`Sada_3.7.0_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
    and verify its SHA-256 against the attached `SHA256SUMS.txt`.
 2. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator rights
    are required.

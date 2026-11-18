@@ -12,7 +12,7 @@
 - Website: https://alshahia.github.io/sada/
 - Repository: https://github.com/alshahia/sada
 - Latest release: https://github.com/alshahia/sada/releases/latest
-- Version: 3.6.0 · License: MIT · Platform: Windows 10/11 x64
+- Version: 3.7.0 · License: MIT · Platform: Windows 10/11 x64
 - Engine: whisper.cpp via bundled vibe-server v0.6.16 (built by Sada from `server/` as
   v0.6.16-sada.1 with a loopback Host/Origin guard); FFmpeg 9.0.2 GPLv3 bundled (notices in repo)
 - GPU: optional Vulkan acceleration (device picker in Settings → Models → Hardware), CPU fallback,

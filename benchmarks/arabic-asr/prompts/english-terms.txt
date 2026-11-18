@@ -1,0 +1,1 @@
+Technical terms, acronyms and foreign names stay in English letters: GPU, CPU, API, HTTP, HTTPS, HTML, CSS, JSON, SQL, URL, PDF, SRT, VTT, USB, VPN, Wi-Fi, GitHub, FFmpeg, Whisper. Do not transliterate them into Arabic letters.
