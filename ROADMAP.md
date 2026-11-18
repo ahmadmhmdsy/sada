@@ -183,6 +183,21 @@ Markdown, and sada: deep links. Installer hash recorded after the release below.
   and is never the default. Both verdicts and the rejections (fine-tune, read-aloud, second engine)
   are recorded with reproduction commands in [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md).
 
+## Backlog after v3.6.0
+
+- [#17](https://github.com/alshahia/sada/issues/17) — run the clean-machine acceptance rows B–E
+  (offline Windows 10, CPU-only, AVX-only, AVX-less SSE4.2) when hardware is available, record the
+  evidence in `docs/ACCEPTANCE.md`, and decide whether to keep the small installer with a WebView2
+  prerequisite or bundle the ~130 MB offline installer.
+- [#18](https://github.com/alshahia/sada/issues/18) — apply for code signing (SignPath Foundation
+  first, then Azure Artifact Signing if eligible), then wire `bundle.windows.signCommand` or
+  signtool in the release workflow plus a signature-verification step.
+- Expand the benchmark corpus with commercial-use Iraqi/Gulf/Levantine and technical
+  Arabic/English clips (the slices currently recorded as unmeasured); no model claim until they are
+  measured. Also re-check prompt-based term biasing for the Nemotron Latin-name loss (25% → 0%).
+- Keep the upstream sync discipline: bump the engine by upstream release, and keep
+  `docs/UPSTREAM-PATCHES.md` honest about what is and is not ported.
+
 ## Rules that do not move
 
 - Arabic-first defaults (`ar-IQ` UI, `ar` transcription, RTL) and the 100% `ar-IQ` catalogue.
