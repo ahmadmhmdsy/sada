@@ -139,9 +139,10 @@ Pass: both checks behave as described; the Rust unit tests cover the same paths.
 | Frontend build | cd desktop; pnpm build | exit 0, final vite bundle 1m 5s |
 | Rust tests | cd desktop/src-tauri; cargo test --release | 101 tests passed, exit 0 |
 | Engine guard tests | cargo test --release -p vibe-server guard:: | 8 tests passed, exit 0 |
-| Arabic benchmark tests | cd benchmarks/arabic-asr; python -m unittest discover -s tests | 44 tests passed |
+| Arabic benchmark tests | cd benchmarks/arabic-asr; python -m unittest discover -s tests | 52 tests passed |
 | i18n audit | python scripts/check_i18n.py | passed |
-| Installer | release workflow artifact, 3.6.0 | 44,926,298 bytes · SHA-256 53e0a3c9…54d40e, silent install verified (Sada.exe 3.6.0, sidecar v0.6.16-sada.1, MCP sada-mcp 3.6.0) |
+| Rust type check | cd app; cargo check --tests | exit 0 |
+| Installer | release workflow artifact, 3.7.0 | 44,921,531 bytes · SHA-256 faeb2d07…a8b207, silent install verified (Sada.exe 3.7.0, sidecar v0.6.16-sada.1, MCP sada-mcp 3.7.0) |
 
 The clean-machine runs above (slots B-E) need physical/VM machines the maintainer controls; until
 they are recorded this page is the procedure plus the automated evidence, and docs/VERIFICATION.md

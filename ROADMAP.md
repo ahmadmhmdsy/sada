@@ -5,9 +5,9 @@ It records what is in flight, what each milestone promises, and the evidence rul
 model questions: **no model is curated without a licence, a size, a SHA-256 and timestamps** — and no
 Arabic claim is made without the benchmark.
 
-Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 in progress` — v3.3.1 and
-v3.4.0 shipped 2026-11-17, v3.5.0 and v3.6.0 shipped 2026-11-18 (all before their due dates).
-Last updated 2026-11-18.
+Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete` — v3.3.1 and
+v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0 and v3.7.0 shipped 2026-11-18 (all before their due
+dates). Last updated 2026-11-18.
 
 ## Milestones
 
@@ -17,7 +17,7 @@ Last updated 2026-11-18.
 | **v3.4.0 — verified model catalog** | 2026-12-08 | Bundled verified catalog + Get models, Arabic entries and docs, MCP/capability plumbing, local endpoint hardening | #5 #6 #7 #8 #9 |
 | **v3.5.0 — Arabic model evaluation** | 2027-01-15 | Arabic WER/CER harness, fine-tune/Nemotron decisions, read-aloud test, second-engine spike | #10 #11 #12 #13 — **complete**, evidence below |
 | **v3.6.0 — transcript quality & hardening** | 2027-02-15 | Arabic transcript post-processing earned in the benchmark, upstream v3.3.6 security audit ported, clean-machine offline acceptance + signing decision | #14 #15 #16 — **complete**, evidence below |
-| **v3.7.0 — dialect coverage & prompt biasing** | 2027-04-15 | Measured Gulf + Arabic/English technical code-switch slices from a commercial-use corpus, prompt-biasing measurement and app wiring if it wins, honest remaining-gap matrix | #19 #20 #21 — in progress (plan: [P4](docs/P4-PLAN.md)) |
+| **v3.7.0 — dialect coverage & prompt biasing** | 2027-04-15 | Measured Gulf + Arabic/English technical code-switch slices from a commercial-use corpus, prompt-biasing measurement and app wiring if it wins, honest remaining-gap matrix | #19 #20 #21 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.7.0), evidence below |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -161,7 +161,7 @@ Markdown, and sada: deep links. Installer hash recorded after the release below.
   [44262019603](https://github.com/alshahia/sada/actions/runs/44262019603) is green including the
   benchmark-harness job, and the site deploy run is green.
 
-## P4 — dialect coverage and prompt biasing (in progress, v3.7.0)
+## P4 — dialect coverage and prompt biasing (complete, v3.7.0)
 
 Plan with the full licence matrix and experiment design: [docs/P4-PLAN.md](docs/P4-PLAN.md).
 
@@ -173,8 +173,14 @@ Plan with the full licence matrix and experiment design: [docs/P4-PLAN.md](docs/
   vs Arabic-only) on the Latin-mixed/MSA slices, then on the full corpus if it wins; wire a
   one-click glossary prompt into Settings only if the numbers justify it and no slice regresses.
   Measured negative: no preset shipped (numbers below).
-- [ ] #21 Docs/decisions, version bumps, bilingual v3.7.0 notes, full test matrix and release;
-  verify installer re-download, silent install, sidecar and MCP banner.
+- [x] #21 Docs/decisions, version bumps, bilingual v3.7.0 notes, full test matrix and release;
+  verify installer re-download, silent install, sidecar and MCP banner. Shipped 2026-11-18:
+  [release](https://github.com/alshahia/sada/releases/tag/v3.7.0) · installer 44,921,531 bytes ·
+  SHA-256 `faeb2d07e207239b30880fc67a689034005091f8031a3090795fc3df83a8b207` (re-downloaded and
+  matched against `SHA256SUMS.txt`); silent install verified Sada.exe 3.7.0, sidecar
+  `vibe-server v0.6.16-sada.1`, MCP `sada-mcp 3.7.0`; CI
+  [44274890695](https://github.com/alshahia/sada/actions/runs/44274890695) and Release
+  [44273571514](https://github.com/alshahia/sada/actions/runs/44273571514) are green.
 
 **P4 evidence (2026-11-18):** manifest v2 = 90 clips (30 MSA, 10 Latin-mixed, 20 Egyptian, 15 Gulf,
 15 technical), Perle revision `1cc59502…`, 30 distinct rows, audio fetched (90/90 WAVs, 0 failed)

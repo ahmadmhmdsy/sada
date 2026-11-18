@@ -3,6 +3,76 @@
 This page summarises how the Windows builds in this repository were verified.
 It is written in English for reviewers; the Arabic summary follows.
 
+## Sada 3.7.0 — dialect coverage and prompt-biasing evidence
+
+- **Date:** 18 November 2026 (Asia/Baghdad)
+- **Source:** `master`, tagged `v3.7.0` (24a23d9). No app runtime change: the engine, bundled
+  catalogue, models and UI behaviour are identical to 3.6.0 (still `vibe-server v0.6.16-sada.1`
+  with the same loopback guard); this release changes the benchmark manifest/tooling, the measured
+  evidence and the docs, plus the version string. The Release workflow rebuilt the engine and the
+  installer from this tag anyway.
+- **Host:** Windows 10.0.26300 · WebView2 157.0.4341.46 · NVIDIA Quadro RTX 4000 (Vulkan0) and
+  Intel UHD Graphics 630 (Vulkan1).
+
+### Tests
+
+| Suite | Result |
+| --- | --- |
+| pnpm test (vitest) | **31 files / 193 tests passed**, exit 0 |
+| pnpm build | paraglide compile → tsc → vite build, exit 0 (final bundle 1m 12s) |
+| cargo test --release (desktop) | **101 passed**, exit 0 |
+| cargo test --release -p vibe-server guard:: | **8 passed**, exit 0 |
+| cargo check --tests | exit 0 |
+| python -m unittest discover -s benchmarks/arabic-asr/tests | **52 tests passed**, exit 0 (was 44; new manifest-reuse and engine prompt-file tests) |
+| i18n audit (check_i18n.py) | passed (fallback warnings only, unchanged) |
+
+The first CI run after the tag failed one desktop test: `arabic-transcript-pdf.test.ts` > “lays
+Arabic right-to-left text down in visual order” hit its 30 s budget at 30.9 s on the shared Windows
+runner (the same work takes ~4 s locally). It is a test-harness timing limit, not a product failure;
+commit 4080c12 raised the PDF layout test budgets to 90 s, and the re-run CI
+[44274890695](https://github.com/alshahia/sada/actions/runs/44274890695) is green (7m 7s).
+
+### What changed (measurement only)
+
+- **Manifest v2:** 90 clips / 5 slices after adding 15 Gulf (Saudi–English) and 15 technical
+  (Egyptian–English) Perle AI code-switch clips (MIT). Audio is fetched at run time and never
+  committed; each clip is pinned by dataset revision and row.
+- **Full run:** 450 transcriptions (5 model variants × 90 clips) and a 4-variant prompt spike;
+  numbers and the negative prompt result are in `benchmarks/arabic-asr/results/` and
+  `docs/MODELS-DECISIONS.md`.
+- **Docs:** `docs/P4-PLAN.md` (licence matrix and rejected corpora), benchmark README results
+  section, `docs/MODELS.md`/`MODELS.ar.md` guidance corrected to the measured slices and the
+  unmeasured Iraqi/Levantine gap, THIRD-PARTY-NOTICES benchmark-data section, bilingual v3.7.0
+  release notes.
+- No Rust or frontend behaviour changed; the free-text prompt field stays unchanged.
+
+### Artifacts
+
+- CI run [44274890695](https://github.com/alshahia/sada/actions/runs/44274890695) — **success**
+  (7m 7s; the first run 44273565822 failed on the timeout above).
+- Release run [44273571514](https://github.com/alshahia/sada/actions/runs/44273571514) —
+  **success** (29m 36s; engine rebuilt from `server/`, guard/Rust tests, NSIS installer).
+- Deploy site run [44273566053](https://github.com/alshahia/sada/actions/runs/44273566053) —
+  **success**.
+
+The published installer and SHA256SUMS.txt were re-downloaded on 18 November 2026 and compared
+with the checksum attached to the [v3.7.0 release](https://github.com/alshahia/sada/releases/tag/v3.7.0)
+and with GitHub's recorded asset digest:
+
+| Artifact | Size | SHA-256 |
+| --- | --- | --- |
+| Sada_3.7.0_x64-setup.exe | 44,921,531 bytes | faeb2d07e207239b30880fc67a689034005091f8031a3090795fc3df83a8b207 |
+| SHA256SUMS.txt | 90 bytes | 828eaaf406be6212b42213b5462eec81e168c63bd6aa35d467d1b6066ac31bf9 |
+
+The re-downloaded installer matched SHA256SUMS.txt. It was installed silently (/S, per-user
+install): the installed Sada.exe is 15,896,576 bytes with product version **3.7.0**, the installed
+sidecar is 75,685,376 bytes and reports **vibe-server v0.6.16-sada.1**, and the installed MCP
+server starts with **sada-mcp 3.7.0 ready (stdio; tools: sada_transcribe, sada_transcripts,
+sada_transcript, sada_info)**. The NSIS package remains unsigned (SmartScreen warns "unknown
+publisher"; verify the hash before choosing *More info → Run anyway*).
+
+---
+
 ## Sada 3.6.0 — transcript quality and security hardening
 
 - **Date:** 18 November 2026 (Asia/Baghdad)
