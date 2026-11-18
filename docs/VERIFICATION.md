@@ -58,9 +58,28 @@ and the documented CPU-variant code path (server/crates/ggml-rs-sys/src/cpu_vari
 
 ### Artifacts
 
-To be filled after the v3.6.0 release publishes the installer and SHA256SUMS.txt (same procedure
-as 3.5.0: re-download, compare with the published checksum, run the installer silently and check
-Sada.exe, the sidecar version and the MCP server banner).
+- CI run [44262019603](https://github.com/alshahia/sada/actions/runs/44262019603) — **success**
+  (desktop build/tests incl. Rust, and the Arabic ASR benchmark job).
+- Release run [44262023351](https://github.com/alshahia/sada/actions/runs/44262023351) —
+  **success** (engine rebuilt from server/, guard tests, Rust tests, NSIS installer).
+- Deploy site run [44262019694](https://github.com/alshahia/sada/actions/runs/44262019694) —
+  **success**.
+
+The published installer and SHA256SUMS.txt were re-downloaded on 18 November 2026 and compared
+with the checksum attached to the [v3.6.0 release](https://github.com/alshahia/sada/releases/tag/v3.6.0)
+and with GitHub's recorded asset digest:
+
+| Artifact | Size | SHA-256 |
+| --- | --- | --- |
+| Sada_3.6.0_x64-setup.exe | 44,926,298 bytes | 53e0a3c9d715c0eff949f9058d77708fb4899c685ef7fe022719868efa54d40e |
+| SHA256SUMS.txt | 90 bytes | 72b64ba6fd218c111f9f58c5868c93ba62ca72cb3a67701a909a29ccb40d3b28 |
+
+The re-downloaded installer matched SHA256SUMS.txt. It was installed silently (/S, per-user
+install): the installed Sada.exe is 15,896,576 bytes with product version **3.6.0**, the installed
+sidecar is 75,685,376 bytes and reports **vibe-server v0.6.16-sada.1**, and the installed MCP
+server starts with **sada-mcp 3.6.0 ready (stdio; tools: sada_transcribe, sada_transcripts,
+sada_transcript, sada_info)**. The NSIS package remains unsigned (SmartScreen warns "unknown
+publisher"; verify the hash before choosing *More info → Run anyway*).
 
 ---
 

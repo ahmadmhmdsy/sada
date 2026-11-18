@@ -151,8 +151,14 @@ guard::` 8 tests, Python benchmark suite 44 tests and the i18n audit pass. New t
 validation, download destinations, yt-dlp tags/SUMS, type_text permit and control characters, safe
 Markdown, and sada: deep links. Installer hash recorded after the release below.
 
-- [x] Release v3.6.0 (bilingual notes, tag): link and installer hash recorded after CI publishes
-  the release.
+- [x] Release v3.6.0 (bilingual notes, tag, CI release run
+  [44262023351](https://github.com/alshahia/sada/actions/runs/44262023351)):
+  [release](https://github.com/alshahia/sada/releases/tag/v3.6.0) · installer 44,926,298 bytes ·
+  SHA-256 `53e0a3c9d715c0eff949f9058d77708fb4899c685ef7fe022719868efa54d40e` (re-downloaded and
+  matched against SHA256SUMS.txt and the GitHub asset digest); silent install → Sada.exe 3.6.0,
+  installed sidecar `vibe-server v0.6.16-sada.1`, installed MCP ready (`sada-mcp 3.6.0`); CI run
+  [44262019603](https://github.com/alshahia/sada/actions/runs/44262019603) is green including the
+  benchmark-harness job, and the site deploy run is green.
 
 ## Step Zero tests (define "done" before code)
 
