@@ -110,6 +110,15 @@ turbo vs 0.0% for every challenger; timestamps 100% for all `vibe-server` models
 `results-2026-11-18-transcribe-cpp.json`. Catalogue, `docs/MODELS.md` and `docs/MODELS.ar.md`
 updated; frontend tests and the Python suite re-run green.
 
+- [x] Release v3.5.0 (bilingual notes, tag, CI release run
+  [44248008750](https://github.com/alshahia/sada/actions/runs/44248008750)):
+  [release](https://github.com/alshahia/sada/releases/tag/v3.5.0) · installer 44,936,816 bytes ·
+  SHA-256 `9cf779ff7c891e4823523be34e5315da2136d7dcf6356db085889c4cbadca279` (re-downloaded and
+  matched against `SHA256SUMS.txt` and the GitHub asset digest); silent install → `Sada.exe` 3.5.0,
+  installed sidecar `vibe-server v0.6.16-sada.1`, installed MCP ready (`sada-mcp 3.5.0`); the CI run
+  [44248005147](https://github.com/alshahia/sada/actions/runs/44248005147) is green including the new
+  benchmark-harness job.
+
 ## Step Zero tests (define "done" before code)
 
 1. **E1 — engine bump smoke test.** Four Arabic clips (short MSA, MSA news, Iraqi dialogue,

@@ -3,6 +3,73 @@
 This page summarises how the Windows builds in this repository were verified.
 It is written in English for reviewers; the Arabic summary follows.
 
+## Sada 3.5.0 — measured Arabic model evaluation
+
+- **Date:** 18 November 2026 (Asia/Baghdad)
+- **Source:** `master`, tagged `v3.5.0`; no Rust or frontend source change beyond the bundled
+  catalogue entry, so the release workflow rebuilt the engine from `server/` and packaged the same
+  guarded sidecar.
+- **Host:** Windows 10.0.26300 · WebView2 157.0.4341.46 · NVIDIA Quadro RTX 4000 (Vulkan0) and Intel
+  UHD Graphics 630 (Vulkan1).
+
+### Tests
+
+| Suite | Result |
+| --- | --- |
+| `pnpm test` (vitest) | **28 files / 179 tests passed**, exit 0 |
+| `pnpm build` | paraglide compile → tsc → vite build, exit 0 (45.3 s) |
+| `python -m unittest discover -s benchmarks/arabic-asr/tests` | **38 tests passed**, exit 0 |
+| i18n audit (`check_i18n.py`) | passed (fallback warnings for older translated docs only) |
+| `cargo test --release` | no Rust source changed since 3.4.0 (91 tests passed there); the Release workflow still built the engine and ran the guard tests (step 13 succeeded) |
+| CI run [44248005147](https://github.com/alshahia/sada/actions/runs/44248005147) | success, including the new `benchmarks` job on ubuntu 3.12 |
+
+### Benchmark (issue #10, #11, #13)
+
+60 clips × 4 models on the bundled `vibe-server v0.6.16-sada.1` with Vulkan, 2026-11-18 08:33
+(transcribe.cpp spike: 08:46). Raw artefacts committed under `benchmarks/arabic-asr/results/`.
+
+| Model | Size MB | WER % | CER % | Latin names kept % | Timestamps % | RTF |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| whisper-large-v3-turbo (default) | 1624.6 | 19.46 | 8.34 | 25.0 | 100 | 0.35 |
+| nemotron-3.5-asr-streaming-0.6b-q4-k-m | 495.8 | **17.12** | 8.28 | 0.0 | 100 | **0.234** |
+| whisper-large-v3-turbo-arabic-dialectal-v2-q5 | 574.0 | 23.09 | 9.53 | 0.0 | 100 | 0.265 |
+| whisper-tiny | 77.7 | 70.56 | 29.46 | 0.0 | 100 | 0.186 |
+| Qwen3-ASR 0.6B Q8_0 via transcribe.cpp v0.4.2 (CPU) | 850.4 | 24.38 | 10.21 | 10.0 | 0 | 0.494 |
+
+Decisions and their conditions are recorded in [MODELS-DECISIONS.md](MODELS-DECISIONS.md): Turbo
+stays the default; Nemotron is curated as an **optional** entry; the dialectal fine-tune, read-aloud
+and second engine are rejected/suspended with evidence.
+
+### Catalogue (issue #11)
+
+`desktop/src/assets/model-catalog.json` now has four curated entries. The Nemotron GGUF was verified
+against the published file before wiring it: 495,831,520 bytes, SHA-256
+`41c99fa5fb6f3d35f68e79adc3e755eca2232a8d921178bd647b71194792b8fd` (mirror
+`vibe-app/nemotron-3.5-asr-streaming-0.6b-gguf`); the entry is OpenMDW-1.1 with VAD supplied by the
+app. Vitest catalog tests pass with the new entry.
+
+### Artifacts
+
+The CI-built installer and its `SHA256SUMS.txt` are attached to the
+[v3.5.0 GitHub release](https://github.com/alshahia/sada/releases/tag/v3.5.0). The published files
+were re-downloaded on 18 November 2026 and compared with the published checksums:
+
+| Artifact | Size | SHA-256 |
+| --- | --- | --- |
+| `Sada_3.5.0_x64-setup.exe` | 44,936,816 bytes | `9cf779ff7c891e4823523be34e5315da2136d7dcf6356db085889c4cbadca279` |
+| `SHA256SUMS.txt` | 90 bytes | `f673e8f3c19b90dc01d565926132f1e2e68e6b149b14f08d8df4ebff69a2b135` |
+
+- The re-downloaded installer matched `SHA256SUMS.txt` and the digest GitHub recorded for the
+  asset.
+- The published installer was run silently (`/S`, per-user install, exit 0). The installed
+  `Sada.exe` reports product version **3.5.0**, the installed sidecar reports
+  **`vibe-server v0.6.16-sada.1`**, and the installed MCP server starts with
+  **`sada-mcp 3.5.0 ready`** — the CI build ships the expected binaries.
+- The NSIS package is unsigned (SmartScreen warns "unknown publisher"; verify the hash before
+  choosing *More info → Run anyway*).
+
+---
+
 ## Sada 3.4.0 — verified catalog, MCP capabilities and endpoint hardening
 
 - **Date:** 17 November 2026 (Asia/Baghdad)

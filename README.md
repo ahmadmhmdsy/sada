@@ -97,6 +97,8 @@ fresh offline install, and every download is checked against the SHA-256 in the 
 Models are **not bundled** with the installer; they are distributed by their own publishers under
 their own terms and downloaded once by you. The model is loaded locally and never leaves your
 machine. Sizes, licences, hashes, GPU notes and how to verify a download: **[docs/MODELS.md](docs/MODELS.md)**.
+The measured Arabic comparison behind the catalogue — including why Turbo stays the default and
+Nemotron is only optional — is in **[docs/MODELS-DECISIONS.md](docs/MODELS-DECISIONS.md)**.
 
 ## GPU acceleration (optional)
 
