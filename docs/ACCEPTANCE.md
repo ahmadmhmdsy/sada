@@ -145,7 +145,8 @@ Pass: both checks behave as described; the Rust unit tests cover the same paths.
 | Arabic benchmark tests | cd benchmarks/arabic-asr; python -m unittest discover -s tests | 62 tests passed (including regression-gate tests) |
 | i18n audit | python scripts/check_i18n.py | passed |
 | Rust type check | cd app; cargo check --tests | exit 0 |
-| Installer | release workflow artifact, 3.7.0 | 44,921,531 bytes · SHA-256 faeb2d07…a8b207, silent install verified (Sada.exe 3.7.0, sidecar v0.6.16-sada.1, MCP sada-mcp 3.7.0) |
+| Installers | release workflow artifacts, 3.8.0 | default 44,924,997 bytes · SHA-256 dfbcb454…c6790; offline-WebView2 262,829,070 bytes · SHA-256 409900ef…8e0a; both hash-matched `SHA256SUMS.txt` and silent-install verified (Sada.exe 3.8.0, sidecar v0.6.16-sada.1, MCP sada-mcp 3.8.0) |
+| Benchmark regression gate | cd benchmarks/arabic-asr; python -m sadabench compare --baseline results/results-2026-11-18-v2.json --candidate results/results-2026-11-18-v2.json | passed, all deltas 0.00 pp; CI runs the same self-comparison |
 
 The clean-machine runs above (slots B-E) need physical/VM machines the maintainer controls; until
 they are recorded this page is the procedure plus the automated evidence, and docs/VERIFICATION.md

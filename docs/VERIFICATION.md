@@ -3,6 +3,85 @@
 This page summarises how the Windows builds in this repository were verified.
 It is written in English for reviewers; the Arabic summary follows.
 
+## Sada 3.8.0 — distribution, offline install and benchmark regression gate
+
+- **Date:** 18 November 2026 (Asia/Baghdad)
+- **Source:** `master`, tagged `v3.8.0` (2fed37f). No app runtime change: the engine,
+  bundled catalogue, models and UI behaviour are identical to 3.7.0 (still
+  `vibe-server v0.6.16-sada.1` with the same loopback guard); this release adds a second
+  installer asset (offline WebView2), stages the signing pipeline dormant, adds the benchmark
+  regression gate, the production-readiness statement and the docs/version bump. The Release
+  workflow rebuilt the engine and both installers from this tag.
+- **Host:** Windows 10.0.26300 · WebView2 157.0.4341.46 · NVIDIA Quadro RTX 4000 (Vulkan0) and
+  Intel UHD Graphics 630 (Vulkan1).
+
+### Tests
+
+| Suite | Result |
+| --- | --- |
+| Frontend | 31 files / 193 tests passed |
+| Frontend build | exit 0 (vite production bundle) |
+| Rust tests (`cargo test --release`) | 101 passed |
+| Engine guard tests | 8 passed |
+| Rust type check (`cargo check --tests`) | exit 0 |
+| Arabic benchmark Python | 62 passed (10 new regression-gate tests) |
+| i18n audit | passed |
+
+### What changed
+
+- **Offline installer variant.** A second NSIS asset embeds the WebView2 offline installer; the
+  default asset keeps `downloadBootstrapper`. Both are built from the same binary and differ only
+  in how WebView2 is provisioned. The offline asset is about 250 MB, the default about 43 MB.
+- **Dormant signing.** The Release workflow resolves `SIGNING_ENABLED`,
+  `SIGN_TUNNEL_URL` and `SIGN_TUNNEL_SECRET`. With signing disabled the
+  "Verify Authenticode signatures" step is skipped (shown as `-` in the run) and the assets are
+  unsigned by owner decision (`docs/SIGNING.md`). Turning it on is a variables/secrets change, not
+  a code change, and the verification step then fails if the signature is missing or invalid.
+- **Benchmark regression gate.** `python -m sadabench compare` defaults to a 1.0 pp per-cell
+  tolerance; exit 0 = no regression, 1 = regression, 2 = usage error. The CI benchmark job
+  self-compares the committed baseline (all deltas 0.00 in 12 s). A manual negative check that
+  blanked five Gulf/technical references failed the gate with +5.76 pp overall and +22.50 pp on
+  Gulf (exit 1), recorded in `docs/MODELS-DECISIONS.md`.
+- **Production-readiness statement.** `docs/PRODUCTION-READINESS.md` records a per-audience
+  verdict and the evidence behind it, including what is not ready.
+
+### Clean-machine acceptance
+
+Rows B–E of `docs/ACCEPTANCE.md` remain unexecuted (#17): they need physical or VM machines the
+maintainer does not control. The offline installer removes the WebView2 download prerequisite, but
+the VC++ 2015-2022 runtime is still required: the NSIS hook downloads it when missing, so a fully
+offline machine must pre-install `vc_redist.x64.exe`. Slot A (development host plus the silent
+installs below) is covered.
+
+### Artifacts and published installers
+
+- **CI run** [44285117725](https://github.com/alshahia/sada/actions/runs/44285117725) — success,
+  6m 55s. Desktop job 6m 52s (frontend tests/build, Rust, engine guard, sidecar); benchmark job 12s
+  (Python suite plus the self-comparison).
+- **Release run** [44285122650](https://github.com/alshahia/sada/actions/runs/44285122650) —
+  success, 29m 16s (10:24:35–10:53:51 UTC). Guard tests, engine rebuild from `server/`, offline
+  variant, default variant, checksums, then the GitHub Release; the signing-verification step was
+  skipped as designed.
+- **Deploy site run** [44285117746](https://github.com/alshahia/sada/actions/runs/44285117746) —
+  success; the download pages show both variants.
+
+Published assets, downloaded again on 18 November 2026 and hash-matched against
+`SHA256SUMS.txt`:
+
+| Asset | Size | SHA-256 |
+| --- | --- | --- |
+| `Sada_3.8.0_x64-setup.exe` | 44,924,997 bytes | `dfbcb454…c6790` |
+| `Sada_3.8.0_x64-setup-offline.exe` | 262,829,070 bytes | `409900ef…8e0a` |
+| `SHA256SUMS.txt` | 191 bytes | `414ae74f…980c` |
+
+Both published installers installed silently (`/S`): exit 0, `Sada.exe` ProductVersion
+**3.8.0** (15,896,576 bytes), sidecar 75,685,376 bytes reporting `vibe-server v0.6.16-sada.1`,
+and the MCP banner `sada-mcp 3.8.0 ready (stdio; tools: sada_transcribe, sada_transcripts,
+sada_transcript, sada_info)`. WebView2 runtime on the host: 157.0.4341.46.
+
+The installers remain unsigned; SmartScreen may warn on first run. Verify the SHA-256 against the
+release `SHA256SUMS.txt` before installing, as documented in the READMEs.
+
 ## Sada 3.7.0 — dialect coverage and prompt-biasing evidence
 
 - **Date:** 18 November 2026 (Asia/Baghdad)
@@ -555,6 +634,8 @@ public copies used in the README and the website.
 
 تم التحقق من بناء Windows قبل أول إصدار عام: بناء نظيف من المصدر، ثم تثبيت وفتح من ملف تعريف
 نظيف والواجهة عربية RTL فعلاً (`lang=ar-IQ`، `dir=rtl`)، وتفريغ فصحى ولهجة عراقية بمحرّك
-التطبيق نفسه، وتصدير PDF عربي بخط مضمّن، واختبارات 130/130 ناجحة، وفحص شبكة عند الخمول يُظهر
-loopback فقط. القيود المعلنة: مثبّت غير موقّع، النموذج غير مضمّن (~1.6GB)، هلوسة على الصمت،
-وقصور في الأكرونيمات والأرقام، والاستخراج الآلي لنص PDF قد يشوّش داخل الكلمات رغم صحة العرض.
+التطبيق نفسه، وتصدير PDF عربي بخط مضمّن. آخر تحقق كامل (3.8.0): 193 اختبار واجهة، و101 اختبار
+Rust، و8 اختبارات حارس للمحرّك، و62 اختبار بايثون للمعيار، ومثبّتا 3.8.0 (العادي ~43MB والمتوفر
+للعمل دون اتصال ~250MB) نُزّلا من صفحة الإصدار وطابقا SHA-256 وثُبّتا صامتين بنجاح. القيود المعلنة:
+مثبّت غير موقّع، النموذج غير مضمّن (~1.6GB)، هلوسة على الصمت، وقصور في الأكرونيمات والأرقام،
+والاستخراج الآلي لنص PDF قد يشوّش داخل الكلمات رغم صحة العرض، وصفوف أجهزة القبول B–E لم تُنفّذ بعد.

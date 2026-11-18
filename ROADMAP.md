@@ -6,7 +6,7 @@ model questions: **no model is curated without a licence, a size, a SHA-256 and 
 Arabic claim is made without the benchmark.
 
 Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete`,
-`P5 in progress` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0 and v3.7.0 shipped
+`P5 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0, v3.7.0 and v3.8.0 shipped
 2026-11-18 (all before their due dates). Last updated 2026-11-18.
 
 ## Milestones
@@ -18,7 +18,7 @@ Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete
 | **v3.5.0 — Arabic model evaluation** | 2027-01-15 | Arabic WER/CER harness, fine-tune/Nemotron decisions, read-aloud test, second-engine spike | #10 #11 #12 #13 — **complete**, evidence below |
 | **v3.6.0 — transcript quality & hardening** | 2027-02-15 | Arabic transcript post-processing earned in the benchmark, upstream v3.3.6 security audit ported, clean-machine offline acceptance + signing decision | #14 #15 #16 — **complete**, evidence below |
 | **v3.7.0 — dialect coverage & prompt biasing** | 2027-04-15 | Measured Gulf + Arabic/English technical code-switch slices from a commercial-use corpus, prompt-biasing measurement and app wiring if it wins, honest remaining-gap matrix | #19 #20 #21 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.7.0), evidence below |
-| **v3.8.0 — distribution, offline install & benchmark gate** | 2027-06-15 | Offline WebView2 installer variant as a second asset, signing pipeline staged but dormant (releases stay unsigned OSS), evidence-based production-readiness statement, benchmark regression gate | #22 #23 #24 #25 #26 — in progress (plan: [P5](docs/P5-PLAN.md)) |
+| **v3.8.0 — distribution, offline install & benchmark gate** | 2027-06-15 | Offline WebView2 installer variant as a second asset, signing pipeline staged but dormant (releases stay unsigned OSS), evidence-based production-readiness statement, benchmark regression gate | #22 #23 #24 #25 #26 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.8.0), evidence below |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -196,27 +196,27 @@ curate; glossary prompt 31.44% overall while preserving more Latin terms (techni
 [`results/prompt-spike-v1.md`](benchmarks/arabic-asr/results/prompt-spike-v1.md); decisions in
 [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md), plan in [`docs/P4-PLAN.md`](docs/P4-PLAN.md).
 
-## P5 — distribution, offline install and benchmark regression gate (in progress, v3.8.0)
+## P5 — distribution, offline install and benchmark regression gate (complete, v3.8.0)
 
 Plan: [docs/P5-PLAN.md](docs/P5-PLAN.md). The release is deliberately not a feature release; it
 closes the trust and regression gaps left by P4.
 
-- [ ] #22 Offline WebView2 installer variant: `desktop/src-tauri/tauri.offline.conf.json` overlay
+- [x] #22 Offline WebView2 installer variant: `desktop/src-tauri/tauri.offline.conf.json` overlay
   (`webviewInstallMode = offlineInstaller`), release workflow builds/publishes both installers
   with distinct names and SHA-256 lines, docs and release notes explain which to pick; the small
   installer stays the default. This leaves only the unexecuted clean-machine rows B–E in #17.
-- [ ] #23 Stage the signing pipeline dormant: workflow steps guarded by the `SIGNING_ENABLED`
+- [x] #23 Stage the signing pipeline dormant: workflow steps guarded by the `SIGNING_ENABLED`
   repository variable plus a SignPath submit step and an Authenticode verification step; with the
   variable unset the release behaves exactly as today. `docs/SIGNING.md` records the owner's
   2026-11-18 decision (unsigned while open-source-only) and the switch-on procedure; #18 stays open
   for the application itself.
-- [ ] #24 Production-readiness statement: `docs/PRODUCTION-READINESS.md` with per-audience
+- [x] #24 Production-readiness statement: `docs/PRODUCTION-READINESS.md` with per-audience
   verdicts (personal use / team use / managed deployment), evidence links, and the explicit gaps
   (unsigned, rows B–E, unmeasured dialects, no telemetry or crash reporting by design).
-- [ ] #25 Benchmark regression gate: `sadabench compare --baseline … --candidate …` with per-slice
+- [x] #25 Benchmark regression gate: `sadabench compare --baseline … --candidate …` with per-slice
   deltas, tolerance and exit codes, tests, committed v2 baseline and CI exercise; release checklist
   runs it.
-- [ ] #26 Docs, version bump 3.8.0, bilingual notes, full test matrix, tag, release verification,
+- [x] #26 Docs, version bump 3.8.0, bilingual notes, full test matrix, tag, release verification,
   evidence in `docs/VERIFICATION.md` / `docs/ACCEPTANCE.md`.
 
 ## Step Zero tests (define "done" before code)
@@ -245,7 +245,29 @@ closes the trust and regression gaps left by P4.
   read-aloud, second engine) are recorded with reproduction commands in
   [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md).
 
-## Backlog after v3.7.0
+
+**P5 evidence (2026-11-18):** released as [v3.8.0](https://github.com/alshahia/sada/releases/tag/v3.8.0)
+(commit 2fed37f) with two NSIS assets from the same source — default
+`Sada_3.8.0_x64-setup.exe` 44,924,997 bytes / SHA-256 `dfbcb454…c6790` and offline-WebView2
+`Sada_3.8.0_x64-setup-offline.exe` 262,829,070 bytes / SHA-256 `409900ef…8e0a` (one line each
+in `SHA256SUMS.txt`). CI run [44285117725](https://github.com/alshahia/sada/actions/runs/44285117725)
+passed in 6m 55s (desktop 193 vitest / 101 Rust / engine sidecar; benchmark job 62 Python tests plus
+the self-comparison of the committed baseline). Release run
+[44285122650](https://github.com/alshahia/sada/actions/runs/44285122650) passed in 29m 16s, rebuilt
+the guarded engine from `server/`, built the offline variant first then the default, published
+the release, and recorded the signing-verification step as skipped (`SIGNING_ENABLED` unset).
+Deploy site run [44285117746](https://github.com/alshahia/sada/actions/runs/44285117746) passed. The
+regression gate was exercised on the committed baseline (self-comparison 0.00 in every cell) and
+manually against a degraded run (blanking five Gulf/technical references failed it with +5.76 pp
+overall and +22.50 pp on Gulf, exit 1). Both published installers were re-downloaded, hash-matched
+against `SHA256SUMS.txt` and installed silently: both report Sada.exe 3.8.0, sidecar
+`vibe-server v0.6.16-sada.1` and MCP banner `sada-mcp 3.8.0`. Evidence in
+[docs/VERIFICATION.md](docs/VERIFICATION.md); readiness statement in
+[docs/PRODUCTION-READINESS.md](docs/PRODUCTION-READINESS.md). Rows B–E of the clean-machine matrix
+remain unexecuted (#17), the offline installer still downloads the VC++ runtime when missing, and
+signing stays dormant (#18) by owner decision.
+
+## Backlog after v3.8.0
 
 - [#17](https://github.com/alshahia/sada/issues/17) — with the offline installer variant shipped in
   P5, the only remaining part is running the clean-machine acceptance rows B–E (offline Windows 10,

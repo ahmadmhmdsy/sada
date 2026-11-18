@@ -42,7 +42,7 @@ open-source-only, by owner decision.
 - ROADMAP milestone/backlog: v3.8.0 row (#22–#26), P5 section, stale 60-clip figures replaced with
   the 90-clip measurements.
 
-NaN
+### Verified
 
 - pnpm test: 31 files / 193 tests; pnpm build; i18n audit.
 - cargo test --release: 101 tests; engine guard: 8 tests; cargo check --tests.
@@ -58,6 +58,7 @@ NaN
   downloads it when missing, so fully offline machines must pre-install `vc_redist.x64.exe`.
 - Iraqi/Levantine remain unmeasured; Gulf/technical slices are scripted code-switch speech.
 - No auto-update (by design); updates are deliberate manual downloads.
+
 ## v3.7.0 — 2026-11-18
 
 Benchmark coverage and prompt-biasing evidence release. **No app runtime change**: the engine,
