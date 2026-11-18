@@ -59,7 +59,8 @@ benchmarks/arabic-asr/
     engine.py            runs vibe-server transcribe for one clip/model
     postprocess.py       Python mirror of the app's Arabic post-processing (app-level scores)
     report.py            aggregation tables, curation rule, Markdown rendering
-    __main__.py          CLI: build-manifest, fetch, run, report
+    compare.py           regression gate: validate a run against the committed baseline
+    __main__.py          CLI: build-manifest, fetch, run, report, compare
   results/               committed tables and raw transcripts from real runs
   tests/                 unit tests (offline, no models needed)
 ```
@@ -82,6 +83,10 @@ python -m sadabench fetch --ffmpeg ffmpeg                # downloads + converts 
 Copy-Item models.example.json models.local.json          # then edit paths/sizes
 python -m sadabench run --engine "$env:LOCALAPPDATA\Sada\vibe-server.exe" --out results/results-2026-11-18.json
 python -m sadabench report --results results/results-2026-11-18.json
+# regression gate: fail (exit 1) if a new run is worse than the committed baseline
+python -m sadabench compare `
+  --baseline results/results-2026-11-18-v2.json `
+  --candidate results/results-2026-11-18.json
 ```
 
 `build-manifest --reuse existing.json` keeps the clips of slices whose count did not change
@@ -230,6 +235,34 @@ on that slice (100%) and preserves at least **90%** of Latin acronyms there. Nem
 an optional catalogue entry only if it wins its slice. The `report` command evaluates the
 rule per slice and prints PASS/no for every challenger.
 
+## Regression gate (v3.8.0, issue #25)
+
+The committed 90-clip report is the baseline, not just a record. `compare` re-scores a candidate run
+with the same scorer and reports overall and per-slice deltas:
+
+```powershell
+python -m sadabench compare `
+  --baseline results/results-2026-11-18-v2.json `
+  --candidate results/results-2026-11-18-v3.json
+```
+
+* **Exit 0** — no gated regression: every baseline model's candidate WER is within
+  **+1.0 pp** of the baseline overall and on every slice (tolerance adjustable with
+  `--tolerance-pp`).
+* **Exit 1** — at least one model regressed past the tolerance; the gated scopes are printed and
+  `--out comparison.json` writes the full machine-readable diff.
+* **Exit 2** — the runs are not comparable: different clip sets, changed reference transcripts or
+  slice labels, or a missing baseline model. That is a usage error on purpose: comparing
+  incompatible runs would turn a corpus edit into a fake accuracy number.
+
+CER, Latin-name preservation and timestamp coverage are shown as context and do not gate: they can
+move for punctuation-sized reasons. An engine-version difference is a warning, not a blocker — it is
+exactly the case a maintainer should inspect before accepting a release. Use it in the release
+checklist after any change to the engine, the model catalogue or the Arabic post-processing; a
+per-PR benchmark stays impractical because it needs the weights and 90 clips. The CI benchmark job
+runs the command on the committed report as a smoke test, and the unit tests cover identical runs,
+a real regression, the tolerance boundary and incompatible inputs.
+
 ## Adding clips
 
 1. Pick a corpus whose licence permits commercial use; record licence and attribution in
@@ -248,7 +281,7 @@ python -m unittest discover -s tests -v
 ```
 
 The tests are offline and cover normalisation, WER/CER edge cases, acronym and Latin-name
-matching, timestamp parsing, manifest metadata and the aggregation/curation rule. CI runs
+matching, timestamp parsing, manifest metadata, the aggregation/curation rule and the regression gate. CI runs
 them on every push and pull request; the model runs are manual because they need weights
 and a GPU/CPU budget.
 

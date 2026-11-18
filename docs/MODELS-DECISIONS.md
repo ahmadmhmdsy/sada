@@ -200,6 +200,20 @@ Nemotron 0.0 / 0.0, glossary prompt 35.5 / 47.1.
 - 15-clip slices give wide confidence intervals; treat slice-level deltas under ~2 pp as
   unresolved unless a bootstrap says otherwise.
 
+## v3.8.0 — regression gate (2026-11-18)
+
+The 90-clip run above is now a **baseline, not just a record**. `python -m sadabench compare
+--baseline results/results-2026-11-18-v2.json --candidate <new run>` re-scores both runs with the
+same scorer and fails (exit 1) when a candidate WER is worse by more than **1.0 pp** overall or on
+any single slice; CER, Latin-name preservation and timestamp coverage are reported for context but
+do not gate. Incompatible runs — different clips, changed references, changed slice labels or a
+missing baseline model — are usage errors (exit 2), not silent numeric comparisons. Self-compare of
+the committed baseline passes with every delta at 0.00; as a manual check on 2026-11-18, blanking
+five Gulf/technical clips for the default model fails the gate with **+5.76 pp overall** and
+**+22.50 pp on the gulf slice**. The release checklist runs the comparison after any change to the
+engine, the catalogue or the Arabic post-processing; the CI benchmark job exercises the command on
+the committed report.
+
 ## Reproduce
 
 ```powershell
@@ -208,6 +222,10 @@ python -m sadabench fetch --ffmpeg ffmpeg            # one-time, network
 python -m sadabench run --engine "$env:LOCALAPPDATA\Sada\vibe-server.exe" \
   --models models.local.json --out results/results-2026-11-18-v2.json
 python -m sadabench report --results results/results-2026-11-18-v2.json
+# regression gate (against the committed baseline):
+python -m sadabench compare `
+  --baseline results/results-2026-11-18-v2.json `
+  --candidate results/results-2026-11-18-v2.json
 # prompt spike (same weights, prompt variants in models.prompt-spike.json):
 python -m sadabench run --manifest manifest.v1.json --slices latin-mixed,msa \
   --models models.prompt-spike.json --engine "$env:LOCALAPPDATA\Sada\vibe-server.exe" \

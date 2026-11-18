@@ -86,3 +86,13 @@ jobs:
       - name: Run harness unit tests
         working-directory: benchmarks/arabic-asr
         run: python -m unittest discover -s tests -v
+
+      # The regression gate cannot run a live model in CI, but it can be exercised on the
+      # committed report: a self-comparison must pass with every delta at 0.00. A broken
+      # compare command therefore fails on the next push instead of on a release day.
+      - name: Regression gate smoke test on the committed report
+        working-directory: benchmarks/arabic-asr
+        run: >-
+          python -m sadabench compare
+          --baseline results/results-2026-11-18-v2.json
+          --candidate results/results-2026-11-18-v2.json

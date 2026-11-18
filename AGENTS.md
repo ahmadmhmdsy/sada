@@ -54,8 +54,10 @@ skill text in `desktop/src/lib/skill.ts` in sync when tool names or registration
 1. Bump `desktop/src-tauri/tauri.conf.json` version (and `desktop/src-tauri/Cargo.toml`).
 2. Write bilingual notes in `docs/releases/v<version>.md` (the release workflow requires the file).
 3. Commit, tag `v<version>`, push the tag. The **Release** workflow builds on Windows, rebuilds
-   the engine from `server/` so the installer ships the guarded sidecar, and creates the GitHub
-   release with installer, `SHA256SUMS.txt`, licence and notices. No manual upload.
+   the engine from `server/` so the installer ships the guarded sidecar, builds the offline-WebView2
+   variant then the default installer, and creates the GitHub release with both assets,
+   `SHA256SUMS.txt`, licence and notices. No manual upload. Code signing is wired but dormant until
+   the repository variable `SIGNING_ENABLED` is `true` (see [Code signing](docs/SIGNING.md)).
 
 ## Website / discovery
 
@@ -73,9 +75,11 @@ inside both `index.html` files in sync with the repository facts (version, links
 - [Voicebox review](docs/VOICEBOX-REVIEW.md) · [Voicebox review in Arabic](docs/VOICEBOX-REVIEW.ar.md)
 - [Models council](docs/MODELS-COUNCIL.md) · [Models council in Arabic](docs/MODELS-COUNCIL.ar.md)
 - [Model decisions (measured)](docs/MODELS-DECISIONS.md) · [Read-aloud evidence](docs/READ-ALOUD.md)
-- [Roadmap](ROADMAP.md) · [P4 plan](docs/P4-PLAN.md) · [Changelog](CHANGELOG.md)
+- [Roadmap](ROADMAP.md) · [P4 plan](docs/P4-PLAN.md) · [P5 plan](docs/P5-PLAN.md)
+  · [Changelog](CHANGELOG.md)
 - [Translations](docs/TRANSLATIONS.md) · [Privacy](PRIVACY.md) · [Security](SECURITY.md)
-- [Clean-machine acceptance](docs/ACCEPTANCE.md) · [Code signing](docs/SIGNING.md)
+- [Clean-machine acceptance](docs/ACCEPTANCE.md) · [Production readiness](docs/PRODUCTION-READINESS.md)
+  · [Code signing](docs/SIGNING.md)
 - [Release notes](docs/releases/) · [Third-party notices](THIRD-PARTY-NOTICES.md)
 
 ---

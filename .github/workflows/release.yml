@@ -81,6 +81,10 @@ jobs:
         with:
           version: v1.6.0
 
+      - name: Setup uv (only needed when signing is enabled)
+        if: vars.SIGNING_ENABLED == 'true'
+        uses: astral-sh/setup-uv@v5
+
       - name: Install frontend dependencies
         working-directory: desktop
         run: pnpm install --frozen-lockfile
@@ -116,9 +120,61 @@ jobs:
         working-directory: desktop/src-tauri
         run: cargo test --release
 
+      - name: Resolve signing configuration
+        id: signing
+        shell: pwsh
+        env:
+          SIGNING_ENABLED: ${{ vars.SIGNING_ENABLED }}
+        run: |
+          # The repository ships tauri.windows.signing.conf.json, a config overlay that wires
+          # scripts/sign.py as bundle.windows.signCommand (YubiKey tunnel signer). It is only
+          # merged into the build when signing is enabled, so an unsigned release never spawns
+          # the signer and does not need uv. See docs/SIGNING.md for the switch-on procedure.
+          if ($env:SIGNING_ENABLED -eq 'true') {
+            "config=--config src-tauri/tauri.windows.signing.conf.json" >> $env:GITHUB_OUTPUT
+            "enabled=true" >> $env:GITHUB_OUTPUT
+            Write-Output "signing: enabled (SignPath/Azure path replaces this overlay when approved)"
+          } else {
+            "config=" >> $env:GITHUB_OUTPUT
+            "enabled=false" >> $env:GITHUB_OUTPUT
+            Write-Output "signing: disabled — publishing unsigned assets with SHA-256 checksums"
+          }
+
+      # Offline WebView2 variant: same app, NSIS embeds the WebView2 Evergreen installer so a
+      # Windows 10 machine that has never run a modern app can install without network. The
+      # small downloadBootstrapper installer stays the default asset.
+      - name: Build the offline WebView2 installer variant (second asset)
+        working-directory: desktop
+        env:
+          SIGN_ENABLED: ${{ vars.SIGNING_ENABLED }}
+          SIGN_TUNNEL_URL: ${{ secrets.SIGN_TUNNEL_URL }}
+          SIGN_TUNNEL_SECRET: ${{ secrets.SIGN_TUNNEL_SECRET }}
+        run: >-
+          pnpm exec tauri build --bundles nsis
+          --config src-tauri/tauri.offline.conf.json
+          ${{ steps.signing.outputs.config }}
+
+      - name: Stage the offline installer as a separate asset
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force release-assets | Out-Null
+          $candidates = @('target/release/bundle/nsis', 'desktop/src-tauri/target/release/bundle/nsis')
+          $offline = Get-ChildItem -Path $candidates -Filter '*.exe' -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if (-not $offline) { throw 'the offline WebView2 installer was not produced by tauri build' }
+          $target = "release-assets/Sada_${{ steps.vars.outputs.version }}_x64-setup-offline.exe"
+          Copy-Item $offline.FullName $target
+          Write-Output "offline installer: $($offline.Length) bytes -> $target"
+
       - name: Build the NSIS installer
         working-directory: desktop
-        run: pnpm exec tauri build --bundles nsis
+        env:
+          SIGN_ENABLED: ${{ vars.SIGNING_ENABLED }}
+          SIGN_TUNNEL_URL: ${{ secrets.SIGN_TUNNEL_URL }}
+          SIGN_TUNNEL_SECRET: ${{ secrets.SIGN_TUNNEL_SECRET }}
+        run: >-
+          pnpm exec tauri build --bundles nsis
+          ${{ steps.signing.outputs.config }}
 
       - name: Collect release assets and checksums
         shell: pwsh
@@ -131,12 +187,35 @@ jobs:
           Write-Output "Installer: $($installer.FullName)"
           Write-Output "Size: $($installer.Length) bytes"
           Copy-Item $installer.FullName release-assets/
+          $offline = "release-assets/Sada_${{ steps.vars.outputs.version }}_x64-setup-offline.exe"
+          if (-not (Test-Path $offline)) { throw 'the offline installer asset was not staged' }
           Copy-Item 'LICENSE', 'NOTICE', 'THIRD-PARTY-NOTICES.md' release-assets/
-          $hash = (Get-FileHash $installer.FullName -Algorithm SHA256).Hash
-          $line = "$hash  $($installer.Name)"
-          Set-Content -Path 'release-assets/SHA256SUMS.txt' -Value $line -NoNewline
-          Write-Output $line
+          $entries = @(
+            @{ Path = $installer.FullName; Name = $installer.Name },
+            @{ Path = $offline; Name = (Split-Path $offline -Leaf) }
+          )
+          $lines = foreach ($entry in $entries) {
+            $hash = (Get-FileHash $entry.Path -Algorithm SHA256).Hash
+            "$hash  $($entry.Name)"
+          }
+          Set-Content -Path 'release-assets/SHA256SUMS.txt' -Value ($lines -join [char]10)
+          $lines | ForEach-Object { Write-Output $_ }
+          Write-Output "signing enabled: ${{ steps.signing.outputs.enabled }}"
           Get-ChildItem release-assets | Format-Table Name, Length -AutoSize | Out-String
+
+      # Runs only when signing is enabled: an unsigned artifact must not reach the release page.
+      - name: Verify Authenticode signatures
+        if: vars.SIGNING_ENABLED == 'true'
+        shell: pwsh
+        run: |
+          $installers = Get-ChildItem release-assets -Filter '*.exe'
+          foreach ($installer in $installers) {
+            $signature = Get-AuthenticodeSignature $installer.FullName
+            if ($signature.Status -ne 'Valid') {
+              throw "$($installer.Name) is not validly signed: $($signature.Status)"
+            }
+            Write-Output "$($installer.Name): $($signature.SignerCertificate.Subject)"
+          }
 
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v2

@@ -51,6 +51,33 @@ it fetches for this machine.
 On macOS, `chore upgrade` builds the app, replaces `/Applications/vibe.app` and
 relaunches it.
 
+## Build the Windows installer variants
+
+The default NSIS build keeps Tauri's small `downloadBootstrapper` WebView2 mode: the installer is
+about 45 MB and the first install on a Windows 10 machine that never ran a modern app downloads the
+WebView2 Runtime. On a fully offline machine, use the second variant: it merges
+`desktop/src-tauri/tauri.offline.conf.json`, which embeds the WebView2 Evergreen installer; the
+finished asset is about 250 MB (the embedded installer is a full ~200 MB WebView2 standalone
+downloadable, not the small bootstrapper).
+
+```console
+cd desktop
+# default small installer (published as Sada_<version>_x64-setup.exe)
+pnpm exec tauri build --bundles nsis
+# offline WebView2 variant (published as Sada_<version>_x64-setup-offline.exe)
+pnpm exec tauri build --bundles nsis --config src-tauri/tauri.offline.conf.json
+```
+
+Both builds write the same `Sada_<version>_x64-setup.exe` file name, so the release workflow builds
+the offline variant first, renames it to `...-offline.exe`, then builds the default;
+`SHA256SUMS.txt` gets one line per installer. The NSIS hook (`vc_redist.nsh`) installs the VC++
+2015-2022 runtime from the network when it is missing or too old — that applies to both variants.
+
+Code signing is a **dormant overlay**, not part of a normal build:
+`desktop/src-tauri/tauri.windows.signing.conf.json` wires `scripts/sign.py` as
+`bundle.windows.signCommand` and the release workflow merges it only when the `SIGNING_ENABLED`
+repository variable is `true`. See [SIGNING.md](SIGNING.md) for the decision and switch-on procedure.
+
 ## Build the server locally (dev)
 
 The engine lives in `server/` and ships as the `vibe-server` sidecar. To run the
@@ -121,18 +148,25 @@ chore check-types  # tsc over desktop and website
 chore check-i18n   # translation coverage against en-US
 ```
 
-# Create new release
+# Create a new release
 
-1. Increment version in `tauri.conf.json` and commit
-2. Run the Release workflow from GitHub Actions (workflow_dispatch)
+1. Bump the version in `desktop/src-tauri/tauri.conf.json` and `desktop/src-tauri/Cargo.toml`, and
+   update the version strings in `CITATION.cff`, `README*.md`, `llms.txt`, `SECURITY.md` and the
+   site pages.
+2. Add `docs/releases/v<version>.md` — the release workflow uses it as the release body and fails
+   without it — plus a `CHANGELOG.md` entry.
+3. Push to `master` and wait for CI to pass. Then create and push the tag:
 
-It will create releases for `Windows`, `Linux`, and `macOS`
+   ```console
+   git tag v<version>
+   git push origin v<version>
+   ```
 
-Along with `latest.json` file (used for auto updater).
+   The `Release` workflow checks that the tag matches the app version, builds both Windows
+   installers, publishes them with `SHA256SUMS.txt` and the licence files.
 
-When `Release` action finishes, it will run `Deploy landing` action
-
-and update downloads links in landing page.
+There is **no auto-updater** and the fork's release workflow publishes **Windows x64 only**; the
+upstream Linux/macOS matrix and `latest.json` do not apply.
 
 # Landing
 
@@ -188,35 +222,12 @@ gh cache delete -a
 - Always update crates and lock in specific commit so it will be easy to revert!!
 - Don't upgrade important crates such as tauri as long as it stable and works and there's no real need!!
 
-## Windows Code Signing
+## Windows code signing
 
-See [Windows Code Signing](https://gist.github.com/thewh1teagle/06022cf1ec17a62949377a17c1b590bd)
-
-Install Windows SDK:
-
-```console
-winget install -e --id Microsoft.WindowsSDK.10.0.26100
-```
-
-Generate a self-signed certificate (valid 10 years):
-
-```console
-openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 3650 -nodes -subj "/CN=Vibe" -addext "extendedKeyUsage=codeSigning"
-openssl pkcs12 -export -out cert.pfx -inkey key.pem -in cert.pem -password pass:YOUR_PASSWORD
-base64 -i cert.pfx
-```
-
-Copy the base64 output and update GitHub secrets:
-
-- `WINDOWS_CERTIFICATE` — the base64 output
-- `WINDOWS_CERTIFICATE_PASSWORD` — the password used above
-
-Then delete the local files:
-
-```console
-rm key.pem cert.pem cert.pfx
-```
-
+Sada releases are unsigned by owner decision (2026-11-18) while the project is open-source-only.
+The release workflow already has a dormant signing pipeline (repository variable
+`SIGNING_ENABLED`), and the fork does not use the upstream self-signed-certificate recipe. Read
+[SIGNING.md](SIGNING.md) before changing anything here.
 ## Analytics (Optional)
 
 Vibe uses [Aptabase](https://aptabase.com/) for analytics. Not required for development. To enable, set these env vars at build time:

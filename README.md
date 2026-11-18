@@ -70,18 +70,29 @@ that:
 
 ## Install
 
-1. Download **`Sada_3.7.0_x64-setup.exe`** from the [latest release](https://github.com/alshahia/sada/releases/latest)
+1. Download **`Sada_3.8.0_x64-setup.exe`** (about 45 MB) from the [latest release](https://github.com/alshahia/sada/releases/latest)
    and verify its SHA-256 against the attached `SHA256SUMS.txt`.
 2. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator rights
    are required.
 3. Launch **صدى / Sada** from the Start Menu.
 
-> **SmartScreen:** the installer is not code-signed, so Windows may show
-> "Windows protected your PC". Choose *More info → Run anyway* only for the official release
-> after verifying the checksum.
+**Fully offline machine?** Windows 10 machines that have never run a modern app do not have the
+WebView2 Runtime, and the default installer asks Windows to download it. If the target machine
+cannot go online, download **`Sada_3.8.0_x64-setup-offline.exe`** instead (about 250 MB): it
+embeds the WebView2 installer, so one file covers the app and the runtime. Both files are the same
+app and both hashes are listed in `SHA256SUMS.txt`. One caveat: neither file embeds the VC++
+2015-2022 runtime — Sada's installer fetches it from Microsoft when missing or outdated, so a fully
+offline machine should have `vc_redist.x64.exe` pre-installed (installing WebView2 first also pulls
+its dependencies).
 
-Requirements: 64-bit Windows 10 or 11, WebView2 (bundled with current Windows), and disk space
-for a Whisper model.
+> **SmartScreen:** the installer is not code-signed (owner decision while the project is
+> open-source-only), so Windows may show "Windows protected your PC". Choose *More info → Run
+> anyway* only for the official release after verifying the checksum. Signing is staged and will be
+> switched on when the project applies for it — see [docs/SIGNING.md](docs/SIGNING.md).
+
+Requirements: 64-bit Windows 10 or 11, the WebView2 Runtime (bundled with current Windows; the
+offline installer includes it), the VC++ 2015-2022 runtime (installed automatically when online),
+and disk space for a Whisper model.
 
 ## First run and models
 

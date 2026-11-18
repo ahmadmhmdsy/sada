@@ -4,6 +4,60 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.8.0 — 2026-11-18
+
+Distribution and trust release. **No app runtime change**: the engine, models, catalogue and UI
+behaviour are identical to v3.7.0 (the version bump is what produces a new installer). The release
+adds a fully offline WebView2 installer as a second asset, stages (but keeps dormant) the code
+signing pipeline, adds a benchmark regression gate that fails a re-run on WER regression, and
+records an honest production-readiness statement. Releases stay unsigned while the project is
+open-source-only, by owner decision.
+
+### Added
+
+- **Offline WebView2 installer variant** (`desktop/src-tauri/tauri.offline.conf.json`,
+  `webviewInstallMode = offlineInstaller`). The release workflow builds it first and stages it as
+  `Sada_<version>_x64-setup-offline.exe`, then builds the default `Sada_<version>_x64-setup.exe`;
+  `SHA256SUMS.txt` gets one line per asset. Download docs explain which file to pick.
+- **Benchmark regression gate**: `sadabench compare` (`benchmarks/arabic-asr/sadabench/compare.py`,
+  CLI `python -m sadabench compare --baseline ... --candidate ...`) re-scores both result files and
+  fails when overall or per-slice WER regresses by more than 1.0 pp (`--tolerance-pp`), exits 2 on
+  incompatible runs, and renders Markdown/JSON. 10 new tests (62 Python tests total); CI runs it on
+  the committed baseline so the gate is exercised on every push.
+- **Dormant signing steps** in the release workflow: `SIGNING_ENABLED=true` merges the signing
+  overlay, sets up `uv`, runs `scripts/sign.py`, and verifies Authenticode on both installers before
+  publishing; with the variable unset no signing step runs. Procedure and alternatives:
+  `docs/SIGNING.md`; issue #18 remains open for the actual signing application.
+- **Production readiness statement** `docs/PRODUCTION-READINESS.md`: per-audience verdict
+  (individual and small team ready with conditions; managed enterprise deployment not yet), eight
+  evidence categories, go/no-go checklist, gap-closing steps, evidence index, Arabic summary.
+- **Docs**: `docs/P5-PLAN.md` (v3.8.0 plan and acceptance criteria); BUILDING.md installer-variants
+  and fork release steps; SIGNING.md decision/status and switch-on steps; README/README.ar file
+  choice, SmartScreen, WebView2 and VC++ notes.
+
+### Changed
+
+- Release workflow now publishes two NSIS assets from the same source and verifies the tag matches
+  `tauri.conf.json` before building; release notes for this version document both hashes.
+- ROADMAP milestone/backlog: v3.8.0 row (#22–#26), P5 section, stale 60-clip figures replaced with
+  the 90-clip measurements.
+
+NaN
+
+- pnpm test: 31 files / 193 tests; pnpm build; i18n audit.
+- cargo test --release: 101 tests; engine guard: 8 tests; cargo check --tests.
+- python -m unittest discover -s tests (benchmarks/arabic-asr): 62 tests.
+- Both installer variants built from the same source; published sizes and SHA-256 are recorded in
+  `docs/VERIFICATION.md`, with silent-install verification of both assets.
+
+### Known limitations
+
+- Installers remain unsigned (owner decision, open-source-only period) → possible SmartScreen
+  warning; verify SHA-256.
+- The offline WebView2 installer embeds WebView2 but not the VC++ 2015-2022 runtime; the NSIS hook
+  downloads it when missing, so fully offline machines must pre-install `vc_redist.x64.exe`.
+- Iraqi/Levantine remain unmeasured; Gulf/technical slices are scripted code-switch speech.
+- No auto-update (by design); updates are deliberate manual downloads.
 ## v3.7.0 — 2026-11-18
 
 Benchmark coverage and prompt-biasing evidence release. **No app runtime change**: the engine,

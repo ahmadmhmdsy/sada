@@ -134,7 +134,7 @@ No arguments. Returns JSON about this install:
 ~~~json
 {
   "app": "Sada",
-  "version": "3.7.0",
+  "version": "3.8.0",
   "platform": "windows",
   "arabic_first": true,
   "engine": { "path": "...", "present": true },

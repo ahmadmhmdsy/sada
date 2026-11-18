@@ -6,8 +6,9 @@ tested twice, once on the development machine (automated suites, see the bottom 
 once by installing the published installer on a machine that has never had Rust, Node, Python,
 FFmpeg or the app itself.
 
-The procedure is also the script for the final v3.6.0 acceptance run. Record the evidence in the
-table at the end; the published results for each release live in docs/VERIFICATION.md.
+The procedure is the script for an acceptance run (last attempted for v3.6.0; the next target is
+v3.8.0, where both installer variants exist). Record the evidence in the table at the end; the
+published results for each release live in docs/VERIFICATION.md.
 
 ## Machine matrix
 
@@ -19,12 +20,14 @@ table at the end; the published results for each release live in docs/VERIFICATI
 | D | VM limited to AVX-only CPU (Sandy Bridge model) — or any pre-2013 x64 CPU | baseline CPU build |
 | E | VM with SSE4.2 but no AVX | expected graceful failure, not a crash |
 
-Windows 11 ships the WebView2 Evergreen Runtime; many Windows 10 images do not. The NSIS installer
-uses Tauri's default bootstrapper, which needs a network connection to fetch WebView2, so a truly
-offline Windows 10 install needs the **WebView2 Evergreen Standalone Installer** copied to the
-machine first (or the owner decides to switch the bundle to the ~130 MB offline installer; that is
-a size decision, not taken yet). This is a known v3.6.0 limitation and is recorded in the release
-notes.
+Windows 11 ships the WebView2 Evergreen Runtime; many Windows 10 images do not. The default
+installer (about 45 MB) uses Tauri's `downloadBootstrapper` mode, which needs a network connection
+to fetch WebView2. From v3.8.0 the release also publishes
+**`Sada_<version>_x64-setup-offline.exe`** (about 250 MB), whose bundle embeds the WebView2
+Evergreen installer; use that file for slot B, and verify both hashes against `SHA256SUMS.txt`.
+Caveat: neither variant embeds the VC++ 2015-2022 runtime — the NSIS hook downloads it from
+Microsoft when missing or older than 14.40, so on a fully offline machine pre-install
+`vc_redist.x64.exe` (or let WebView2 setup pull it) before running the acceptance steps.
 
 ## Models on an offline machine
 
@@ -139,7 +142,7 @@ Pass: both checks behave as described; the Rust unit tests cover the same paths.
 | Frontend build | cd desktop; pnpm build | exit 0, final vite bundle 1m 5s |
 | Rust tests | cd desktop/src-tauri; cargo test --release | 101 tests passed, exit 0 |
 | Engine guard tests | cargo test --release -p vibe-server guard:: | 8 tests passed, exit 0 |
-| Arabic benchmark tests | cd benchmarks/arabic-asr; python -m unittest discover -s tests | 52 tests passed |
+| Arabic benchmark tests | cd benchmarks/arabic-asr; python -m unittest discover -s tests | 62 tests passed (including regression-gate tests) |
 | i18n audit | python scripts/check_i18n.py | passed |
 | Rust type check | cd app; cargo check --tests | exit 0 |
 | Installer | release workflow artifact, 3.7.0 | 44,921,531 bytes · SHA-256 faeb2d07…a8b207, silent install verified (Sada.exe 3.7.0, sidecar v0.6.16-sada.1, MCP sada-mcp 3.7.0) |

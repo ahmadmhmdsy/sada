@@ -5,9 +5,9 @@ It records what is in flight, what each milestone promises, and the evidence rul
 model questions: **no model is curated without a licence, a size, a SHA-256 and timestamps** — and no
 Arabic claim is made without the benchmark.
 
-Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete` — v3.3.1 and
-v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0 and v3.7.0 shipped 2026-11-18 (all before their due
-dates). Last updated 2026-11-18.
+Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete`,
+`P5 in progress` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0 and v3.7.0 shipped
+2026-11-18 (all before their due dates). Last updated 2026-11-18.
 
 ## Milestones
 
@@ -18,6 +18,7 @@ dates). Last updated 2026-11-18.
 | **v3.5.0 — Arabic model evaluation** | 2027-01-15 | Arabic WER/CER harness, fine-tune/Nemotron decisions, read-aloud test, second-engine spike | #10 #11 #12 #13 — **complete**, evidence below |
 | **v3.6.0 — transcript quality & hardening** | 2027-02-15 | Arabic transcript post-processing earned in the benchmark, upstream v3.3.6 security audit ported, clean-machine offline acceptance + signing decision | #14 #15 #16 — **complete**, evidence below |
 | **v3.7.0 — dialect coverage & prompt biasing** | 2027-04-15 | Measured Gulf + Arabic/English technical code-switch slices from a commercial-use corpus, prompt-biasing measurement and app wiring if it wins, honest remaining-gap matrix | #19 #20 #21 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.7.0), evidence below |
+| **v3.8.0 — distribution, offline install & benchmark gate** | 2027-06-15 | Offline WebView2 installer variant as a second asset, signing pipeline staged but dormant (releases stay unsigned OSS), evidence-based production-readiness statement, benchmark regression gate | #22 #23 #24 #25 #26 — in progress (plan: [P5](docs/P5-PLAN.md)) |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -195,6 +196,29 @@ curate; glossary prompt 31.44% overall while preserving more Latin terms (techni
 [`results/prompt-spike-v1.md`](benchmarks/arabic-asr/results/prompt-spike-v1.md); decisions in
 [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md), plan in [`docs/P4-PLAN.md`](docs/P4-PLAN.md).
 
+## P5 — distribution, offline install and benchmark regression gate (in progress, v3.8.0)
+
+Plan: [docs/P5-PLAN.md](docs/P5-PLAN.md). The release is deliberately not a feature release; it
+closes the trust and regression gaps left by P4.
+
+- [ ] #22 Offline WebView2 installer variant: `desktop/src-tauri/tauri.offline.conf.json` overlay
+  (`webviewInstallMode = offlineInstaller`), release workflow builds/publishes both installers
+  with distinct names and SHA-256 lines, docs and release notes explain which to pick; the small
+  installer stays the default. This leaves only the unexecuted clean-machine rows B–E in #17.
+- [ ] #23 Stage the signing pipeline dormant: workflow steps guarded by the `SIGNING_ENABLED`
+  repository variable plus a SignPath submit step and an Authenticode verification step; with the
+  variable unset the release behaves exactly as today. `docs/SIGNING.md` records the owner's
+  2026-11-18 decision (unsigned while open-source-only) and the switch-on procedure; #18 stays open
+  for the application itself.
+- [ ] #24 Production-readiness statement: `docs/PRODUCTION-READINESS.md` with per-audience
+  verdicts (personal use / team use / managed deployment), evidence links, and the explicit gaps
+  (unsigned, rows B–E, unmeasured dialects, no telemetry or crash reporting by design).
+- [ ] #25 Benchmark regression gate: `sadabench compare --baseline … --candidate …` with per-slice
+  deltas, tolerance and exit codes, tests, committed v2 baseline and CI exercise; release checklist
+  runs it.
+- [ ] #26 Docs, version bump 3.8.0, bilingual notes, full test matrix, tag, release verification,
+  evidence in `docs/VERIFICATION.md` / `docs/ACCEPTANCE.md`.
+
 ## Step Zero tests (define "done" before code)
 
 1. **E1 — engine bump smoke test.** Four Arabic clips (short MSA, MSA news, Iraqi dialogue,
@@ -210,28 +234,34 @@ curate; glossary prompt 31.44% overall while preserving more Latin terms (techni
 - [Models, features & tools council (EN)](docs/MODELS-COUNCIL.md) · [(AR)](docs/MODELS-COUNCIL.ar.md) —
   verdicts, licence table, measured evidence, phased plan.
 - [Upstream delta](docs/UPSTREAM-PATCHES.md) — engine/catalog/security changes the fork has not taken yet.
-- Why the defaults stay Whisper large-v3-turbo (measured 2026-11-18): best overall Arabic WER
-  (19.46%), 100% word timestamps and the only model that keeps Latin code-switched terms (25% of
-  Latin names vs 0% for Nemotron), and fast enough (RTF 0.35 on Vulkan). Nemotron 3.5 is smaller
-  (496 MB), faster (RTF 0.234), punctuates better and wins the read MSA/Egyptian slices (17.83%/9.11%
-  vs 22.09%/11.03%), so it is curated as an optional entry — but it transliterates technical terms
-  and is never the default. Both verdicts and the rejections (fine-tune, read-aloud, second engine)
-  are recorded with reproduction commands in [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md).
+- Why the defaults stay Whisper large-v3-turbo (measured 2026-11-18, 90-clip suite): best overall
+  Arabic WER (30.27%), 100% word timestamps and the only model that keeps a meaningful share of
+  Latin code-switched terms (27.3% of Latin names vs 0% for Nemotron), fast enough on Vulkan
+  (RTF 0.38). Nemotron 3.5 is smaller (496 MB), faster (RTF 0.215), punctuates better and wins the
+  read MSA/Egyptian slices (17.83%/9.11% vs 22.09%/11.03%), so it is curated as an optional entry —
+  but it trails by 17–19 pp on the Gulf and technical code-switch slices, transliterates technical
+  terms and is never the default. The 60-clip v3.5/v3.6 numbers are kept in the P2/P3 evidence above
+  and are not comparable to the 90-clip suite. Both verdicts and the rejections (fine-tune,
+  read-aloud, second engine) are recorded with reproduction commands in
+  [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md).
 
-## Backlog after v3.6.0
+## Backlog after v3.7.0
 
-- [#17](https://github.com/alshahia/sada/issues/17) — run the clean-machine acceptance rows B–E
-  (offline Windows 10, CPU-only, AVX-only, AVX-less SSE4.2) when hardware is available, record the
-  evidence in `docs/ACCEPTANCE.md`, and decide whether to keep the small installer with a WebView2
-  prerequisite or bundle the ~130 MB offline installer.
-- [#18](https://github.com/alshahia/sada/issues/18) — apply for code signing (SignPath Foundation
-  first, then Azure Artifact Signing if eligible), then wire `bundle.windows.signCommand` or
-  signtool in the release workflow plus a signature-verification step.
-- Expand the benchmark corpus with commercial-use Iraqi/Gulf/Levantine and technical
-  Arabic/English clips (the slices currently recorded as unmeasured); no model claim until they are
-  measured. Also re-check prompt-based term biasing for the Nemotron Latin-name loss (25% → 0%).
-- Keep the upstream sync discipline: bump the engine by upstream release, and keep
-  `docs/UPSTREAM-PATCHES.md` honest about what is and is not ported.
+- [#17](https://github.com/alshahia/sada/issues/17) — with the offline installer variant shipped in
+  P5, the only remaining part is running the clean-machine acceptance rows B–E (offline Windows 10,
+  CPU-only, AVX-only, AVX-less SSE4.2) on hardware the maintainer does not control, then recording
+  the evidence in `docs/ACCEPTANCE.md`.
+- [#18](https://github.com/alshahia/sada/issues/18) — code signing. Owner decision 2026-11-18: stay
+  unsigned while the project is open-source-only; P5 stages the workflow dormant, and the SignPath
+  Foundation application (then Azure Artifact Signing as fallback) happens later.
+- Iraqi/Levantine and spontaneous-dialect coverage: no commercial-use corpus with human
+  transcripts was found as of 2026-11-18 (full matrix in `docs/P4-PLAN.md`); a paid vendor corpus
+  is an owner purchase decision. Until measured, those regions stay explicitly unmeasured.
+- Upstream drift: upstream Vibe's latest release is v3.3.5 (2026-11-13) while this fork is based on
+  v3.2.2 plus hand-ported deltas (`docs/UPSTREAM-PATCHES.md`). Plan an incremental rebase release
+  (v3.9.0) instead of ad-hoc cherry-picks.
+- Keep the benchmark gate honest: run the 90-clip suite and `sadabench compare` against the
+  committed baseline for every release that touches the engine, models or Arabic post-processing.
 
 ## Rules that do not move
 

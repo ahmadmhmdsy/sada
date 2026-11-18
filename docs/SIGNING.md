@@ -1,8 +1,13 @@
 # Windows code signing
 
-The Windows installer and the app executable are **not signed** as of Sada v3.7.0. This page records
+The Windows installer and the app executable are **not signed** as of Sada v3.8.0. This page records
 the options, their real costs, what the fork already has in the repository, and the recommendation
 for when signing is funded. Nothing is purchased or enabled without the owner's decision.
+
+**Status (2026-11-18): the owner decided to keep releases unsigned while the project is
+open-source-only; the SignPath Foundation application comes later (issue #18). P5 staged the
+pipeline so enabling it is configuration, not a redesign — see *When signing is enabled* below.
+The released assets stay unsigned, and the release notes say so.
 
 ## What users see today
 
@@ -40,12 +45,17 @@ a good first-run experience, and it does not protect users who click through.
 
 - scripts/sign.py (inherited from upstream Vibe) has two halves: a YubiKey signing server that
   shells out to jsign, and a client that a Tauri signCommand can call. It is a **dry run** unless
-  SIGN_ENABLED=true and SIGN_TUNNEL_URL / SIGN_TUNNEL_SECRET are set, so the release workflow can
-  call it today without changing behaviour.
-- .github/workflows/release.yml builds the installer and publishes it unsigned; it has no signing
-  step or secrets yet.
-- desktop/src-tauri/tauri.conf.json has no bundle.windows.signCommand (the Tauri hook the client
-  script would occupy).
+  SIGN_ENABLED=true and SIGN_TUNNEL_URL / SIGN_TUNNEL_SECRET are set.
+- desktop/src-tauri/tauri.windows.signing.conf.json is a Tauri config **overlay** that wires
+  `bundle.windows.signCommand` to `uv run ../../scripts/sign.py sign %1`. It is not merged into a
+  normal build, so the base config and the default installer stay unsigned.
+- .github/workflows/release.yml (P5, v3.8.0) has the dormant pipeline: a *Resolve signing
+  configuration* step plus build steps that merge the signing overlay only when the repository
+  variable `SIGNING_ENABLED` is `true`, and a *Verify Authenticode signatures* step that fails the
+  release if any asset is not validly signed. With the variable unset — today — those steps are
+  skipped, `uv` is not installed, no signer is spawned and no secret is needed.
+- The release still publishes SHA-256 lines for **both** installers (small and offline WebView2),
+  so users can verify what they downloaded without any signing infrastructure.
 
 ## Recommendation
 
@@ -61,31 +71,37 @@ a good first-run experience, and it does not protect users who click through.
 
 ## When signing is enabled
 
-Tauri signs the executable and installer through bundle.windows.signCommand. With the repository
-script the wiring is:
+The switch is the repository variable `SIGNING_ENABLED=true` (Settings → Secrets and variables →
+Actions → Variables). The workflow then:
 
-    "bundle": {
-      "windows": {
-        "signCommand": "uv run scripts/sign.py sign %1"
-      }
-    }
+1. installs `uv` (needed by the existing Tauri signCommand overlay);
+2. merges `desktop/src-tauri/tauri.windows.signing.conf.json` into both installer builds;
+3. exports `SIGN_ENABLED=true` (from the variable) and the `SIGN_TUNNEL_URL` /
+   `SIGN_TUNNEL_SECRET` repository secrets to `scripts/sign.py`;
+4. runs the Authenticode verification step before the release is created, so an unsigned asset
+   cannot be published by accident.
 
-and the release job exports SIGN_ENABLED=true, SIGN_TUNNEL_URL and SIGN_TUNNEL_SECRET. For Azure
-Artifact Signing or a cloud HSM the step is a signtool / trusted-signing-action call in
-release.yml instead; signCommand is not needed there.
+The YubiKey tunnel signer is the path the inherited script implements. If the SignPath Foundation
+application is approved instead, replace step 2 with the SignPath GitHub Action (its project/policy
+IDs come from the accepted application) and drop the signing overlay: SignPath signs in its own
+pipeline and `signCommand` is not needed there. Keep the variable and the verification step.
 
-After signing, verify before publishing:
+Manual verification (same check the workflow runs):
+    Get-AuthenticodeSignature .\Sada_<version>_x64-setup.exe | Format-List Status, SignerCertificate
+    & "$env:ProgramFiles(x86)\Windows Kits\10\bin\*\x64\signtool.exe" verify /pa /v .\Sada_<version>_x64-setup.exe
 
-    Get-AuthenticodeSignature .\Sada_<version>x64-setup.exe | Format-List Status, SignerCertificate
-    & "$env:ProgramFiles(x86)\Windows Kits\10\bin\*\x64\signtool.exe" verify /pa /v .\Sada_<version>x64-setup.exe
-
-Status must be Valid, and the signer must be the expected publisher. Add the same check to the
-release workflow so an unsigned artifact cannot be published by accident.
+Repeat for `Sada_<version>_x64-setup-offline.exe`. Status must be **Valid**, and the signer must be
+the expected publisher. SmartScreen reputation still needs to build after the first signed release;
+signing removes the unknown-publisher warning, it does not create instant trust for a new file.
 
 ## Arabic summary
 
-الملف غير موقّع حتى الإصدار 3.7.0، لذلك يظهر تحذير SmartScreen ("ناشر غير معروف"). الحماية الحالية
-هي نشر بصمة SHA-256 مع كل إصدار. الخيار الموصى به هو التقدّم إلى **SignPath Foundation** المجاني
-للمشاريع مفتوحة المصدر، ثم **Azure Artifact Signing** بحدود 10 دولارات شهرياً إذا كان الكيان مؤهلاً؛
-ولا تُشترى شهادة OV/EV قبل قرار المالك. سكربت scripts/sign.py الموجود جاهز للتوصيل عبر signCommand
-لكنه يبقى معطلاً حتى تتوفر الشهادة.
+الملف غير موقّع حتى الإصدار 3.8.0، لذلك يظهر تحذير SmartScreen ("ناشر غير معروف"). قرار المالك في
+2026-11-18 هو البقاء على إصدارات غير موقّعة ما دام المشروع مفتوح المصدر فقط، مع تجهيز المسار
+لكي يُفعَّل لاحقاً بمتغير واحد. الحماية الحالية هي نشر بصمة SHA-256 للمثبّتَين (الصغير ومثبّت
+WebView2 دون اتصال) مع كل إصدار. الخيار الموصى به عند التقديم هو **SignPath Foundation** المجاني
+للمشاريع مفتوحة المصدر، ثم **Azure Artifact Signing** بحدود 10 دولارات شهرياً إذا كان الكيان
+مؤهلاً؛ ولا تُشترى شهادة OV/EV قبل قرار المالك. في v3.8.0 أصبح سير الإصدار يدمج ملف
+tauri.windows.signing.conf.json ويشغّل scripts/sign.py فقط عندما يكون المتغير SIGNING_ENABLED
+مساوياً true، ثم يتحقق من التوقيع قبل النشر؛ وبدون المتغير يبقى كل شيء كما هو اليوم: غير موقّع
+وبدون أسرار.

@@ -12,7 +12,10 @@
 - Website: https://alshahia.github.io/sada/
 - Repository: https://github.com/alshahia/sada
 - Latest release: https://github.com/alshahia/sada/releases/latest
-- Version: 3.7.0 · License: MIT · Platform: Windows 10/11 x64
+- Version: 3.8.0 · License: MIT · Platform: Windows 10/11 x64
+- Distribution: two unsigned NSIS installers per release — `Sada_3.8.0_x64-setup.exe` (~45 MB,
+  downloads WebView2) and `Sada_3.8.0_x64-setup-offline.exe` (~250 MB, embeds WebView2 for offline
+  Windows 10); the NSIS hook fetches the VC++ 2015-2022 runtime from Microsoft when missing
 - Engine: whisper.cpp via bundled vibe-server v0.6.16 (built by Sada from `server/` as
   v0.6.16-sada.1 with a loopback Host/Origin guard); FFmpeg 9.0.2 GPLv3 bundled (notices in repo)
 - GPU: optional Vulkan acceleration (device picker in Settings → Models → Hardware), CPU fallback,

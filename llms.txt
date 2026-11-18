@@ -11,13 +11,16 @@
 ## Key facts
 
 - Name: Sada (صدى) — "echo"
-- Version: 3.7.0
+- Version: 3.8.0
 - Platform: Windows 10/11 x64 (Tauri 2 desktop app)
 - License: MIT (fork of Vibe v3.2.2, MIT); bundled FFmpeg is GPLv3 (mere aggregation, see notices)
 - Engine: whisper.cpp via the bundled `vibe-server` sidecar (v0.6.16; built by Sada from
   `server/` as `v0.6.16-sada.1`, adding a loopback Host/Origin guard); models are NOT bundled
-- Installer: `Sada_3.7.0_x64-setup.exe` from GitHub Releases, unsigned, per-user
-  (`%LOCALAPPDATA%\Sada\`)
+- Installers (v3.8.0, GitHub Releases, unsigned, per-user `%LOCALAPPDATA%\Sada\`):
+  `Sada_3.8.0_x64-setup.exe` (~45 MB, downloads WebView2 at install) and
+  `Sada_3.8.0_x64-setup-offline.exe` (~250 MB, embeds the WebView2 installer). The NSIS hook
+  installs the VC++ 2015-2022 runtime from Microsoft when missing, so fully offline machines must
+  pre-install `vc_redist.x64.exe`
 - Languages: Arabic `ar-IQ` first; 20+ inherited upstream locales available
 - Network: only user-requested actions (model download, pasted URL, optional summary provider)
 - GPU: optional Vulkan acceleration on NVIDIA/AMD/Intel GPUs, selectable in Settings → Models →
@@ -39,7 +42,7 @@
 - [MCP guide](docs/AGENT-MCP.md) · [MCP guide in Arabic](docs/AGENT-MCP.ar.md)
 - [Voicebox review (why MCP, what was not copied)](docs/VOICEBOX-REVIEW.md)
 - [Models council (models, features and tools worth adding, with licences)](docs/MODELS-COUNCIL.md)
-- [Release notes v3.7.0](docs/releases/v3.7.0.md) · [v3.6.0](docs/releases/v3.6.0.md) · [v3.5.0](docs/releases/v3.5.0.md) ·
+- [Release notes v3.8.0](docs/releases/v3.8.0.md) · [v3.6.0](docs/releases/v3.6.0.md) · [v3.5.0](docs/releases/v3.5.0.md) ·
   [v3.4.0](docs/releases/v3.4.0.md) · [v3.3.1](docs/releases/v3.3.1.md) · [v3.3.0](docs/releases/v3.3.0.md)
 - [Website](https://alshahia.github.io/sada/)
 

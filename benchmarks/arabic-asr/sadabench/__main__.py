@@ -5,6 +5,7 @@ Commands:
     fetch           download clip audio and convert it to 16 kHz mono WAV
     run             transcribe every clip with every configured model
     report          aggregate results into JSON + Markdown tables
+    compare         diff a run against a committed baseline (regression gate)
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ import sys
 import time
 from pathlib import Path
 
+from . import compare as compare_mod
 from . import datasets, engine, postprocess, report
 
 
@@ -58,6 +60,26 @@ def _parser() -> argparse.ArgumentParser:
     render = sub.add_parser("report", help="aggregate results into tables")
     render.add_argument("--results", type=Path, required=True)
     render.add_argument("--md", type=Path, default=None, help="write Markdown next to the JSON")
+
+    compare = sub.add_parser(
+        "compare",
+        help="diff a run against a committed baseline and fail on a WER regression",
+    )
+    compare.add_argument("--baseline", type=Path, required=True)
+    compare.add_argument("--candidate", type=Path, required=True)
+    compare.add_argument(
+        "--tolerance-pp",
+        type=float,
+        default=compare_mod.DEFAULT_TOLERANCE_PP,
+        help=f"allowed WER regression in percentage points (default {compare_mod.DEFAULT_TOLERANCE_PP:g})",
+    )
+    compare.add_argument("--json", action="store_true", help="print the comparison as JSON")
+    compare.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="also write the JSON comparison to this path",
+    )
     return parser
 
 
@@ -187,6 +209,35 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_compare(args: argparse.Namespace) -> int:
+    try:
+        baseline = compare_mod.load_results(args.baseline)
+        candidate = compare_mod.load_results(args.candidate)
+        comparison = compare_mod.compare_results(
+            baseline, candidate, tolerance_pp=args.tolerance_pp
+        )
+    except compare_mod.ComparisonError as exc:
+        print(f"compare: {exc}", file=sys.stderr)
+        return 2
+    if args.out:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        datasets.write_json(args.out, comparison)
+        print(f"wrote {args.out}")
+    if args.json:
+        print(json.dumps(comparison, ensure_ascii=False, indent=2))
+    else:
+        markdown = compare_mod.render_markdown(comparison)
+        print(markdown)
+        if not comparison["ok"]:
+            for item in comparison["regressions"]:
+                print(
+                    f"REGRESSION {item['model']} / {item['scope']}: "
+                    f"{item['wer_delta_pp']:+.2f} pp vs baseline",
+                    file=sys.stderr,
+                )
+    return 0 if comparison["ok"] else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     handlers = {
@@ -194,6 +245,7 @@ def main(argv: list[str] | None = None) -> int:
         "fetch": cmd_fetch,
         "run": cmd_run,
         "report": cmd_report,
+        "compare": cmd_compare,
     }
     return handlers[args.command](args)
 
