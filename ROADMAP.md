@@ -5,8 +5,8 @@ It records what is in flight, what each milestone promises, and the evidence rul
 model questions: **no model is curated without a licence, a size, a SHA-256 and timestamps** — and no
 Arabic claim is made without the benchmark.
 
-Status: `P0 complete`, `P1 in progress` — v3.3.1 shipped 2026-11-17; P1 code, tests and local verification are
-done and the v3.4.0 release is being prepared (due 2026-12-08). Last updated 2026-11-17.
+Status: `P0 complete`, `P1 complete` — v3.3.1 shipped 2026-11-17 and v3.4.0 shipped 2026-11-17
+(before its 2026-12-08 due date). Next: P2/v3.5.0 (Arabic model evaluation). Last updated 2026-11-18.
 
 ## Milestones
 
@@ -16,7 +16,7 @@ done and the v3.4.0 release is being prepared (due 2026-12-08). Last updated 202
 | **v3.4.0 — verified model catalog** | 2026-12-08 | Bundled verified catalog + Get models, Arabic entries and docs, MCP/capability plumbing, local endpoint hardening | #5 #6 #7 #8 #9 |
 | **v3.5.0 — Arabic model evaluation** | 2027-01-15 | Arabic WER/CER harness, fine-tune/Nemotron decisions, read-aloud test, second-engine spike | #10 #11 #12 #13 |
 
-## P0 — engine & GPU foundation (in progress)
+## P0 — engine & GPU foundation (complete)
 
 - [x] Verified download integrity for the default and Hebrew Whisper models (`b05ee7d`).
 - [x] Council decision record committed EN/AR and indexed (`ee2ba40`).
@@ -37,7 +37,7 @@ done and the v3.4.0 release is being prepared (due 2026-12-08). Last updated 202
 3.5 ASR still loads behind the Silero VAD; the CPU-only path (`no_gpu`) transcribes; `devices`
 lists Vulkan0 (Quadro RTX 4000) and Vulkan1 (Intel UHD 630). No Rust or i18n source changed.
 
-## P1 — verified model catalog, MCP capabilities and endpoint hardening (v3.4.0)
+## P1 — verified model catalog, MCP capabilities and endpoint hardening (complete, v3.4.0)
 
 - [x] #5 Bundled verified catalog (`desktop/src/assets/model-catalog.json`): three commercial-safe
   entries — `whisper-large-v3-turbo` (MIT, 1,624,555,275 B, SHA-256 `1fc70f77…2bc69`),
@@ -68,7 +68,16 @@ prompts); Nemotron transcribed the Arabic clip with timestamps; Whisper accepted
 succeeded. Guard tests 8/8 passed and a live `curl` matrix returned 200 for native loopback
 requests, 200 for `localhost`, and 403 for a DNS-rebinding `Host`, a page `Origin`, and a missing
 `Host` — including a state-changing `POST /v1/models/load`. Frontend 28 files / 179 tests pass,
-Rust `mcp::` 27 tests pass, `pnpm build` and the i18n audit pass.
+Rust `mcp::` 27 tests pass, `pnpm build` and the i18n audit pass. The published installer was re-downloaded, hash-verified, installed silently
+(exit 0) and checked: `Sada.exe` 3.4.0, installed sidecar `vibe-server v0.6.16-sada.1`, installed
+MCP server `3.4.0` with the expected capabilities, and the guard matrix repeated on the installed
+engine (200/403/403/200).
+- [x] Release v3.4.0 (bilingual notes, tag, CI release run
+  [44092018396](https://github.com/alshahia/sada/actions/runs/44092018396)):
+  [release](https://github.com/alshahia/sada/releases/tag/v3.4.0) · installer 44,915,585 bytes ·
+  SHA-256 `7e6d8c813af34a80e4fa59e2ee28444a07b2c7811d88aa1b2549b627ce3cfd27` (re-downloaded and
+  matched against `SHA256SUMS.txt`); the published installer installs `Sada 3.4.0` with sidecar
+  `vibe-server v0.6.16-sada.1`, and the installed engine repeats the guard matrix.
 ## Step Zero tests (define "done" before code)
 
 1. **E1 — engine bump smoke test.** Four Arabic clips (short MSA, MSA news, Iraqi dialogue,

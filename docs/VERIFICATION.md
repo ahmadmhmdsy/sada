@@ -65,10 +65,29 @@ The engine was rebuilt locally from `server/` with `VIBE_SERVER_VERSION=v0.6.16-
 (75,686,912 bytes, SHA-256 `48308753614AA6B2D7C8BF587234569791A121F53D19EB006B2A9A5986FA29CF`) and
 staged as `desktop/src-tauri/binaries/vibe-server-x86_64-pc-windows-msvc.exe`; the upstream binary
 remains available as a local backup and CI rebuilds the same way in the Release workflow.
+The same matrix was repeated against the engine **installed by the published 3.4.0 installer**:
+200 for a native loopback `Host`, 403 for a rebinding `Host`, 403 for a page `Origin`, 200 for a
+loopback `Origin` — the binary shipped in the installer is the guarded build.
 
 ### Artifacts
 
-_(installer size and SHA-256 are added after the v3.4.0 release workflow finishes.)_
+The CI-built installer and its `SHA256SUMS.txt` are attached to the
+[v3.4.0 GitHub release](https://github.com/alshahia/sada/releases/tag/v3.4.0). The published files
+were re-downloaded on 17 November 2026 and compared with the published checksums:
+
+| Artifact | Size | SHA-256 |
+| --- | --- | --- |
+| `Sada_3.4.0_x64-setup.exe` | 44,915,585 bytes | `7e6d8c813af34a80e4fa59e2ee28444a07b2c7811d88aa1b2549b627ce3cfd27` |
+| `SHA256SUMS.txt` | 90 bytes | `48c45db058b21037ac2278386de1c16a9bc8ce441ecc57ba83e97dfb91ad993e` |
+
+- The re-downloaded installer matched `SHA256SUMS.txt` and the digest GitHub recorded for the
+  asset.
+- The published installer was run silently (`/S`, per-user install, exit 0). The installed
+  `Sada.exe` reports product version **3.4.0**, and the installed sidecar reports
+  **`vibe-server v0.6.16-sada.1`** — the installer ships the CI-built guarded engine.
+- The installed MCP server reports `serverInfo.version = 3.4.0` and the expected
+  `model.capabilities`; the NSIS package is unsigned (SmartScreen warns "unknown publisher";
+  verify the hash before choosing *More info → Run anyway*).
 
 ---
 ## Sada 3.3.1 — engine v0.6.16 and GPU documentation
