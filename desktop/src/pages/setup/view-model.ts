@@ -55,9 +55,11 @@ export function viewModel() {
 
 			// Determine model URLs
 			if (location?.state?.downloadURL) {
-				// A URL the user supplied carries no size or hash, so the backend falls back to the
-				// size and magic-byte checks it runs on every download.
-				urls = [{ url: location.state.downloadURL }]
+				// A deep link that matches the catalog keeps the published size and SHA-256; a URL
+				// the user supplied carries neither, so the backend falls back to the size and
+				// magic-byte checks it runs on every download.
+				const integrity = (location.state.downloadIntegrity ?? {}) as config.ModelIntegrity
+				urls = [{ url: location.state.downloadURL, ...integrity }]
 				console.log(`[model] Using provided model URL: ${urls[0].url}`)
 			} else {
 				urls = [...config.modelUrls.default]

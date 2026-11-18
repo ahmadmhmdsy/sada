@@ -1,0 +1,155 @@
+{
+  "$comment": "Shared contract between desktop/src/lib/arabic-text.ts and benchmarks/arabic-asr/sadabench/postprocess.py. Every case is asserted by desktop/src/lib/arabic-text-fixtures.test.ts (vitest) and benchmarks/arabic-asr/tests/test_postprocess.py (unittest). Update both implementations together when a rule changes.",
+  "version": 1,
+  "replacements": [
+    {
+      "name": "gpu spaced",
+      "input": "استخدم جي بي يو لتسريع التحويل",
+      "expected": "استخدم GPU لتسريع التحويل"
+    },
+    {
+      "name": "gpu joined with article",
+      "input": "وحدة الجيبيو قوية",
+      "expected": "وحدة GPU قوية"
+    },
+    {
+      "name": "cpu with article",
+      "input": "المعالج السيبيو أسرع",
+      "expected": "المعالج CPU أسرع"
+    },
+    {
+      "name": "pdf joined",
+      "input": "تقارير بيديف جاهزة",
+      "expected": "تقارير PDF جاهزة"
+    },
+    {
+      "name": "pdf spaced with article",
+      "input": "ملف البي دي إف جاهز",
+      "expected": "ملف PDF جاهز"
+    },
+    {
+      "name": "srt spaced",
+      "input": "حفظ بصيغة إس آر تي",
+      "expected": "حفظ بصيغة SRT"
+    },
+    {
+      "name": "srt joined with article",
+      "input": "ملفات السورتي جاهزة",
+      "expected": "ملفات SRT جاهزة"
+    },
+    {
+      "name": "vtt spaced",
+      "input": "صيغة في تي تي",
+      "expected": "صيغة VTT"
+    },
+    {
+      "name": "json with article",
+      "input": "ملف الجيسون صالح",
+      "expected": "ملف JSON صالح"
+    },
+    {
+      "name": "api spaced",
+      "input": "استخدم إيه بي آي واحد",
+      "expected": "استخدم API واحد"
+    },
+    {
+      "name": "ffmpeg spaced",
+      "input": "محرك إف إف إم بيغ مضمّن",
+      "expected": "محرك FFmpeg مضمّن"
+    },
+    {
+      "name": "whisper with article",
+      "input": "نموذج الويسبر دقيق",
+      "expected": "نموذج Whisper دقيق"
+    },
+    {
+      "name": "url with article",
+      "input": "افتح اليو آر إل",
+      "expected": "افتح URL"
+    },
+    {
+      "name": "http spaced",
+      "input": "بروتوكول إتش تي تي بي",
+      "expected": "بروتوكول HTTP"
+    },
+    {
+      "name": "https spaced",
+      "input": "استخدم إتش تي تي بي إس دائما",
+      "expected": "استخدم HTTPS دائما"
+    },
+    {
+      "name": "html spaced",
+      "input": "صفحة إتش تي إم إل",
+      "expected": "صفحة HTML"
+    },
+    {
+      "name": "sql spaced",
+      "input": "استعلام إس كيو إل",
+      "expected": "استعلام SQL"
+    },
+    {
+      "name": "css with article",
+      "input": "ملف السي إس إس",
+      "expected": "ملف CSS"
+    },
+    {
+      "name": "usb with article",
+      "input": "وصلة اليو إس بي",
+      "expected": "وصلة USB"
+    },
+    {
+      "name": "vpn spaced",
+      "input": "شبكة في بي إن",
+      "expected": "شبكة VPN"
+    },
+    {
+      "name": "wifi spaced",
+      "input": "شبكة واي فاي",
+      "expected": "شبكة Wi-Fi"
+    },
+    {
+      "name": "github with article",
+      "input": "مستودع الغيت هاب",
+      "expected": "مستودع GitHub"
+    },
+    {
+      "name": "acronym and punctuation together",
+      "input": "مرحبا , هذا جي بي يو ؟",
+      "expected": "مرحبا، هذا GPU؟"
+    }
+  ],
+  "unchanged": [
+    {
+      "name": "plain Arabic",
+      "input": "البيت كبير والحديقة واسعة"
+    },
+    {
+      "name": "word that starts like a term",
+      "input": "شربت جيبا من الماء"
+    },
+    {
+      "name": "arabic word with in",
+      "input": "في بيتنا ضيف"
+    },
+    {
+      "name": "english only",
+      "input": "Hello, world? Yes; fine."
+    },
+    {
+      "name": "url with ascii punctuation",
+      "input": "افتح https://example.com/a,b ثم اقرأ الملف"
+    },
+    {
+      "name": "decimal numbers",
+      "input": "النتيجة 3.14 تقريبا"
+    },
+    {
+      "name": "empty",
+      "input": ""
+    },
+    {
+      "name": "whitespace only",
+      "input": "   "
+    }
+  ]
+}

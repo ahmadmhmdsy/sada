@@ -221,6 +221,7 @@
 	"orSelectFolder": "or a whole folder",
 	"others": "Others",
 	"pasteModelLink": "Paste Model Link",
+	"invalidModelLink": "Only https links from huggingface.co or github.com can be downloaded.",
 	"placeTranscriptNextToFiles": "Place transcript next to files",
 	"playSoundOnFinish": "Play sound",
 	"pleaseEnableWordTimestamps": "Please enable word timestamps to use this option!\nAlso make sure to disable this option once you finished or reset the model options!",

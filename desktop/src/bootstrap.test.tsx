@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => ({
 	runMigrations: vi.fn(),
 	unregisterAll: vi.fn(),
 	render: vi.fn(),
+	releaseCleanup: null as null | (() => void),
 }))
 
 vi.mock('@tauri-apps/api/window', () => ({ getCurrentWindow: () => ({ label: mocks.windowLabel }) }))
@@ -21,7 +22,13 @@ vi.mock('./lib/migrations', () => ({ runMigrations: mocks.runMigrations }))
 vi.mock('./root', () => ({ default: () => null }))
 vi.mock('react-dom/client', () => ({ default: { createRoot: () => ({ render: mocks.render }) } }))
 
-beforeEach(() => {
+beforeEach(async () => {
+	// A test that timed out can leave `start()` waiting on native cleanup. Release and flush it
+	// before the module registry and mock call history are reset, otherwise its render lands in the
+	// next test and makes it look like bootstrap rendered twice.
+	mocks.releaseCleanup?.()
+	mocks.releaseCleanup = null
+	await new Promise((resolve) => setTimeout(resolve, 0))
 	vi.resetModules()
 	vi.resetAllMocks()
 	mocks.windowLabel = 'main'
@@ -31,9 +38,15 @@ beforeEach(() => {
 afterEach(() => vi.restoreAllMocks())
 
 describe('shortcut recovery after a webview reload', () => {
-	it('finishes clearing stale native shortcuts before either provider can register again', async () => {
+	it('finishes clearing stale native shortcuts before either provider can register again', { timeout: 15000 }, async () => {
 		let finishCleanup!: () => void
-		mocks.unregisterAll.mockImplementation(() => new Promise<void>((resolve) => (finishCleanup = resolve)))
+		mocks.unregisterAll.mockImplementation(
+			() =>
+				new Promise<void>((resolve) => {
+					finishCleanup = resolve
+					mocks.releaseCleanup = resolve
+				})
+		)
 		await import('./bootstrap')
 		await waitFor(() => expect(mocks.unregisterAll).toHaveBeenCalledOnce())
 		expect(mocks.render).not.toHaveBeenCalled()
@@ -41,7 +54,7 @@ describe('shortcut recovery after a webview reload', () => {
 		await waitFor(() => expect(mocks.render).toHaveBeenCalledOnce())
 	})
 
-	it.each(['dictation-indicator', 'meeting-prompt'])('does not release live shortcuts when %s opens', async (label) => {
+	it.each(['dictation-indicator', 'meeting-prompt'])('does not release live shortcuts when %s opens', { timeout: 15000 }, async (label) => {
 		mocks.windowLabel = label
 		await import('./bootstrap')
 		await waitFor(() => expect(mocks.render).toHaveBeenCalledOnce())

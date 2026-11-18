@@ -22,7 +22,7 @@ desktop app (React 19 frontend, Rust shell) around the upstream `vibe-server` si
 chore setup x86_64-pc-windows-msvc   # fetch pinned vibe-server + ffmpeg sidecars (not in git)
 cd desktop
 pnpm install
-pnpm test                            # vitest, 28 files / 179 tests at release time
+pnpm test                            # vitest, 31 files / 193 tests at release time
 pnpm build                           # paraglide compile → tsc → vite build
 pnpm exec tauri build                # NSIS installer under target/release/bundle/nsis/
 ```
@@ -75,6 +75,7 @@ inside both `index.html` files in sync with the repository facts (version, links
 - [Model decisions (measured)](docs/MODELS-DECISIONS.md) · [Read-aloud evidence](docs/READ-ALOUD.md)
 - [Roadmap](ROADMAP.md) · [Changelog](CHANGELOG.md)
 - [Translations](docs/TRANSLATIONS.md) · [Privacy](PRIVACY.md) · [Security](SECURITY.md)
+- [Clean-machine acceptance](docs/ACCEPTANCE.md) · [Code signing](docs/SIGNING.md)
 - [Release notes](docs/releases/) · [Third-party notices](THIRD-PARTY-NOTICES.md)
 
 ---

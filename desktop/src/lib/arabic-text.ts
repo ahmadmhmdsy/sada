@@ -13,18 +13,52 @@
 
 const ARABIC_CHAR = '[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]'
 const HAS_ARABIC = new RegExp(ARABIC_CHAR)
+const NO_ARABIC_BEFORE = '(?<!' + ARABIC_CHAR + ')'
+const NO_ARABIC_AFTER = '(?!' + ARABIC_CHAR + ')'
 
-/** Spellings whisper.cpp produces for terms that are normally written in Latin in Arabic text. */
+/**
+ * Build one rule for a term whisper writes out in Arabic letters. Segments may be written with or
+ * without spaces, and the Arabic definite article is swallowed with the term, so "الجيبيو" and
+ * "جي بي يو" both become "GPU". Rules only fire on whole words.
+ */
+function term(latin: string, ...segments: string[][]): [RegExp, string] {
+	const body = segments.map((alternatives) => '(?:' + alternatives.join('|') + ')').join('[ \t]*')
+	return [new RegExp(NO_ARABIC_BEFORE + '(?:ال)?' + body + NO_ARABIC_AFTER, 'g'), latin]
+}
+
+/**
+ * Spellings whisper.cpp produces for terms that are normally written in Latin in Arabic text.
+ *
+ * This list is mirrored by benchmarks/arabic-asr/sadabench/postprocess.py (so the harness can score
+ * what the app actually shows); both implementations assert
+ * benchmarks/arabic-asr/fixtures/arabic-postprocess-cases.json, which keeps them in sync.
+ */
 const ACRONYMS: [RegExp, string][] = [
-	[/(?<![\u0600-\u06FF])(?:جي|جى)[ \t]*(?:بي|بى)[ \t]*(?:يو|يوا)(?![\u0600-\u06FF])/g, 'GPU'],
-	[/(?<![\u0600-\u06FF])(?:سي|سى)[ \t]*(?:بي|بى)[ \t]*(?:يو|يوا)(?![\u0600-\u06FF])/g, 'CPU'],
-	[/(?<![\u0600-\u06FF])(?:بي|بى)[ \t]*(?:دي|دى)[ \t]*(?:إف|اف|أف)(?![\u0600-\u06FF])/g, 'PDF'],
-	[/(?<![\u0600-\u06FF])(?:إس|اس|أس)[ \t]*(?:آر|ار|أر)[ \t]*(?:تي|تى)(?![\u0600-\u06FF])/g, 'SRT'],
-	[/(?<![\u0600-\u06FF])(?:في|فى)[ \t]*(?:تي|تى)[ \t]*(?:تي|تى)(?![\u0600-\u06FF])/g, 'VTT'],
-	[/(?<![\u0600-\u06FF])(?:جيسون|جسون|جيسُن|جيسون)(?![\u0600-\u06FF])/g, 'JSON'],
-	[/(?<![\u0600-\u06FF])(?:إيه|ايه|إي)[ \t]*(?:بي|بى)[ \t]*(?:آي|اي|أي)(?![\u0600-\u06FF])/g, 'API'],
-	[/(?<![\u0600-\u06FF])(?:إف|اف|أف)[ \t]*(?:إف|اف|أف)[ \t]*(?:إم|ام|أم)[ \t]*(?:بيغ|بيج|بغ)(?![\u0600-\u06FF])/g, 'FFmpeg'],
-	[/(?<![\u0600-\u06FF])(?:ويسبر|ويسپر|ويسْبر)(?![\u0600-\u06FF])/g, 'Whisper'],
+	// Longest terms first: HTTPS contains HTTP, so the shorter rule must not run first.
+	term('HTTPS', ['إتش', 'اتش'], ['تي', 'تى'], ['تي', 'تى'], ['بي', 'بى'], ['إس', 'اس', 'أس']),
+	term('HTTP', ['إتش', 'اتش'], ['تي', 'تى'], ['تي', 'تى'], ['بي', 'بى']),
+	term('HTML', ['إتش', 'اتش'], ['تي', 'تى'], ['إم', 'ام', 'أم'], ['إل', 'ال', 'أل']),
+	// Joined spellings overlap ("جيبيو" is جي + بيو), so they need their own rules before the split ones.
+	[new RegExp(NO_ARABIC_BEFORE + '(?:ال)?(?:جيبيو|جيبْيو)' + NO_ARABIC_AFTER, 'g'), 'GPU'],
+	[new RegExp(NO_ARABIC_BEFORE + '(?:ال)?(?:سيبيو|سيبْيو)' + NO_ARABIC_AFTER, 'g'), 'CPU'],
+	term('GPU', ['جي', 'جى'], ['بي', 'بى'], ['يو', 'يوا']),
+	term('CPU', ['سي', 'سى'], ['بي', 'بى'], ['يو', 'يوا']),
+	term('PDF', ['بي', 'بى'], ['دي', 'دى'], ['إف', 'اف', 'أف', 'ف']),
+	// SRT is often written as one joined word ("السورتي") rather than read as three letters.
+	[new RegExp(NO_ARABIC_BEFORE + '(?:ال)?(?:سورتي|سورتى)' + NO_ARABIC_AFTER, 'g'), 'SRT'],
+	term('SRT', ['إس', 'اس', 'أس'], ['آر', 'ار', 'أر'], ['تي', 'تى']),
+	term('VTT', ['في', 'فى'], ['تي', 'تى'], ['تي', 'تى']),
+	[new RegExp(NO_ARABIC_BEFORE + '(?:ال)?(?:جيسون|جسون|جيسُن)' + NO_ARABIC_AFTER, 'g'), 'JSON'],
+	term('API', ['إيه', 'ايه', 'إي'], ['بي', 'بى'], ['آي', 'اي', 'أي']),
+	term('FFmpeg', ['إف', 'اف', 'أف'], ['إف', 'اف', 'أف'], ['إم', 'ام', 'أم'], ['بيغ', 'بيج', 'بغ']),
+	[new RegExp(NO_ARABIC_BEFORE + '(?:ال)?(?:ويسبر|ويسپر|ويسْبر)' + NO_ARABIC_AFTER, 'g'), 'Whisper'],
+	term('URL', ['يو', 'يوا'], ['آر', 'ار', 'أر'], ['إل', 'ال', 'أل']),
+	term('SQL', ['إس', 'اس', 'أس'], ['كيو'], ['إل', 'ال', 'أل']),
+	term('CSS', ['سي', 'سى'], ['إس', 'اس', 'أس'], ['إس', 'اس', 'أس']),
+	term('USB', ['يو', 'يوا'], ['إس', 'اس', 'أس'], ['بي', 'بى']),
+	term('VPN', ['في', 'فى'], ['بي', 'بى'], ['إن', 'ان', 'أن']),
+	term('Wi-Fi', ['واي', 'واى'], ['فاي', 'فاى']),
+	term('GitHub', ['غيت', 'جيت'], ['هاب', 'هب']),
 ]
 
 /** ASCII punctuation that Arabic typography replaces with its own codepoint. */

@@ -1,0 +1,148 @@
+# Clean-machine acceptance
+
+This page is the release acceptance procedure for a Windows build that must work **offline, on a
+clean machine, without developer tooling**. It is the checklist issue #16 asks for: every build is
+tested twice, once on the development machine (automated suites, see the bottom of this page) and
+once by installing the published installer on a machine that has never had Rust, Node, Python,
+FFmpeg or the app itself.
+
+The procedure is also the script for the final v3.6.0 acceptance run. Record the evidence in the
+table at the end; the published results for each release live in docs/VERIFICATION.md.
+
+## Machine matrix
+
+| Slot | Machine | Purpose |
+| --- | --- | --- |
+| A | Windows 11 x64, SSD, WebView2 preinstalled, no developer tools | default path: online install, GPU transcription |
+| B | Windows 10 22H2 x64, no developer tools, **network disconnected** | offline install and offline transcription |
+| C | Same as B, CPU only (no Vulkan device) | CPU fallback, baseline build |
+| D | VM limited to AVX-only CPU (Sandy Bridge model) — or any pre-2013 x64 CPU | baseline CPU build |
+| E | VM with SSE4.2 but no AVX | expected graceful failure, not a crash |
+
+Windows 11 ships the WebView2 Evergreen Runtime; many Windows 10 images do not. The NSIS installer
+uses Tauri's default bootstrapper, which needs a network connection to fetch WebView2, so a truly
+offline Windows 10 install needs the **WebView2 Evergreen Standalone Installer** copied to the
+machine first (or the owner decides to switch the bundle to the ~130 MB offline installer; that is
+a size decision, not taken yet). This is a known v3.6.0 limitation and is recorded in the release
+notes.
+
+## Models on an offline machine
+
+No model is bundled. On the connected machine, download the model(s) and the Silero VAD model from
+Settings -> Models, then copy the models folder to the offline machine before the run. The folder is
+reported by the app (Settings -> Models -> Models folder) and defaults to
+%LOCALAPPDATA%\Sada\models. The sidecar binaries (vibe-server, ffmpeg) are inside the installer.
+
+## Acceptance steps
+
+### A. Install and first run (machines A and B)
+
+1. Verify the installer against the SHA256SUMS.txt attached to the release:
+   Get-FileHash .\Sada_<version>x64-setup.exe -Algorithm SHA256
+2. Install per-user (default). Confirm the install path is under %LOCALAPPDATA%\Sada.
+3. Launch. The window is Arabic (RTL), first-run language ar-IQ, transcription language ar,
+   translation off.
+4. No DevTools console errors. In particular no Content-Security-Policy violations on the first
+   paint, while loading models, or while playing a recording (the 3.6.0 CSP is new).
+
+Pass: first paint Arabic, no error dialog, no console CSP violation.
+
+### B. Offline transcription (machine B, network adapter disabled)
+
+1. Disable every network adapter (Settings -> Network -> Change adapter options -> Disable), or
+   block Sada outbound in Windows Defender Firewall with advanced security.
+2. Launch, load a sideloaded model, transcribe a 30-second Arabic clip and export the transcript.
+3. Repeat with a dictation via the global shortcut: record, stop, confirm the text is typed into
+   Notepad.
+
+Pass: both transcriptions succeed with no network adapter enabled; Windows firewall shows no
+outbound rule hit; text typed exactly once per recording.
+
+### C. CPU fallback (machine C)
+
+1. Settings -> Advanced -> CPU build: "baseline" (this maps to VIBE_SERVER_CPU_VARIANT=baseline).
+2. Load the model and transcribe the same clip.
+3. Repeat once with the GPU device removed/disabled.
+
+Pass: transcription succeeds on CPU; the engine log shows no illegal-instruction exit; the UI does
+not show the "CPU without AVX" hint.
+
+### D. Baseline CPU (machine D, or a VM with AVX but not AVX2/FMA/BMI2)
+
+1. Leave the CPU build on "auto" first: the server detects AVX2/FMA/BMI2 and picks the Haswell
+   build only if the CPU has all three; otherwise it must fall back to the x64 baseline build.
+2. Transcribe.
+3. Force the wrong build (Settings -> Advanced -> "AVX2") and confirm the app reports the
+   illegal-instruction hint instead of crashing silently.
+
+Pass: auto picks baseline, transcription works, the forced-wrong build gets the explanatory error.
+
+### E. SSE4.2 without AVX (machine E)
+
+Both bundled x64 backends require AVX (baseline is AVX + SSE4.2). A CPU with SSE4.2 but no AVX
+therefore cannot run the engine. Expected behaviour: the app shows the illegal-instruction hint
+("This looks like a CPU without AVX support...") naming Settings -> Advanced, and the UI stays
+usable.
+
+Pass: readable error, no silent crash loop, no corrupted config.
+
+### F. Nemotron VAD path (machine A or B)
+
+1. Install the Nemotron model from the catalog (machine A) or copy it to the offline machine (B).
+2. Ensure the Silero VAD model is present (Settings -> Models shows it; the app downloads it once
+   when a VAD model is selected).
+3. Transcribe with timestamps enabled, offline on machine B.
+4. Confirm the timestamps checkbox is honoured and the transcript is not empty for silence-only
+   audio.
+
+Pass: Nemotron transcription with request timestamps; VAD resolved from the offline copy; no
+different failure between online and offline.
+
+### G. Deep link and URL hardening (machine A, online)
+
+1. In a browser, open
+   sada://download/?url=https%3A%2F%2Fhuggingface.co%2Fggerganov%2Fwhisper.cpp%2Fresolve%2Fmain%2Fggml-tiny.bin
+   The dialog must show the **whole URL**, and accepting must prefill the setup download.
+2. Repeat with a non-catalog host:
+   sada://download/?url=https%3A%2F%2Fexample.com%2Fmodel.bin
+   The app must refuse it (no download, console message only).
+3. Repeat with a plain http URL: also refused.
+
+Pass: only https on huggingface.co / github.com is offered, and the full URL is visible before
+accepting.
+
+### H. Engine confinement and typing permit
+
+1. While a transcription runs, check the server process working directory is the sidecar folder and
+   its TEMP points at the app temp folder (Process Explorer -> Environment).
+2. From an unrelated program, call the app's type_text command path (DevTools console in the app
+   window): it must be rejected because no recording finished recently.
+3. Record a dictation and confirm type_text works exactly once.
+
+Pass: both checks behave as described; the Rust unit tests cover the same paths.
+
+## Evidence table
+
+| Slot | Windows | WebView2 | CPU / GPU | Offline | Result | Date |
+| --- | --- | --- | --- | --- | --- | --- |
+| A |  |  |  |  |  |  |
+| B |  |  |  |  |  |  |
+| C |  |  |  |  |  |  |
+| D |  |  |  |  |  |  |
+| E |  |  |  |  |  |  |
+
+## Automated evidence recorded during development
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Frontend tests | cd desktop; pnpm test | 31 files / 193 tests passed |
+| Frontend build | cd desktop; pnpm build | to record |
+| Rust tests | cd desktop/src-tauri; cargo test --release | to record |
+| Engine guard tests | cargo test --release -p vibe-server guard:: | to record |
+| Arabic benchmark tests | cd benchmarks/arabic-asr; python -m unittest discover -s tests | 44 tests passed |
+| i18n audit | python scripts/check_i18n.py | to record |
+| Installer | release workflow artifact | to record after the release |
+
+The clean-machine runs above (slots B-E) need physical/VM machines the maintainer controls; until
+they are recorded this page is the procedure plus the automated evidence, and docs/VERIFICATION.md
+says exactly which rows were actually run for the release.

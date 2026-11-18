@@ -2,7 +2,7 @@
 
 import unittest
 
-from sadabench import report
+from sadabench import postprocess, report
 
 
 def _results() -> dict:
@@ -56,6 +56,26 @@ class AggregateTest(unittest.TestCase):
         self.assertIn("nemotron", markdown)
         self.assertIn("Curation rule", markdown)
         self.assertIn("technical", markdown)
+
+class AppLevelReportTest(unittest.TestCase):
+    def test_hypothesis_filter_scores_postprocessed_output(self) -> None:
+        raw = report.aggregate(_results())
+        app = report.aggregate(_results(), hypothesis_filter=postprocess.postprocess)
+        # Nemotron writes SRT as "السورتي"; the app restores it, so the app-level score improves.
+        self.assertEqual(raw["models"]["nemotron"]["overall"]["acronym_preserved_pct"], 0.0)
+        self.assertEqual(app["models"]["nemotron"]["overall"]["acronym_preserved_pct"], 100.0)
+        self.assertLess(
+            app["models"]["nemotron"]["overall"]["wer_pct"],
+            raw["models"]["nemotron"]["overall"]["wer_pct"],
+        )
+
+    def test_render_markdown_adds_app_level_section(self) -> None:
+        raw = report.aggregate(_results())
+        app = report.aggregate(_results(), hypothesis_filter=postprocess.postprocess)
+        markdown = report.render_markdown(raw, app_report=app)
+        self.assertIn("## App-level", markdown)
+        self.assertIn("after the app's Arabic post-processing", markdown)
+        self.assertIn("nemotron", markdown)
 
 
 if __name__ == "__main__":

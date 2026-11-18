@@ -12,7 +12,7 @@ possible and credit in the advisory once a fix ships, unless you prefer to stay 
 
 ## Supported versions
 
-Security fixes target the latest released `3.3.x` build. Older builds are not maintained.
+Security fixes target the latest released `3.6.x` build. Older builds are not maintained.
 
 ## Scope
 
@@ -52,6 +52,45 @@ the user noticing. The fork ships an engine built from `server/` with a request 
 Residual risk: a process running as the same user can still call the engine, like any local
 software. The guard closes the browser path, not the local trust boundary; a per-run bearer token
 between the app and the engine is the next step if that boundary is ever considered too wide.
+
+## Defences in depth added in 3.6.0
+
+Upstream v3.3.6 shipped a security audit; the parts that fit this fork were ported and are listed
+in [UPSTREAM-PATCHES.md](docs/UPSTREAM-PATCHES.md). The behaviour they enforce:
+
+- **Webview content**: the window has a Content-Security-Policy (`default-src 'self'`, no
+  `object-src`, no remote script/connect origin except the Tauri asset protocol). Markdown is
+  rendered through a wrapper that drops images and opens http(s) links in the system browser
+  instead of navigating the app window; other schemes are inert.
+- **Deep links**: the `sada:` handler only accepts `https` model URLs on `huggingface.co` or
+  `github.com` (plus their subdomains), shows the whole URL and asks for confirmation, and takes
+  the expected size and SHA-256 from the bundled catalogue. A `sada:` link cannot point the app
+  at an arbitrary host, path or plain-http URL.
+- **Model downloads**: the destination must be a `.bin`/`.gguf` file directly inside the
+  models folder (parents canonicalised, `..` rejected, symlinked destinations and `.part`
+  files rejected). The download client follows only https redirects, at most ten, and writes the
+  file only after the checksum and size in the catalogue match.
+- **yt-dlp update**: the release version is validated against the date tag format, the download
+  URL is built by the app from the validated version (never from the webview), and the release
+  `SHA2-256SUMS` file is required.
+- **Engine process**: the sidecar starts in its own canonical directory with
+  `GGML_BACKEND_PATH` removed and `TEMP`/`TMP` pointing at the app temp folder, so a hostile
+  profile or a stray backend library cannot redirect the engine load path.
+- **Dictation**: `type_text` accepts input only within 30 minutes of a finished recording, and
+  the text is capped (50,000 characters) and stripped of control characters before typing. Other
+  local processes cannot use the app as an arbitrary keystroke injector.
+- **No update channel**: the app still has no updater and never downloads and executes new code;
+  yt-dlp is only updated by explicit user action and is verified against the published checksums.
+
+## Release artifacts and code signing
+
+Every release publishes the installer together with `SHA256SUMS.txt`; `docs/VERIFICATION.md`
+records the size and SHA-256 of each installer. The Windows binaries are **unsigned** up to
+3.6.0, so SmartScreen shows an "unknown publisher" warning. Verify the hash before running the
+installer. The signing options, costs and the recommended (free, OSS) path are recorded in
+[SIGNING.md](docs/SIGNING.md); nothing is signed until the owner funds or is accepted for one of
+those programmes.
+
 ## Third-party dependencies
 
 If the issue is in a third-party dependency (Tauri, React, whisper.cpp/ggml, FFmpeg, Rust/Node

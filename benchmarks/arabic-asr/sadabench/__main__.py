@@ -16,7 +16,7 @@ import sys
 import time
 from pathlib import Path
 
-from . import datasets, engine, report
+from . import datasets, engine, postprocess, report
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -163,7 +163,8 @@ def cmd_run(args: argparse.Namespace) -> int:
 def cmd_report(args: argparse.Namespace) -> int:
     results = json.loads(args.results.read_text(encoding="utf-8"))
     report_data = report.aggregate(results)
-    markdown = report.render_markdown(report_data)
+    app_report = report.aggregate(results, hypothesis_filter=postprocess.postprocess)
+    markdown = report.render_markdown(report_data, app_report=app_report)
     md_path = args.md or args.results.with_suffix(".md")
     md_path.write_text(markdown, encoding="utf-8")
     print(markdown)

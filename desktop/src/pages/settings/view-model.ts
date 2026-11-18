@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import * as clipboard from '@tauri-apps/plugin-clipboard-manager'
 import * as config from '~/lib/config'
 import { NamedPath } from '~/lib/types'
+import { parseModelDownloadUrl } from '~/lib/model-download-url'
 import { getIssueUrl, resetApp } from '~/lib/app'
 import { usePreferenceProvider } from '~/providers/preference'
 import { useModelGates } from '~/providers/model-gates'
@@ -158,7 +159,13 @@ export function viewModel() {
 		if (!downloadURL) {
 			return
 		}
-		navigate('/setup', { state: { downloadURL } })
+		const link = parseModelDownloadUrl(downloadURL)
+		if (!link) {
+			toast.error(m.invalidModelLink())
+			return
+		}
+		// A catalog URL keeps its published size and SHA-256; a user URL has neither.
+		navigate('/setup', { state: { downloadURL: link.url, downloadIntegrity: link.catalog } })
 	}
 
 	async function loadMeta() {

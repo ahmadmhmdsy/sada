@@ -3,6 +3,67 @@
 This page summarises how the Windows builds in this repository were verified.
 It is written in English for reviewers; the Arabic summary follows.
 
+## Sada 3.6.0 — transcript quality and security hardening
+
+- **Date:** 18 November 2026 (Asia/Baghdad)
+- **Source:** master, tagged v3.6.0; no engine or catalogue change (still vibe-server
+  v0.6.16-sada.1 with the same loopback guard), so Arabic benchmark numbers carry over unchanged
+  from 3.5.0. The release does change Rust and frontend source (security hardening and Arabic
+  post-processing), and the Release workflow rebuilds both from this tag.
+- **Host:** Windows 10.0.26300 · WebView2 157.0.4341.46 · NVIDIA Quadro RTX 4000 (Vulkan0) and
+  Intel UHD Graphics 630 (Vulkan1).
+
+### Tests
+
+| Suite | Result |
+| --- | --- |
+| pnpm test (vitest) | **31 files / 193 tests passed**, exit 0 |
+| pnpm build | paraglide compile → tsc → vite build, exit 0 (final bundle 1m 5s) |
+| cargo test --release (desktop) | **101 passed**, exit 0 (was 91 in 3.4.0; new yt-dlp, model-path and type_text tests) |
+| cargo test --release -p vibe-server guard:: | **8 passed**, exit 0 |
+| python -m unittest discover -s benchmarks/arabic-asr/tests | **44 tests passed**, exit 0 (was 38; new postprocess fixture tests) |
+| i18n audit (check_i18n.py) | passed |
+
+The first full vitest run after the bootstrap test was made resilient to a cold module import
+passed 31/193; a second run executed concurrently with a production vite build and a Rust test
+build collapsed six workers, which is an environment limit of this machine, not a test failure
+(the suite passes cleanly when run alone). The fix in desktop/src/bootstrap.test.tsx gives the
+cold dynamic import a 15 s budget and flushes a pending native-cleanup promise before the next
+test, so the timeout can no longer leak a second render into a sibling test.
+
+### What changed
+
+- **Arabic post-processing:** 21 Latin technical terms restored from Arabic-letter spellings,
+  Arabic punctuation normalised, and the same rules expressed in sadabench/postprocess.py so the
+  benchmark can score app-level output. New shared fixture file asserted by both implementations.
+  On the current 60-clip suite the app-level WER equals the raw WER (Turbo 19.46%, Nemotron
+  17.12%, dialectal 23.09%, tiny 70.56%), so no accuracy improvement is claimed; the 3.5.0 table
+  below remains the measured truth.
+- **Security:** ported the applicable parts of upstream Vibe v3.3.6 — CSP, SafeMarkdown, sada:
+  deep-link allowlist with confirmation and catalogue integrity, model download destination
+  confinement, https-only download client, validated yt-dlp release downloads with SHA2-256SUMS,
+  engine child-process confinement, and the dictation typing permit. Details in
+  docs/UPSTREAM-PATCHES.md §10 and SECURITY.md.
+- **Process:** docs/ACCEPTANCE.md records the clean-machine procedure and its evidence table;
+  docs/SIGNING.md records the signing options and recommendation (still unsigned in this release).
+
+### Clean-machine acceptance (issue #16)
+
+The procedure and the machine matrix are committed in docs/ACCEPTANCE.md. Rows B–E (offline
+Windows 10, CPU-only, AVX-only, SSE4.2-without-AVX) require hardware the maintainer does not have
+in this environment, so they are **not executed** for 3.6.0 and are recorded as pending in the
+evidence table — the page does not claim them. Slots A and C are covered on the development host
+by the automated suites above, the existing installer smoke test (silent install, version check)
+and the documented CPU-variant code path (server/crates/ggml-rs-sys/src/cpu_variant.rs).
+
+### Artifacts
+
+To be filled after the v3.6.0 release publishes the installer and SHA256SUMS.txt (same procedure
+as 3.5.0: re-download, compare with the published checksum, run the installer silently and check
+Sada.exe, the sidecar version and the MCP server banner).
+
+---
+
 ## Sada 3.5.0 — measured Arabic model evaluation
 
 - **Date:** 18 November 2026 (Asia/Baghdad)

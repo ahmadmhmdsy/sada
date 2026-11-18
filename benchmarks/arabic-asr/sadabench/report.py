@@ -2,14 +2,22 @@
 
 from __future__ import annotations
 
+from typing import Callable
+
 from .metrics import Score
 
 MIN_WER_GAIN_PP = 1.0
 MIN_ACRONYM_PRESERVED_PCT = 90.0
 
+HypothesisFilter = Callable[[str], str]
 
-def aggregate(results: dict) -> dict:
-    """Compute overall and per-slice scores for every model in a results file."""
+
+def aggregate(results: dict, hypothesis_filter: HypothesisFilter | None = None) -> dict:
+    """Compute overall and per-slice scores for every model in a results file.
+
+    When hypothesis_filter is given (normally postprocess.postprocess), the filter is applied to
+    every hypothesis before scoring, so the report describes what the app actually shows.
+    """
     clips = results["clips"]
     slices = sorted({clip["slice"] for clip in clips})
     models: dict[str, dict] = {}
@@ -22,6 +30,8 @@ def aggregate(results: dict) -> dict:
                 continue
             reference = clip["reference"]
             hypothesis = run.get("text", "")
+            if hypothesis_filter is not None:
+                hypothesis = hypothesis_filter(hypothesis)
             duration = clip.get("duration_sec", 0.0)
             latency = run.get("latency_sec", 0.0)
             timestamps_ok = bool(run.get("timestamps"))
@@ -95,8 +105,12 @@ def _fmt(value) -> str:
     return "n/a" if value is None else str(value)
 
 
-def render_markdown(report: dict) -> str:
-    """Render a human-readable Markdown report."""
+def render_markdown(report: dict, app_report: dict | None = None) -> str:
+    """Render a human-readable Markdown report.
+
+    app_report, when given, is the same aggregation with the app's post-processing applied to the
+    hypotheses; its scores are rendered as a separate section.
+    """
     lines: list[str] = []
     lines.append("# Arabic ASR benchmark results")
     lines.append("")
@@ -169,6 +183,44 @@ def render_markdown(report: dict) -> str:
                     f"{'PASS' if item['passes_rule'] else 'no'}"
                 )
             lines.append("")
+    if app_report:
+        lines.append("## App-level (after the app's Arabic post-processing)")
+        lines.append("")
+        lines.append(
+            "The app normalises Arabic punctuation and restores transliterated technical terms "
+            "(desktop/src/lib/arabic-text.ts, mirrored by sadabench/postprocess.py) before showing "
+            "or exporting text. These scores apply the same rules to every hypothesis."
+        )
+        lines.append("")
+        lines.append(
+            "| Model | Raw WER % | App WER % | App CER % | App acronyms preserved % | "
+            "App Latin names preserved % |"
+        )
+        lines.append("| --- | --- | --- | --- | --- | --- |")
+        for model_id, model in app_report["models"].items():
+            raw_overall = report["models"].get(model_id, {}).get("overall", {})
+            overall = model["overall"]
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        model_id,
+                        _fmt(raw_overall.get("wer_pct")),
+                        _fmt(overall.get("wer_pct")),
+                        _fmt(overall.get("cer_pct")),
+                        _fmt(overall.get("acronym_preserved_pct")),
+                        _fmt(overall.get("latin_preserved_pct")),
+                    ]
+                )
+                + " |"
+            )
+        lines.append("")
+        lines.append(
+            "On the committed clips this changes punctuation only: no permissive Arabic technical "
+            "corpus exists yet, so the reference transcripts carry no Latin acronyms to restore. "
+            "The section exists so the next technical slice is scored against what users see."
+        )
+        lines.append("")
     lines.append("## Method")
     lines.append("")
     lines.append(

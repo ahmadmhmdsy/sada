@@ -248,6 +248,7 @@ pub async fn start_record(app_handle: AppHandle, devices: Vec<AudioDevice>, reco
             (best_raw, None)
         };
 
+        crate::cmd::app::recording_finished();
         tracing::debug!("Emitting record_finish event");
         let recording_stem = recording_name
             .as_deref()

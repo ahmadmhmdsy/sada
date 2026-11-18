@@ -5,8 +5,9 @@ It records what is in flight, what each milestone promises, and the evidence rul
 model questions: **no model is curated without a licence, a size, a SHA-256 and timestamps** — and no
 Arabic claim is made without the benchmark.
 
-Status: `P0 complete`, `P1 complete`, `P2 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17, and
-v3.5.0 shipped 2026-11-18 (before its 2027-01-15 due date). Last updated 2026-11-18.
+Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17,
+v3.5.0 shipped 2026-11-18 and v3.6.0 shipped 2026-11-18 (all before their due dates).
+Last updated 2026-11-18.
 
 ## Milestones
 
@@ -15,6 +16,7 @@ v3.5.0 shipped 2026-11-18 (before its 2027-01-15 due date). Last updated 2026-11
 | **v3.3.1 — engine & GPU foundation** | 2026-11-24 | Engine sidecar v0.6.16, Nemotron-3 diarization migration, GPU/Vulkan documented, patch release | #1 #2 #3 #4 |
 | **v3.4.0 — verified model catalog** | 2026-12-08 | Bundled verified catalog + Get models, Arabic entries and docs, MCP/capability plumbing, local endpoint hardening | #5 #6 #7 #8 #9 |
 | **v3.5.0 — Arabic model evaluation** | 2027-01-15 | Arabic WER/CER harness, fine-tune/Nemotron decisions, read-aloud test, second-engine spike | #10 #11 #12 #13 — **complete**, evidence below |
+| **v3.6.0 — transcript quality & hardening** | 2027-02-15 | Arabic transcript post-processing earned in the benchmark, upstream v3.3.6 security audit ported, clean-machine offline acceptance + signing decision | #14 #15 #16 — **complete**, evidence below |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -118,6 +120,39 @@ updated; frontend tests and the Python suite re-run green.
   installed sidecar `vibe-server v0.6.16-sada.1`, installed MCP ready (`sada-mcp 3.5.0`); the CI run
   [44248005147](https://github.com/alshahia/sada/actions/runs/44248005147) is green including the new
   benchmark-harness job.
+
+## P3 — transcript quality, security and acceptance (complete, v3.6.0)
+
+- [x] #14 Arabic transcript quality: 21 Latin technical terms restored from the Arabic-letter
+  spellings whisper.cpp emits (whole-word rules handling the definite article and split/joined
+  forms), Arabic punctuation and spacing normalised, lossless and idempotent, applied to every
+  transcript surface. The same rules live in `sadabench/postprocess.py` and are pinned by shared
+  fixtures (`benchmarks/arabic-asr/fixtures/arabic-postprocess-cases.json`), and the benchmark
+  report gained an **App-level** table. Measured 2026-11-18: app-level WER equals raw (Turbo
+  19.46%, Nemotron 17.12%, dialectal 23.09%, tiny 70.56%) — presentation only, no accuracy claim.
+- [x] #15 Upstream v3.3.6 security audit ported where it fits the fork: CSP, SafeMarkdown, sada:
+  deep-link allowlist with full-URL confirmation and catalogue integrity, model download
+  destination confinement (no relative paths, `..`, symlinks or `.part` symlinks; https-only
+  redirects), yt-dlp version/URL/SUMS validation, engine child-process confinement, dictation
+  typing permit (30 min, 50k chars, control characters stripped); the unvalidated generic
+  `download_file` command is gone. Deliberately not ported (fork invariants): telemetry, the
+  agent-drivable test build, staging-folder migration and remote catalogue signing. Recorded in
+  `docs/UPSTREAM-PATCHES.md` §10 and `SECURITY.md`.
+- [x] #16 Clean-machine acceptance + signing decision: `docs/ACCEPTANCE.md` (install, offline,
+  WebView2 prerequisite, CPU fallback, AVX2/AVX baseline, AVX-less SSE4.2 behaviour, Nemotron +
+  VAD, sada: links, dictation, engine confinement, evidence table) and `docs/SIGNING.md`
+  (SignPath Foundation free OSS → Azure Artifact Signing ≈US$10/month → OV/EV; no purchase before
+  the owner decides; `scripts/sign.py` stays disabled). Machine rows B–E need hardware the
+  maintainer does not have and are explicitly recorded as **not executed**, not claimed.
+
+**P3 evidence (2026-11-18):** `pnpm test` 31 files / 193 tests, `pnpm build` (paraglide + tsc +
+vite, final bundle 1m 5s), `cargo test --release` 101 tests, `cargo test --release -p vibe-server
+guard::` 8 tests, Python benchmark suite 44 tests and the i18n audit pass. New tests cover URL
+validation, download destinations, yt-dlp tags/SUMS, type_text permit and control characters, safe
+Markdown, and sada: deep links. Installer hash recorded after the release below.
+
+- [x] Release v3.6.0 (bilingual notes, tag): link and installer hash recorded after CI publishes
+  the release.
 
 ## Step Zero tests (define "done" before code)
 

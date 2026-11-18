@@ -1,5 +1,5 @@
 use crate::error::LogError;
-use eyre::{bail, Context, Result};
+use eyre::{bail, eyre, Context, Result};
 use futures::future::{AbortHandle, Abortable};
 use futures_util::StreamExt;
 use serde::{Deserialize, Serialize};
@@ -35,13 +35,13 @@ pub enum DownloadModelResult {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-enum DownloadOutcome {
+pub(crate) enum DownloadOutcome {
     Completed,
     Cancelled,
 }
 
 /// What the catalog claims the finished file should be. Entries the user supplies themselves (the
-/// settings URL field, the `vibe://download/?url=` deep link) carry none of this, so every field is
+/// settings URL field, the `sada://download/?url=` deep link) carry none of this, so every field is
 /// optional and verification degrades to the size and magic-byte checks.
 #[derive(Debug, Default, Deserialize)]
 pub struct DownloadIntegrity {
@@ -214,7 +214,22 @@ fn publish_download(partial: &Path, destination: &Path) -> Result<()> {
     }
 }
 
-async fn download_to_partial(
+/// Client for every download in the app. Redirects are followed (Hugging Face and GitHub both
+/// bounce to a CDN) but only to https, so a redirect can never downgrade the transfer to plain HTTP.
+pub(crate) fn download_client() -> reqwest::Result<reqwest::Client> {
+    let policy = reqwest::redirect::Policy::custom(|attempt| {
+        if attempt.url().scheme() != "https" {
+            attempt.error("refusing to follow a redirect to a non-https URL")
+        } else if attempt.previous().len() >= 10 {
+            attempt.error("too many redirects")
+        } else {
+            attempt.follow()
+        }
+    });
+    reqwest::Client::builder().redirect(policy).build()
+}
+
+pub(crate) async fn download_to_partial(
     app_handle: &tauri::AppHandle,
     url: &str,
     destination: &Path,
@@ -249,7 +264,7 @@ async fn download_to_partial(
     });
 
     let operation = async {
-        let client = reqwest::Client::new();
+        let client = download_client()?;
         let response = client.get(url).send().await?.error_for_status()?;
         let content_length = response.content_length().filter(|length| *length > 0);
         let total_size = content_length.unwrap_or(0);
@@ -333,20 +348,17 @@ pub async fn download_model(
 ) -> Result<DownloadModelResult> {
     tracing::debug!("Download model invoked! with path {}", path);
 
+    let parsed = reqwest::Url::parse(&url).context("Invalid model URL")?;
+    if parsed.scheme() != "https" {
+        return Err(eyre!("Model downloads must use https, got {}", parsed.scheme()));
+    }
+    let models_folder = crate::cmd::app::get_models_folder(app_handle.clone())?;
+    let destination = crate::cmd::model_paths::resolve_model_destination(&models_folder, Path::new(&path))?;
+
     let integrity = integrity.unwrap_or_default();
-    match download_to_partial(&app_handle, &url, Path::new(&path), &integrity, true).await? {
+    match download_to_partial(&app_handle, parsed.as_str(), &destination, &integrity, true).await? {
         DownloadOutcome::Completed => Ok(DownloadModelResult::Completed { path }),
         DownloadOutcome::Cancelled => Ok(DownloadModelResult::Cancelled),
-    }
-}
-
-#[tauri::command]
-pub async fn download_file(app_handle: tauri::AppHandle, url: String, path: String) -> Result<()> {
-    tracing::debug!("Download file invoked! with path {}", path);
-
-    match download_to_partial(&app_handle, &url, Path::new(&path), &DownloadIntegrity::default(), false).await? {
-        DownloadOutcome::Completed => Ok(()),
-        DownloadOutcome::Cancelled => bail!("Download cancelled"),
     }
 }
 

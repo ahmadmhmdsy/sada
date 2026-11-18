@@ -3,7 +3,8 @@
 Base: `thewh1teagle/vibe` tag **v3.2.2**, commit `23eae78b864088202e4e3b9987d269fe4da5ebb3`.
 
 > **v3.3.0 update:** section 6 lists the MCP agent interface and the other changes shipped after
-> the v3.2.2 release. The file counts in sections 1–5 describe the v3.2.2 fork delta.
+> the v3.2.2 release. **v3.6.0 update:** section 10 lists the security hardening ported from
+> upstream v3.3.6 (PR #1741). The file counts in sections 1–5 describe the v3.2.2 fork delta.
 Everything below is a deliberate delta. The upstream tree stays untouched in
 `upstream/vibe-3.2.2/` for reference; this document is generated from a file-by-file hash
 comparison between that snapshot and the fork.
@@ -173,6 +174,33 @@ loads behind the Silero VAD, and the CPU-only path still transcribes. The engine
 
 This is the first release that changes `server/`. The engine tree is otherwise upstream v0.6.16
 code; the guard is the only behavioural delta and is upstreamable as-is.
+## 10. Security hardening ported from upstream v3.3.6 (added by Sada, v3.6.0)
+
+Upstream v3.3.6 hardened downloads, yt-dlp, the webview and keystroke injection. The fork
+carried the same weaknesses; this section lists the ports. Telemetry, updater and remote-catalog
+changes from the same release are deliberately not ported (section 3).
+
+| File | Change |
+| --- | --- |
+| `desktop/src-tauri/src/cmd/ytdlp.rs` | `validate_media_url` (http/https with a host only, so `--exec=…` and `file://` never reach yt-dlp), `validate_out_path` (absolute, `..`-free, parent must canonicalize to the staging folder), `validate_version_tag` (date tags only), `parse_sha256_sums`; new `download_ytdlp` fetches the asset and `SHA2-256SUMS` from the fixed release URL and installs only on a hash match; `download_audio` adds `--no-update --ignore-config` and a `--` separator, so a URL can never be read as an option; unit tests for every validator |
+| `desktop/src-tauri/src/cmd/download.rs` | `download_client()` follows redirects only to https (at most 10), used by every download; `download_model` requires https and resolves the destination through the models folder; the generic `download_file` command is removed, so the webview can no longer write arbitrary paths |
+| `desktop/src-tauri/src/cmd/model_paths.rs` | **new** — `resolve_in_folder` / `resolve_model_destination`: absolute, `..`-free direct children of the (canonicalized) models folder, `.bin`/`.gguf` only, no symlink at the file or its `.part`; unit tests |
+| `desktop/src-tauri/src/cmd/app.rs`, `cmd/audio.rs` | `type_text` types only once per finished recording (a Rust-side permit set just before `record_finish`, 30-minute window) and sanitizes the text: control characters removed except newline/tab, 50,000-character cap; unit tests |
+| `desktop/src-tauri/src/server/process.rs` | `confine_child`: the engine runs from its own folder, inherits no `GGML_BACKEND_PATH`, and gets the app temp folder as `TEMP`/`TMP` (Windows) or `TMPDIR` — the folder `cleaner.rs` already sweeps |
+| `desktop/src-tauri/tauri.conf.json` | a real CSP (was `null`) plus a dev CSP: no remote script, no object/base escapes, only `self`/`asset:`/`ipc:` and blob/data where the app needs them |
+| `desktop/src/components/safe-markdown.tsx` (+ test) | **new** — summaries, answers and transcripts are untrusted: images are dropped instead of fetched, links open only http(s) targets through the system browser and never navigate the webview |
+| `desktop/src/pages/main/components/summary-view.tsx`, `transcript-export-dialog.tsx`, `desktop/src/components/text-area.tsx` | render through `SafeMarkdown` instead of raw `react-markdown` |
+| `desktop/src/lib/model-download-url.ts` (+ test) | **new** — model URLs from the settings field or a deep link must be https on `huggingface.co`/`github.com` (the catalog hosts); catalog URLs keep their published size and SHA-256 |
+| `desktop/src/lib/use-deep-links.tsx`, `use-single-instance.tsx` | the scheme check is `sada://download/?url=…` (the inherited `vibe://` check could never match this app, so the feature was dead code); untrusted URLs are refused, and the confirmation dialog shows the whole URL, not just the host |
+| `desktop/src/lib/ytdlp.ts`, `mock-tauri/handlers/server.ts` | `downloadYtDlp` sends only the release tag; the backend picks the asset, URL and checksum |
+
+Not ported from the same upstream release:
+
+- **Telemetry** changes: this fork has no telemetry by design (section 3).
+- **Agent-drivable test build** (`VITE_` test hooks): not needed; `pnpm test` and the Rust tests cover the same paths.
+- **Staging-folder migration**: our `cleaner.rs` has swept `%TEMP%/vibe_temp*` since v3.2.x, and model downloads already stage as `.part`.
+- **Remote catalog signing**: the catalog is bundled and is the only source; user URLs are restricted to https + trusted hosts and cannot carry a forged hash.
+
 ## Deliberately not changed
 
 - The Whisper engine, model handling and audio pipeline are upstream code apart from the loopback request guard in section 9; no model is bundled.

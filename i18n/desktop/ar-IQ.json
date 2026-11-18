@@ -221,6 +221,7 @@
 	"orSelectFolder": "أو مجلد كامل",
 	"others": "أخرى",
 	"pasteModelLink": "لصق رابط النموذج",
+	"invalidModelLink": "يمكن تنزيل روابط https من huggingface.co أو github.com فقط.",
 	"placeTranscriptNextToFiles": "وضع ملف التفريغ بجانب الملفات",
 	"playSoundOnFinish": "تشغيل صوت",
 	"pleaseEnableWordTimestamps": "فعّل طوابع زمنية للكلمات لاستخدام هذا الخيار.\nوتأكد أيضاً من تعطيله بعد الانتهاء، أو من إعادة تعيين خيارات النموذج.",

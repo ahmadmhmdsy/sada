@@ -4,6 +4,69 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.6.0 — 2026-11-18
+
+Transcript quality and security hardening. No engine or model change (still
+`vibe-server v0.6.16-sada.1`, same four catalogue entries); the release adds the Arabic
+post-processing pass and its shared fixtures, ports the relevant upstream v3.3.6 security fixes,
+and records the clean-machine acceptance procedure and the code-signing decision.
+
+### Added
+
+- **Arabic term restoration** in `desktop/src/lib/arabic-text.ts`: 21 common Latin technical
+  terms (GPU, CPU, HTTP, HTTPS, HTML, PDF, SRT, VTT, JSON, API, FFmpeg, Whisper, URL, SQL, CSS,
+  USB, VPN, Wi-Fi, GitHub, …) that whisper.cpp wrote in Arabic letters are restored to their Latin
+  spelling, with the Arabic definite article and split/joined spellings handled and whole-word
+  matching only. Arabic punctuation (، ؟ ؛) and spacing are normalised in the same pass. Rules are
+  lossless and idempotent and already run on every transcript surface (live text, saved projects,
+  dictation, phone handoff, exports).
+- **Shared post-processing fixtures** `benchmarks/arabic-asr/fixtures/arabic-postprocess-cases.json`
+  asserted by both the TypeScript app rules and the new `sadabench/postprocess.py`, plus an
+  **App-level** table in the benchmark report so scoring runs the same rules users see.
+  Measured result on the current clips: app-level WER equals raw (Turbo 19.46%, Nemotron 17.12%),
+  i.e. the pass is presentation-only and does not claim an accuracy gain.
+- **Clean-machine acceptance procedure** `docs/ACCEPTANCE.md`: install/offline/CPU/VAD/deep-link/
+  dictation checklist with an evidence table, plus the WebView2 prerequisite finding for offline
+  Windows 10.
+- **Code-signing decision record** `docs/SIGNING.md`: SignPath Foundation (free OSS), Azure
+  Artifact Signing (~US$10/month), OV/EV certificate options, costs, existing `scripts/sign.py`
+  state and the recommendation not to buy before the owner decides.
+- New tests: Rust 101 (was 91) covering yt-dlp release validation, download destination
+  confinement and the dictation typing permit/control-character scrubbing; TypeScript 31 files /
+  193 tests (was 28/179) including safe Markdown and sada: deep-link parsing; Python 44 (was 38)
+  including the postprocess fixtures.
+
+### Security
+
+Ported the applicable parts of upstream Vibe v3.3.6 (see `docs/UPSTREAM-PATCHES.md` §10):
+
+- Content-Security-Policy in `tauri.conf.json` (dev and production).
+- `SafeMarkdown`: images dropped, http(s) links opened in the system browser, other schemes inert.
+- `sada://download/?url=…` accepts https on huggingface.co / github.com only, shows the full URL
+  for confirmation and takes size/SHA-256 from the bundled catalogue.
+- Model download destinations confined to `.bin`/`.gguf` inside the models folder (no relative
+  paths, `..`, symlinked destinations or `.part` symlinks); https-only redirects, max 10.
+- yt-dlp update: version-tag validation, app-built GitHub release URL, required SHA2-256SUMS.
+- Engine child process: canonical working directory, app TEMP/TMP, `GGML_BACKEND_PATH` removed.
+- Dictation typing permit (30-minute window after a recording) and 50,000-character cap with
+  control characters stripped.
+- Deleted the unvalidated generic `download_file` command; the webview cannot pass a download URL
+  or path any more.
+
+### Changed
+
+- `SECURITY.md`: supported version is 3.6.x and a new "Defences in depth added in 3.6.0" section
+  records the boundary and the signing status.
+- `AGENTS.md`: docs index (acceptance, signing) and current test counts.
+
+### Verification
+
+`pnpm test` 31 files / 193 tests, `pnpm build` (paraglide + tsc + vite), `cargo test --release`
+101 tests, `cargo test --release -p vibe-server guard::` 8 tests, Python benchmark suite 44 tests
+and the i18n audit all pass on 2026-11-18. The installer is built by CI from the same source; its
+hash is recorded in `docs/VERIFICATION.md` after the release. The installer remains unsigned
+(SmartScreen warning) until a signing programme is adopted.
+
 ## v3.5.0 — 2026-11-18
 
 Measured Arabic model evaluation. No engine change (still `vibe-server v0.6.16-sada.1`); the

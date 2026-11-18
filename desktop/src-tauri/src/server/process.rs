@@ -132,6 +132,26 @@ fn build_client() -> Result<reqwest::Client> {
         .context("failed to build server http client")
 }
 
+/// Confine the child to its own folder and to a private temporary directory:
+/// - run from the folder the binary lives in, so relative paths stay next to it;
+/// - drop GGML_BACKEND_PATH inherited from the parent shell, which would otherwise
+///   point the engine at another installation's backend and crash it;
+/// - give the child the app temp folder that cleaner.rs already sweeps.
+fn confine_child(cmd: &mut Command, binary_path: &Path) -> Result<()> {
+    let folder = binary_path.parent().context("server binary path has no parent folder")?;
+    let folder = std::fs::canonicalize(folder).context("failed to resolve the server folder")?;
+    cmd.current_dir(&folder);
+    cmd.env_remove("GGML_BACKEND_PATH");
+    let temp = crate::ffmpeg::get_vibe_temp_folder();
+    #[cfg(unix)]
+    cmd.env("TMPDIR", &temp);
+    #[cfg(windows)]
+    {
+        cmd.env("TEMP", &temp).env("TMP", &temp);
+    }
+    Ok(())
+}
+
 impl ServerProcess {
     pub fn spawn(
         binary_path: &Path,
@@ -173,6 +193,7 @@ impl ServerProcess {
         if let Some(value) = cpu_variant.env_value() {
             cmd.env("VIBE_SERVER_CPU_VARIANT", value);
         }
+        confine_child(&mut cmd, binary_path)?;
         #[cfg(target_os = "windows")]
         {
             use std::os::windows::process::CommandExt;

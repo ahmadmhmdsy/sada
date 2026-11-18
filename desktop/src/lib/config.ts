@@ -22,7 +22,7 @@ export interface ModelIntegrity {
 }
 
 /** One downloadable model. Only catalog entries carry integrity metadata — a URL the user pastes
- * into settings or opens with `vibe://download/?url=` never does, and falls back to the size and
+ * into settings or opens with a `sada://download/?url=` deep link never does, and falls back to the size and
  * magic-byte checks the backend runs on every download. */
 export interface ModelDownload extends ModelIntegrity {
 	url: string
@@ -99,10 +99,6 @@ export const ytDlpAssetNames: Record<string, string> = {
 	'linux-aarch64': 'yt-dlp_linux_aarch64',
 	'macos-x86_64': 'yt-dlp_macos',
 	'macos-aarch64': 'yt-dlp_macos',
-}
-
-export function ytDlpDownloadUrl(version: string, key: string): string {
-	return `https://github.com/yt-dlp/yt-dlp/releases/download/${version}/${ytDlpAssetNames[key]}`
 }
 
 export const videoExtensions = ['mp4', 'mkv', 'avi', 'mov', 'wmv', 'webm', 'mxf']

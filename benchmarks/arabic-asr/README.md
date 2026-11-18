@@ -42,11 +42,13 @@ Pending slices (no clip yet, kept visible so the gap is not mistaken for a measu
 benchmarks/arabic-asr/
   manifest.json          committed clip selection (60 clips, 3 slices): reference, offset, licence
   models.example.json    template for models.local.json (machine paths, not committed)
+  fixtures/              shared post-processing fixtures asserted by Python and vitest
   sadabench/             harness package (pure Python standard library)
     normalize.py         Arabic/Latin normalisation and the acronym list
     metrics.py           WER/CER, acronym preservation, word-timestamp parsing, aggregation
     datasets.py          dataset access, clip selection, manifest build/fetch
     engine.py            runs vibe-server transcribe for one clip/model
+    postprocess.py       Python mirror of the app's Arabic post-processing (app-level scores)
     report.py            aggregation tables, curation rule, Markdown rendering
     __main__.py          CLI: build-manifest, fetch, run, report
   results/               committed tables and raw transcripts from real runs
@@ -78,12 +80,22 @@ latency and timestamp flag to the results JSON. `report` prints the Markdown tab
 writes them next to the JSON. `--only model-a,model-b` and `--limit N` shorten a run;
 `--baseline` sets the model the curation rule compares against.
 
+`report` renders two tables. The **raw** table scores engine output directly and is what the
+curation rule uses. The **app-level** table applies the app's Arabic post-processing to every
+hypothesis first, so it describes what users actually see: `desktop/src/lib/arabic-text.ts`
+normalises punctuation and restores transliterated technical terms (GPU, PDF, SRT, URL, ...),
+and `sadabench/postprocess.py` mirrors that module. The two implementations assert the same
+`fixtures/arabic-postprocess-cases.json`, so a rule added to one side without the other fails
+a test instead of drifting; `tests/test_postprocess.py` also proves the glossary never rewrites
+the committed reference sentences.
+
 ## Results (2026-11-18, milestone v3.5.0)
 
 60 clips (30 MSA + 10 Latin-mixed + 20 Egyptian), four models, bundled engine
 `vibe-server v0.6.16-sada.1` on Vulkan, RTX 4000. Committed artefacts:
 `results/results-2026-11-18.json` (raw transcripts, timings, flags) and
-`results/results-2026-11-18.md` (tables). Decisions and the curation outcome are recorded in
+`results/results-2026-11-18.md` (tables) and the app-level section added in milestone v3.6.0.
+Decisions and the curation outcome are recorded in
 [`docs/MODELS-DECISIONS.md`](../../docs/MODELS-DECISIONS.md).
 
 | Model | Size MB | WER % | CER % | Latin names kept % | Timestamps % | RTF |

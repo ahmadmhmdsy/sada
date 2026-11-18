@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { listen } from '@tauri-apps/api/event'
 import { useNavigate } from 'react-router-dom'
 import * as config from '~/lib/config'
+import { parseDeepLinkDownloadUrl, parseModelDownloadUrl } from './model-download-url'
 import * as os from '@tauri-apps/plugin-os'
 
 interface UseSingleInstanceProps {
@@ -21,17 +22,17 @@ export function useSingleInstance({ setFiles }: UseSingleInstanceProps) {
 			const argv = event.payload
 			const action = argv?.[1]
 
-			// vibe://download/?url=google.com
-			// already handled in deep links in macos
-			if (action && action.startsWith('vibe://download/?') && platform != 'macos') {
-				const params = new URLSearchParams(action.replace('vibe://download/?', ''))
-				const url = params.get('url')
-				if (url) {
-					const downloadURL = url.replace('vibe://download/?url=', '')
-					const hostname = new URL(url).hostname
-					const confirm = await ask(`${m.askForDownloadModel()} ${hostname}؟`, { title: m.downloadModel(), kind: 'info' })
+			// sada://download/?url=... — macOS gets the same link through useDeepLinks instead.
+			const requestedDownload = action ? parseDeepLinkDownloadUrl(action) : null
+			if (requestedDownload !== null && platform !== 'macos') {
+				const link = parseModelDownloadUrl(requestedDownload)
+				if (!link) {
+					console.error('refusing a model download deep link from an untrusted source', action)
+				} else {
+					const confirm = await ask(`${m.askForDownloadModel()} ${link.url}؟`, { title: m.downloadModel(), kind: 'info' })
 					if (confirm) {
-						navigate('/setup', { state: { downloadURL } })
+						// A catalog URL keeps its published size and SHA-256; a user URL has neither.
+						navigate('/setup', { state: { downloadURL: link.url, downloadIntegrity: link.catalog } })
 					}
 				}
 			}
