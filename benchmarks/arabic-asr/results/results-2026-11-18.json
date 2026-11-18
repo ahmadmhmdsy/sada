@@ -1,0 +1,2564 @@
+{
+  "version": 1,
+  "created": "2026-11-18 08:33:30",
+  "engine": "vibe-server v0.6.16-sada.1",
+  "baseline": "whisper-large-v3-turbo",
+  "models": {
+    "whisper-large-v3-turbo": {
+      "family": "whisper",
+      "language": "ar",
+      "size_mb": 1624.6,
+      "file": "ggml-large-v3-turbo.bin"
+    },
+    "whisper-tiny": {
+      "family": "whisper",
+      "language": "ar",
+      "size_mb": 77.7,
+      "file": "ggml-tiny.bin"
+    },
+    "nemotron-3.5-asr-streaming-0.6b-q4-k-m": {
+      "family": "nemotron",
+      "language": "ar-AR",
+      "size_mb": 495.8,
+      "file": "nemotron-3.5-asr-streaming-0.6b-Q4_K_M.gguf"
+    },
+    "whisper-large-v3-turbo-arabic-dialectal-v2-q5": {
+      "family": "whisper-finetune",
+      "language": "ar",
+      "size_mb": 574,
+      "file": "ggml-whisper-large-v3-turbo-arabic-dialectal-v2-q5_0.bin"
+    }
+  },
+  "clips": [
+    {
+      "id": "msa-cv-001",
+      "slice": "msa",
+      "reference": "أعلنت القوات الأمريكية انتهاء مهمتها في العراق.",
+      "duration_sec": 5.664
+    },
+    {
+      "id": "msa-cv-002",
+      "slice": "msa",
+      "reference": ".كل ما عليك فعله هو حفظ هذه الجملة عن ظهر قلب",
+      "duration_sec": 5.376
+    },
+    {
+      "id": "msa-cv-003",
+      "slice": "msa",
+      "reference": ".سأكون قد درست الإنجليزية لخمس سنوات مع حلول فبراير المقبل",
+      "duration_sec": 6.624
+    },
+    {
+      "id": "msa-cv-004",
+      "slice": "msa",
+      "reference": "يحترم عالمنا قانوناً ذهبياً واحداً: من يملك الذهب يضع القانون.",
+      "duration_sec": 8.256
+    },
+    {
+      "id": "msa-cv-005",
+      "slice": "msa",
+      "reference": "بالرغم من أنني أحسست بأن هناك شيئاً غريباً ، لم أعرف بالتحديد ما هو.",
+      "duration_sec": 8.904
+    },
+    {
+      "id": "msa-cv-006",
+      "slice": "msa",
+      "reference": ".بريطانيا العظمى بلد النبلاء و ركوب الخيل",
+      "duration_sec": 6.576
+    },
+    {
+      "id": "msa-cv-007",
+      "slice": "msa",
+      "reference": "ليس هناك طريق مختصرة إلى القمة ، فقط إلى الهاوية.",
+      "duration_sec": 7.296
+    },
+    {
+      "id": "msa-cv-008",
+      "slice": "msa",
+      "reference": "ذكر هاتوياما أنه يعيل عائلته بالمراهنة على سباق الخيل.",
+      "duration_sec": 7.104
+    },
+    {
+      "id": "msa-cv-009",
+      "slice": "msa",
+      "reference": "إذا الشعب يوماً أراد الحياة فلا بد أن يستجيب القدر",
+      "duration_sec": 6.504
+    },
+    {
+      "id": "msa-cv-010",
+      "slice": "msa",
+      "reference": ".سمعت صوت اصطدام حوالي العاشرة ليلة الأمس",
+      "duration_sec": 4.776
+    },
+    {
+      "id": "msa-cv-011",
+      "slice": "msa",
+      "reference": "\" كم الساعة الآن ؟ \" \" إنها الثالثة وعشرون دقيقة. \"",
+      "duration_sec": 5.184
+    },
+    {
+      "id": "msa-cv-012",
+      "slice": "msa",
+      "reference": "يبلغ عدد سكان اليابان حوالي مئة و عشرون مليون نسمة.",
+      "duration_sec": 5.424
+    },
+    {
+      "id": "msa-cv-013",
+      "slice": "msa",
+      "reference": ".أحتاج لمزيد من الوقت لأنهي واجبي المدرسي",
+      "duration_sec": 4.896
+    },
+    {
+      "id": "msa-cv-014",
+      "slice": "msa",
+      "reference": "قفا نبك من ذكرى حبيب ومنزل بسقط اللوى بين الدّهول فحومل",
+      "duration_sec": 6.984
+    },
+    {
+      "id": "msa-cv-015",
+      "slice": "msa",
+      "reference": ".يبدو عليه أنه كان غنياً في يوم من الأيام",
+      "duration_sec": 5.304
+    },
+    {
+      "id": "msa-cv-016",
+      "slice": "msa",
+      "reference": "ارجوك لا تمشي بسرعة هكذا ، لا استطيع مجاراة سرعتك في المشي.",
+      "duration_sec": 6.744
+    },
+    {
+      "id": "msa-cv-017",
+      "slice": "msa",
+      "reference": "من تلك المرأة التي ترتدي فستاناً وردياً ؟",
+      "duration_sec": 4.896
+    },
+    {
+      "id": "msa-cv-018",
+      "slice": "msa",
+      "reference": "اقطع تلك الشجرة الميتة ، وإلا فإنها ستقع فوق منزلك.",
+      "duration_sec": 6.024
+    },
+    {
+      "id": "msa-cv-019",
+      "slice": "msa",
+      "reference": "الأم مدرسة إذا أعددتها أعددت شعباً طيب الأعراق",
+      "duration_sec": 4.872
+    },
+    {
+      "id": "msa-cv-020",
+      "slice": "msa",
+      "reference": "ولد جدي عام ألف و تسعمئة و عشرين للميلاد.",
+      "duration_sec": 4.728
+    },
+    {
+      "id": "msa-cv-021",
+      "slice": "msa",
+      "reference": "بإمكانك الوصول إلى المحطة عن طريق الحافلة.",
+      "duration_sec": 4.752
+    },
+    {
+      "id": "msa-cv-022",
+      "slice": "msa",
+      "reference": "إذا التقى المسلمان بسيفيهما فالقاتل والمقتول في النار",
+      "duration_sec": 6.024
+    },
+    {
+      "id": "msa-cv-023",
+      "slice": "msa",
+      "reference": "أبريل هو موسم الضرائب في الولايات المتحدة",
+      "duration_sec": 4.056
+    },
+    {
+      "id": "msa-cv-024",
+      "slice": "msa",
+      "reference": "بعد شراء تلك الأحذية انتهى بي المطاف مع السحب على المكشوف",
+      "duration_sec": 5.856
+    },
+    {
+      "id": "msa-cv-025",
+      "slice": "msa",
+      "reference": "أَتَأمُرُونَ النَّاسَ بِالبِرِّ وَتَنسَونَ أَنفُسَكُم",
+      "duration_sec": 4.416
+    },
+    {
+      "id": "msa-cv-026",
+      "slice": "msa",
+      "reference": ".من دون الهواء ، لن يبقى شيء على قيد الحياة",
+      "duration_sec": 4.824
+    },
+    {
+      "id": "msa-cv-027",
+      "slice": "msa",
+      "reference": ".عندما عدت إلى المنزل ، اكتشفت أني أضعت محفظتي",
+      "duration_sec": 5.136
+    },
+    {
+      "id": "msa-cv-028",
+      "slice": "msa",
+      "reference": "سيذهب أستاذنا إلى الولايات المتحدة الشهر القادم.",
+      "duration_sec": 4.056
+    },
+    {
+      "id": "msa-cv-029",
+      "slice": "msa",
+      "reference": "قبل الفجر بقليل من اليوم التالي ، جاء إطلاق النار",
+      "duration_sec": 4.824
+    },
+    {
+      "id": "msa-cv-030",
+      "slice": "msa",
+      "reference": "أخبرتُهُم أن يُرْسِلُوا لي تذِكرةً أُخرى.",
+      "duration_sec": 3.384
+    },
+    {
+      "id": "latin-cv-001",
+      "slice": "latin-mixed",
+      "reference": "حاضَرَ أوجورمان في جامعة Universidad Iberoamericana.",
+      "duration_sec": 5.328
+    },
+    {
+      "id": "latin-cv-002",
+      "slice": "latin-mixed",
+      "reference": "أثبت استوديو Eddie عكس ذلك، حيث أصر Eddie على أن صنع الموسيقى هو أمر خاص لنفسه.",
+      "duration_sec": 7.884
+    },
+    {
+      "id": "latin-cv-003",
+      "slice": "latin-mixed",
+      "reference": "كانت هناك محطتان في Braintree.",
+      "duration_sec": 3.888
+    },
+    {
+      "id": "latin-cv-004",
+      "slice": "latin-mixed",
+      "reference": "الاسم المحدد \"kuhli\" هو تكريم لعالم الحيوان الألماني Heinrich Kuhl.",
+      "duration_sec": 7.488
+    },
+    {
+      "id": "latin-cv-005",
+      "slice": "latin-mixed",
+      "reference": "ينتج عن استخدام تقنية Contre-jour في التصوير إضاءة خلفية للشخص.",
+      "duration_sec": 5.256
+    },
+    {
+      "id": "latin-cv-006",
+      "slice": "latin-mixed",
+      "reference": "ظهرت شركة Vyjayanti بعد ليلتين.",
+      "duration_sec": 3.528
+    },
+    {
+      "id": "latin-cv-007",
+      "slice": "latin-mixed",
+      "reference": "يخدم خط Queens Boulevard أربعة طرق متداخلة.",
+      "duration_sec": 6.156
+    },
+    {
+      "id": "latin-cv-008",
+      "slice": "latin-mixed",
+      "reference": "لكن Saint Mary كانت لا تزال بعيدة عن الانتهاء، واستمر العمل تحت قيادة الكاردينال Moran.",
+      "duration_sec": 7.236
+    },
+    {
+      "id": "latin-cv-009",
+      "slice": "latin-mixed",
+      "reference": "الإجراء البديل هو وضع قسطرة PleurX Pleural أو قسطرة Aspira Drainage.",
+      "duration_sec": 7.776
+    },
+    {
+      "id": "latin-cv-010",
+      "slice": "latin-mixed",
+      "reference": "أيضاً تم إصدار ذلك على صفحة الفرقة الموسيقية على Myspace.",
+      "duration_sec": 5.58
+    },
+    {
+      "id": "egyptian-fleurs-001",
+      "slice": "egyptian",
+      "reference": "تشكلت في المحيط الأطلسي اليوم عاشر عاصفة مُسماة لموسم الأعاصير الأطلسية العاصفة شبه الاستوائية جيري",
+      "duration_sec": 8.16
+    },
+    {
+      "id": "egyptian-fleurs-002",
+      "slice": "egyptian",
+      "reference": "نصنع بيوتنا وملابسنا من النباتات . معظم الطعام الذي نتناوله من النباتات كذلك. بدون النباتات، لا يمكن للحيوانات البقاء",
+      "duration_sec": 11.64
+    },
+    {
+      "id": "egyptian-fleurs-003",
+      "slice": "egyptian",
+      "reference": "إن الرياح الشديدة والبَرَد والتهطال المفرط والحرائق البرية هي أشكال وآثار الطقس الشديد وكذلك العواصف الرعدية والأعاصير والفيضانات والأعاصير الحلزونية",
+      "duration_sec": 10.68
+    },
+    {
+      "id": "egyptian-fleurs-004",
+      "slice": "egyptian",
+      "reference": "قد يختار هؤلاء الأزواج وضع خطة تبني لأطفالهم",
+      "duration_sec": 5.4
+    },
+    {
+      "id": "egyptian-fleurs-005",
+      "slice": "egyptian",
+      "reference": "لكن بسبب موقعها القريب من المناطق الاستوائية ببضع درجات فقط شمال الخط الاستوائي، فأنتم بحاجة للتعامل مع كلاهما: الحرارة العالية المستمرة والشمس اللافحة وذلك نادراً عندما تكون السماء صافية",
+      "duration_sec": 20.04
+    },
+    {
+      "id": "egyptian-fleurs-006",
+      "slice": "egyptian",
+      "reference": "قد لا يتوقع الناس أن الصبر والتفاهم ضروريان أيضاً للمسافرين العائدين إلى ديارهم",
+      "duration_sec": 8.64
+    },
+    {
+      "id": "egyptian-fleurs-007",
+      "slice": "egyptian",
+      "reference": "في حال كنت تعبر منطقة بحر البلطيق الشمالية في الشتاء فيجب أن تفحص موقع الكابينة إذ أن المرور عبر الجليد يسبب ضوضاء صاخبة للغاية للأشخاص الأكثر تضرراً",
+      "duration_sec": 11.88
+    },
+    {
+      "id": "egyptian-fleurs-008",
+      "slice": "egyptian",
+      "reference": "تخضع الفرقُ الافتراضية إلى نفس معاييرِ التميّز مثل الفرق التقليدية ولكن هناك اختلافات دقيقة",
+      "duration_sec": 14.82
+    },
+    {
+      "id": "egyptian-fleurs-009",
+      "slice": "egyptian",
+      "reference": "يكتب الناس الآن رسائل على شاشات الكمبيوتر دون الاحتياج إلى استخدام المباراة",
+      "duration_sec": 10.02
+    },
+    {
+      "id": "egyptian-fleurs-010",
+      "slice": "egyptian",
+      "reference": "تتفاوت سياسات الإلغاء ولكن اعتباراً من أواخر آذار لم تعد معظم سياسات الإلغاء المستندة إلى فيروس كورونا حتى تموز عام 2020 عندما كان من المقرر أن يتم تنظيم الألعاب الأوليمبية",
+      "duration_sec": 16.26
+    },
+    {
+      "id": "egyptian-fleurs-011",
+      "slice": "egyptian",
+      "reference": "في أيامه الأولى أُذيع البرنامج حصراً على موقع راديو الإنترنت الموجود منذ فترة طويلة توجي نت راديو وهو الموقع الذي يركز على الراديو الحواري",
+      "duration_sec": 13.86
+    },
+    {
+      "id": "egyptian-fleurs-012",
+      "slice": "egyptian",
+      "reference": "ونتيجة لذلك يدخن الفنانون لفائف القنب على خشبة المسرح ويشجع المسرح نفسه الجمهور على مشاركتهم في ذلك",
+      "duration_sec": 10.62
+    },
+    {
+      "id": "egyptian-fleurs-013",
+      "slice": "egyptian",
+      "reference": "تعتبر فنلندا وجهةً رائعةً لركوب القوارب تحتوي أرض الألف بحيرة أيضاً على الآلاف من الجزر في البحيرات وفي الأرخبيل الساحلي كليهما",
+      "duration_sec": 14.28
+    },
+    {
+      "id": "egyptian-fleurs-014",
+      "slice": "egyptian",
+      "reference": "تشمل الموضوعات الأخرى المدرجة على جدول أعمال بالي الحفاظ على الغابات المتبقية في العالم وتبادل التكنولوجيات لمساعدة الدول النامية على النمو بطرق أقل تلويثاً",
+      "duration_sec": 15.6
+    },
+    {
+      "id": "egyptian-fleurs-015",
+      "slice": "egyptian",
+      "reference": "كما تعد المدينة قاعدة لتسلق بركان نيراجونجو وبعض أرخص سبل تتبع الغوريلا الجبلية في إفريقيا",
+      "duration_sec": 8.4
+    },
+    {
+      "id": "egyptian-fleurs-016",
+      "slice": "egyptian",
+      "reference": "حقبة الممالك الثلاثة هي واحدة من أكثر الحقب دمويةً في تاريخ الصين القديمة مات آلاف من الناس خلال القتال في سبيل الجلوس على أعلى المقاعد في القصر الكبير في شيان",
+      "duration_sec": 15.84
+    },
+    {
+      "id": "egyptian-fleurs-017",
+      "slice": "egyptian",
+      "reference": "وفي الحقيقة، فليس من السهل العثور عليه على الإطلاق حتى لو كنت تعلم بوجوده. فبمجرد الدخول إلى الكهف ، تصبح في عزلةٍ تامةٍ",
+      "duration_sec": 11.94
+    },
+    {
+      "id": "egyptian-fleurs-018",
+      "slice": "egyptian",
+      "reference": "تحتوي العديد من المخبوزات الألمانية على اللوز والبندق وجوز الأشجار الأخرى وغالبًا ما يتم تناول الكعك الشعبي خصيصاً مع فنجان من القهوة القوية",
+      "duration_sec": 10.8
+    },
+    {
+      "id": "egyptian-fleurs-019",
+      "slice": "egyptian",
+      "reference": "لا يزال هناك العديد من الرجال والنساء على قيد الحياة من ممن نجوا من وقتهم هنا والعديد من الأشخاص الآخرين الذين كان عندهم أحباء قُتلوا أو عملوا حتى الموت هناك من اليهود وغير اليهود على حد سواء",
+      "duration_sec": 18.1
+    },
+    {
+      "id": "egyptian-fleurs-020",
+      "slice": "egyptian",
+      "reference": "أوتاوا هي عاصمة كندا الساحرة ثنائية اللغة تضم مجموعة من المعارض الفنية والمتاحف التي تبرز ماضي كندا وحاضرها",
+      "duration_sec": 19.26
+    }
+  ],
+  "runs": {
+    "whisper-large-v3-turbo": {
+      "msa-cv-001": {
+        "ok": true,
+        "text": "أعلنت القوات الأمريكية انتهاء مهمتها في العراق",
+        "latency_sec": 2.516,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-002": {
+        "ok": true,
+        "text": "كل ما عليك فعله هو حفظ هذه الجملة عن ��هر قلب",
+        "latency_sec": 2.141,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-003": {
+        "ok": true,
+        "text": "سأكون قد درست الإنجليزية لخمس سنوات مع حلول فبراير المقبل.",
+        "latency_sec": 2.225,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-004": {
+        "ok": true,
+        "text": "يحترم عالمنا قانوناً ذهبياً واحداً من يملك الذهب يضع القانون",
+        "latency_sec": 2.68,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-005": {
+        "ok": true,
+        "text": "بالرغم من أنني أحسست بأن هناك شيئاً غريباً لم أعرف بالتحديد ما هو",
+        "latency_sec": 4.766,
+        "timestamps": true,
+        "timed_words": 13,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-006": {
+        "ok": true,
+        "text": "بريطانيا ال��وثمى بلد النبلاء و ركوب الخيل",
+        "latency_sec": 2.879,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-007": {
+        "ok": true,
+        "text": "ليس هناك طريق مختصرة إلى القمة فقط إلى الهاوية",
+        "latency_sec": 2.8,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-008": {
+        "ok": true,
+        "text": "ذكر هاتوياما أنه يعيد عائلته بالمراهنة على سباق الخيل",
+        "latency_sec": 2.951,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-009": {
+        "ok": true,
+        "text": "إذا الشعب يوماً أراد الحياة فلابد أن يستجيب القدر",
+        "latency_sec": 5.044,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-010": {
+        "ok": true,
+        "text": "سمعت صوت اصطدام حوالي العاشرة ليلة الأمس",
+        "latency_sec": 4.418,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-011": {
+        "ok": true,
+        "text": "كم الساعة ال��ن؟ إنها ال��الثة وعشرون دقيقة",
+        "latency_sec": 3.321,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-012": {
+        "ok": true,
+        "text": "يبلغ عدد سكان اليابان حوالي 120 مليون نسمة",
+        "latency_sec": 2.599,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-013": {
+        "ok": true,
+        "text": "أحتاج لمزيد من الوقت لأنهي واجب المدرسي",
+        "latency_sec": 2.346,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-014": {
+        "ok": true,
+        "text": "قف نبكي من ذكرى حبيب ومنزلي بسقط اللواء بين الدهول فحوملي",
+        "latency_sec": 2.526,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-015": {
+        "ok": true,
+        "text": "يبدو عليه أنه كان غنيا في يوم من الأيام",
+        "latency_sec": 2.832,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-016": {
+        "ok": true,
+        "text": "أرجوك لا تمشي بسرعة هكذا لا أستطيع مجاراة سرعتك في المشي",
+        "latency_sec": 2.816,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-017": {
+        "ok": true,
+        "text": "من تلك المرأة التي ترتدي فستاناً وردياً؟",
+        "latency_sec": 2.476,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-018": {
+        "ok": true,
+        "text": "اقطع تلك الشجرة الميتة وإلا فإنها ستقع فوق منزلك",
+        "latency_sec": 2.221,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-019": {
+        "ok": true,
+        "text": "الأم مدرسة إذا أعدتها أعدتها شعباً طيباً ال��راق",
+        "latency_sec": 2.507,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-020": {
+        "ok": true,
+        "text": "ولد جدي عام 1920 للميلاد",
+        "latency_sec": 2.365,
+        "timestamps": true,
+        "timed_words": 5,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-021": {
+        "ok": true,
+        "text": "بإمكانك الوصول للمحطة عن طريق الحافلة",
+        "latency_sec": 2.726,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-022": {
+        "ok": true,
+        "text": "إذا التقى المسلمان بسيفهما فالقاتل المقتول في النار",
+        "latency_sec": 2.533,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-023": {
+        "ok": true,
+        "text": "أbríl هو موسيم مضراء في فلوالات الموتهيضة.",
+        "latency_sec": 2.59,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-024": {
+        "ok": true,
+        "text": "بعد شراء ترك الأحذية انتهبي المطاف مع استحبه على المقصود.",
+        "latency_sec": 2.654,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-025": {
+        "ok": true,
+        "text": "أتى مرون أنت في براء أسنع أمتوساكم.",
+        "latency_sec": 2.867,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-026": {
+        "ok": true,
+        "text": "من دون الهواء لن يبقى شيئا على قيد الحيا.",
+        "latency_sec": 2.728,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-027": {
+        "ok": true,
+        "text": "عندما عادت إلى المنزل اكتشفت أنني أضعت محفظة قيط",
+        "latency_sec": 2.512,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-028": {
+        "ok": true,
+        "text": "سيذهب الأستاذنا إلى الولايات المتحدة الشهر القادم",
+        "latency_sec": 2.953,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-029": {
+        "ok": true,
+        "text": "قبل الفجر بقليل من اليوم التالي جاء اطلاق النار",
+        "latency_sec": 2.477,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-030": {
+        "ok": true,
+        "text": "أخبرتهم أن يرسلوا لي تذكرة أخرى",
+        "latency_sec": 2.445,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-001": {
+        "ok": true,
+        "text": "حدره أدرمان في جامعة انفرزدهي ايبو مكارا",
+        "latency_sec": 2.616,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-002": {
+        "ok": true,
+        "text": "أثبت استوديو ايدي عكس ذلك حيث أصلنا ايدي على أن صنع الموسيقى هو أمور خاصة لنفسه",
+        "latency_sec": 2.686,
+        "timestamps": true,
+        "timed_words": 16,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-003": {
+        "ok": true,
+        "text": "Kennet hún ekki محطة تن í því Brain Tree?",
+        "latency_sec": 2.49,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-004": {
+        "ok": true,
+        "text": "الاسم المحدد كوهلي هو تكريم لعالم الحيوان الألماني هنريتش كوهل",
+        "latency_sec": 2.653,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-005": {
+        "ok": true,
+        "text": "ينتج عن استخدام تقنية كونتر جوخ في التصوير إذا أخذ فيه للشخص",
+        "latency_sec": 2.54,
+        "timestamps": true,
+        "timed_words": 12,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-006": {
+        "ok": true,
+        "text": "��هرت شركة في وفانتي بعد رئيسة",
+        "latency_sec": 2.174,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-007": {
+        "ok": true,
+        "text": "يقدموا خطة \"Queen's Bollywood\" أربعة تورقين متدهلة",
+        "latency_sec": 2.528,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-008": {
+        "ok": true,
+        "text": "لكن سينت ماري كانت لا تزال بعيدة عن الانتهاء واستمر العمل تحت قياتك الكارديني المورن",
+        "latency_sec": 2.478,
+        "timestamps": true,
+        "timed_words": 15,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-009": {
+        "ok": true,
+        "text": "الجوء البديل هو وضع قسطرة Plurix Plural أو قسطرة Aspira Drainage",
+        "latency_sec": 2.483,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-010": {
+        "ok": true,
+        "text": "أيضا تم إخذار ذلك على صفحة الفرقة الموسيقية على MySpace",
+        "latency_sec": 2.369,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-001": {
+        "ok": true,
+        "text": "تشكلت في المحيط الأطلسي اليوم عاشر عاصفة مسمى لموسم الأعاصير الأطلسية العاصفة شبه الاستوائية جيري",
+        "latency_sec": 2.649,
+        "timestamps": true,
+        "timed_words": 15,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-002": {
+        "ok": true,
+        "text": "نصنع بيوتنا وملابسنا من النباتات معظم الطعام الذي نتناوله من النباتات كذلك بدون النباتات لا يمكن للحيوانات البقاء",
+        "latency_sec": 2.671,
+        "timestamps": true,
+        "timed_words": 18,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-003": {
+        "ok": true,
+        "text": "الراحة الشديدة والبرد والطهات والمفرد والحرائك البرية هي أشكال وأثار الطقس الشديد وكذلك العواصف الرعدية والأعصير والفايدانات والأعصير الحزونية",
+        "latency_sec": 2.796,
+        "timestamps": true,
+        "timed_words": 19,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-004": {
+        "ok": true,
+        "text": "قد يختار هؤلاء الأزواج وضع خطة تبني لأطفالهم",
+        "latency_sec": 2.353,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-005": {
+        "ok": true,
+        "text": "لكن بسبب موقعها القريب من المناطق الاستوائية ببضع درجات فقط شمال الخط الاستوائي فأنتم بحاجة للتعامل مع كلاهما الحرارة العالية المستمرة والشمس اللافحة وذلك نادرا عندما تكون السماء صافية",
+        "latency_sec": 3.507,
+        "timestamps": true,
+        "timed_words": 29,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-006": {
+        "ok": true,
+        "text": "قد لا يتوقع الناس أن الصبر والتفاهم ضروريان أيضا للمسافرين العائدين إلى ديارهم",
+        "latency_sec": 2.553,
+        "timestamps": true,
+        "timed_words": 13,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-007": {
+        "ok": true,
+        "text": "في حال كنت تعبر منطقة بحر البلطيق الشمالية في الشتاء فيجب أن تفحص موقع الكابينة إذ أن المرور عبر الجليد يسبب ضغضاء صخبة للغاية للأشخاص الأكثر تضرراً",
+        "latency_sec": 2.686,
+        "timestamps": true,
+        "timed_words": 27,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-008": {
+        "ok": true,
+        "text": "تغضع الفرق الافتراضية الى نفس معايير التميز مثل الفرق التقليدية ولكن هناك اختلفات دقيقة",
+        "latency_sec": 2.683,
+        "timestamps": true,
+        "timed_words": 14,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-009": {
+        "ok": true,
+        "text": "يكتب الناس ال��ن رسائل على شاشات الكمبيوتر دون الاحتياج إلى استخدام المباراة",
+        "latency_sec": 2.988,
+        "timestamps": true,
+        "timed_words": 12,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-010": {
+        "ok": true,
+        "text": "تتفاوت سياسات الإلغاء ولكن اعتبارا من أواخر أزور لم تعود معظم سياسات الإلغاء المستندة إلى فيروس كورونا حتى تموز عام 2020 عندما كان من المقرر أن يتم تنظيم الألعاب الأولمبية",
+        "latency_sec": 3.37,
+        "timestamps": true,
+        "timed_words": 30,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-011": {
+        "ok": true,
+        "text": "في أيامه الأولى أذيع البرنامج حصرا على موقع راديو الإنترنت الموجود منذ فترة طويلة 2G net radio وهو الموقع الذي يركز على الراديو الحواري",
+        "latency_sec": 3.66,
+        "timestamps": true,
+        "timed_words": 24,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-012": {
+        "ok": true,
+        "text": "ونتيجة لذلك يدخن الفنانون لفائف القنب على خشبة المصرح ويشجع المصرح نفسه الجمهور على مشاراقتهم في ذلك",
+        "latency_sec": 2.968,
+        "timestamps": true,
+        "timed_words": 17,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-013": {
+        "ok": true,
+        "text": "تعتبر فنلندا وجهة رائعة لركوب القوارب تحتوي أرض الألف بحيرة أيضا على ال��لاف من الجزر في البحيرات وفي الأرخبيل الساحلي كليهما",
+        "latency_sec": 3.124,
+        "timestamps": true,
+        "timed_words": 21,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-014": {
+        "ok": true,
+        "text": "تشمل الموضوعات الأخرى المدرجة على جدوى الأعمال بالي الحفا�� على ال��ابات المتبقية في العالم وتبادل التكنولوجيات لمساعدة الدول النامية على النمو بطرق أقل تلويثاً",
+        "latency_sec": 3.362,
+        "timestamps": true,
+        "timed_words": 24,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-015": {
+        "ok": true,
+        "text": "كما تعد المدينة قاعدة لتسلق بركان نيراجونجو وبعد أرخص سبل تتبع ال��وريلا الجبلية في أفريقيا",
+        "latency_sec": 2.634,
+        "timestamps": true,
+        "timed_words": 15,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-016": {
+        "ok": true,
+        "text": "حقبة الممالك ال��لا��ة هي واحدة من أكثر الحقب دموية في تاريخ الصين القديمة مات آلاف من الناس خلال القتال في سبيل الجلوس على أعلى المقاعد في القصر الكبير في شيان",
+        "latency_sec": 3.155,
+        "timestamps": true,
+        "timed_words": 30,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-017": {
+        "ok": true,
+        "text": "وفي الحقيقة فليس من السهل العثور عليه على الإطلاق حتى لو كنت تعلم بوجوده فبمجرد الدخول إلى الكهف تصبح في عزلة تامة",
+        "latency_sec": 3.048,
+        "timestamps": true,
+        "timed_words": 22,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-018": {
+        "ok": true,
+        "text": "تحتوي العديد من المخبوزات الألمانية على الوز والبندق وجوز الأشجار الأخرى وغالبا ما يتم تناول الكعك الشعبي خصيصا مع فنجان من القهوة القوية",
+        "latency_sec": 2.948,
+        "timestamps": true,
+        "timed_words": 23,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-019": {
+        "ok": true,
+        "text": "لا يزال هناك العديد من الرجال والنساء على قيد الحياة من من من نجوا من وقتهم هنا والعديد من الأشخاص ال��خرين الذين كان عندهم أحباء قتلوا أو عملوا حتى الموت هناك من اليهود وغير اليهود على حد سواء",
+        "latency_sec": 3.33,
+        "timestamps": true,
+        "timed_words": 38,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-020": {
+        "ok": true,
+        "text": "أوتاوا هي عاصمة كندا الساحرة سنائية للغاة تضم مجموعة من المعارضة الفنية والمتاحف التي تبرز ماضي كندا وحاضرها.",
+        "latency_sec": 3.711,
+        "timestamps": true,
+        "timed_words": 18,
+        "returncode": 0,
+        "stderr": ""
+      }
+    },
+    "whisper-tiny": {
+      "msa-cv-001": {
+        "ok": true,
+        "text": "على نتقوات الأمريكية انتها مهمة في العرق",
+        "latency_sec": 1.109,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-002": {
+        "ok": true,
+        "text": "كلما عليك فعله هو حفلها هذه الجملة عن طهر قلب",
+        "latency_sec": 1.037,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-003": {
+        "ok": true,
+        "text": "سأكون قدرست الإنجليزية لحمسي سنوات محلول في برائير المقبل",
+        "latency_sec": 1.177,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-004": {
+        "ok": true,
+        "text": "يحترم على من القانون انتها بيان واحدة من يملك التهب يضع القانون",
+        "latency_sec": 1.18,
+        "timestamps": true,
+        "timed_words": 12,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-005": {
+        "ok": true,
+        "text": "برغمي من أنني أحسستو بأن هناك شيء غريباً لم أعرف بالتحديد مهوة",
+        "latency_sec": 1.256,
+        "timestamps": true,
+        "timed_words": 12,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-006": {
+        "ok": true,
+        "text": "بارتانية الروف مع بلد النبلاة ورقوبة الخيل.",
+        "latency_sec": 1.329,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-007": {
+        "ok": true,
+        "text": "ليس هناك اطريق المختصرات لان إلقمة فقط إلى الهائوية",
+        "latency_sec": 1.13,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-008": {
+        "ok": true,
+        "text": "وكرة هتا يما أنه يويرع إلى تهب المرحنة على سبق الخائل",
+        "latency_sec": 1.124,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-009": {
+        "ok": true,
+        "text": "إذا الشعب يوماً أراد الحياة فلا بطأنيا استجيب القدر",
+        "latency_sec": 1.113,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-010": {
+        "ok": true,
+        "text": "سميتوا سلطست ضام حوال العجيرة ليلة الأمس",
+        "latency_sec": 1.295,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-011": {
+        "ok": true,
+        "text": "كبس عطل أن إنها ال��الي فهو عشرونة ضقيقة",
+        "latency_sec": 1.363,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-012": {
+        "ok": true,
+        "text": "يبلغادة سكان اليابان حوالي مئا وعشرون مليون نصمه",
+        "latency_sec": 1.167,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-013": {
+        "ok": true,
+        "text": "احتاجوا لما زيد من الوقت لونه واجب المدرسي",
+        "latency_sec": 1.314,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-014": {
+        "ok": true,
+        "text": "قفانب كمنذكرة حبيبا ومنزلي بسقتلوة بين الدهول فحوملي",
+        "latency_sec": 1.126,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-015": {
+        "ok": true,
+        "text": "يبتوا علي أنه كان الرينين في يوم من الرين",
+        "latency_sec": 1.025,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-016": {
+        "ok": true,
+        "text": "أرجوك لاتمشي بسرعة انها كده لا أستطيع مجارات سرعة كفر المشي",
+        "latency_sec": 1.575,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-017": {
+        "ok": true,
+        "text": "من تلك المرألة ترتدي فستان الوردياً",
+        "latency_sec": 1.154,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-018": {
+        "ok": true,
+        "text": "اختاط الكشجرة الميئة وعلى فانها ستقارشوا قمنزلك",
+        "latency_sec": 1.325,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-019": {
+        "ok": true,
+        "text": "الأماما دريسة من دعادتها عادتها شادة الوضعاته.",
+        "latency_sec": 2.468,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-020": {
+        "ok": true,
+        "text": "ورد جد عام الفتسامة وعشتين للميلات",
+        "latency_sec": 1.017,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-021": {
+        "ok": true,
+        "text": "بمكانك الوسود لمحتاً تدقة الحافلة",
+        "latency_sec": 1.143,
+        "timestamps": true,
+        "timed_words": 5,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-022": {
+        "ok": true,
+        "text": "إذل تقل مسلمين إجسيفهما فلقاته المكتول في النار",
+        "latency_sec": 1.366,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-023": {
+        "ok": true,
+        "text": "أبري الهو موسم مدراء بفلولة اتنمت حيلا",
+        "latency_sec": 1.108,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-024": {
+        "ok": true,
+        "text": "بعد شراع ترك الأحديا، نتابي المطاط مارسة حبالا المقشوص.",
+        "latency_sec": 1.861,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-025": {
+        "ok": true,
+        "text": "أتأمرنا نحن بريوة ال��انسونة أمسة هون",
+        "latency_sec": 1.712,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-026": {
+        "ok": true,
+        "text": "من دول الهواء لن يقرش ان على قريد الحياة",
+        "latency_sec": 1.218,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-027": {
+        "ok": true,
+        "text": "ومعاتو للمنزل كتشر تننني أدعو تمحفظاتي.",
+        "latency_sec": 1.644,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-028": {
+        "ok": true,
+        "text": "سيلاهبوا بسرادنا إليلاهة المتحدة الشهر لقادم.",
+        "latency_sec": 1.33,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-029": {
+        "ok": true,
+        "text": "أبل أفضل فجب قادرين للمتالي جائت لرنا",
+        "latency_sec": 1.188,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-030": {
+        "ok": true,
+        "text": "أخبرتون أن يرسي لليتفكي بثن أخرى",
+        "latency_sec": 1.15,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-001": {
+        "ok": true,
+        "text": "هذا الأجر مع في جامعة \"إن في سيديد عيب المكرة\"",
+        "latency_sec": 2.078,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-002": {
+        "ok": true,
+        "text": "أثبت أستودي أديك أكثر ذلك حيث أسمنا أدي على أنسناء المصيرقه وأمو الخاص الناسة",
+        "latency_sec": 1.242,
+        "timestamps": true,
+        "timed_words": 14,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-003": {
+        "ok": true,
+        "text": "كانت هناك محطة عن في برينطري.",
+        "latency_sec": 1.458,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-004": {
+        "ok": true,
+        "text": "الاسم المحدة كهلي هو تكريم العالم الحيون الألمني حنرش كهل.",
+        "latency_sec": 1.677,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-005": {
+        "ok": true,
+        "text": "ينتجع نسخدام تقنيا سكنترجوه في السوار ادى اخد في الريشاق",
+        "latency_sec": 1.426,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-006": {
+        "ok": true,
+        "text": "بحرح شركة زيوهان تبايت ريضة جيه.",
+        "latency_sec": 1.283,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-007": {
+        "ok": true,
+        "text": "اعتمه حطة كوينيز بوليبورت عرباتة ترقاين متداخلها.",
+        "latency_sec": 1.598,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-008": {
+        "ok": true,
+        "text": "لك إنسينت معريكا تلا��ة الوضعية تناقية لن تحطيها تقلق الكل كردييني في المورون.",
+        "latency_sec": 1.571,
+        "timestamps": true,
+        "timed_words": 13,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-009": {
+        "ok": true,
+        "text": "لجهو الوضع قصطرة في قلق صحق قلق صحق قلق صحق قصطرة في أصفرة درائنية.",
+        "latency_sec": 3.07,
+        "timestamps": true,
+        "timed_words": 14,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-010": {
+        "ok": true,
+        "text": "بيضاً دمع أنزار وزالك على صفحة في القطينة مصابلية على معي سبيس.",
+        "latency_sec": 1.369,
+        "timestamps": true,
+        "timed_words": 12,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-001": {
+        "ok": true,
+        "text": "داشكتلت في المهيد الأطلاص اليوم عشرة عوسفة مسمي لموسي ملعصر الأطلاصية العوسفة شبه الاستوائية الجري",
+        "latency_sec": 1.449,
+        "timestamps": true,
+        "timed_words": 15,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-002": {
+        "ok": true,
+        "text": "نصنا بيوتنا وملاب سنامنا باتات موازم التعام ال��ذينةنا ولاه من النباتات كذلك بدون النباتات لا يمكن لحيونات البقاء",
+        "latency_sec": 1.569,
+        "timestamps": true,
+        "timed_words": 18,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-003": {
+        "ok": true,
+        "text": "إن ريح الشديدة والبادة التهات المفضة والحراء تبالية هي اشكان واصلت تكس الشديد وكزلك العوصف العديد والعاصيل والفيدة ناطول عاصيل حزونية",
+        "latency_sec": 1.375,
+        "timestamps": true,
+        "timed_words": 21,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-004": {
+        "ok": true,
+        "text": "كت يختارها أولائل أزوائج وضاختتبني لأطفالهم",
+        "latency_sec": 1.046,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-005": {
+        "ok": true,
+        "text": "لك بسبب مع القاهة القريب من المنوطة الاسطوائية ببضاعد رجيت فقط شمال الخطي الاسطوائية فانتن بحاجة لتعام المعاكي لهمة الحرارة العليل مستمرة والشمس الليفها وذلك نادرون عندما تكون استمع صافية",
+        "latency_sec": 1.945,
+        "timestamps": true,
+        "timed_words": 30,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-006": {
+        "ok": true,
+        "text": "قد لا يتبقى نسأنا الصبر وتفهم دارورياً أيضاً للمسافرين العائدين إلى دياريهم",
+        "latency_sec": 1.432,
+        "timestamps": true,
+        "timed_words": 12,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-007": {
+        "ok": true,
+        "text": "فحال كنت تعبر من تقد بحر البلتية الشمالية في الشيطة فيجم ان تفحص موقع الكبيرة اي ان المرور عبر الجاليدي سبب دعضو افخبا الوقع الاشخاص الاخصر تداروراً",
+        "latency_sec": 1.683,
+        "timestamps": true,
+        "timed_words": 27,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-008": {
+        "ok": true,
+        "text": "تضعها الفيوك الفتوديه إينافسي معيوة تم يزمس الفيوكة تقليديه وليكي نمناك اختلفة بقليقا.",
+        "latency_sec": 3.819,
+        "timestamps": true,
+        "timed_words": 13,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-009": {
+        "ok": true,
+        "text": "يكتب النسل الان رساء العالشة الجمبيوتر دون الاحتياج لستغدام الموضارة",
+        "latency_sec": 1.363,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-010": {
+        "ok": true,
+        "text": "تتفاوتي ساتل ال��ياء والاكن اعتبارا من أواخر أوزور لم تعود مازم ساتل ال��ياء المستنة دائل وظير سكوننا حتى تموز عام الفين واشفين عندما كان من المقارر أن يتمتون زي من العام الأول مبيا",
+        "latency_sec": 1.755,
+        "timestamps": true,
+        "timed_words": 33,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-011": {
+        "ok": true,
+        "text": "في أيامي الأولى وذي علب النامك حصر على موقع رجول الانترنت الموجود منظفة رتويلة توجي نت رجوه الموقع الذي يركز على رجو الحواري",
+        "latency_sec": 1.661,
+        "timestamps": true,
+        "timed_words": 23,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-012": {
+        "ok": true,
+        "text": "ونتيجت لذلك يدخل الفلنان والفائف الكومب على خشبة المصرح ويشجة المصرح نفسه الجمور على مشاراقة في ذلك",
+        "latency_sec": 1.518,
+        "timestamps": true,
+        "timed_words": 17,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-013": {
+        "ok": true,
+        "text": "تبار في النندة ويجهراء اعه لركوب القوارب تحتوي ارض الالف بحيرا أيضا هل الالف من الجوزر في البحيرات وفي الأرخبيل سهلي كلهما",
+        "latency_sec": 1.811,
+        "timestamps": true,
+        "timed_words": 22,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-014": {
+        "ok": true,
+        "text": "تشمل الموضوعات الأخرى المدرغة على جدوى العمال بلي الحفظ على العبات المتبقية في العالم وتباد الأدتك من المجيات المسعادة الدول النامية على النموة ودورق ققلت الويثن",
+        "latency_sec": 1.755,
+        "timestamps": true,
+        "timed_words": 26,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-015": {
+        "ok": true,
+        "text": "كما تعد المدين قادة لتصلق بركان نيرجونجو و بعد ارخ السوبل تتبر الغور اللي الجبالية في افرقية",
+        "latency_sec": 1.252,
+        "timestamps": true,
+        "timed_words": 17,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-016": {
+        "ok": true,
+        "text": "حقبت الممالك السرا��ة هي واحدة من أكثر الحقب دموية في تاريخ الصين القديمة ما تألاف من الناس خدار القطال في سبيل الجروس على على المقائد في القصر الكبير في شيء حن",
+        "latency_sec": 2,
+        "timestamps": true,
+        "timed_words": 31,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-017": {
+        "ok": true,
+        "text": "وفي الحق يقى فاليس من السايل العثور على هي على الأطلق هتلق كنت تعلن بووبود تب مجرد الدخول إلى الكهة تصبح في عزلاتام",
+        "latency_sec": 1.52,
+        "timestamps": true,
+        "timed_words": 23,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-018": {
+        "ok": true,
+        "text": "تحتوي العديد من مخبزة الانمانية على الوزوة بوندك وقوز الاجغون أخوة وغالب ميتم مدنة والكاك الشابي خصيص المافين جين من القهوة كوية",
+        "latency_sec": 1.412,
+        "timestamps": true,
+        "timed_words": 22,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-019": {
+        "ok": true,
+        "text": "يزل هناك العديد من الرجال والنساء على قيد الحياة من من منجو من وقتهم هنا ولعديد من الأشخاص الأخرين الذي نكن عندهم أحب قطلو أو عمل حتى الموت هناك من اليهود وغير اليهود على حدين سواء",
+        "latency_sec": 1.806,
+        "timestamps": true,
+        "timed_words": 36,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-020": {
+        "ok": true,
+        "text": "بطاوهي عاصمت كانت الساحرة سنة إيه تضغات الدم مجموة من المعودة في النية ونما تحفد لتيتبز مديكا دفعض الموضة.",
+        "latency_sec": 2.362,
+        "timestamps": true,
+        "timed_words": 19,
+        "returncode": 0,
+        "stderr": ""
+      }
+    },
+    "nemotron-3.5-asr-streaming-0.6b-q4-k-m": {
+      "msa-cv-001": {
+        "ok": true,
+        "text": "أعلنت القوات الأميركية انتهاء مهمتها في العراق.",
+        "latency_sec": 1.92,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-002": {
+        "ok": true,
+        "text": "كل ما عليك فعله هو حفظ هذه الجملة عن ظهر قلب.",
+        "latency_sec": 1.662,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-003": {
+        "ok": true,
+        "text": "سأكون قد درست الإنجليزية لخمس سنوات مع حلول فبراير المقبل.",
+        "latency_sec": 2.023,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-004": {
+        "ok": true,
+        "text": "يحترم عالمنا قانوناً ذهبياً واحداً من يملك الذهب يضع القانون.",
+        "latency_sec": 1.77,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-005": {
+        "ok": true,
+        "text": "بالرغم من أنني أحسست بأن هناك شيئاً غريباً لم أعرف بالتحديد ما هو.",
+        "latency_sec": 1.826,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-006": {
+        "ok": true,
+        "text": "بريطانيا العظمى بلد النبلائي وركوب الخيل.",
+        "latency_sec": 1.607,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-007": {
+        "ok": true,
+        "text": "ليس هناك طريق مختصرة إلى القمة فقط إلى الهاوية.",
+        "latency_sec": 2.214,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-008": {
+        "ok": true,
+        "text": "ذكرها تويما أنه يعيد عائلته بالمراهنة على سباق الخيل.",
+        "latency_sec": 1.68,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-009": {
+        "ok": true,
+        "text": "إذا الشعب يوماً أراد الحياة فلا بد أن يستجيب القدر.",
+        "latency_sec": 1.806,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-010": {
+        "ok": true,
+        "text": "سمعت صوت اصطدام حوالي العاشرة ليلة الأمس.",
+        "latency_sec": 1.653,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-011": {
+        "ok": true,
+        "text": "كم الساعة الآن إنها الثالثة وعشرون دقيقة.",
+        "latency_sec": 1.527,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-012": {
+        "ok": true,
+        "text": "يبلغ عدد سكان اليابان حوالي مائة وعشرون مليون نسمة.",
+        "latency_sec": 1.877,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-013": {
+        "ok": true,
+        "text": "أحتاج لمزيد من الوقت لأنهي واجب المدرسي.",
+        "latency_sec": 1.592,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-014": {
+        "ok": true,
+        "text": "قف نبك من ذكرى حبيب ومنزلي بصقط اللوى بين الدهول فحوملي.",
+        "latency_sec": 1.722,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-015": {
+        "ok": true,
+        "text": "يبدو عليه أنه كان غنياً في يوم من الأيام.",
+        "latency_sec": 1.522,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-016": {
+        "ok": true,
+        "text": "أرجوك لا تمشي بسرعة هكذا لا أستطيع مجاراة سرعتك في المشي.",
+        "latency_sec": 1.769,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-017": {
+        "ok": true,
+        "text": "من تلك المرأة التي ترتدي فستاناً وردياً",
+        "latency_sec": 1.581,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-018": {
+        "ok": true,
+        "text": "تعتلك الشجرة الميتة واللا فإنها ستقع فوق منزلك.",
+        "latency_sec": 1.695,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-019": {
+        "ok": true,
+        "text": "الأم مدرسة إذا أعددتها أعدت تشعدا طيب العراقي.",
+        "latency_sec": 1.851,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-020": {
+        "ok": true,
+        "text": "ورد جد عام ألف وتسعمائة وعشرين للميلاد.",
+        "latency_sec": 1.752,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-021": {
+        "ok": true,
+        "text": "بإمكانك الوصول لا المحطة عن طريق الحافلة",
+        "latency_sec": 1.614,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-022": {
+        "ok": true,
+        "text": "إذا التقى المسلمان بسيفهما فالقاتل المقتول في النار.",
+        "latency_sec": 1.622,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-023": {
+        "ok": true,
+        "text": "أبريل هو موسم الضرائب في الولايات المتحدة.",
+        "latency_sec": 1.573,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-024": {
+        "ok": true,
+        "text": "بعد شراء تلك الأحذية نتابع المطاط مع الصحب على المكشوون.",
+        "latency_sec": 1.795,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-025": {
+        "ok": true,
+        "text": "تأمرون الناس البري وتنصون أنت تحم.",
+        "latency_sec": 1.73,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-026": {
+        "ok": true,
+        "text": "من دون الهواء لن يبقى شيء على قيد الحياة.",
+        "latency_sec": 1.89,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-027": {
+        "ok": true,
+        "text": "عندما عدته للمنزل ، اكتشفت أنني أضعت محفظتي.",
+        "latency_sec": 2,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-028": {
+        "ok": true,
+        "text": "سيدهب أستاذنا إلى الولايات المتحدة الشهر القادم.",
+        "latency_sec": 2.017,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-029": {
+        "ok": true,
+        "text": "قبل الفجر بقديل من اليوم التالي جاء إطلاق النار.",
+        "latency_sec": 1.688,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-030": {
+        "ok": true,
+        "text": "أخبرتهم أن يرسلوا لي تذكرة أخرى.",
+        "latency_sec": 1.394,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-001": {
+        "ok": true,
+        "text": "ضرمان في جامعة انفر ديبل مكان.",
+        "latency_sec": 1.526,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-002": {
+        "ok": true,
+        "text": "أثبت استوديو أدي عكس ذلك حيث أصلنا إيدي على أن صنع الموسيقى هو أموال خاصة لنفسه.",
+        "latency_sec": 1.787,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-003": {
+        "ok": true,
+        "text": "كانت هناك محطتان في برين تري.",
+        "latency_sec": 1.414,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-004": {
+        "ok": true,
+        "text": "اسم المحدد كهلي هو تكريم لعالم الحيوان الألماني هنريش كهول.",
+        "latency_sec": 1.775,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-005": {
+        "ok": true,
+        "text": "ينتج عن استخدام تقنية كونترشوخ في التصوير إضاء فيه للشخص.",
+        "latency_sec": 1.583,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-006": {
+        "ok": true,
+        "text": "ظهرت شركة في أنت بدلتين.",
+        "latency_sec": 1.404,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-007": {
+        "ok": true,
+        "text": "أربعة طرق متداخلة.",
+        "latency_sec": 1.584,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-008": {
+        "ok": true,
+        "text": "لكن سينت ماري كانت لا تزال بعيدة على الانتهاء واستمر العمل وتحتقياتك للكاردينيل المورن.",
+        "latency_sec": 1.771,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-009": {
+        "ok": true,
+        "text": "الجو بديله هو رجع قثرة بليكس بليركس بلور أو قثر دي أسفيرا درينج.",
+        "latency_sec": 2.186,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-010": {
+        "ok": true,
+        "text": "أيضاً تم أنظار ذلك على صفحة الفرقة الموسيقيات على مايسبس.",
+        "latency_sec": 1.789,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-001": {
+        "ok": true,
+        "text": "تشكلت في المحيط الأطلسي اليوم عاشر عاصفة مسمى لموسم الأعاصير الأطلسية العاصفة شبه الاستوائية جيري.",
+        "latency_sec": 2.009,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-002": {
+        "ok": true,
+        "text": "نصنع بيوتنا وملابسنا من النباتات معظم الطعام الذي نتناوله من النباتات كذلك بدون النباتات لا يمكن للحيوانات البقاء.",
+        "latency_sec": 2.136,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-003": {
+        "ok": true,
+        "text": "إن الراحل الشديدة والبرد والطهات والمفرط والحرائك البرية هي أشكال وآثار الطقس الشديد وكذلك العواصف الرعدية والأعصير والفيضانات والأعصير الحزونية.",
+        "latency_sec": 2.227,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-004": {
+        "ok": true,
+        "text": "قد يختار هؤلاء الأزواج وضع خطة تبني لأطفالهم.",
+        "latency_sec": 1.67,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-005": {
+        "ok": true,
+        "text": "لكن بسبب موقعها القريب من المناطق الاستوائية ببضع درجات فقط شمال الخط الاستوائي فأنتم بحاجة للتعامل مع كلاهما الحرارة العالية المستمرة والشمس اللافحة وذلك نادراً عندما تكون السماء صافية.",
+        "latency_sec": 2.888,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-006": {
+        "ok": true,
+        "text": "قد لا يتوقع الناس أن الصبر والتفاهم ضروريان أيضاً للمسافرين العائدين إلى ديارهم.",
+        "latency_sec": 1.827,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-007": {
+        "ok": true,
+        "text": "فحل كنت تعبر منطقة بحر البلطيق الشمالية في الشتاء فيجب أن تفحص موقع الكبينة إذ أن المرور عبر الجليد يسبب ضوضاء صخبة للغاية الأشخاص الأكثر تضرراً.",
+        "latency_sec": 2.144,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-008": {
+        "ok": true,
+        "text": "تضع الفرق الافتراضية إلى نفس مع التميز مثل الفرق التقليدية ولكن هناك اختلفات دقيقة.",
+        "latency_sec": 2.238,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-009": {
+        "ok": true,
+        "text": "يكتب الناس الآن رسائل على شاشات الكمبيوتر دون الاحتياج إلى استخدام المباراة.",
+        "latency_sec": 1.862,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-010": {
+        "ok": true,
+        "text": "تتفاوت سياسات الإلغاء ولكن اعتباراً من أواخر عزار لم تعد معظم سياسات الإلغاء المستندة إلى فيروس كورونا حتى تموز عام الفين وعشرين عندما كان من المقرر أن يتم تنظيم الألعاب الأولمبية.",
+        "latency_sec": 2.446,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-011": {
+        "ok": true,
+        "text": "في أيامه الأولى أذيع البرنامج حصراً على موقع راديو الإنترنت الموجود منذ فترة طويلة توجي نت راديو وهو الموقع الذي يركز على الراديو الحواري.",
+        "latency_sec": 2.317,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-012": {
+        "ok": true,
+        "text": "ونتيجة لذلك يدخن الفنانون اللفائف القنب على خشبة المسرح ويشجع المسرح نفسه الجمهور على مشاركتهم في ذلك.",
+        "latency_sec": 1.954,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-013": {
+        "ok": true,
+        "text": "تعتبر فنلندا وجهة رائعة لركوب القوارب تحتوي أرض الألف بحيرة أيضا على الآلاف من الجزر في البحيرات وفي الأرخبيل الساحلي كليهما.",
+        "latency_sec": 2.282,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-014": {
+        "ok": true,
+        "text": "تشمل الموضوعات الأخرى المدرجة على جدول أعمال بالي الحفاظ على الغبات المتبقية في العالم وتبادل التكنولوجيات لمساعدة الدول النامية على النمو بطرق أقل تلويثاً.",
+        "latency_sec": 2.408,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-015": {
+        "ok": true,
+        "text": "كما تعدل مدينة قاعدة لتسلق بركان نيرا جونجو وبعد أرخص سبل تتبع الغوريلا الجبلية في أفريقيا.",
+        "latency_sec": 1.917,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-016": {
+        "ok": true,
+        "text": "حكبة الممالك الثلاثة هي واحدة من أكثر الحقب الدموية في تاريخ الصين القديمة مات الآلاف من الناس خلال القتال في سبيل الجلوس على أعلى المقاعد في القصر الكبير في شيان.",
+        "latency_sec": 2.374,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-017": {
+        "ok": true,
+        "text": "وفي الحقيقة فليس من السهل العثور عليه على الإطلاق حتى لو كنت تعلم بوجوده فبمجرد الدخول إلى الكهف تصبح في عزلة تامة.",
+        "latency_sec": 2.108,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-018": {
+        "ok": true,
+        "text": "تحتوي العديد من المخبوزات الألمانية على اللوز والبندق وجوز الأشجار الأخرى وغالباً ما يتم تناول الكعك الشعبي خصيصاً مع في نجان القهوة القوية.",
+        "latency_sec": 2.065,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-019": {
+        "ok": true,
+        "text": "لا يزال هناك العديد من الرجال والنساء على قيد الحياة من ممن نجو من وقتهم هنا والعديد من الأشخاص الآخرين الذين كان عندهم أحباء قتلوا أو عملوا حتى الموت هناك من اليهود وغير اليهود على حد سواء.",
+        "latency_sec": 2.708,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-020": {
+        "ok": true,
+        "text": "وهي عاصمة كندا الساحرة ثنائية اللغة تضم مجموعة من المعارضة الفنية والمتاحف التي تبرز ماضي كان دا وحاضرها.",
+        "latency_sec": 2.729,
+        "timestamps": true,
+        "timed_words": 1,
+        "returncode": 0,
+        "stderr": ""
+      }
+    },
+    "whisper-large-v3-turbo-arabic-dialectal-v2-q5": {
+      "msa-cv-001": {
+        "ok": true,
+        "text": "أعلنت القوات الأمريكية إنتهاء مهماتها في العراق.",
+        "latency_sec": 1.883,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-002": {
+        "ok": true,
+        "text": "كل ما عليك فعله هو حفظ هذه الجملة عن طهر القلب.",
+        "latency_sec": 1.811,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-003": {
+        "ok": true,
+        "text": "سأكون قد درست الإنجليزية لخمس سنوات مع حلول فيبراير المقبل.",
+        "latency_sec": 1.84,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-004": {
+        "ok": true,
+        "text": "يحترم عالمنا قانونا ذهبيا واحدا، من يملك الذهب يضع القانون.",
+        "latency_sec": 2.07,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-005": {
+        "ok": true,
+        "text": "بالرغم من أنني أحسست بأن هناك شيئا غريبا، لم أعرف بالتحديد ما هو.",
+        "latency_sec": 2.421,
+        "timestamps": true,
+        "timed_words": 13,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-006": {
+        "ok": true,
+        "text": "بريطانيا ال��وثمى بلد نبلاء وركوبي الخيل.",
+        "latency_sec": 1.876,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-007": {
+        "ok": true,
+        "text": "ليس هناك طريق مختصرة إلى القمة، فقط إلى الهاوية.",
+        "latency_sec": 2.009,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-008": {
+        "ok": true,
+        "text": "ذكرها توياما أنه يعيد عائلته بالمراهنة على سباق الخيل.",
+        "latency_sec": 2.011,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-009": {
+        "ok": true,
+        "text": "إذا الشعب يوما أراد الحياة، فلا بد أن يستجيب القدر.",
+        "latency_sec": 1.876,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-010": {
+        "ok": true,
+        "text": "سمعت صوت اصطدام حوالي العاشرة ليلة الأمس.",
+        "latency_sec": 1.851,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-011": {
+        "ok": true,
+        "text": "كم الساعة ال��ن؟ إنها ال��الثة وعشرون دقيقة.",
+        "latency_sec": 1.91,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-012": {
+        "ok": true,
+        "text": "يبلغ عدد سكان اليابان حوالي 120 مليون نسمة.",
+        "latency_sec": 1.882,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-013": {
+        "ok": true,
+        "text": "أحتاج لمزيد من الوقت لأنهي واجب المدرسي.",
+        "latency_sec": 2.124,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-014": {
+        "ok": true,
+        "text": "��ف نبكي من ذكرى حبيب ومنزلي، بسقط اللي بين الدهولي فحوملي.",
+        "latency_sec": 1.901,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-015": {
+        "ok": true,
+        "text": "يبدو عليه أنه كان غنيا في يوم من الأيام.",
+        "latency_sec": 2.157,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-016": {
+        "ok": true,
+        "text": "أرجوك لا تمشي بسرعة هكذا، لا أستطيع مجاراة سرعتك في المشي.",
+        "latency_sec": 1.915,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-017": {
+        "ok": true,
+        "text": "من تلك المرأة التي ترتدي فستانا ورديا؟",
+        "latency_sec": 1.796,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-018": {
+        "ok": true,
+        "text": "إقتع تلك الشجرة الميتة، وإلا فإنها ستقع فوق منزلك.",
+        "latency_sec": 1.942,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-019": {
+        "ok": true,
+        "text": "أنا مدرسة النباة، أعدتها أعدتها شعبن طيب الأعراقي.",
+        "latency_sec": 1.764,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-020": {
+        "ok": true,
+        "text": "ولد جدي عام 1920 للميلاد.",
+        "latency_sec": 2.077,
+        "timestamps": true,
+        "timed_words": 5,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-021": {
+        "ok": true,
+        "text": "بإمكانك الوصول للمحطة عن طريق الحافلة.",
+        "latency_sec": 2.069,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-022": {
+        "ok": true,
+        "text": "إذا التقى المسلماني بسيفه ما، فالقاتل والمقتول في النار.",
+        "latency_sec": 2.103,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-023": {
+        "ok": true,
+        "text": "أبريل هو موسم ال��رائب في الولايات المتحدة.",
+        "latency_sec": 1.847,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-024": {
+        "ok": true,
+        "text": "بعد شراء ترك الأحذية، انتهى بي المطاف من السحب على المكسود.",
+        "latency_sec": 2.157,
+        "timestamps": true,
+        "timed_words": 11,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-025": {
+        "ok": true,
+        "text": "أتأمرونا الناس يبري وتنسونا عنفسكم.",
+        "latency_sec": 2.086,
+        "timestamps": true,
+        "timed_words": 5,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-026": {
+        "ok": true,
+        "text": "من دون الهوا لن يبقى شئون على قيد الحياة.",
+        "latency_sec": 2.242,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-027": {
+        "ok": true,
+        "text": "عندما عدتو إلى المنزل، اكتشفتو أنني أضعتو محفظتي.",
+        "latency_sec": 2.093,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-028": {
+        "ok": true,
+        "text": "فينهبوا الأستاذنا إلى الولايات المتحدة الشهر القادم.",
+        "latency_sec": 1.874,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-029": {
+        "ok": true,
+        "text": "قبل الفجر بقليل من اليوم التالي جاء إطلاق النار.",
+        "latency_sec": 1.944,
+        "timestamps": true,
+        "timed_words": 9,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "msa-cv-030": {
+        "ok": true,
+        "text": "أخبرتهم أن يرسلوا لي تفكيرة أخرى.",
+        "latency_sec": 2.614,
+        "timestamps": true,
+        "timed_words": 6,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-001": {
+        "ok": true,
+        "text": "حضرة أدرمان في جامعة، إندريز دايد آي بوموكارا.",
+        "latency_sec": 2.55,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-002": {
+        "ok": true,
+        "text": "أثبت أستوديو إيدي عكس ذلك، حيث أصرنا إيدي على أن صنع الموسيقى هو أمور خاصة لنفسه.",
+        "latency_sec": 2.915,
+        "timestamps": true,
+        "timed_words": 16,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-003": {
+        "ok": true,
+        "text": "كانت هناك محطة تاني في براين تري.",
+        "latency_sec": 2.171,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-004": {
+        "ok": true,
+        "text": "الاسم المحدد كوهلي هو تكريم لعالم الحيوان الألماني هنريتش كوهل.",
+        "latency_sec": 2.132,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-005": {
+        "ok": true,
+        "text": "ينتوج عن استخدام تقنية كونتر جوغ في التصوير إذا أخد فيه للشخص.",
+        "latency_sec": 2.287,
+        "timestamps": true,
+        "timed_words": 12,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-006": {
+        "ok": true,
+        "text": "نهارت شركة فيا فانتي بعد ريلا تي.",
+        "latency_sec": 1.989,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-007": {
+        "ok": true,
+        "text": "يعني منخطة كوينز بولي��رد أربعة طرقين متداخلة.",
+        "latency_sec": 2.016,
+        "timestamps": true,
+        "timed_words": 7,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-008": {
+        "ok": true,
+        "text": "لكن سنت ماري كانت لا تزالو بعيدة على الانتهاء، واستمر العامة وتحت قيادة الكاردينييل مورن.",
+        "latency_sec": 2.425,
+        "timestamps": true,
+        "timed_words": 15,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-009": {
+        "ok": true,
+        "text": "ألو الجاوب البديل هو وضع قصدراتي من بلوركس بلورو أو قصدراتي أسفيرة درنج.",
+        "latency_sec": 2.152,
+        "timestamps": true,
+        "timed_words": 13,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "latin-cv-010": {
+        "ok": true,
+        "text": "بأيضا دمى أهزار ذلك على صفحة الفرقة الموسيقياتي على MySBIS.",
+        "latency_sec": 1.872,
+        "timestamps": true,
+        "timed_words": 10,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-001": {
+        "ok": true,
+        "text": "تشكلت في المحيط الأطلاسي اليوم عاشرة عاصفة مسماة لموسم الأعصير الأطلاسية، العاصفة شبه الاستوائية جيري.",
+        "latency_sec": 2.01,
+        "timestamps": true,
+        "timed_words": 15,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-002": {
+        "ok": true,
+        "text": "نصنع بيوتنا وملابسنا من النباتات، معظم الطعام الذي نتناوله من النباتات كذلك، بدون النباتات لا يمكن للحيوانات البقاء.",
+        "latency_sec": 2.259,
+        "timestamps": true,
+        "timed_words": 18,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-003": {
+        "ok": true,
+        "text": "إن الرياحة الشديدة والبرد والطهات والمفرد والحرائك البرية هي أشكال و��ثار الطقس الشديد، وكذلك العواصف الرعدية والأعصير والفيضانات والأعصير الحزونية.",
+        "latency_sec": 2.387,
+        "timestamps": true,
+        "timed_words": 20,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-004": {
+        "ok": true,
+        "text": "قد يختار هؤلاء الأزواج وضع خطة تبني لأطفالهم.",
+        "latency_sec": 1.775,
+        "timestamps": true,
+        "timed_words": 8,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-005": {
+        "ok": true,
+        "text": "لكن بسبب موقعها القريب من المناطق الإستوائية ببضع درجات فقط شمال الخط الإستوائي، فأنتم بحاجة للتعامل مع كلاهما، الحرارة العالية المستمرة والشمس اللافحة، وذلك نادرا عندما تكون السماء صافية.",
+        "latency_sec": 2.639,
+        "timestamps": true,
+        "timed_words": 29,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-006": {
+        "ok": true,
+        "text": "قد لا يتوقع الناس أن الصبر والتفاهم ضروريان أيضا للمسافرين العائدين إلى ديارهم.",
+        "latency_sec": 2.175,
+        "timestamps": true,
+        "timed_words": 13,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-007": {
+        "ok": true,
+        "text": "فحيل كنت تعبر منطقة بحر البلطيق الشمالية في الشتا، فيجب أن تفحص موقع الكابينة، إذ أن المرور عبر الجليد يسبب ضوضوة أسخبها للقيا الأشخاص الأكثر تضررا.",
+        "latency_sec": 2.169,
+        "timestamps": true,
+        "timed_words": 26,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-008": {
+        "ok": true,
+        "text": "تقضى الفرق الإفترادية إلى نفس معايير التميز مثل الفرق التقليدية ولكن هناك اختلفات دقيقة.",
+        "latency_sec": 2.347,
+        "timestamps": true,
+        "timed_words": 14,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-009": {
+        "ok": true,
+        "text": "يكتب الناس ال��ن رسائل على شاشات الكمبيوتر دون الاحتياج إلى استخدام المباراة.",
+        "latency_sec": 2.041,
+        "timestamps": true,
+        "timed_words": 12,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-010": {
+        "ok": true,
+        "text": "تتفاوت سياسات الإلغاء، ولكن اعتبارا من أواخر أزور، لم تعود معظم سياسات الإلغاء المستندة إلى فيروس كورونا حتى تموز عام 2020، عندما كان من المقرر أن يتم تنظيم الألعاب الأولمبية.",
+        "latency_sec": 2.493,
+        "timestamps": true,
+        "timed_words": 30,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-011": {
+        "ok": true,
+        "text": "في أيامه الأولى أذيع البرنامج حصرا على موقع راديو الإنترنت، الموجود منذ فترة طويلة، تو جي نت راديو، وهو الموقع الذي يركز على الراديو الحواري.",
+        "latency_sec": 2.352,
+        "timestamps": true,
+        "timed_words": 25,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-012": {
+        "ok": true,
+        "text": "ونتيجة لذلك يدخن الفنانولة فائف القنبا على خشبة المسرح، ويشجع المسرح نفسه الجمهور على مشاركاتهم في ذلك.",
+        "latency_sec": 1.999,
+        "timestamps": true,
+        "timed_words": 17,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-013": {
+        "ok": true,
+        "text": "تعتبر فنلندا وجهة رائعة لركوب القوارب، تحتوي أرض الألف بحيرة، أيضا على ال��لاف من الجزر في البحيرات وفي الأرخبيل الساحلي كليهما.",
+        "latency_sec": 2.53,
+        "timestamps": true,
+        "timed_words": 21,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-014": {
+        "ok": true,
+        "text": "تشمل الموضوعات الأخرى المدرجة على جدول أعمال بالي الحفا�� على ال��ابات المتبقية في العالم، وتبادل التكنولوجيات لمساعدة الدول النامية على النمو بطرق أقل تلويسا.",
+        "latency_sec": 2.492,
+        "timestamps": true,
+        "timed_words": 24,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-015": {
+        "ok": true,
+        "text": "كما تعد المدينة قاعدة لتخلق بركان نيراجونجو، وبعد أرخص سبل تتبع ال��وريلا الجبلية في أفريقيا.",
+        "latency_sec": 2.29,
+        "timestamps": true,
+        "timed_words": 15,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-016": {
+        "ok": true,
+        "text": "حكبة الممالك ال��لا��ة هي واحدة من أكثر الحقب دموية في تاريخ الصين القديمة. مات آلاف من الناس خلال القتال في سبيل الجلوس على أعلى المقاعد في القصر الكبير في شيان.",
+        "latency_sec": 2.376,
+        "timestamps": true,
+        "timed_words": 30,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-017": {
+        "ok": true,
+        "text": "وفي الحقيقة، فليس من السهل العثور عليه على الإطلاق، حتى لو كنت تعلم بوجوده، فبمجرد الدخول إلى الكهف، تصبح فيه عزلة تامة.",
+        "latency_sec": 2.135,
+        "timestamps": true,
+        "timed_words": 22,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-018": {
+        "ok": true,
+        "text": "تحتوي العديد من المخبوزات الألمانية على الوز والبندق وجوز الأشجار الأخرى، وغالبا ما يتم تناول كعك الشعبي، خصيصا مع فنجان من القهوة القوية.",
+        "latency_sec": 2.511,
+        "timestamps": true,
+        "timed_words": 23,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-019": {
+        "ok": true,
+        "text": "ليزل هناك العديد من الرجال والنساء على قيد الحياة من مين منجوا من وقتهم هنا، والعديد من الأشخاص ال��خرين الذين كان عندهم أحباء قتلوا أو عملوا حتى الموت هناك من اليهود وغير اليهود على حد سواء.",
+        "latency_sec": 2.574,
+        "timestamps": true,
+        "timed_words": 36,
+        "returncode": 0,
+        "stderr": ""
+      },
+      "egyptian-fleurs-020": {
+        "ok": true,
+        "text": "وطاوة هي عاصمة كندا الساحرة، ثنائية اللغة تضن مجموع من المعارض الفنية والمتاحف التي تبرز ماضي كندا وحاضرها.",
+        "latency_sec": 2.509,
+        "timestamps": true,
+        "timed_words": 18,
+        "returncode": 0,
+        "stderr": ""
+      }
+    }
+  }
+}

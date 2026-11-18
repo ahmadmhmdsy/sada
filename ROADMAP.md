@@ -5,8 +5,8 @@ It records what is in flight, what each milestone promises, and the evidence rul
 model questions: **no model is curated without a licence, a size, a SHA-256 and timestamps** — and no
 Arabic claim is made without the benchmark.
 
-Status: `P0 complete`, `P1 complete` — v3.3.1 shipped 2026-11-17 and v3.4.0 shipped 2026-11-17
-(before its 2026-12-08 due date). Next: P2/v3.5.0 (Arabic model evaluation). Last updated 2026-11-18.
+Status: `P0 complete`, `P1 complete`, `P2 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17, and
+v3.5.0 shipped 2026-11-18 (before its 2027-01-15 due date). Last updated 2026-11-18.
 
 ## Milestones
 
@@ -14,7 +14,7 @@ Status: `P0 complete`, `P1 complete` — v3.3.1 shipped 2026-11-17 and v3.4.0 sh
 | --- | --- | --- | --- |
 | **v3.3.1 — engine & GPU foundation** | 2026-11-24 | Engine sidecar v0.6.16, Nemotron-3 diarization migration, GPU/Vulkan documented, patch release | #1 #2 #3 #4 |
 | **v3.4.0 — verified model catalog** | 2026-12-08 | Bundled verified catalog + Get models, Arabic entries and docs, MCP/capability plumbing, local endpoint hardening | #5 #6 #7 #8 #9 |
-| **v3.5.0 — Arabic model evaluation** | 2027-01-15 | Arabic WER/CER harness, fine-tune/Nemotron decisions, read-aloud test, second-engine spike | #10 #11 #12 #13 |
+| **v3.5.0 — Arabic model evaluation** | 2027-01-15 | Arabic WER/CER harness, fine-tune/Nemotron decisions, read-aloud test, second-engine spike | #10 #11 #12 #13 — **complete**, evidence below |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -78,6 +78,38 @@ engine (200/403/403/200).
   SHA-256 `7e6d8c813af34a80e4fa59e2ee28444a07b2c7811d88aa1b2549b627ce3cfd27` (re-downloaded and
   matched against `SHA256SUMS.txt`); the published installer installs `Sada 3.4.0` with sidecar
   `vibe-server v0.6.16-sada.1`, and the installed engine repeats the guard matrix.
+## P2 — Arabic model evaluation (complete, v3.5.0)
+
+- [x] #10 Arabic ASR benchmark harness (`benchmarks/arabic-asr/`): pinned 60-clip manifest
+  (30 MSA Common Voice 18 CC0 + 10 Latin-mixed Common Voice + 20 Egyptian FLEURS `ar_eg`
+  CC-BY-4.0), Arabic normalisation, stripped-WER/CER, acronym **and Latin-name** preservation,
+  timestamp coverage, RTF, per-slice curation verdicts, `unittest` suite (38 tests) and a CI job.
+  Audio and weights stay out of git.
+- [x] #11 Model decisions with measured evidence, written to
+  [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md): Turbo stays the default; **Nemotron 3.5
+  ASR Streaming 0.6B promoted to an optional verified catalogue entry** (OpenMDW-1.1, 495,831,520 B,
+  SHA-256 `41c99fa5…b8fd`, VAD supplied by the app); the Arabic Whisper fine-tune is rejected
+  (23.09% vs 19.46% WER); the ≥90% acronym gate is recorded as not applicable because no
+  commercial-use corpus with acronym references exists yet — the `latin-mixed` slice is the
+  declared proxy.
+- [x] #12 Read-aloud go/no-go in [`docs/READ-ALOUD.md`](docs/READ-ALOUD.md): **no-go** (a normal
+  Windows install ships English voices only; Arabic voices are an optional Narrator download that
+  needs network and usually elevation; the rubric could not be run on the evaluation host). No TTS
+  code written; Chatterbox stays suspended.
+- [x] #13 Second-engine spike in [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md): built
+  transcribe.cpp v0.4.2 from source (MIT) and ran Qwen3-ASR 0.6B Q8_0 (811 MB, Apache-2.0) over all
+  60 clips in one CPU batch — 60/60 transcribed, WER 24.38% overall (MSA 20.54%, Egyptian 21.10%,
+  Latin-mixed 48.96%), no timestamps, no VAD → **rejected for integration**, keep-learning only.
+
+**P2 evidence (2026-11-18):** engine `vibe-server v0.6.16-sada.1` on Vulkan (Quadro RTX 4000),
+60 clips per model. Overall WER/CER: **turbo 19.46/8.34, RTF 0.35**; Nemotron 17.12/8.28, RTF 0.234,
+496 MB; dialectal fine-tune 23.09/9.53; tiny 70.56/29.46. WER by slice (turbo → Nemotron): MSA
+22.09 → 17.83, Egyptian 11.03 → 9.11, Latin-mixed 48.96 → 50.00. Latin-name preservation 25.0% for
+turbo vs 0.0% for every challenger; timestamps 100% for all `vibe-server` models. Raw:
+`benchmarks/arabic-asr/results/results-2026-11-18.json` and
+`results-2026-11-18-transcribe-cpp.json`. Catalogue, `docs/MODELS.md` and `docs/MODELS.ar.md`
+updated; frontend tests and the Python suite re-run green.
+
 ## Step Zero tests (define "done" before code)
 
 1. **E1 — engine bump smoke test.** Four Arabic clips (short MSA, MSA news, Iraqi dialogue,
@@ -93,10 +125,13 @@ engine (200/403/403/200).
 - [Models, features & tools council (EN)](docs/MODELS-COUNCIL.md) · [(AR)](docs/MODELS-COUNCIL.ar.md) —
   verdicts, licence table, measured evidence, phased plan.
 - [Upstream delta](docs/UPSTREAM-PATCHES.md) — engine/catalog/security changes the fork has not taken yet.
-- Why the defaults stay Whisper large-v3-turbo: it is the only tested model that keeps Arabic/English
-  code-switching intact (`GPU`, `SRT`, `VTT` stay Latin) while offering timestamps, and it is fast enough
-  (~12.5× realtime on the test GPU). Nemotron 3.5 is smaller and punctuates better but transliterates
-  technical terms and is ~2.5× slower — optional, never default.
+- Why the defaults stay Whisper large-v3-turbo (measured 2026-11-18): best overall Arabic WER
+  (19.46%), 100% word timestamps and the only model that keeps Latin code-switched terms (25% of
+  Latin names vs 0% for Nemotron), and fast enough (RTF 0.35 on Vulkan). Nemotron 3.5 is smaller
+  (496 MB), faster (RTF 0.234), punctuates better and wins the read MSA/Egyptian slices (17.83%/9.11%
+  vs 22.09%/11.03%), so it is curated as an optional entry — but it transliterates technical terms
+  and is never the default. Both verdicts and the rejections (fine-tune, read-aloud, second engine)
+  are recorded with reproduction commands in [`docs/MODELS-DECISIONS.md`](docs/MODELS-DECISIONS.md).
 
 ## Rules that do not move
 

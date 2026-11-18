@@ -12,13 +12,14 @@
 - Website: https://alshahia.github.io/sada/
 - Repository: https://github.com/alshahia/sada
 - Latest release: https://github.com/alshahia/sada/releases/latest
-- Version: 3.4.0 · License: MIT · Platform: Windows 10/11 x64
+- Version: 3.5.0 · License: MIT · Platform: Windows 10/11 x64
 - Engine: whisper.cpp via bundled vibe-server v0.6.16 (built by Sada from `server/` as
   v0.6.16-sada.1 with a loopback Host/Origin guard); FFmpeg 9.0.2 GPLv3 bundled (notices in repo)
 - GPU: optional Vulkan acceleration (device picker in Settings → Models → Hardware), CPU fallback,
   no CUDA/ROCm download
 - Models: not bundled; verified catalog in Settings → Models with licence, size, SHA-256 and
-  languages (suggested large-v3-turbo, ~1.6 GB)
+  languages (suggested large-v3-turbo, ~1.6 GB; NVIDIA Nemotron 3.5 ASR 0.6B is an optional
+  OpenMDW-1.1 entry, 496 MB, faster on read MSA/Egyptian speech but transliterates Latin terms)
 - Language: Arabic ar-IQ first, 20+ inherited locales available
 - MCP: `Sada.exe --mcp` (stdio only) — tools sada_transcribe, sada_transcripts, sada_transcript,
   sada_info. `sada_info` reports model capabilities (engine, languages, VAD, translation, prompts).
@@ -35,7 +36,7 @@
 - [MCP guide](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.md) · [دليل MCP](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.ar.md)
 - [Voicebox review](https://github.com/alshahia/sada/blob/master/docs/VOICEBOX-REVIEW.md)
 - [Models council](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.md) · [مجلس النماذج](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.ar.md)
-- [Release notes v3.4.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.4.0.md) · [v3.3.1](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.1.md) · [v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
+- [Release notes v3.5.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.5.0.md) · [v3.4.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.4.0.md) · [v3.3.1](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.1.md) · [v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
 - [Privacy](https://github.com/alshahia/sada/blob/master/PRIVACY.md)
 - [Third-party notices](https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md)
 

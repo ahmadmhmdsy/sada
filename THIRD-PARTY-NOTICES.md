@@ -35,12 +35,16 @@ and do not relicense FFmpeg as MIT.
 [server/LICENSE](./server/LICENSE)). It statically links whisper.cpp/ggml (MIT) and other
 crates whose licences are recorded in [docs/licenses/rust-crates.txt](./docs/licenses/rust-crates.txt).
 
-### Whisper models — not bundled
+### Speech models — not bundled
 
-No speech model is shipped in the installer. Models are downloaded by the user at runtime from
-the upstream model sources (for example https://huggingface.co/ggerganov/whisper.cpp), or
-selected from the user's disk. Model weights are distributed by their own publishers under
-their own terms.
+No speech model is shipped in the installer. Models are downloaded by the user at runtime, either
+from the app's verified catalogue (OpenAI Whisper large-v3-turbo and tiny, MIT; ivrit.ai Hebrew
+large-v3-turbo, Apache-2.0; NVIDIA Nemotron 3.5 ASR Streaming 0.6B, OpenMDW-1.1) or from the model
+sources the user chooses, or selected from the user's disk. Model weights are distributed by their
+own publishers under their own terms; the app only links to the publisher's file, verifies its
+SHA-256 and keeps the publisher's name and licence visible before download. The auxiliary Silero VAD
+model is MIT (ggml build from ggml-org/whisper-vad) and the diarization model is OpenMDW-1.1 (NVIDIA).
+OpenMDW-1.1 asks that its notices be kept when the model is redistributed — Sada never bundles it.
 
 ## Application frontend and Rust crates
 

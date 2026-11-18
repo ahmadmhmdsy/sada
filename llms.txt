@@ -10,12 +10,12 @@
 ## Key facts
 
 - Name: Sada (صدى) — "echo"
-- Version: 3.4.0
+- Version: 3.5.0
 - Platform: Windows 10/11 x64 (Tauri 2 desktop app)
 - License: MIT (fork of Vibe v3.2.2, MIT); bundled FFmpeg is GPLv3 (mere aggregation, see notices)
 - Engine: whisper.cpp via the bundled `vibe-server` sidecar (v0.6.16; built by Sada from
   `server/` as `v0.6.16-sada.1`, adding a loopback Host/Origin guard); models are NOT bundled
-- Installer: `Sada_3.4.0_x64-setup.exe` from GitHub Releases, unsigned, per-user
+- Installer: `Sada_3.5.0_x64-setup.exe` from GitHub Releases, unsigned, per-user
   (`%LOCALAPPDATA%\Sada\`)
 - Languages: Arabic `ar-IQ` first; 20+ inherited upstream locales available
 - Network: only user-requested actions (model download, pasted URL, optional summary provider)
@@ -37,8 +37,8 @@
 - [MCP guide](docs/AGENT-MCP.md) · [MCP guide in Arabic](docs/AGENT-MCP.ar.md)
 - [Voicebox review (why MCP, what was not copied)](docs/VOICEBOX-REVIEW.md)
 - [Models council (models, features and tools worth adding, with licences)](docs/MODELS-COUNCIL.md)
-- [Release notes v3.4.0](docs/releases/v3.4.0.md) · [v3.3.1](docs/releases/v3.3.1.md) ·
-  [v3.3.0](docs/releases/v3.3.0.md)
+- [Release notes v3.5.0](docs/releases/v3.5.0.md) · [v3.4.0](docs/releases/v3.4.0.md) ·
+  [v3.3.1](docs/releases/v3.3.1.md) · [v3.3.0](docs/releases/v3.3.0.md)
 - [Website](https://alshahia.github.io/sada/)
 
 ## For AI agents and researchers
@@ -46,7 +46,8 @@
 - Source layout: `desktop/` (React + Tauri shell), `i18n/desktop/` (catalogues incl.
   `ar-IQ.json`, 704 keys), `server/` (Rust whisper.cpp sidecar), `docs/`, `site/`.
 - Build/test: `chore setup x86_64-pc-windows-msvc`, `cd desktop && pnpm install && pnpm test && pnpm build`.
-- Tests: `pnpm test` = vitest (26 files / 134 tests); `cargo test --release` = 83 Rust tests.
+- Tests: `pnpm test` = vitest (28 files / 179 tests); `cargo test --release` = 91 Rust tests;
+  `python -m unittest discover -s benchmarks/arabic-asr/tests` = 38 tests.
 - Do not assume the model is included; a `ggml-*.bin` is required at runtime.
 - Agent integration: run `Sada.exe --mcp` as a stdio MCP server; no HTTP port is opened. The
   installed agent skill lives at `.claude|.codex/skills/sada/SKILL.md`.

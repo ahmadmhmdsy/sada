@@ -70,3 +70,19 @@ jobs:
       - name: Run Rust tests (MCP, Arabic normaliser, app)
         working-directory: desktop/src-tauri
         run: cargo test --release
+
+  benchmarks:
+    name: Arabic ASR benchmark harness
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run harness unit tests
+        working-directory: benchmarks/arabic-asr
+        run: python -m unittest discover -s tests -v

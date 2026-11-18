@@ -302,6 +302,44 @@ Upstream delta relevant to this council (all verified via the GitHub API on 2026
 
 Sources: [Vibe releases](https://github.com/thewh1teagle/vibe/releases) · [Vibe model catalog JSON](https://github.com/thewh1teagle/vibe/blob/v3.3.5/website/public/models.json) · [Nemotron 3.5 model card](https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b) · [OpenMDW-1.1 text](https://github.com/OpenMDW/OpenMDW/blob/main/1.1/LICENSE.OpenMDW-1.1) · [Qwen3-ASR](https://huggingface.co/Qwen/Qwen3-ASR-1.7B) · [transcribe.cpp](https://github.com/handy-computer/transcribe.cpp) · [Cohere Transcribe Arabic](https://huggingface.co/CohereLabs/cohere-transcribe-arabic-07-2026) · [Chatterbox Multilingual V3](https://huggingface.co/ResembleAI/chatterbox) · [Piper voices (ar_JO)](https://huggingface.co/rhasspy/piper-voices/blob/main/ar/ar_JO/kareem/medium/MODEL_CARD)
 
+## 8. Benchmark evidence and rulings (measured on this host, 2026-11-18)
+
+Milestone v3.5.0 replaced the four-clip spot check with a pinned 60-clip corpus: 30 MSA
+(Common Voice 18 Arabic, CC0), 10 Latin-mixed (Common Voice rows whose reference text carries Latin
+proper nouns) and 20 Egyptian (FLEURS `ar_eg` test, CC BY 4.0). Engine: bundled
+`vibe-server v0.6.16-sada.1` on Vulkan (same RTX 4000 host). Full tables, licences, hashes and
+reproduction commands: [docs/MODELS-DECISIONS.md](MODELS-DECISIONS.md); raw artefacts under
+`benchmarks/arabic-asr/results/results-2026-11-18.*`.
+
+| Model | WER % overall | MSA | Egyptian | Latin-mixed | Latin names kept % | Timestamps % | RTF | Ruling |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| whisper-large-v3-turbo | 19.46 | 22.09 | 11.03 | 48.96 | 25.0 | 100 | 0.35 | default stays |
+| nemotron-3.5-asr-streaming-0.6b-q4-k-m | **17.12** | **17.83** | **9.11** | 50.00 | 0.0 | 100 | **0.234** | curated as optional catalogue entry |
+| whisper-large-v3-turbo-arabic-dialectal-v2-q5 | 23.09 | 23.64 | 14.39 | 59.38 | 0.0 | 100 | 0.265 | rejected |
+| whisper-tiny | 70.56 | 72.09 | 64.03 | 94.79 | 0.0 | 100 | 0.186 | low-resource fallback only |
+
+Second-engine spike (transcribe.cpp v0.4.2, Qwen3-ASR 0.6B Q8_0, CPU): WER 24.38 % overall,
+MSA 20.54 %, Egyptian 21.10 %, Latin-mixed 48.96 %, Latin names 10 %, **no timestamps**, no VAD.
+It is close on MSA and loses 10 pp on Egyptian, and the missing timestamps break SRT/VTT/editing,
+so it is not integrated; Cohere Transcribe Arabic is gated upstream and also timestamp-free.
+
+Rulings of the council, now closed with evidence:
+
+1. **Turbo stays the default** — best overall WER, 100 % timestamps, best Latin-term preservation.
+2. **Nemotron is promoted to an optional curated entry** on the strength of the MSA/Egyptian
+   dictation slices (≥1.0 pp rule met: +4.26 pp, +1.92 pp), 100 % timestamps, faster RTF and 496 MB.
+   It transliterates Latin technical terms (0 % Latin names kept vs 25 %), so it is never the
+   default; the ≥90 % acronym gate is recorded as **not applicable** (no acronym-bearing
+   commercial corpus exists yet), not as passed, and the catalogue description says so.
+3. **Arabic Whisper fine-tunes stay rejected** until one wins a measured slice by ≥1.0 pp with
+   terms intact.
+4. **Read-aloud stays no-go** — evidence in [docs/READ-ALOUD.md](READ-ALOUD.md).
+5. **Second engine stays suspended**; revisit only if a port lands word timestamps + VAD (or a
+   commercial-use technical/dialect corpus changes the scorecard).
+6. **Still unmeasured:** Iraqi, Gulf, Levantine and Arabic/English technical speech (no
+   commercial-use-permissive corpus found; research-only corpora are excluded by fork policy).
+   `latin-mixed` is the declared proxy; extending `manifest.json` is the retest path.
+
 ---
 
 *Council stop condition: met after three rounds — every fatal flaw was fixed, dropped, downgraded, or suspended on the named tests above. The Maestro's first action is the only thing to start today.*

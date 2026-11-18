@@ -17,6 +17,7 @@ does not match is deleted and reported instead of being loaded.
 | **Whisper Large v3 Turbo** (`whisper-large-v3-turbo`) — the default | every language, including Arabic | 1.62 GB | MIT | OpenAI, ggml conversion by ggerganov/whisper.cpp | a GPU is recommended, not required |
 | **Whisper Tiny** (`whisper-tiny`) | every language | 78 MB | MIT | OpenAI | any machine, CPU is enough |
 | **Whisper Large v3 Turbo Hebrew** (`whisper-large-v3-turbo-he`) | Hebrew | 1.62 GB | Apache-2.0 | ivrit.ai | a GPU is recommended, not required |
+| **NVIDIA Nemotron 3.5 ASR Streaming 0.6B** (`nemotron-3.5-asr-streaming-0.6b`) — optional, for faster Arabic dictation | 35 languages, including every Arabic code the engine lists | 496 MB | OpenMDW-1.1 | NVIDIA, GGUF build mirrored by vibe-app | the Silero VAD file (downloaded automatically); a GPU is recommended, not required |
 
 Verified file facts (checked against the publishers on 2026-11-17):
 
@@ -25,12 +26,18 @@ Verified file facts (checked against the publishers on 2026-11-17):
 | `ggml-large-v3-turbo.bin` | 1,624,555,275 | `1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69` |
 | `ggml-tiny.bin` | 77,691,713 | `be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21` |
 | `ggml-model.bin` (ivrit.ai Hebrew) | 1,624,555,275 | `c8090411113357097bfafc2b8e228ec1639fa7f5fe4ecb5d054ac0ccef8641b1` |
+| `nemotron-3.5-asr-streaming-0.6b-Q4_K_M.gguf` | 495,831,520 | `41c99fa5fb6f3d35f68e79adc3e755eca2232a8d921178bd647b71194792b8fd` |
 
 ## Which model should I pick?
 
 - **Arabic — the default:** Whisper Large v3 Turbo. It is the model the app was tuned and measured
   on: Modern Standard Arabic, Iraqi dialect, and Arabic/English technical speech (Latin terms such
   as GPU, CPU, PDF, SRT, VTT stay Latin), with word timestamps for exports and transcript editing.
+- **Faster Arabic dictation, smaller download:** NVIDIA Nemotron 3.5 ASR Streaming 0.6B. In the
+  Arabic benchmark (60 clips) it beat Turbo on read Modern Standard Arabic (17.8% vs 22.1% WER) and
+  read Egyptian Arabic (9.1% vs 11.0%), adds punctuation, runs faster and is 496 MB instead of
+  1.62 GB. It transliterates Latin technical terms (GPU becomes جي بي يو) and needs the Silero VAD
+  file, so keep Turbo when your audio mixes Arabic with English terms.
 - **A slow or old machine:** Whisper Tiny. It runs on the CPU only and fits in 78 MB, but its
   accuracy is much lower, especially on dialect and technical terms. Use it for a trial or for a
   laptop that cannot run the large model.
@@ -70,15 +77,17 @@ left where they are and are simply ignored.
 
 ## Not curated yet
 
-- **NVIDIA Nemotron 3.5 ASR Streaming 0.6B** (OpenMDW-1.1, 496 MB, 36 languages including Arabic)
-  is a smaller multilingual model with punctuation, but it transliterates Latin technical terms
-  and runs slower than Turbo on the same GPU. It stays an evaluated candidate, not a catalogue
-  entry, until the Arabic benchmark (E2) decides.
-- **Arabic Whisper fine-tunes** (Byne large-v3-arabic, oddadmix turbo dialectal v2) are suspended on
-  the same benchmark: no fine-tune is recommended before it beats Turbo on measured Arabic WER/CER
-  with technical terms intact.
-- **Qwen3-ASR and Cohere Transcribe Arabic** would need a second engine runtime without timestamps
-  or VAD today; they are documented as suspended experiments, not shipped.
+- **Arabic Whisper fine-tunes** (Byne large-v3-arabic, oddadmix turbo dialectal v2) were evaluated in
+  the same benchmark and **not curated**: the oddadmix turbo dialectal v2 q5_0 file scored worse than
+  Turbo on every slice (23.1% vs 19.5% overall WER), and a fine-tune is only curated after a
+  measured win of at least 1.0 pp on its target slice. See
+  [docs/MODELS-DECISIONS.md](MODELS-DECISIONS.md).
+- **Qwen3-ASR and Cohere Transcribe Arabic** would need a second engine runtime. The one-day
+  transcribe.cpp spike is recorded in [docs/MODELS-DECISIONS.md](MODELS-DECISIONS.md): Qwen3-ASR
+  0.6B came within 1.5 pp of Turbo on the MSA slice but has no timestamps, VAD or segments in the
+  current port, and it was 10 pp behind on Egyptian Arabic; both stay suspended experiments.
+- **NVIDIA Nemotron 3.5 ASR Streaming 0.6B** is now an optional curated entry, not the default:
+  it transliterates Latin technical terms, so it never replaces Turbo for Arabic/English mixing.
 
 ## GPU or CPU?
 

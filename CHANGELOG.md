@@ -4,6 +4,42 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.5.0 — 2026-11-18
+
+Measured Arabic model evaluation. No engine change (still `vibe-server v0.6.16-sada.1`); the
+release adds the benchmark harness, the written decisions, one optional verified catalogue entry,
+and the read-aloud and second-engine verdicts.
+
+### Added
+
+- **Arabic ASR benchmark harness** (`benchmarks/arabic-asr/`, stdlib Python, offline after the
+  one-time fetch): pinned 60-clip manifest (30 MSA Common Voice 18 CC0, 10 Latin-mixed Common Voice,
+  20 Egyptian FLEURS `ar_eg` CC BY 4.0), Arabic normalisation, corpus-level WER/CER, acronym and
+  Latin-name preservation, word-timestamp coverage, RTF, per-slice curation verdicts, 38 `unittest`
+  tests and a CI job. Audio and weights stay out of git.
+- **NVIDIA Nemotron 3.5 ASR Streaming 0.6B** as an optional catalogue entry
+  (`nemotron-3.5-asr-streaming-0.6b`, OpenMDW-1.1, 495,831,520 B, SHA-256
+  `41c99fa5…b8fd`, Silero VAD supplied automatically). It wins the measured read MSA/Egyptian
+  slices, adds punctuation, is faster and 3.3× smaller than Turbo; its description states that it
+  transliterates Latin technical terms and that it is not the default.
+- **Decision record** `docs/MODELS-DECISIONS.md` (measured numbers, rulings, reproduction commands,
+  reopen conditions) and **read-aloud evidence** `docs/READ-ALOUD.md` (no-go for Windows voices).
+- Evidence log §8 in `docs/MODELS-COUNCIL.md` and its Arabic mirror; ROADMAP P2 completed.
+
+### Changed
+
+- `docs/MODELS.md` / `docs/MODELS.ar.md`: the optional Nemotron entry, the rejected fine-tune and
+  the unmeasured Iraqi/Gulf/Levantine/technical slices are documented honestly.
+- Catalogue is now four curated entries (three Whisper models + Nemotron); no weight is bundled.
+
+### Rejected (recorded, not shipped)
+
+- Arabic Whisper fine-tune `whisper-large-v3-turbo-arabic-dialectal-v2-q5_0`: 23.09% overall WER vs
+  19.46% for Turbo, no ≥1.0 pp slice win → not curated.
+- Read-aloud via Windows voices: no Arabic voice in a normal install, rubric not runnable → no TTS code.
+- Second engine (transcribe.cpp + Qwen3-ASR 0.6B, CPU): 24.38% overall WER (MSA 20.54%, Egyptian
+  21.10%), no timestamps and no VAD → not integrated; keep-learning conditions recorded.
+
 ## v3.4.0 — 2026-11-17
 
 Verified model catalog, model-capability gating and local endpoint hardening. The installer still

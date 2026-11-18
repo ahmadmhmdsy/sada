@@ -2,7 +2,7 @@
 	"$schema": "./gen/schemas/desktop-schema.json",
 	"productName": "Sada",
 	"mainBinaryName": "Sada",
-	"version": "3.4.0",
+	"version": "3.5.0",
 	"identifier": "app.sada.desktop",
 	"app": {
 		"macOSPrivateApi": true,

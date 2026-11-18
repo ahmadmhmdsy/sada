@@ -1,0 +1,29 @@
+{
+  "models": {
+    "whisper-large-v3-turbo": {
+      "path": "C:/models/ggml-large-v3-turbo.bin",
+      "language": "ar",
+      "family": "whisper",
+      "size_bytes": 1624555275
+    },
+    "whisper-tiny": {
+      "path": "C:/models/ggml-tiny.bin",
+      "language": "ar",
+      "family": "whisper",
+      "size_bytes": 77691713
+    },
+    "nemotron-3.5-asr-streaming-0.6b-q4-k-m": {
+      "path": "C:/models/nemotron-3.5-asr-streaming-0.6b-Q4_K_M.gguf",
+      "language": "ar-AR",
+      "family": "nemotron",
+      "args": ["--vad-model", "C:/models/ggml-silero-v6.2.0.bin"],
+      "size_bytes": 495831520
+    },
+    "whisper-large-v3-turbo-arabic-dialectal-v2-q5": {
+      "path": "C:/models/ggml-whisper-large-v3-turbo-arabic-dialectal-v2-q5_0.bin",
+      "language": "ar",
+      "family": "whisper-finetune",
+      "size_bytes": 574000000
+    }
+  }
+}

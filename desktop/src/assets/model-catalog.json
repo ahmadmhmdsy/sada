@@ -67,6 +67,64 @@
 				"en-US": "A Hebrew-specialised Whisper model with high accuracy on Hebrew text. It does not understand Arabic.",
 				"ar-IQ": "نموذج Whisper متخصّص بالعبرية بدقة عالية في النصوص العبرية، لكنه لا يفهم العربية."
 			}
+		},
+		{
+			"id": "nemotron-3.5-asr-streaming-0.6b",
+			"name": "NVIDIA Nemotron 3.5 ASR Streaming 0.6B",
+			"languages": [
+				"en",
+				"es",
+				"de",
+				"fr",
+				"it",
+				"ar",
+				"ja",
+				"ko",
+				"pt",
+				"ru",
+				"hi",
+				"zh",
+				"vi",
+				"he",
+				"nl",
+				"cs",
+				"da",
+				"pl",
+				"no",
+				"sv",
+				"th",
+				"tr",
+				"bg",
+				"el",
+				"et",
+				"fi",
+				"hr",
+				"hu",
+				"lt",
+				"lv",
+				"ro",
+				"sk",
+				"uk",
+				"mt",
+				"sl"
+			],
+			"tags": [
+				"fast",
+				"small",
+				"dictation"
+			],
+			"publisher": {
+				"name": "NVIDIA",
+				"url": "https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b"
+			},
+			"license": "OpenMDW-1.1",
+			"url": "https://huggingface.co/vibe-app/nemotron-3.5-asr-streaming-0.6b-gguf/resolve/main/nemotron-3.5-asr-streaming-0.6b-Q4_K_M.gguf",
+			"size": 495831520,
+			"sha256": "41c99fa5fb6f3d35f68e79adc3e755eca2232a8d921178bd647b71194792b8fd",
+			"description": {
+				"en-US": "A 496 MB multilingual NVIDIA model that requires the Silero VAD file. In our Arabic benchmark it was faster than Turbo and more accurate on Modern Standard Arabic and Egyptian read speech, and it adds punctuation; but it transliterates Latin technical terms (GPU becomes جي بي يو), so Turbo stays the default for Arabic/English mixing.",
+				"ar-IQ": "نموذج إنفيديا متعدد اللغات بحجم 496 ميغابايت ويحتاج ملف Silero VAD. في قياسنا العربي كان أسرع من Turbo وأدق في الفصحى والقراءة المصرية، ويضيف ترقيماً؛ لكنه ينقل المصطلحات التقنية اللاتينية صوتياً (تُكتب GPU «جي بي يو»)، لذا يبقى Turbo هو الافتراضي للخلط بين العربية والإنجليزية."
+			}
 		}
 	]
 }

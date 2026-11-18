@@ -1,0 +1,915 @@
+{
+  "version": 1,
+  "created": "2026-11-18",
+  "policy": "commercial-use-permissive corpora only; audio is fetched, never committed",
+  "slices": {
+    "msa": "Modern Standard Arabic read speech (Common Voice ar)",
+    "egyptian": "Egyptian Arabic read speech (FLEURS ar_eg)",
+    "technical": "Arabic sentences containing Latin technical acronyms (Common Voice ar)",
+    "iraqi": "pending: no commercial-use-permissive Iraqi corpus found",
+    "gulf": "pending: no commercial-use-permissive Gulf corpus found",
+    "levantine": "pending: no commercial-use-permissive Levantine corpus found"
+  },
+  "clips": [
+    {
+      "id": "msa-cv-001",
+      "slice": "msa",
+      "reference": "أعلنت القوات الأمريكية انتهاء مهمتها في العراق.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 8,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-002",
+      "slice": "msa",
+      "reference": ".كل ما عليك فعله هو حفظ هذه الجملة عن ظهر قلب",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 9,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-003",
+      "slice": "msa",
+      "reference": ".سأكون قد درست الإنجليزية لخمس سنوات مع حلول فبراير المقبل",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 12,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-004",
+      "slice": "msa",
+      "reference": "يحترم عالمنا قانوناً ذهبياً واحداً: من يملك الذهب يضع القانون.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 13,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-005",
+      "slice": "msa",
+      "reference": "بالرغم من أنني أحسست بأن هناك شيئاً غريباً ، لم أعرف بالتحديد ما هو.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 52,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-006",
+      "slice": "msa",
+      "reference": ".بريطانيا العظمى بلد النبلاء و ركوب الخيل",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 63,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-007",
+      "slice": "msa",
+      "reference": "ليس هناك طريق مختصرة إلى القمة ، فقط إلى الهاوية.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 66,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-008",
+      "slice": "msa",
+      "reference": "ذكر هاتوياما أنه يعيل عائلته بالمراهنة على سباق الخيل.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 102,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-009",
+      "slice": "msa",
+      "reference": "إذا الشعب يوماً أراد الحياة فلا بد أن يستجيب القدر",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 129,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-010",
+      "slice": "msa",
+      "reference": ".سمعت صوت اصطدام حوالي العاشرة ليلة الأمس",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 133,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-011",
+      "slice": "msa",
+      "reference": "\" كم الساعة الآن ؟ \" \" إنها الثالثة وعشرون دقيقة. \"",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 141,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-012",
+      "slice": "msa",
+      "reference": "يبلغ عدد سكان اليابان حوالي مئة و عشرون مليون نسمة.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 142,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-013",
+      "slice": "msa",
+      "reference": ".أحتاج لمزيد من الوقت لأنهي واجبي المدرسي",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 145,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-014",
+      "slice": "msa",
+      "reference": "قفا نبك من ذكرى حبيب ومنزل بسقط اللوى بين الدّهول فحومل",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 148,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-015",
+      "slice": "msa",
+      "reference": ".يبدو عليه أنه كان غنياً في يوم من الأيام",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 162,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-016",
+      "slice": "msa",
+      "reference": "ارجوك لا تمشي بسرعة هكذا ، لا استطيع مجاراة سرعتك في المشي.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 184,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-017",
+      "slice": "msa",
+      "reference": "من تلك المرأة التي ترتدي فستاناً وردياً ؟",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 195,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-018",
+      "slice": "msa",
+      "reference": "اقطع تلك الشجرة الميتة ، وإلا فإنها ستقع فوق منزلك.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 263,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-019",
+      "slice": "msa",
+      "reference": "الأم مدرسة إذا أعددتها أعددت شعباً طيب الأعراق",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 272,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-020",
+      "slice": "msa",
+      "reference": "ولد جدي عام ألف و تسعمئة و عشرين للميلاد.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 342,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-021",
+      "slice": "msa",
+      "reference": "بإمكانك الوصول إلى المحطة عن طريق الحافلة.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 346,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-022",
+      "slice": "msa",
+      "reference": "إذا التقى المسلمان بسيفيهما فالقاتل والمقتول في النار",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 362,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-023",
+      "slice": "msa",
+      "reference": "أبريل هو موسم الضرائب في الولايات المتحدة",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 389,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-024",
+      "slice": "msa",
+      "reference": "بعد شراء تلك الأحذية انتهى بي المطاف مع السحب على المكشوف",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 398,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-025",
+      "slice": "msa",
+      "reference": "أَتَأمُرُونَ النَّاسَ بِالبِرِّ وَتَنسَونَ أَنفُسَكُم",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 405,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-026",
+      "slice": "msa",
+      "reference": ".من دون الهواء ، لن يبقى شيء على قيد الحياة",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 454,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-027",
+      "slice": "msa",
+      "reference": ".عندما عدت إلى المنزل ، اكتشفت أني أضعت محفظتي",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 517,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-028",
+      "slice": "msa",
+      "reference": "سيذهب أستاذنا إلى الولايات المتحدة الشهر القادم.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 534,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-029",
+      "slice": "msa",
+      "reference": "قبل الفجر بقليل من اليوم التالي ، جاء إطلاق النار",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 581,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "msa-cv-030",
+      "slice": "msa",
+      "reference": "أخبرتُهُم أن يُرْسِلُوا لي تذِكرةً أُخرى.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "validation",
+        "offset": 583,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-001",
+      "slice": "latin-mixed",
+      "reference": "حاضَرَ أوجورمان في جامعة Universidad Iberoamericana.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 8979,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-002",
+      "slice": "latin-mixed",
+      "reference": "أثبت استوديو Eddie عكس ذلك، حيث أصر Eddie على أن صنع الموسيقى هو أمر خاص لنفسه.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 8986,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-003",
+      "slice": "latin-mixed",
+      "reference": "كانت هناك محطتان في Braintree.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 9008,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-004",
+      "slice": "latin-mixed",
+      "reference": "الاسم المحدد \"kuhli\" هو تكريم لعالم الحيوان الألماني Heinrich Kuhl.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 9032,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-005",
+      "slice": "latin-mixed",
+      "reference": "ينتج عن استخدام تقنية Contre-jour في التصوير إضاءة خلفية للشخص.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 9061,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-006",
+      "slice": "latin-mixed",
+      "reference": "ظهرت شركة Vyjayanti بعد ليلتين.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 9062,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-007",
+      "slice": "latin-mixed",
+      "reference": "يخدم خط Queens Boulevard أربعة طرق متداخلة.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 9069,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-008",
+      "slice": "latin-mixed",
+      "reference": "لكن Saint Mary كانت لا تزال بعيدة عن الانتهاء، واستمر العمل تحت قيادة الكاردينال Moran.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 9076,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-009",
+      "slice": "latin-mixed",
+      "reference": "الإجراء البديل هو وضع قسطرة PleurX Pleural أو قسطرة Aspira Drainage.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 9080,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "latin-cv-010",
+      "slice": "latin-mixed",
+      "reference": "أيضاً تم إصدار ذلك على صفحة الفرقة الموسيقية على Myspace.",
+      "source": {
+        "dataset": "MohamedRashad/common-voice-18-arabic",
+        "config": "default",
+        "split": "test",
+        "offset": 9083,
+        "revision": "1a52eefd8259398b1ddda495876f71c202943df2",
+        "license": "CC0-1.0",
+        "attribution": "Common Voice 18.0 Arabic (Mozilla), CC0 1.0",
+        "url": "https://commonvoice.mozilla.org/"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-001",
+      "slice": "egyptian",
+      "reference": "تشكلت في المحيط الأطلسي اليوم عاشر عاصفة مُسماة لموسم الأعاصير الأطلسية العاصفة شبه الاستوائية جيري",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 0,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-002",
+      "slice": "egyptian",
+      "reference": "نصنع بيوتنا وملابسنا من النباتات . معظم الطعام الذي نتناوله من النباتات كذلك. بدون النباتات، لا يمكن للحيوانات البقاء",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 22,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-003",
+      "slice": "egyptian",
+      "reference": "إن الرياح الشديدة والبَرَد والتهطال المفرط والحرائق البرية هي أشكال وآثار الطقس الشديد وكذلك العواصف الرعدية والأعاصير والفيضانات والأعاصير الحلزونية",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 45,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-004",
+      "slice": "egyptian",
+      "reference": "قد يختار هؤلاء الأزواج وضع خطة تبني لأطفالهم",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 67,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-005",
+      "slice": "egyptian",
+      "reference": "لكن بسبب موقعها القريب من المناطق الاستوائية ببضع درجات فقط شمال الخط الاستوائي، فأنتم بحاجة للتعامل مع كلاهما: الحرارة العالية المستمرة والشمس اللافحة وذلك نادراً عندما تكون السماء صافية",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 90,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-006",
+      "slice": "egyptian",
+      "reference": "قد لا يتوقع الناس أن الصبر والتفاهم ضروريان أيضاً للمسافرين العائدين إلى ديارهم",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 112,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-007",
+      "slice": "egyptian",
+      "reference": "في حال كنت تعبر منطقة بحر البلطيق الشمالية في الشتاء فيجب أن تفحص موقع الكابينة إذ أن المرور عبر الجليد يسبب ضوضاء صاخبة للغاية للأشخاص الأكثر تضرراً",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 135,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-008",
+      "slice": "egyptian",
+      "reference": "تخضع الفرقُ الافتراضية إلى نفس معاييرِ التميّز مثل الفرق التقليدية ولكن هناك اختلافات دقيقة",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 157,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-009",
+      "slice": "egyptian",
+      "reference": "يكتب الناس الآن رسائل على شاشات الكمبيوتر دون الاحتياج إلى استخدام المباراة",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 180,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-010",
+      "slice": "egyptian",
+      "reference": "تتفاوت سياسات الإلغاء ولكن اعتباراً من أواخر آذار لم تعد معظم سياسات الإلغاء المستندة إلى فيروس كورونا حتى تموز عام 2020 عندما كان من المقرر أن يتم تنظيم الألعاب الأوليمبية",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 202,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-011",
+      "slice": "egyptian",
+      "reference": "في أيامه الأولى أُذيع البرنامج حصراً على موقع راديو الإنترنت الموجود منذ فترة طويلة توجي نت راديو وهو الموقع الذي يركز على الراديو الحواري",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 225,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-012",
+      "slice": "egyptian",
+      "reference": "ونتيجة لذلك يدخن الفنانون لفائف القنب على خشبة المسرح ويشجع المسرح نفسه الجمهور على مشاركتهم في ذلك",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 247,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-013",
+      "slice": "egyptian",
+      "reference": "تعتبر فنلندا وجهةً رائعةً لركوب القوارب تحتوي أرض الألف بحيرة أيضاً على الآلاف من الجزر في البحيرات وفي الأرخبيل الساحلي كليهما",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 270,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-014",
+      "slice": "egyptian",
+      "reference": "تشمل الموضوعات الأخرى المدرجة على جدول أعمال بالي الحفاظ على الغابات المتبقية في العالم وتبادل التكنولوجيات لمساعدة الدول النامية على النمو بطرق أقل تلويثاً",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 292,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-015",
+      "slice": "egyptian",
+      "reference": "كما تعد المدينة قاعدة لتسلق بركان نيراجونجو وبعض أرخص سبل تتبع الغوريلا الجبلية في إفريقيا",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 315,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-016",
+      "slice": "egyptian",
+      "reference": "حقبة الممالك الثلاثة هي واحدة من أكثر الحقب دمويةً في تاريخ الصين القديمة مات آلاف من الناس خلال القتال في سبيل الجلوس على أعلى المقاعد في القصر الكبير في شيان",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 337,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-017",
+      "slice": "egyptian",
+      "reference": "وفي الحقيقة، فليس من السهل العثور عليه على الإطلاق حتى لو كنت تعلم بوجوده. فبمجرد الدخول إلى الكهف ، تصبح في عزلةٍ تامةٍ",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 360,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-018",
+      "slice": "egyptian",
+      "reference": "تحتوي العديد من المخبوزات الألمانية على اللوز والبندق وجوز الأشجار الأخرى وغالبًا ما يتم تناول الكعك الشعبي خصيصاً مع فنجان من القهوة القوية",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 382,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-019",
+      "slice": "egyptian",
+      "reference": "لا يزال هناك العديد من الرجال والنساء على قيد الحياة من ممن نجوا من وقتهم هنا والعديد من الأشخاص الآخرين الذين كان عندهم أحباء قُتلوا أو عملوا حتى الموت هناك من اليهود وغير اليهود على حد سواء",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 405,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    },
+    {
+      "id": "egyptian-fleurs-020",
+      "slice": "egyptian",
+      "reference": "أوتاوا هي عاصمة كندا الساحرة ثنائية اللغة تضم مجموعة من المعارض الفنية والمتاحف التي تبرز ماضي كندا وحاضرها",
+      "source": {
+        "dataset": "google/fleurs",
+        "config": "ar_eg",
+        "split": "test",
+        "offset": 427,
+        "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+        "license": "CC-BY-4.0",
+        "attribution": "FLEURS ar_eg (Google), CC BY 4.0; Conneau et al. 2022",
+        "url": "https://huggingface.co/datasets/google/fleurs"
+      }
+    }
+  ]
+}
