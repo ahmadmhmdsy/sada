@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sada (صدى) — Arabic-first offline speech-to-text for Windows</title>
-  <meta name="description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe. Since 3.3.0 it also ships a built-in MCP server for AI agents." />
-  <meta name="keywords" content="Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, Whisper Windows app, RTL interface, Arabic transcription, Iraqi Arabic, SRT VTT PDF export, local transcription, private, Sada, صدى, MCP, AI agents, Model Context Protocol, agent tools" />
+  <title>Sada (صدى) — Free offline Arabic speech-to-text for Windows</title>
+  <meta name="description" content="Sada is a free, Arabic-first offline speech-to-text app for Windows: local Whisper transcription, RTL Arabic UI, SRT/VTT/PDF/DOCX export, no account, no telemetry. MIT." />
+  <meta name="keywords" content="Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, Whisper Windows app, RTL Arabic interface, Arabic transcription, Iraqi Arabic, SRT VTT PDF DOCX export, local transcription, private dictation, free speech-to-text, Sada, صدى, MCP, AI agents, Model Context Protocol" />
   <meta name="author" content="Ahmad Mahmoud" />
-  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="copyright" content="© 2026 Sada (MIT)" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="theme-color" content="#0f6b62" />
   <link rel="canonical" href="https://alshahia.github.io/sada/en/" />
   <link rel="alternate" hreflang="ar" href="https://alshahia.github.io/sada/" />
@@ -15,20 +16,29 @@
   <link rel="alternate" hreflang="x-default" href="https://alshahia.github.io/sada/" />
   <link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt" />
   <link rel="icon" type="image/svg+xml" href="../assets/sada-icon.svg" />
+  <link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-512.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+  <link rel="preload" href="../assets/fonts/IBMPlexSansArabic-Regular.ttf" as="font" type="font/ttf" crossorigin />
+  <link rel="preload" href="../assets/fonts/IBMPlexSansArabic-Bold.ttf" as="font" type="font/ttf" crossorigin />
   <link rel="stylesheet" href="../styles.css" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sada (صدى)" />
-  <meta property="og:title" content="Sada (صدى) — Arabic-first offline speech-to-text for Windows" />
-  <meta property="og:description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe. Since 3.3.0 it also ships a built-in MCP server for AI agents." />
+  <meta property="og:title" content="Sada (صدى) — Free offline Arabic speech-to-text for Windows" />
+  <meta property="og:description" content="Sada is a free, Arabic-first offline speech-to-text app for Windows: local Whisper transcription, RTL Arabic UI, SRT/VTT/PDF/DOCX export, no account, no telemetry. MIT." />
   <meta property="og:url" content="https://alshahia.github.io/sada/en/" />
-  <meta property="og:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
+  <meta property="og:image" content="https://alshahia.github.io/sada/assets/social-card-en.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Sada card: Arabic-first offline speech-to-text for Windows, with a screenshot of the Arabic RTL app." />
   <meta property="og:locale" content="en_US" />
   <meta property="og:locale:alternate" content="ar_IQ" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Sada (صدى) — Arabic-first offline speech-to-text for Windows" />
-  <meta name="twitter:description" content="Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe. Since 3.3.0 it also ships a built-in MCP server for AI agents." />
-  <meta name="twitter:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
+  <meta name="twitter:title" content="Sada (صدى) — Free offline Arabic speech-to-text for Windows" />
+  <meta name="twitter:description" content="Sada is a free, Arabic-first offline speech-to-text app for Windows: local Whisper transcription, RTL Arabic UI, SRT/VTT/PDF/DOCX export, no account, no telemetry. MIT." />
+  <meta name="twitter:image" content="https://alshahia.github.io/sada/assets/social-card-en.png" />
+  <meta name="twitter:image:alt" content="Sada card: Arabic-first offline speech-to-text for Windows, with a screenshot of the Arabic RTL app." />
 
   <script type="application/ld+json">
 {
@@ -36,9 +46,9 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://alshahia.github.io/sada/en/#website",
-      "url": "https://alshahia.github.io/sada/en/",
-      "name": "Sada (صدى)",
+      "@id": "https://alshahia.github.io/sada/#website",
+      "url": "https://alshahia.github.io/sada/",
+      "name": "صدى (Sada)",
       "description": "Arabic-first offline speech-to-text for Windows.",
       "inLanguage": [
         "ar",
@@ -51,19 +61,21 @@
       }
     },
     {
-      "@id": "https://alshahia.github.io/sada/en/#app",
       "@type": "SoftwareApplication",
+      "@id": "https://alshahia.github.io/sada/en/#app",
       "name": "Sada (صدى)",
       "alternateName": [
-        "صدى (Sada)",
+        "Sada",
+        "صدى",
         "Sada Arabic transcription"
       ],
-      "description": "Sada is an Arabic-first, fully offline speech-to-text app for Windows: Whisper transcription, RTL Arabic UI, Arabic PDF export, no telemetry, no account. Free, MIT-licensed fork of Vibe. Since 3.3.0 it also ships a built-in MCP server for AI agents.",
+      "description": "Sada is a free, Arabic-first offline speech-to-text app for Windows: local Whisper transcription, RTL Arabic UI, SRT/VTT/PDF/DOCX export, no account, no telemetry. MIT.",
       "applicationCategory": "UtilitiesApplication",
       "applicationSubCategory": "Speech-to-text",
       "operatingSystem": "Windows 10, Windows 11",
       "softwareVersion": "3.9.0",
       "datePublished": "2026-11-17",
+      "dateModified": "2026-11-19",
       "inLanguage": [
         "ar",
         "en"
@@ -73,19 +85,30 @@
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
+        "availability": "https://schema.org/InStock",
+        "url": "https://github.com/alshahia/sada/releases/latest"
       },
       "license": "https://github.com/alshahia/sada/blob/master/LICENSE",
       "codeRepository": "https://github.com/alshahia/sada",
       "downloadUrl": "https://github.com/alshahia/sada/releases/latest",
-      "screenshot": "https://alshahia.github.io/sada/assets/sada-main.png",
+      "releaseNotes": "https://github.com/alshahia/sada/releases/tag/v3.9.0",
+      "screenshot": [
+        "https://alshahia.github.io/sada/assets/sada-main.png",
+        "https://alshahia.github.io/sada/assets/sada-settings.png",
+        "https://alshahia.github.io/sada/assets/sada-first-run.png"
+      ],
+      "image": "https://alshahia.github.io/sada/assets/social-card-en.png",
+      "keywords": "Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, Whisper Windows app, RTL Arabic interface, Arabic transcription, Iraqi Arabic, SRT VTT PDF DOCX export, local transcription, private dictation, free speech-to-text, Sada, صدى, MCP, AI agents, Model Context Protocol",
+      "softwareRequirements": "Windows 10 or 11 (64-bit); WebView2 Runtime; VC++ 2015-2022 runtime; disk space for a Whisper model (~1.6 GB for the recommended model).",
       "featureList": [
-        "Arabic-first and RTL",
-        "Fully local transcription",
-        "Whisper models",
-        "Many export formats",
-        "Dictation and recording",
-        "Private by design"
+        "Local audio and video transcription",
+        "Arabic RTL interface with ar-IQ defaults",
+        "Whisper models with SHA-256 verification",
+        "Export to SRT, VTT, TXT, HTML, Arabic PDF, DOCX and JSON",
+        "Recording and global-shortcut dictation",
+        "Projects and search for saved transcripts",
+        "Local MCP server for AI agents",
+        "Optional Vulkan acceleration with no telemetry"
       ],
       "author": {
         "@type": "Person",
@@ -97,6 +120,10 @@
         "name": "Ahmad Mahmoud",
         "url": "https://github.com/alshahia"
       },
+      "sameAs": [
+        "https://github.com/alshahia/sada",
+        "https://alshahia.github.io/sada/"
+      ],
       "url": "https://alshahia.github.io/sada/en/"
     },
     {
@@ -121,18 +148,50 @@
         },
         {
           "@type": "Question",
-          "name": "Does it support Iraqi Arabic?",
+          "name": "What are the system requirements?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Whisper handles Iraqi Arabic as part of Arabic, and the Arabic cleanup normalizes punctuation. Accuracy depends on the model and audio; start with large-v3-turbo."
+            "text": "Windows 10 or 11 (64-bit), the WebView2 Runtime, the VC++ 2015-2022 runtime, and disk space for a Whisper model. The offline installer embeds WebView2."
           }
         },
         {
           "@type": "Question",
-          "name": "Why does Windows warn about the installer?",
+          "name": "Do I need a GPU?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The installer is not code-signed. Verify the published SHA-256 checksum, or build the app from source yourself."
+            "text": "No. GPU is an optional Vulkan accelerator; every model runs on the CPU, and if a model fails to load on the GPU Sada retries it on the CPU automatically."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it support Iraqi Arabic?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Whisper handles Iraqi Arabic as part of Arabic, and the Arabic cleanup normalizes punctuation. Accuracy depends on the model and audio. No published Iraqi benchmark exists yet because no corpus with a commercial-use licence was available. Start with large-v3-turbo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which languages are supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Arabic (ar-IQ) first, plus 22 inherited interface locales. Transcription covers the languages the Whisper engine supports; English is one click away."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What export formats does it produce?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SRT, VTT, TXT, HTML, PDF (embedded Arabic font), DOCX and JSON."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can AI agents use Sada?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Sada.exe --mcp is a local stdio MCP server with four tools: transcribe a file, list saved transcripts, read one transcript and report install info, with no port, no account and no network."
           }
         },
         {
@@ -145,10 +204,26 @@
         },
         {
           "@type": "Question",
+          "name": "Why does Windows warn about the installer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The installer is not code-signed. Verify the published SHA-256 checksum and build provenance (gh attestation verify), or build the app from source yourself."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Where are my files?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Settings, logs and projects live in %APPDATA%\\app.sada.desktop; the model and WebView data in %LOCALAPPDATA%\\app.sada.desktop. Nothing is sent to a server."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use it commercially?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the MIT licence permits commercial use of the source. The installer bundles FFmpeg under GPLv3; read THIRD-PARTY-NOTICES.md before redistributing a build."
           }
         }
       ]

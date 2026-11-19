@@ -97,5 +97,23 @@
 			"esbuild"
 		]
 	},
-	"description": "Sada — Arabic-first offline transcription (fork of Vibe)"
+	"description": "Sada — Arabic-first, fully offline speech-to-text desktop app for Windows (Tauri + React).",
+	"keywords": [
+		"sada",
+		"arabic",
+		"speech-to-text",
+		"asr",
+		"transcription",
+		"whisper",
+		"whisper-cpp",
+		"offline",
+		"privacy",
+		"windows",
+		"tauri",
+		"mcp",
+		"rtl",
+		"dictation",
+		"iraqi-arabic",
+		"local-first"
+	]
 }

@@ -1,0 +1,51 @@
+name: Docs & metadata
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "**.md"
+      - "README*"
+      - "docs/**"
+      - "site/**"
+      - "scripts/seo/**"
+      - "desktop/package.json"
+      - "desktop/src-tauri/tauri.conf.json"
+      - "CITATION.cff"
+      - "llms.txt"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    paths:
+      - "**.md"
+      - "README*"
+      - "docs/**"
+      - "site/**"
+      - "scripts/seo/**"
+      - "desktop/package.json"
+      - "desktop/src-tauri/tauri.conf.json"
+      - "CITATION.cff"
+      - "llms.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  metadata:
+    name: README, site metadata and links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check SEO, links and metadata
+        run: node scripts/seo/check-seo.mjs

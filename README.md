@@ -1,184 +1,314 @@
+<!--
+  README for Sada (صدى) — the GitHub landing page. Arabic counterpart: README.ar.md.
+  Keep both files in sync when facts change (version, counts, model list, links).
+-->
+
 <div align="center">
 
 # صدى · Sada
 
-**Arabic-first speech-to-text for Windows — fully offline.**
+**Arabic-first speech-to-text for Windows — free, private and fully offline.**
 
 [![CI](https://github.com/alshahia/sada/actions/workflows/ci.yml/badge.svg)](https://github.com/alshahia/sada/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/alshahia/sada?label=release&color=2ea043)](https://github.com/alshahia/sada/releases/latest)
-[![License: MIT](https://img.shields.io/github/license/alshahia/sada?color=blue)](LICENSE)
-![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11%20x64-0078D4)
-![Arabic-first](https://img.shields.io/badge/Arabic--first-ar--IQ-1f6feb)
+[![Download for Windows](docs/media/badges/download.svg)](https://github.com/alshahia/sada/releases/latest)
+![Platform: Windows 10 / 11 x64](docs/media/badges/platform.svg)
+![Arabic-first: ar-IQ and RTL](docs/media/badges/arabic-first.svg)
+![License: MIT](docs/media/badges/license.svg)
+![Privacy: offline, no telemetry](docs/media/badges/privacy.svg)
 
-[العربية (Arabic)](README.ar.md) · [Download](https://github.com/alshahia/sada/releases/latest) · [Website](https://alshahia.github.io/sada/) · [Docs](docs/)
+[العربية (Arabic)](README.ar.md) · [Download](https://github.com/alshahia/sada/releases/latest) · [Website](https://alshahia.github.io/sada/en/) · [Documentation](#documentation) · [Verified release](#verified-build-and-release-evidence)
 
 </div>
 
-![Sada main window, Arabic RTL](docs/media/sada-main.png)
+Sada (صدى, "echo") turns Arabic audio and video into text **on your own Windows PC**, with no
+account, no cloud upload and no telemetry. Drop in a file and get a transcript, subtitles or an
+Arabic-styled PDF; the app opens in Arabic and right-to-left by default, and English plus the other
+upstream languages are one click away. It is free, MIT-licensed, and runs after a one-time model
+download even with the network cable unplugged.
 
-Sada (صدى, "echo") turns audio and video into text **on your own computer**, and it is
-**Arabic-first**: the app opens in Arabic, right-to-left, with Arabic transcription defaults,
-Arabic typography (IBM Plex Sans Arabic) and Arabic-aware transcript cleanup. English and the
-other upstream languages are still one click away in Settings.
+It is an independent fork of [Vibe](https://github.com/thewh1teagle/vibe) (MIT) on upstream tag
+**v3.2.2**, with telemetry, the auto-updater and the phone relay removed, a complete Arabic
+localization added, and a local MCP server since 3.3.0 so AI agents can use it without a port or an
+account.
 
-It is an independent fork of [Vibe](https://github.com/thewh1teagle/vibe) (MIT), built on upstream
-tag **v3.2.2**, with telemetry and the auto-updater removed, the phone handoff deliberately
-disabled, and a complete Arabic localization added. Nothing is uploaded: the Whisper engine runs
-locally through the bundled `vibe-server` sidecar, and the installer bundles its own FFmpeg for
-audio decoding.
+> **New in 3.9.0:** managed offline policy, DPAPI-sealed API keys, transcript retention, a
+> per-machine MSI for Intune/SCCM/GPO, and keyless build provenance plus a CycloneDX SBOM on every
+> release asset. See the [release notes](https://github.com/alshahia/sada/releases/tag/v3.9.0).
 
-Since 3.3.0 Sada is also **agent-ready**: `Sada.exe --mcp` runs a local MCP server over stdio,
-so Claude Code, Codex and other agents can transcribe Arabic audio and read saved transcripts
-directly — no server port, no account, no network. See [docs/AGENT-MCP.md](docs/AGENT-MCP.md).
+## What makes Sada Arabic-first
 
-- **Keywords:** offline speech-to-text, Arabic ASR, whisper.cpp, Whisper large-v3-turbo, RTL UI,
-  MSA and Iraqi Arabic, Windows transcription app, private voice-to-text, SRT/VTT/PDF/DOCX export,
-  MCP server for AI agents, local agent tools.
+Most transcription tools treat Arabic as a translation target or an afterthought. Sada is built the
+other way around:
 
-## Why Sada
+- **Arabic defaults, not English defaults.** The interface starts in `ar-IQ`, transcription in
+  `ar`, translation off, temperature 0, beam size 5, six threads and an empty initial prompt.
+- **A real RTL interface.** The shell, settings, dialogs, PDF export and error messages are Arabic
+  and right-to-left; Latin acronyms, file paths and numbers stay isolated and readable.
+- **Arabic-aware transcript cleanup.** ASCII punctuation becomes Arabic (`, → ،`, `? → ؟`,
+  `; → ؛`), stray spaces collapse, and common Latin acronyms (GPU, CPU, PDF, SRT, VTT, JSON, API,
+  FFmpeg, Whisper) are restored inside Arabic transcripts.
+- **Arabic PDF export.** Transcripts export to PDF with an embedded Arabic font and correct
+  shaping, not boxes or broken letters.
+- **Arabic measured, not assumed.** The model catalogue is backed by a committed Arabic benchmark
+  harness (see [quality](#arabic-transcription-quality-measured)); the default is the model that
+  actually won on measured Arabic WER, Latin-name retention and timestamps.
 
-Most transcription apps treat Arabic as a translation target, not a first language. Sada inverts
-that:
+## Who Sada is for
 
-- **Arabic-first defaults** — display language `ar-IQ`, transcription language `ar`, translation
-  off, temperature 0, beam size 5, 6 threads, empty initial prompt.
-- **Right-to-left interface** — the shell, settings, dialogs, PDF export and errors are Arabic and
-  RTL; Latin acronyms and file paths stay isolated and readable.
-- **Arabic-aware text cleanup** — normalizes ASCII punctuation to Arabic (`,` → `،`, `?` → `؟`,
-  `;` → `؛`), collapses stray spaces, and restores common Latin acronyms (GPU, CPU, PDF, SRT, VTT,
-  JSON, API, FFmpeg, Whisper) inside Arabic transcripts.
-- **Arabic PDF** — transcripts export to PDF with an embedded Arabic font and proper shaping.
-- **Truly offline and private** — no account, no analytics, no crash reporting, no auto-update.
-  Outbound traffic happens only for actions *you* start: downloading a model, importing from a
-  media link (yt-dlp), or a summary provider you configure with your own key. A managed offline
-  policy can forbid all of them at once — see [docs/NETWORK.md](docs/NETWORK.md).
-- **Agent-ready (MCP)** — `Sada.exe --mcp` gives agents Arabic ears over stdio: transcribe a
-  file, list or read saved transcripts, inspect the install. No port, no toggle, no window.
+- Editors and creators who need Arabic subtitles (SRT/VTT) or a readable transcript without
+  uploading client footage.
+- Researchers, journalists and students transcribing interviews, lectures and meetings that cannot
+  leave the machine.
+- Teams on locked-down or intermittent networks, and organisations with data-residency rules.
+- Arabic-speaking users who want dictation or file transcription without a subscription.
+- Developers who need local Arabic ASR for agents and pipelines through the built-in MCP server.
 
 ## Features
 
 | | |
 | --- | --- |
-| **Transcribe files** | Drop audio or video files; batch transcription with per-file progress and cancellation. |
-| **Live preview** | Watch the transcript fill in as the file is processed. |
+| **Transcribe files** | Drop audio or video; batch transcription with per-file progress and cancellation. |
+| **Live preview** | Watch the transcript fill in while the file is being processed. |
 | **Whisper models** | Any `ggml-*.bin` Whisper model; download from Settings or point at a local file. Recommended for Arabic: `large-v3-turbo`. |
-| **Export** | SRT, VTT, TXT, HTML, PDF (Arabic font embedded), DOCX, JSON. |
-| **Dictation** | Global shortcut: hold to record, release to transcribe into the active app. |
+| **Export** | SRT, VTT, TXT, HTML, PDF (embedded Arabic font), DOCX and JSON. |
+| **Dictation** | A global shortcut: hold to record, release to transcribe into the active app. |
 | **Recording** | Microphone and system-audio capture. |
 | **Projects** | Saved transcripts with search, reopen and re-export. |
-| **Optional summaries** | Claude or local Ollama, with your own key — off by default. |
-| **Agents (MCP)** | `Sada.exe --mcp` — four stdio tools for Claude Code, Codex and other MCP clients; Arabic defaults, local only. |
-| **Languages** | Arabic (`ar-IQ`) plus 20+ inherited locales. |
+| **Optional summaries** | Claude or a local Ollama model with your own key — off by default. |
+| **Agents (MCP)** | `Sada.exe --mcp` exposes four stdio tools to Claude Code, Codex and other MCP clients; Arabic defaults, local only. |
+| **Languages** | Arabic (`ar-IQ`) plus 22 inherited interface locales; transcription covers the languages the engine supports. |
+| **GPU acceleration** | Optional Vulkan path, with automatic CPU fallback when a model does not fit on the GPU. |
+| **Managed controls** | Machine-wide offline policy, DPAPI-sealed API keys and transcript retention for managed installs. |
 
-## Install
+## Screenshots
 
-1. Download **`Sada_3.9.0_x64-setup.exe`** (about 45 MB) from the [latest release](https://github.com/alshahia/sada/releases/latest)
-   and verify it: SHA-256 against the attached `SHA256SUMS.txt`, and (optionally) build provenance
-   with `gh attestation verify Sada_3.9.0_x64-setup.exe --repo alshahia/sada` or the bundled
-   `scripts/verify-release.ps1`.
-2. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator rights
-   are required.
-3. Launch **صدى / Sada** from the Start Menu.
+![Sada main window: Arabic RTL interface with a drag-and-drop area and recent transcripts](docs/media/sada-main.png)
 
-**Fully offline machine?** Windows 10 machines that have never run a modern app do not have the
-WebView2 Runtime, and the default installer asks Windows to download it. If the target machine
-cannot go online, download **`Sada_3.9.0_x64-setup-offline.exe`** instead (about 250 MB): it
-embeds the WebView2 installer, so one file covers the app and the runtime. Both files are the same
-app and both hashes are listed in `SHA256SUMS.txt`. One caveat: neither file embeds the VC++
-2015-2022 runtime — Sada's installer fetches it from Microsoft when missing or outdated, so a fully
-offline machine should have `vc_redist.x64.exe` pre-installed (installing WebView2 first also pulls
-its dependencies).
+| Settings and models | First-run Arabic setup |
+| --- | --- |
+| <img src="docs/media/sada-settings.png" width="420" alt="Sada settings: Arabic interface, model and hardware options, RTL layout" /> | <img src="docs/media/sada-first-run.png" width="420" alt="Sada first-run screen in Arabic with a model download prompt" /> |
 
-**Managed deployment?** v3.9.0 also publishes **`Sada_3.9.0_x64_en-US.msi`**, a per-machine
-installer for Intune/SCCM/GPO, and a machine-wide policy that can enforce offline mode and disable
-AI, URL import and model downloads. Silent install, detection, policy and cleanup are documented in
-[docs/ENTERPRISE-DEPLOYMENT.md](docs/ENTERPRISE-DEPLOYMENT.md).
+## Download and install (Windows 10/11 x64)
 
-> **SmartScreen:** the installer is not code-signed (owner decision while the project is
-> open-source-only), so Windows may show "Windows protected your PC". Choose *More info → Run
-> anyway* only for the official release after verifying the checksum. Signing is staged and will be
-> switched on when the project applies for it — see [docs/SIGNING.md](docs/SIGNING.md).
+### Standard installer (recommended)
 
-Requirements: 64-bit Windows 10 or 11, the WebView2 Runtime (bundled with current Windows; the
-offline installer includes it), the VC++ 2015-2022 runtime (installed automatically when online),
-and disk space for a Whisper model.
+1. Download **`Sada_3.9.0_x64-setup.exe`** (about 45 MB) from the
+   [latest release](https://github.com/alshahia/sada/releases/latest).
+2. Verify it (recommended — see [verify the download](#verify-the-download)).
+3. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator
+   rights are required.
+4. Launch **صدى / Sada** from the Start Menu.
 
-## First run and models
+### Fully offline installer
 
-On first launch Sada opens with an Arabic setup screen. Open **Settings → Models → Get models**. The catalogue ships inside the app, so it works on a
-fresh offline install, and every download is checked against the SHA-256 in the catalogue:
+A Windows 10 machine that has never run a modern app does not have the WebView2 Runtime, and the
+standard installer asks Windows to download it. If the target machine cannot go online, download
+**`Sada_3.9.0_x64-setup-offline.exe`** (about 250 MB) instead: it embeds the WebView2 installer,
+so one file covers both the app and the runtime.
 
-- **Whisper Large v3 Turbo** (~1.6 GB, MIT) — the default: best Arabic quality/speed balance, with
-  word timestamps;
-- **Whisper Tiny** (78 MB, MIT) — for slow machines, lower accuracy;
-- **Whisper Large v3 Turbo Hebrew** (Apache-2.0) — for Hebrew audio;
-- or **Add a model… / choose a file** if you already have a `ggml-*.bin` on disk.
+Neither file embeds the VC++ 2015-2022 runtime: the installer fetches it from Microsoft when it is
+missing, so a completely offline machine should have `vc_redist.x64.exe` pre-installed
+(installing WebView2 first also pulls its dependencies).
 
-Models are **not bundled** with the installer; they are distributed by their own publishers under
-their own terms and downloaded once by you. The model is loaded locally and never leaves your
-machine. Sizes, licences, hashes, GPU notes and how to verify a download: **[docs/MODELS.md](docs/MODELS.md)**.
-The measured Arabic comparison behind the catalogue — including why Turbo stays the default and
-Nemotron is only optional — is in **[docs/MODELS-DECISIONS.md](docs/MODELS-DECISIONS.md)**.
+### Managed per-machine installer
+
+v3.9.0 also publishes **`Sada_3.9.0_x64_en-US.msi`**, a per-machine WiX installer for
+Intune/SCCM/GPO (administrator rights required), with machine-wide policy that can enforce offline
+mode and disable AI, URL import and model downloads. Silent install, detection, policy and cleanup
+are documented in [docs/ENTERPRISE-DEPLOYMENT.md](docs/ENTERPRISE-DEPLOYMENT.md).
+
+### Verify the download
+
+Every release publishes `SHA256SUMS.txt`, keyless build provenance (Sigstore) and a CycloneDX
+SBOM. The short version:
+
+```powershell
+# 1. Checksum against the published SHA-256
+Get-FileHash .\Sada_3.9.0_x64-setup.exe -Algorithm SHA256
+
+# 2. Build provenance — GitHub CLI verifies the signature and the workflow identity
+gh attestation verify .\Sada_3.9.0_x64-setup.exe --repo alshahia/sada
+
+# ...or verify every asset of a release and its hashes in one command
+pwsh -File scripts/verify-release.ps1 -Version 3.9.0 -Download
+```
+
+Full details: [docs/SUPPLY-CHAIN.md](docs/SUPPLY-CHAIN.md) and
+[docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+> **SmartScreen:** the installer is not code-signed yet (an owner decision while the project is
+> open-source-only), so Windows may show *"Windows protected your PC"*. Choose *More info → Run
+> anyway* only for the official release after verifying the checksum and provenance. Signing is
+> staged and will be switched on when the project applies for it — see
+> [docs/SIGNING.md](docs/SIGNING.md).
+
+### Requirements
+
+- Windows 10 or Windows 11, 64-bit (x64).
+- WebView2 Runtime (bundled with current Windows; the offline installer includes it).
+- VC++ 2015-2022 runtime (installed automatically when online).
+- Disk space for a Whisper model — about 1.6 GB for the recommended model (models are not bundled).
+
+## First run: choose a model
+
+On first launch Sada opens an Arabic setup screen. Open **Settings → Models → Get models**. The
+catalogue ships inside the app, so it works on a fresh offline install, and every download is
+checked against the SHA-256 in the catalogue before it is used:
+
+| Model | Size | Licence | Why choose it |
+| --- | ---: | --- | --- |
+| **Whisper Large v3 Turbo** — default | 1.62 GB | MIT | Best measured Arabic balance: 19.46% WER, word timestamps, keeps a quarter of Latin names. |
+| **Whisper Tiny** | 78 MB | MIT | Runs on very slow machines, lower accuracy (only as a fallback). |
+| **NVIDIA Nemotron 3.5 ASR Streaming 0.6B** — optional | 496 MB | OpenMDW-1.1 | Faster dictation and lower WER on MSA/Egyptian, but transliterates Latin terms; not the default. |
+| **Whisper Large v3 Turbo Hebrew** | 1.62 GB | Apache-2.0 | Hebrew audio (ivrit.ai). |
+
+You can also use **Add a model…** to point at any local `ggml-*.bin` file. Models are downloaded
+once, loaded locally and never leave the machine. Sizes, hashes, GPU notes and verification steps:
+[docs/MODELS.md](docs/MODELS.md). The measured comparison behind the catalogue:
+[docs/MODELS-DECISIONS.md](docs/MODELS-DECISIONS.md).
+
+## Arabic transcription quality (measured)
+
+Sada is not benchmarked by vibes. The repository includes a Python Arabic ASR harness
+(`benchmarks/arabic-asr/`) that fetches licence-compatible corpora once, normalizes Arabic, and
+scores corpus-level WER/CER, Latin-name retention and word-timestamp coverage. Results on 60 clips
+of **Common Voice 18 Arabic** (30 MSA + 10 Latin-mixed read speech) and **FLEURS ar_eg**
+(20 Egyptian clips), Vulkan GPU, 2026-11-18, engine `vibe-server v0.6.16-sada.1`:
+
+| Model | WER % ↓ | CER % ↓ | Latin names kept % ↑ | Timestamps % | RTF ↓ |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| **whisper-large-v3-turbo** (default) | 19.46 | 8.34 | **25.0** | 100.0 | 0.35 |
+| nemotron-3.5-asr-streaming-0.6b | **17.12** | 8.28 | 0.0 | 100.0 | **0.234** |
+| whisper-large-v3-turbo-arabic-dialectal-v2-q5 | 23.09 | 9.53 | 0.0 | 100.0 | 0.265 |
+| whisper-tiny | 70.56 | 29.46 | 0.0 | 100.0 | 0.186 |
+
+Lower WER/CER/RTF is better; higher Latin-name retention is better. WER by slice: MSA 22.09 /
+Egyptian 11.03 / Latin-mixed 48.96 for Turbo; Nemotron 17.83 / 9.11 / 50.00. **Not measured yet,
+and not claimed:** Iraqi, Gulf and Levantine dialects need a corpus with a commercial-use licence,
+which the project has not found; that gap is recorded rather than hidden. Raw results and the
+harness: [`benchmarks/arabic-asr/`](benchmarks/arabic-asr/).
+
+## Use Sada from an AI agent (MCP)
+
+`Sada.exe --mcp` starts a local MCP server over stdio — no port, no account, no network. Four
+tools: `sada_transcribe` (transcribe a file), `sada_transcripts` (list saved transcripts),
+`sada_transcript` (read one) and `sada_info` (install and model info).
+
+```powershell
+claude mcp add sada -- "C:\Users\<you>\AppData\Local\Sada\Sada.exe" --mcp
+```
+
+Any MCP client can use the equivalent JSON:
+
+```json
+{
+  "mcpServers": {
+    "sada": {
+      "command": "C:\\Users\\<you>\\AppData\\Local\\Sada\\Sada.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+See [docs/AGENT-MCP.md](docs/AGENT-MCP.md) for tool schemas, limits and examples in Arabic and
+English.
 
 ## GPU acceleration (optional)
 
-Sada ships the Vulkan build of its whisper.cpp engine, so a Vulkan-capable GPU can speed up
-transcription without CUDA, ROCm or any extra download. GPU is an **optional accelerator, never a
-requirement**: every model still runs on the CPU.
+Sada ships the Vulkan build of its whisper.cpp engine; a Vulkan 1.1+ GPU (current NVIDIA, AMD or
+Intel drivers) can speed up transcription without CUDA or ROCm. GPU is an optional accelerator:
+every model still runs on the CPU, and the app does not refuse to start without Vulkan.
 
-- **Device picker:** **Settings → Models → Hardware**. **Auto** (the default) lets the engine pick
-  its default Vulkan device; choose a specific one if you have more than one GPU. **Transcribe on
-  CPU** forces the CPU path.
-- **What you need:** a GPU driver that provides Vulkan 1.1+ (current NVIDIA/AMD/Intel drivers do;
-  on a machine without the Vulkan loader, install the
-  [Vulkan Runtime](https://sdk.lunarg.com/sdk/download/1.3.290.0/windows/VulkanRT-1.3.290.0-Installer.exe)).
-  When Vulkan is unavailable the engine quietly uses the CPU — the app does not refuse to run.
-- **Out of memory:** if a model fails to load on the GPU, Sada retries it on the CPU, tells you it
-  did, and remembers that model so later runs start on the CPU instead of failing again.
-- **Speed:** on the reference machine (NVIDIA Quadro RTX 4000 with Vulkan), 38 s of Arabic audio
-  transcribed in ~4.9 s including model load (~12.5× realtime). CPU-only is a compatibility path,
-  not a speed path.
-- **Diagnostics:** the engine lists the devices it sees with
-  `vibe-server-x86_64-pc-windows-msvc.exe devices`; see [docs/DEBUG.md](docs/DEBUG.md) for
-  `vulkan-1.dll` errors and [docs/BUILDING.md](docs/BUILDING.md) for build details.
+- **Settings → Models → Hardware** offers *Auto*, a specific Vulkan device, or *Transcribe on CPU*.
+- If a model fails to load on the GPU, Sada retries it on the CPU, tells you, and remembers that
+  model so later runs start on the CPU instead of failing again.
+- Reference speed: on an NVIDIA Quadro RTX 4000 with Vulkan, 38 seconds of Arabic audio transcribed
+  in about 4.9 seconds including model load (~12.5× realtime).
+- Diagnostics: `vibe-server-x86_64-pc-windows-msvc.exe devices`; troubleshooting in
+  [docs/DEBUG.md](docs/DEBUG.md) and [docs/BUILDING.md](docs/BUILDING.md).
 
-## Privacy
+## Enterprise and managed deployment
 
-- No analytics, telemetry, crash reporting or account.
+v3.9.0 adds the controls a managed Windows environment needs, without a server component:
+
+- **Per-machine MSI** for Intune/SCCM/GPO, plus a clean-machine acceptance kit.
+- **Managed policy** in `HKLM\SOFTWARE\Sada\Policy` (or `%ProgramData%\Sada\policy.json`)
+  that can force offline mode and disable AI, URL import and model downloads; enforced in the Rust
+  command layer, not just hidden in the UI.
+- **DPAPI-sealed API keys**, **transcript retention/purge**, and a **network egress inventory**.
+- **Keyless supply chain:** build provenance attestations, a CycloneDX SBOM (1,939 components) and
+  `scripts/verify-release.ps1`.
+
+Start with [docs/ENTERPRISE-DEPLOYMENT.md](docs/ENTERPRISE-DEPLOYMENT.md); the policy, egress,
+security and procurement material is listed under [documentation](#documentation).
+
+## Privacy and network
+
+- No analytics, telemetry, crash reporting, account or auto-update.
 - Audio, video and transcripts never leave the computer.
-- The bundled FFmpeg is used only as a local subprocess for decoding.
-- Settings and projects live under `%APPDATA%\app.sada.desktop\`; the model and WebView profile
-  live under `%LOCALAPPDATA%\app.sada.desktop\`.
+- Network is used only for actions *you* start: downloading a model, importing from a media URL
+  with yt-dlp, or a summary provider you configure with your own key — and a managed policy can
+  forbid all of them.
+- The bundled FFmpeg runs as a local subprocess for decoding only.
+- Settings and projects live in `%APPDATA%\app.sada.desktop\`; the model and WebView profile
+  in `%LOCALAPPDATA%\app.sada.desktop\`.
 
-See [PRIVACY.md](PRIVACY.md). The upstream updater and Aptabase client are removed from the
-source, not switched off at runtime.
+See [PRIVACY.md](PRIVACY.md) and the complete egress list in [docs/NETWORK.md](docs/NETWORK.md).
+The upstream updater and Aptabase client were removed from the source, not switched off at runtime.
 
-## Verified build
+## Verified build and release evidence
 
-This release was built from the source in this repository and checked end-to-end:
+Every release is built from this repository by GitHub Actions and then verified end-to-end:
 
-- 33 test files / 204 unit tests passing (`pnpm test`, exit 0), including Arabic text
-  normalization, Arabic PDF export, boot-locale/RTL tests, managed policy and DPAPI key sealing.
-- Engine v0.6.16-sada.1 smoke test: the four Arabic clips produced exactly the same text as on
-  v0.6.10, SRT/VTT timings were correct, Nemotron-3 diarization labelled 12/12 segments, and the
-  CPU-only path still transcribed.
-- Rust: 120 tests passing (`cargo test --release`), including MCP protocol/tools, Arabic
-  normaliser, managed policy, DPAPI and retention tests.
-- MCP verified end-to-end: `Sada.exe --mcp` answered initialize, tools/list, sada_info,
-  sada_transcripts, sada_transcript and sada_transcribe over pipes with a real model and Arabic
-  audio.
-- Fresh-profile launch verified Arabic/RTL (`lang=ar-IQ`, `dir=rtl`) by inspecting the running
-  WebView, not just the source.
-- Arabic transcription verified with the app's own engine on Modern Standard Arabic and Iraqi
-  Arabic clips; CLI transcription exits 0.
-- Idle network check on the installed app: only loopback sockets, no external endpoint.
-- Known limitations are listed in [docs/VERIFICATION.md](docs/VERIFICATION.md); the security
-  assurance pack is in [docs/SECURITY-WHITEPAPER.md](docs/SECURITY-WHITEPAPER.md) and the complete
-  network egress list in [docs/NETWORK.md](docs/NETWORK.md).
+- 33 frontend test files / 204 tests, 120 Rust tests, 8 engine guard tests and 62 Python benchmark
+  tests pass in CI; `tsc` and the production build are clean.
+- The v3.9.0 release run built the engine from `server/`, then the guarded offline NSIS
+  installer, the per-machine MSI and the default NSIS installer, generated the SBOM, and signed
+  provenance attestations for every asset.
+- The published assets were downloaded again and checked with `scripts/verify-release.ps1`:
+  SHA-256 matches, `gh attestation verify` succeeds, and both installers install and launch
+  with the version and engine expected.
+- Arabic transcription, MCP protocol, RTL first-run and idle-network behaviour were verified with
+  the app's own engine and a real model.
+
+Evidence: [docs/VERIFICATION.md](docs/VERIFICATION.md) · [acceptance matrix](docs/ACCEPTANCE.md) ·
+[production-readiness statement](docs/PRODUCTION-READINESS.md) ·
+[v3.9.0 release](https://github.com/alshahia/sada/releases/tag/v3.9.0).
+
+## How Sada compares
+
+| | Cloud transcription services | Upstream Vibe (v3.2.2) | **Sada** |
+| --- | --- | --- | --- |
+| Audio leaves your device | Yes, by design | No | **No** |
+| Account / subscription | Usually | No | **No** |
+| Works offline | No | Yes, after a model download | **Yes, after a model download** |
+| Arabic-first UI and defaults | Rarely | No (English-first) | **Yes (ar-IQ, RTL, Arabic PDF)** |
+| Telemetry and auto-update | Typically | Present upstream | **Removed from the source** |
+| Price | Subscription | Free (MIT) | **Free (MIT)** |
+| Agent access | Vendor API | — | **Local MCP server** |
+
+Comparisons are about the design each project ships, not a claim that cloud services are bad; cloud
+services are a better fit when you need elastic scale, many languages or shared team infrastructure.
+
+## Documentation
+
+| Start here | Models and quality | Privacy and security | Enterprise | Development |
+| --- | --- | --- | --- | --- |
+| [Install and first run](README.md#first-run-choose-a-model) | [Models and hashes](docs/MODELS.md) | [Privacy policy](PRIVACY.md) | [Enterprise deployment](docs/ENTERPRISE-DEPLOYMENT.md) | [Building from source](docs/BUILDING.md) |
+| [Agent/MCP guide](docs/AGENT-MCP.md) | [Model decisions](docs/MODELS-DECISIONS.md) | [Network egress](docs/NETWORK.md) | [Managed policy and egress](docs/NETWORK.md) | [Architecture](docs/ARCHITECTURE.md) |
+| [Verification report](docs/VERIFICATION.md) | [Arabic benchmark](benchmarks/arabic-asr/) | [Security whitepaper](docs/SECURITY-WHITEPAPER.md) | [Supply chain](docs/SUPPLY-CHAIN.md) | [Upstream patches](docs/UPSTREAM-PATCHES.md) |
+| [Release notes](docs/releases/v3.9.0.md) | [GPU notes](docs/DEBUG.md) | [Threat model](docs/THREAT-MODEL.md) | [Signing plan](docs/SIGNING.md) | [Contributing](CONTRIBUTING.md) |
+
+Maintainer material: [discoverability and SEO plan](docs/DISCOVERABILITY.md), [release verification runbook](docs/VALIDATION-RUNBOOK.md), [acceptance matrix](docs/ACCEPTANCE.md).
+
+Arabic documentation: [README.ar.md](README.ar.md), [Network](docs/NETWORK.ar.md),
+[models](docs/MODELS.ar.md), [MCP](docs/AGENT-MCP.ar.md).
 
 ## Build from source
 
-Prerequisites: [Rust](https://rustup.rs), Node.js 22+, pnpm 10.4.1 (corepack), [chore](https://getchore.github.io/chore/).
+Prerequisites: [Rust](https://rustup.rs), Node.js 22+, pnpm 10.4.1 (corepack) and
+[chore](https://getchore.github.io/chore/).
 
 ```powershell
 git clone https://github.com/alshahia/sada.git
@@ -190,7 +320,7 @@ pnpm test
 pnpm exec tauri build                # writes the NSIS installer under target/release/bundle/nsis/
 ```
 
-Sidecar binaries are not committed to git (they are ~175MB combined); `chore setup` fetches the
+Sidecar binaries are not committed to git (they are ~175 MB combined); `chore setup` fetches the
 pinned release from the upstream server tag in [.server-version](.server-version). See
 [docs/BUILDING.md](docs/BUILDING.md) for details and non-Windows instructions.
 
@@ -198,52 +328,80 @@ pinned release from the upstream server tag in [.server-version](.server-version
 
 ```text
 desktop/          React 19 + Tauri 2 desktop app (frontend, Rust shell, icons, fonts)
-i18n/desktop/     Translation catalogues, including ar-IQ.json (704 keys)
+i18n/desktop/     Translation catalogues, including ar-IQ.json (748 keys)
 server/           vibe-server: Rust sidecar around whisper.cpp (upstream engine)
-docs/             Architecture, building, verification, licences, release notes, MCP guide, Voicebox review
+benchmarks/       Arabic ASR benchmark harness and committed results
+docs/             Architecture, building, verification, licences, release notes, MCP, assurance pack
 site/             Bilingual static landing page (GitHub Pages, with llms.txt for agents)
-.github/workflows CI (build + tests), Release (tag → Windows installer + GitHub release), Deploy site
+scripts/          Release verification, SBOM generation, enterprise and acceptance helpers
+.github/workflows CI (build + tests), Release (tag → installers + provenance), Security, Deploy site
 ```
 
 ## FAQ
 
 <details>
 <summary><strong>Is Sada free?</strong></summary>
-Yes. MIT-licensed source; the Windows installer is free. No account, no subscription.
+Yes. MIT-licensed source and a free Windows installer — no account, no subscription, no ads.
 </details>
 
 <details>
 <summary><strong>Does it work without internet?</strong></summary>
-Yes, after the one-time model download. Transcription is fully local; network is used only for
-what you explicitly request.
+Yes, after the one-time model download. Transcription is fully local; the network is used only for
+actions you explicitly request.
+</details>
+
+<details>
+<summary><strong>What are the system requirements?</strong></summary>
+64-bit Windows 10 or 11, the WebView2 Runtime, the VC++ 2015-2022 runtime, and disk space for a
+Whisper model (~1.6 GB for the recommended one). The offline installer embeds WebView2.
+</details>
+
+<details>
+<summary><strong>Do I need a GPU?</strong></summary>
+No. GPU is an optional Vulkan accelerator; every model runs on the CPU, and Sada retries on the CPU
+automatically when a model does not fit on the GPU.
+</details>
+
+<details>
+<summary><strong>Does it support Iraqi Arabic?</strong></summary>
+Whisper handles Iraqi Arabic as part of Arabic, and the Arabic cleanup normalizes punctuation.
+Accuracy depends on the model and the audio; `large-v3-turbo` is the recommended starting point.
+No published Iraqi benchmark exists yet because no corpus with a commercial-use licence was
+available — that limitation is recorded, not hidden.
+</details>
+
+<details>
+<summary><strong>Which languages are supported?</strong></summary>
+Arabic (`ar-IQ`) is the first-class language; the interface also ships 22 inherited locales, and
+transcription covers the languages the Whisper engine supports. English is one click away.
+</details>
+
+<details>
+<summary><strong>What formats can I export?</strong></summary>
+SRT, VTT, TXT, HTML, PDF (embedded Arabic font), DOCX and JSON.
 </details>
 
 <details>
 <summary><strong>Can AI agents use Sada?</strong></summary>
 Yes. `Sada.exe --mcp` is a local MCP server over stdio with four tools: transcribe a file, list
 saved transcripts, read one transcript and report install info. Register it in Claude Code with
-`claude mcp add sada -- ".../Sada.exe" --mcp`, or in any MCP client JSON config. It is local
-only: no port, no account, no network. See [docs/AGENT-MCP.md](docs/AGENT-MCP.md).
+`claude mcp add sada -- "...\Sada.exe" --mcp` or in any MCP client JSON config. It is local
+only: no port, no account, no network.
 </details>
 
 <details>
-<summary><strong>Does it support Iraqi Arabic?</strong></summary>
-Whisper handles Iraqi Arabic as part of Arabic. Arabic-first cleanup normalizes punctuation;
-dialect accuracy depends on the model and audio quality. `large-v3-turbo` is the recommended
-starting point.
-</details>
-
-<details>
-<summary><strong>How is it different from Vibe?</strong></summary>
-Sada is a fork: full Arabic localization and RTL, Arabic defaults and transcript cleanup, Arabic
-PDF export, a new name/icon, and removal of telemetry, auto-update and the phone relay. The
-transcription engine is upstream code. See [docs/UPSTREAM-PATCHES.md](docs/UPSTREAM-PATCHES.md).
+<summary><strong>How is Sada different from Vibe?</strong></summary>
+Sada is a fork of Vibe v3.2.2: full Arabic localization and RTL, Arabic defaults and transcript
+cleanup, Arabic PDF export, a new name and icon, and removal of telemetry, auto-update and the phone
+relay. The transcription engine is upstream code; patches are listed in
+[docs/UPSTREAM-PATCHES.md](docs/UPSTREAM-PATCHES.md).
 </details>
 
 <details>
 <summary><strong>Why does Windows warn about the installer?</strong></summary>
-The installer is not code-signed (code-signing certificates cost money). Verify the SHA-256
-checksum and build from source if you prefer.
+The installer is not code-signed yet (code-signing certificates cost money). Verify the SHA-256
+checksum and build provenance, or build from source. Signing is staged and not switched on — see
+[docs/SIGNING.md](docs/SIGNING.md).
 </details>
 
 <details>
@@ -252,10 +410,17 @@ Settings, logs and projects: `%APPDATA%\app.sada.desktop\`. Model and WebView da
 `%LOCALAPPDATA%\app.sada.desktop\`. Nothing is copied elsewhere.
 </details>
 
+<details>
+<summary><strong>Can I use it commercially?</strong></summary>
+Yes — the MIT licence permits commercial use of the source. The installer bundles an FFmpeg 9.0.2
+GPLv3 build; read [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) before redistributing a build.
+</details>
+
 ## Contributing
 
-Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). For security
-reports use GitHub Security Advisories, see [SECURITY.md](SECURITY.md).
+Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). For security reports
+use GitHub Security Advisories, see [SECURITY.md](SECURITY.md). If Sada saves you time, a star helps
+other Arabic users find it: [github.com/alshahia/sada](https://github.com/alshahia/sada).
 
 ## Licence and attribution
 
@@ -263,9 +428,9 @@ MIT — see [LICENSE](LICENSE). The original Vibe copyright notice is preserved.
 independent fork, **not affiliated with or endorsed by** the Vibe author; "Vibe" remains that
 author's property, while the Sada name and artwork are this fork's own.
 
-The installer bundles an **FFmpeg 9.0.1 GPLv3** build; read [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)
-before redistributing a build. IBM Plex Sans Arabic is SIL OFL 1.1. Full notices and licence
-texts: [NOTICE](NOTICE), [docs/licenses/](docs/licenses/).
+The installer bundles an **FFmpeg 9.0.2 GPLv3** build; read
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) before redistributing a build. IBM Plex Sans Arabic
+is SIL OFL 1.1. Full notices and licence texts: [NOTICE](NOTICE), [docs/licenses/](docs/licenses/).
 
 ---
 

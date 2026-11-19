@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>صدى (Sada) — تفريغ صوتي عربي بدون إنترنت | Arabic-first offline speech-to-text for Windows</title>
-  <meta name="description" content="صدى: تطبيق تفريغ صوتي وفيديو إلى نص، عربي أولاً، يعمل محلياً على Windows بلا إنترنت وبلا حساب. واجهة RTL، تصدير PDF عربي، ودعم Whisper — مجاني ومفتوح المصدر (MIT). ومنذ 3.3.0 خادم MCP مدمج يصل الوكلاء بتفريغ عربي محلي." />
-  <meta name="keywords" content="تفريغ صوتي, تفريغ عربي, تحويل الصوت إلى نص, التعرف على الكلام العربي, whisper عربي, تفريغ بدون إنترنت, Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, RTL, Windows, صدى, Sada, MCP, AI agents, وكلاء الذكاء الاصطناعي" />
+  <title>صدى (Sada) — تفريغ صوتي عربي بدون إنترنت وتحميل مجاني | Windows</title>
+  <meta name="description" content="صدى: تطبيق مجاني لتحويل الصوت والفيديو إلى نص عربي على جهازك، بلا إنترنت وبلا حساب. واجهة RTL، نماذج Whisper، تصدير PDF عربي، ومفتوح المصدر (MIT)." />
+  <meta name="keywords" content="تفريغ صوتي, تفريغ عربي, تحويل الصوت إلى نص, تحويل الفيديو إلى نص, التعرف على الكلام العربي, تفريغ محاضرات, تفريغ اجتماعات, whisper عربي, تفريغ بدون إنترنت, بديل مجاني, Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, RTL, Windows 10, Windows 11, صدى, Sada, MCP, وكلاء الذكاء الاصطناعي" />
   <meta name="author" content="Ahmad Mahmoud" />
-  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="copyright" content="© 2026 Sada (MIT)" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="theme-color" content="#0f6b62" />
   <link rel="canonical" href="https://alshahia.github.io/sada/" />
   <link rel="alternate" hreflang="ar" href="https://alshahia.github.io/sada/" />
@@ -15,20 +16,29 @@
   <link rel="alternate" hreflang="x-default" href="https://alshahia.github.io/sada/" />
   <link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt" />
   <link rel="icon" type="image/svg+xml" href="assets/sada-icon.svg" />
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+  <link rel="preload" href="assets/fonts/IBMPlexSansArabic-Regular.ttf" as="font" type="font/ttf" crossorigin />
+  <link rel="preload" href="assets/fonts/IBMPlexSansArabic-Bold.ttf" as="font" type="font/ttf" crossorigin />
   <link rel="stylesheet" href="styles.css" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="صدى (Sada)" />
-  <meta property="og:title" content="صدى (Sada) — تفريغ صوتي عربي بدون إنترنت | Arabic-first offline speech-to-text for Windows" />
-  <meta property="og:description" content="صدى: تطبيق تفريغ صوتي وفيديو إلى نص، عربي أولاً، يعمل محلياً على Windows بلا إنترنت وبلا حساب. واجهة RTL، تصدير PDF عربي، ودعم Whisper — مجاني ومفتوح المصدر (MIT). ومنذ 3.3.0 خادم MCP مدمج يصل الوكلاء بتفريغ عربي محلي." />
+  <meta property="og:title" content="صدى (Sada) — تفريغ صوتي عربي بدون إنترنت وتحميل مجاني | Windows" />
+  <meta property="og:description" content="صدى: تطبيق مجاني لتحويل الصوت والفيديو إلى نص عربي على جهازك، بلا إنترنت وبلا حساب. واجهة RTL، نماذج Whisper، تصدير PDF عربي، ومفتوح المصدر (MIT)." />
   <meta property="og:url" content="https://alshahia.github.io/sada/" />
-  <meta property="og:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
+  <meta property="og:image" content="https://alshahia.github.io/sada/assets/social-card-ar.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="بطاقة صدى: تفريغ صوتي عربي على جهازك بلا إنترنت، مع لقطة من واجهة التطبيق العربية." />
   <meta property="og:locale" content="ar_IQ" />
   <meta property="og:locale:alternate" content="en_US" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="صدى (Sada) — تفريغ صوتي عربي بدون إنترنت | Arabic-first offline speech-to-text for Windows" />
-  <meta name="twitter:description" content="صدى: تطبيق تفريغ صوتي وفيديو إلى نص، عربي أولاً، يعمل محلياً على Windows بلا إنترنت وبلا حساب. واجهة RTL، تصدير PDF عربي، ودعم Whisper — مجاني ومفتوح المصدر (MIT). ومنذ 3.3.0 خادم MCP مدمج يصل الوكلاء بتفريغ عربي محلي." />
-  <meta name="twitter:image" content="https://alshahia.github.io/sada/assets/sada-main.png" />
+  <meta name="twitter:title" content="صدى (Sada) — تفريغ صوتي عربي بدون إنترنت وتحميل مجاني | Windows" />
+  <meta name="twitter:description" content="صدى: تطبيق مجاني لتحويل الصوت والفيديو إلى نص عربي على جهازك، بلا إنترنت وبلا حساب. واجهة RTL، نماذج Whisper، تصدير PDF عربي، ومفتوح المصدر (MIT)." />
+  <meta name="twitter:image" content="https://alshahia.github.io/sada/assets/social-card-ar.png" />
+  <meta name="twitter:image:alt" content="بطاقة صدى: تفريغ صوتي عربي على جهازك بلا إنترنت، مع لقطة من واجهة التطبيق العربية." />
 
   <script type="application/ld+json">
 {
@@ -51,19 +61,21 @@
       }
     },
     {
-      "@id": "https://alshahia.github.io/sada/#app",
       "@type": "SoftwareApplication",
-      "name": "صدى (Sada)",
+      "@id": "https://alshahia.github.io/sada/#app",
+      "name": "Sada (صدى)",
       "alternateName": [
         "Sada",
+        "صدى",
         "Sada Arabic transcription"
       ],
-      "description": "صدى: تطبيق تفريغ صوتي وفيديو إلى نص، عربي أولاً، يعمل محلياً على Windows بلا إنترنت وبلا حساب. واجهة RTL، تصدير PDF عربي، ودعم Whisper — مجاني ومفتوح المصدر (MIT). ومنذ 3.3.0 خادم MCP مدمج يصل الوكلاء بتفريغ عربي محلي.",
+      "description": "صدى: تطبيق مجاني لتحويل الصوت والفيديو إلى نص عربي على جهازك، بلا إنترنت وبلا حساب. واجهة RTL، نماذج Whisper، تصدير PDF عربي، ومفتوح المصدر (MIT).",
       "applicationCategory": "UtilitiesApplication",
       "applicationSubCategory": "Speech-to-text",
       "operatingSystem": "Windows 10, Windows 11",
       "softwareVersion": "3.9.0",
       "datePublished": "2026-11-17",
+      "dateModified": "2026-11-19",
       "inLanguage": [
         "ar",
         "en"
@@ -73,19 +85,30 @@
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
+        "availability": "https://schema.org/InStock",
+        "url": "https://github.com/alshahia/sada/releases/latest"
       },
       "license": "https://github.com/alshahia/sada/blob/master/LICENSE",
       "codeRepository": "https://github.com/alshahia/sada",
       "downloadUrl": "https://github.com/alshahia/sada/releases/latest",
-      "screenshot": "https://alshahia.github.io/sada/assets/sada-main.png",
+      "releaseNotes": "https://github.com/alshahia/sada/releases/tag/v3.9.0",
+      "screenshot": [
+        "https://alshahia.github.io/sada/assets/sada-main.png",
+        "https://alshahia.github.io/sada/assets/sada-settings.png",
+        "https://alshahia.github.io/sada/assets/sada-first-run.png"
+      ],
+      "image": "https://alshahia.github.io/sada/assets/social-card-ar.png",
+      "keywords": "تفريغ صوتي, تفريغ عربي, تحويل الصوت إلى نص, تحويل الفيديو إلى نص, التعرف على الكلام العربي, تفريغ محاضرات, تفريغ اجتماعات, whisper عربي, تفريغ بدون إنترنت, بديل مجاني, Arabic speech-to-text, Arabic ASR, offline transcription, whisper.cpp, RTL, Windows 10, Windows 11, صدى, Sada, MCP",
+      "softwareRequirements": "Windows 10 أو 11 (64-bit)؛ WebView2 Runtime؛ حزمة VC++ 2015-2022؛ مساحة قرص لنموذج Whisper (~1.6 غيغابايت للنموذج الموصى به).",
       "featureList": [
-        "عربي أولاً و RTL",
-        "تفريغ محلي بالكامل",
-        "نماذج Whisper",
-        "تصدير متعدد",
-        "إملاء وتسجيل",
-        "خصوصية مطلقة"
+        "تفريغ صوتي وفيديو محلي",
+        "واجهة عربية RTL ولغة ar-IQ",
+        "نماذج Whisper مع تحقق SHA-256",
+        "تصدير SRT وVTT وTXT وHTML وPDF عربي وDOCX وJSON",
+        "تسجيل وإملاء باختصار عام",
+        "مشاريع وبحث في النصوص المحفوظة",
+        "خادم MCP محلي للوكلاء",
+        "تسريع Vulkan اختياري وبلا قياسات"
       ],
       "author": {
         "@type": "Person",
@@ -97,6 +120,10 @@
         "name": "Ahmad Mahmoud",
         "url": "https://github.com/alshahia"
       },
+      "sameAs": [
+        "https://github.com/alshahia/sada",
+        "https://alshahia.github.io/sada/"
+      ],
       "url": "https://alshahia.github.io/sada/"
     },
     {
@@ -108,7 +135,7 @@
           "name": "هل صدى مجاني؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "نعم. المصدر برخصة MIT والمثبّت مجاني. لا حساب ولا اشتراك ولا إعلانات."
+            "text": "نعم. المصدر برخصة MIT والمثبّت مجاني، بلا حساب ولا اشتراك ولا إعلانات."
           }
         },
         {
@@ -116,7 +143,23 @@
           "name": "هل يعمل بدون إنترنت؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "نعم، بعد تنزيل نموذج Whisper مرة واحدة. التفريغ يجري محلياً بالكامل، ولا تُستخدم الشبكة إلا لأشياء تطلبها أنت."
+            "text": "نعم، بعد تنزيل نموذج Whisper مرة واحدة. التفريغ محلي بالكامل، ولا تُستخدم الشبكة إلا لما تطلبه أنت."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ما متطلبات التشغيل؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Windows 10 أو 11 (64-bit)، وWebView2، وحزمة VC++ 2015-2022، ومساحة قرص لنموذج Whisper. المثبّت غير المتصل يضمّن WebView2."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هل أحتاج بطاقة رسومات؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "لا. GPU مسرّع اختياري عبر Vulkan؛ كل نموذج يعمل على المعالج، وإذا فشل التحميل على البطاقة يعيد التطبيق المحاولة على المعالج تلقائياً."
           }
         },
         {
@@ -124,15 +167,31 @@
           "name": "هل يدعم اللهجة العراقية؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Whisper يتعامل مع العراقية ضمن العربية، والتنظيف العربي يوحّد علامات الترقيم. الدقة تعتمد على النموذج وجودة الصوت؛ ابدأ بـ large-v3-turbo."
+            "text": "Whisper يتعامل مع العراقية ضمن العربية، والتنظيف العربي يوحّد علامات الترقيم. الدقة تعتمد على النموذج وجودة الصوت؛ ولا تتوفر بعد قياسات منشورة للهجة العراقية بسبب غياب مجموعة صوتية بترخيص يسمح بالاستخدام التجاري. ابدأ بـ large-v3-turbo."
           }
         },
         {
           "@type": "Question",
-          "name": "لماذا يحذّر Windows من المثبّت؟",
+          "name": "ما اللغات المدعومة؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "المثبّت غير موقّع رقمياً. تحقّق من بصمة SHA-256 المرفقة مع الإصدار، أو ابنِ التطبيق من المصدر بنفسك."
+            "text": "العربية (ar-IQ) أولاً، مع 22 لغة واجهة موروثة من المنبع. التفريغ يشمل لغات Whisper التي يدعمها المحرّك، والإنجليزية متاحة بنقرة واحدة."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ما صيغ التصدير؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SRT وVTT وTXT وHTML وPDF (بخط عربي مضمّن) وDOCX وJSON."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هل يستطيع وكلاء الذكاء الاصطناعي استخدام صدى؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "نعم. Sada.exe --mcp خادم MCP محلي عبر stdio فيه أربع أدوات: تفريغ ملف، وسرد النصوص المحفوظة، وقراءة نص، وتقرير عن التثبيت — بلا منفذ وبلا حساب وبلا شبكة."
           }
         },
         {
@@ -145,10 +204,26 @@
         },
         {
           "@type": "Question",
+          "name": "لماذا يحذّر Windows من المثبّت؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "المثبّت غير موقّع رقمياً. تحقّق من بصمة SHA-256 وبصمة البناء المرفقة (gh attestation verify)، أو ابنِ التطبيق من المصدر."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "أين تُحفظ ملفاتي؟",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "الإعدادات والسجلات والمشاريع في %APPDATA%\\app.sada.desktop، والنموذج وبيانات WebView في %LOCALAPPDATA%\\app.sada.desktop. لا يُرسل شيء إلى أي خادم."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هل الاستخدام التجاري مسموح؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "نعم، رخصة MIT تسمح بالاستخدام التجاري للمصدر. المثبّت يضم FFmpeg بترخيص GPLv3؛ راجع THIRD-PARTY-NOTICES.md قبل إعادة توزيع أي بناء."
           }
         }
       ]

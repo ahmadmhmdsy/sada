@@ -10,9 +10,10 @@ desktop app (React 19 frontend, Rust shell) around the upstream `vibe-server` si
 | Path | What it is |
 | --- | --- |
 | `desktop/` | The app: React 19 + Vite frontend, Tauri shell under `desktop/src-tauri/`, icons and fonts |
-| `i18n/desktop/` | UI catalogues; `ar-IQ.json` is the Arabic-first catalogue (704 keys, must stay complete) |
+| `i18n/desktop/` | UI catalogues; `ar-IQ.json` is the Arabic-first catalogue (748 keys, must stay complete) |
 | `server/` | `vibe-server` engine (upstream Rust code around whisper.cpp); the fork's only change is the loopback Host/Origin request guard (see [Security](SECURITY.md)), and the release workflow builds it from source |
-| `docs/` | Architecture, building, verification, licences, release notes, upstream delta, MCP guide, Voicebox review |
+| `docs/` | Architecture, building, verification, discoverability/SEO, licences, release notes, upstream delta, MCP guide, Voicebox review |
+| `scripts/` | Release verification, SBOM generation, SEO/share-asset build and metadata guard |
 | `site/` | Static bilingual landing page deployed to GitHub Pages (includes `llms.txt` for agents) |
 | `.github/workflows/` | `ci.yml` (build + tests), `release.yml` (tag → Windows installer + GitHub release), `pages.yml` |
 
@@ -29,6 +30,13 @@ pnpm exec tauri build                # NSIS installer under target/release/bundl
 
 CI runs `pnpm install --frozen-lockfile`, `pnpm build` and `pnpm test` on every push and PR.
 Do not add a model to the repository: `*.bin` is ignored and models are downloaded by users.
+
+Docs, READMEs and the landing page have their own dependency-free guard (CI: **Docs & metadata**):
+
+```powershell
+node scripts/seo/check-seo.mjs                  # titles, JSON-LD, OG cards, hreflang, sitemap, README links, version refs
+pwsh -File scripts/seo/build-share-assets.ps1   # re-render OG cards + icons after a brand/UI change only
+```
 
 The MCP server lives in Rust and must keep working headlessly: `Sada.exe --mcp` is handled
 before any Tauri setup, speaks JSON-RPC over stdin/stdout, and must never open a port or touch the
@@ -63,7 +71,10 @@ skill text in `desktop/src/lib/skill.ts` in sync when tool names or registration
 
 `site/` is deployed by the **Deploy site** workflow to <https://alshahia.github.io/sada/>. Keep
 `site/llms.txt`, root `llms.txt`, `site/robots.txt`, `site/sitemap.xml` and the JSON-LD blocks
-inside both `index.html` files in sync with the repository facts (version, links, limitations).
+inside both `index.html` files in sync with the repository facts (version, links, limitations) —
+`node scripts/seo/check-seo.mjs` fails if they drift. The strategy, owner-only actions (GitHub
+social preview, Search Console, Bing, distribution posts) and the rejected practices are documented
+in [docs/DISCOVERABILITY.md](docs/DISCOVERABILITY.md); read it before changing README/meta copy.
 
 ## Docs index
 
@@ -75,7 +86,7 @@ inside both `index.html` files in sync with the repository facts (version, links
 - [Voicebox review](docs/VOICEBOX-REVIEW.md) · [Voicebox review in Arabic](docs/VOICEBOX-REVIEW.ar.md)
 - [Models council](docs/MODELS-COUNCIL.md) · [Models council in Arabic](docs/MODELS-COUNCIL.ar.md)
 - [Model decisions (measured)](docs/MODELS-DECISIONS.md) · [Read-aloud evidence](docs/READ-ALOUD.md)
-- [Roadmap](ROADMAP.md) · [P4 plan](docs/P4-PLAN.md) · [P5 plan](docs/P5-PLAN.md)
+- [Discoverability and SEO](docs/DISCOVERABILITY.md) · [Roadmap](ROADMAP.md) · [P4 plan](docs/P4-PLAN.md) · [P5 plan](docs/P5-PLAN.md)
  · [P6 plan](docs/P6-PLAN.md)
   · [Changelog](CHANGELOG.md)
 - [Translations](docs/TRANSLATIONS.md) · [Privacy](PRIVACY.md) · [Security](SECURITY.md)
