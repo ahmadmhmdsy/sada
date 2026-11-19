@@ -99,10 +99,30 @@ four repairs + V3   →     measure, decide     →    planned repairs  →  Ech
 - Banned phrases audit holds in both catalogues: no “never leaves your device”, no “absolute
   privacy”, no “100% safe”, no “offline” without the first-download exception, no ownership absolutes.
 
+### Verification pass · runtime accessibility
+
+The release check is not only “does it build”: the running dev-mock UI was audited with axe-core 4.14.1
+(WCAG 2.2 A/AA tags) across **35 states** — idle, every Settings section, and the export dialog, in
+English, Arabic and dark mode. It found and this pass fixed:
+
+- Switches and Radix select triggers in Settings had no accessible name (the visible row label was not
+  associated). A shared row-label context now gives both controls the label of the row they sit in.
+- The selected Settings nav row and the version footer failed AA contrast; they now use
+  `bg-primary/10 text-foreground` and solid muted text.
+- The selected export-format badge used `bg-primary/20 text-primary` (3.39:1); it is now solid primary
+  with primary-foreground text.
+- Display-language and transcript-language triggers announced a name that did not contain their visible
+  label (`label-content-name-mismatch`); each trigger now carries the label text.
+
+Result: **0 violations in all 35 states.** Focus behaviour of the Radix settings dialog was verified
+separately (Tab stays inside, Escape closes). This is automated evidence only — it does not replace the
+screen-reader check on Windows or the five-user gate below.
+
 ## 4. Evidence (dev mock, headless Chrome 158, 1440×1000)
 
 Captured from the Vite dev server with the mock Tauri layer (`desktop/src/mock-tauri/`), not from the
-installed build; timestamps and paths are mock data.
+installed build; timestamps and paths are mock data. Screenshots 05, 06 and 09 were recaptured after
+the contrast and accessible-name fixes above, so they show the shipped state, not the pre-fix one.
 
 | Screenshot | Shows |
 | --- | --- |
@@ -124,15 +144,21 @@ Run from `app/desktop` on 19 Nov 2026:
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Build (paraglide → tsc → vite) | `pnpm build` | pass, exit 0; Vite built in 52.6s |
+| Build (paraglide → tsc → vite) | `pnpm build` | pass, exit 0; Vite built in 1m 19s |
 | Test suite | `pnpm test` | **34 files / 207 tests passed**, exit 0 |
 | i18n parity | key count in `i18n/desktop/en-US.json` and `ar-IQ.json` | 786 keys each, no missing Arabic keys |
 | Docs/metadata guard | `node scripts/seo/check-seo.mjs` | pass after this document landed (see repo CI) |
+| Runtime axe audit (WCAG 2.2 A/AA) | `node .dsh/a11y/audit2.mjs` — axe-core 4.14.1, headless Chrome 158, dev mock | **35 states / 0 violations**: idle, all 10 Settings sections, export dialog; EN + AR + dark |
+| Dialog focus behaviour | same script | focus trap holds (5/5 Tab stays inside); `Escape` closes the settings dialog; focus **restoration** not confirmed in the headless harness |
 
 Not covered by automation: the installed (Tauri) build, real model-download timing, screen-reader
-behaviour on Windows, and the five-user test below. Those are explicitly the next evidence to gather.
+behaviour on Windows (axe cannot see it), and the five-user test below. Those are explicitly the next
+evidence to gather.
 
 ## 6. Five-user gate (required before Wave 2 and before 4.0)
+
+Operating manual for running it — materials, task cards, printable observation sheet, scoring table and
+the appendix template — is [GATE-KIT.md](GATE-KIT.md). The rules below are the source of truth.
 
 Participants: five Iraqi-Arabic speakers who did not see the boards, at least three installing for
 the first time. Moderated, think-aloud, ~30 minutes, recorded notes only (no telemetry).
@@ -161,7 +187,6 @@ Decision rules:
 | RTL sidebar mirror / full re-theme | Part of the identity direction, token-level, moves with 4.0 |
 | Progress-fill direction in Arabic (fill still grows left→right) | Cosmetic; keep the diff small, measure it in task 5, fix with the 4.0 typography pass |
 | English catalogue still says “Vibe” in several strings (Arabic says صدى) | Upstream base-locale debt, not a 3.10 repair; belongs to the 4.0 naming/wordmark pass and one consistent `en-US.json` rename |
-| Mock seed writes recent transcripts under `Documents/Vibe` while the app uses `Documents/Sada` | Test-only mock data issue, not user-facing; optional chore |
 | Real-download ETA calibration | Needs the installed build and real model sizes; the UI is ready |
 
 ## 8. References

@@ -8,6 +8,7 @@ Open [index.html](index.html) in a browser, or read the PNGs in [shots/](shots/)
 
 The owner answered all four questions; the answers and their mapping to releases are recorded in
 [DECISIONS.md](DECISIONS.md), with the implemented Wave-1 evidence in [shots/wave1/](shots/wave1/).
+The five-user gate that must pass before Wave 2 has a runnable moderator kit in [GATE-KIT.md](GATE-KIT.md).
 Summary:
 
 | # | Question | Owner answer | Effect |
