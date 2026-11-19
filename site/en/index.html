@@ -386,6 +386,26 @@
           <summary>Where are my files?</summary>
           <p>Settings, logs and projects live in %APPDATA%\app.sada.desktop; the model and WebView data in %LOCALAPPDATA%\app.sada.desktop. Nothing is sent to a server.</p>
         </details>
+        <details>
+          <summary>What are the system requirements?</summary>
+          <p>Windows 10 or 11 (64-bit), the WebView2 Runtime, the VC++ 2015-2022 runtime, and disk space for a Whisper model. The offline installer embeds WebView2.</p>
+        </details>
+        <details>
+          <summary>Do I need a GPU?</summary>
+          <p>No. GPU is an optional Vulkan accelerator; every model runs on the CPU, and if a model fails to load on the GPU Sada retries it on the CPU automatically.</p>
+        </details>
+        <details>
+          <summary>Which languages are supported?</summary>
+          <p>Arabic (<code>ar-IQ</code>) first, plus 22 inherited interface locales. Transcription covers the languages the Whisper engine supports; English is one click away.</p>
+        </details>
+        <details>
+          <summary>What export formats does it produce?</summary>
+          <p>SRT, VTT, TXT, HTML, PDF (embedded Arabic font), DOCX and JSON.</p>
+        </details>
+        <details>
+          <summary>Can I use it commercially?</summary>
+          <p>Yes, the MIT licence permits commercial use of the source. The installer bundles FFmpeg under GPLv3; read <a href="https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md" rel="noopener">THIRD-PARTY-NOTICES.md</a> before redistributing a build.</p>
+        </details>
         </div>
       </div>
     </section>

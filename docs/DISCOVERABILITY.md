@@ -26,6 +26,35 @@ pwsh -File scripts/seo/build-share-assets.ps1   # cards + Apple touch icon + 512
 node scripts/seo/check-seo.mjs                  # metadata and link guard
 ```
 
+
+## Council review (2026-11-19)
+
+A Qiyas council (Mode C merged) reviewed the discoverability package before it shipped. Seated:
+**The Expert** (offline desktop distribution/search), **The Engineer**, **Devil's Advocate**,
+**Naive User**, plus three dynamic roles — **Arabic Search Specialist** (query intent and RTL
+indexing), **Distribution Operator** (where Windows users actually discover tools), **Maintainer**
+(drift capacity). The Maestro ruled only on what survived.
+
+| Branch | Verdict | Precedent → cause | Constraint imposed by the objections |
+| --- | --- | --- | --- |
+| Bilingual README as the product page | **Survived** | Mature OSS desktop projects rank on README prose because GitHub is indexed and repo metadata is GitHub-search input → write for the reader first | Keep the honest benchmark and limitations; no keyword dumping |
+| Repo About/topics/description | **Survived** | GitHub search reads name, description and topics | GitHub caps topics at 20: drop `fork`/`sada`, add `dictation`/`mcp-server` (done) |
+| Self-hosted badges | **Survived** | shields.io badges work but every README view pings a third party → static SVGs keep the same look with zero extra requests | Regenerate only on brand change |
+| Social cards + OG/Twitter tags | **Survived** | Link previews are the first impression; GitHub only accepts the repo-level card via the web UI | 1200×630 < 1 MB; owner uploads the card (no API) |
+| JSON-LD `SoftwareApplication` with `offers.price = 0` | **Survived** | Google reads the entity, not the marketing copy; price 0 is factual | **No `aggregateRating`** — fake ratings would be dishonest and risk manual action |
+| `FAQPage` markup | **Downgraded** | FAQ markup is legitimate structured data, but Google restricted FAQ **rich results** to authoritative government/health sites in 2023 | Kept for entity/AI crawlers; every marked-up question must be visible (guard added after the council caught 5 invisible entries) |
+| `keywords` meta tag | **Downgraded (kept)** | Ignored by Google and Bing for ranking; harmless and cheap | Do not spend more effort on it |
+| `llms.txt` | **Downgraded (kept)** | Not an official standard; low cost, and AI crawlers may read it | Keep it accurate at release time; do not claim it as a ranking factor |
+| Winget/Chocolatey submission | **Suspended on test** | Winget is a real Windows discovery channel → but the installer is unsigned | Revisit after code signing; do not submit now |
+| Per-release changelog page on the site | **Dropped** | Thin duplicate content competes with the GitHub release notes | Revisit only with substantial original content (e.g. an Arabic ASR benchmark write-up) |
+| Third-party analytics / keyword farms / fake ratings | **Dropped** | Violates the privacy posture or search guidelines | — |
+
+**Missed items the council caught (now fixed or documented):** five FAQ questions were marked up
+but not visible on the page (fixed, CI-guarded); the SoftwareApplication node needed an explicit
+free `offers` (it already had one — verified); GitHub's 20-topic cap forced a trade-off (done); the
+social preview upload and Search Console verification cannot be automated (documented above); the
+FAQ rich-result limitation is now stated so nobody optimizes for a snippet that will not appear.
+
 ## Owner-only actions (cannot be automated from the repository)
 
 These need a person with access to the account or the community, and are deliberately left out of

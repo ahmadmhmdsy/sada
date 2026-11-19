@@ -76,6 +76,11 @@ for (const page of pages) {
     if (!Array.isArray(app.screenshot) || app.screenshot.length < 2) fail(page.file + ': schema needs >=2 screenshots');
     const faq = data['@graph']?.find((n) => n['@type'] === 'FAQPage');
     if (!Array.isArray(faq?.mainEntity) || faq.mainEntity.length < 6) fail(page.file + ': FAQPage needs >=6 questions');
+    // Google requires every FAQ answer/name marked up to be visible on the page.
+    const bodyText = html.slice(html.indexOf('</head>'));
+    for (const question of faq?.mainEntity ?? []) {
+      if (!bodyText.includes(question.name)) fail(page.file + ': FAQ question is marked up but not visible: ' + question.name);
+    }
   }
   const images = [...html.matchAll(/<img[^>]*src="([^"]+)"/g)].map((m) => m[1]).filter((s) => !s.startsWith('http'));
   for (const img of images) {
