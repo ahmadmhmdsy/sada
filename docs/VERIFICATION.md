@@ -3,6 +3,111 @@
 This page summarises how the Windows builds in this repository were verified.
 It is written in English for reviewers; the Arabic summary follows.
 
+## Sada 3.9.0 — trust and enterprise readiness (P6 Wave 1)
+
+- **Date:** 19 November 2026 (Asia/Baghdad)
+- **Source:** `master`, tagged `v3.9.0` (c46809c). No engine or transcription change: the engine
+  (`vibe-server v0.6.16-sada.1`), models, catalogue and UI behaviour are identical to 3.8.0. This
+  release adds managed machine policy, DPAPI-protected API keys, transcript retention, the network
+  egress inventory, the assurance pack, keyless build provenance + CycloneDX SBOM, a per-machine MSI
+  and the clean-machine runbook/scripts. The Release workflow rebuilt the guarded engine and all
+  three installers from this tag.
+- **Host:** Windows 10.0.26300 · WebView2 157.0.4341.46 · NVIDIA Quadro RTX 4000 (Vulkan0) and
+  Intel UHD Graphics 630 (Vulkan1).
+
+### Tests
+
+| Suite | Result |
+| --- | --- |
+| pnpm test (vitest) | **33 files / 204 tests passed**, exit 0 (11 new policy/key-sealing tests) |
+| pnpm build | exit 0 (production bundle, final vite build 58 s) |
+| pnpm exec tsc --noEmit | exit 0 |
+| cargo test --release (desktop) | **120 passed**, exit 0 (19 new policy/DPAPI/retention tests) |
+| cargo test --release -p vibe-server guard:: | **8 passed**, exit 0 |
+| cargo check --tests | exit 0 |
+| python -m unittest discover -s tests (benchmarks/arabic-asr) | **62 passed**, exit 0 |
+| i18n audit (check_i18n.py) | passed (fallback warnings only, unchanged) |
+
+### What changed
+
+- **Managed machine policy.** `HKLM\SOFTWARE\Sada\Policy` (DWORD values) with a
+  `%ProgramData%\Sada\policy.json` fallback and `SADA_POLICY_PATH` override; limits are OR-ed
+  and enforced in the Rust command layer, not only in the UI. `OfflineMode` also stops the
+  connectivity probe from opening a socket.
+- **DPAPI key storage.** Claude/OpenAI keys are sealed per Windows user (`CryptProtectData`) and
+  stored as hex blobs; legacy plaintext keys migrate once at boot. A failed decrypt yields an empty
+  key, not a crash.
+- **Transcript retention.** `transcription.retentionDays` (0 = forever, default), launch-time purge
+  and a manual purge command limited to the transcripts folder; reports counts/bytes, logs no content.
+- **Supply chain.** Every published binary gets keyless GitHub build provenance
+  (`actions/attest-build-provenance`) and a CycloneDX SBOM (`sbom-cyclonedx.json`) enriched with
+  the bundled FFmpeg, WebView2, vibe-server and runtime yt-dlp components;
+  `scripts/verify-release.ps1` verifies hashes and attestations in one step.
+- **Per-machine MSI** (`tauri.enterprise.conf.json`, `Sada_<version>_x64_en-US.msi`) as a third
+  asset, plus the enterprise deployment kit and the rows B–E validation runbook/scripts.
+- **Security operations**: new `Security` workflow (npm audit on production deps failing only on
+  critical advisories, RustSec audit of both cargo lockfiles, CodeQL for the frontend) and
+  Dependabot; response targets in SECURITY.md.
+
+### Clean-machine acceptance
+
+Rows B–E of `docs/ACCEPTANCE.md` remain unexecuted (#17/#34): they need physical or VM hardware the
+maintainer does not control. The executable procedure is now
+`scripts/acceptance/run-row-b-e.ps1` plus `docs/VALIDATION-RUNBOOK.md`; Slot A (this host, including
+the silent installs below) is covered.
+
+### Artifacts and published installers
+
+- **CI run** [44469317890](https://github.com/alshahia/sada/actions/runs/44469317890) — success,
+  8m 12s (desktop job 8m 4s: frontend tests 204/build/typecheck, engine built from `server/`, guard,
+  Rust 120; benchmark job 12 s: 62 Python tests plus the baseline self-comparison).
+- **Security run** [44469317902](https://github.com/alshahia/sada/actions/runs/44469317902) —
+  success, 1m 54s: production npm audit (no critical advisories), RustSec audit of `Cargo.lock` and
+  `server/Cargo.lock` (reported, non-blocking by design), CodeQL javascript-typescript analysis.
+- **Release run** [44470348142](https://github.com/alshahia/sada/actions/runs/44470348142) —
+  success, 48m 44s (06:11:22–07:00:06 UTC). The step log shows: frontend tests, engine sidecar rebuilt
+  from `server/` (3.5 min), guard 8 (0.8 min), Rust tests (7.8 min), offline NSIS variant (13 min),
+  per-machine MSI (6.4 min), default NSIS installer (7 min), SBOM generation/enrichment (0.1 min),
+  provenance attestation (0.1 min), Authenticode verification skipped because `SIGNING_ENABLED` is
+  unset, then the GitHub Release.
+- **Deploy site run** [44469317846](https://github.com/alshahia/sada/actions/runs/44469317846) —
+  success; the download page shows 3.9.0.
+
+Published assets, downloaded again on 19 November 2026 and verified with
+`scripts/verify-release.ps1 -Version 3.9.0 -Download` (hashes **and** attestations):
+
+| Asset | Size | SHA-256 |
+| --- | --- | --- |
+| `Sada_3.9.0_x64-setup.exe` | 44,939,266 bytes | `560b76c24a8ddaa04e00f36d18857d0ba5d562c2ba51486785ea0d0391db6133` |
+| `Sada_3.9.0_x64-setup-offline.exe` | 262,848,006 bytes | `674d58c29fefe712b25c8a2f4785c4a77a7b5408545d907f8846a2e3412ab979` |
+| `Sada_3.9.0_x64_en-US.msi` | 70,934,528 bytes | `751e74f34d0a763e4a120d38749febee8bdeefa5086337e8b84ebd7d72136bad` |
+| `SHA256SUMS.txt` | 282 bytes | `a14e373317e71ee2e5ebed23fc9409f99e221d722bccd1e06a00a4d699744673` |
+| `sbom-cyclonedx.json` | 3,741,404 bytes | `32eee714a9f5cd49b6329273fe041955584dad1e9d52716f3571a95857fa08c6` |
+
+`gh attestation verify` passed for both NSIS installers, the MSI and the SBOM (keyless Sigstore;
+verified in the same stream, exit 0 for each). The SBOM is CycloneDX 1.6, metadata component
+`Sada 3.9.0`, 1,939 components, and includes the bundled/runtime external components
+`ffmpeg`, `Microsoft Edge WebView2 Runtime`, `vibe-server` and `yt-dlp`.
+
+The two NSIS installers installed silently (`/S`) on the existing 3.8.0 install: exit 0 each,
+registry entry `Sada 3.9.0`, `Sada.exe` **15,916,544 bytes** with ProductVersion **3.9.0**. The
+installed sidecar is 75,685,376 bytes and reports `vibe-server v0.6.16-sada.1`; the MCP banner is
+`sada-mcp 3.9.0 ready (stdio; tools: sada_transcribe, sada_transcripts, sada_transcript, sada_info)`
+and an `initialize` request returns `serverInfo.version = 3.9.0`. WebView2 on the host:
+157.0.4341.46.
+
+The MSI was verified without elevation: its database reports `ProductName = Sada`,
+`ProductVersion = 3.9.0`, `ALLUSERS = 1`, `ProductLanguage = 1033` (en-US) and the documented
+upgrade code. A `msiexec /i ... /qn` attempt in the non-elevated verification session fails with
+**error 1925** ("You do not have sufficient privileges to complete this installation for all users")
+and exit 1603 — the expected per-machine behaviour, not a package defect; managed deployment runs it
+elevated (Intune/SCCM/GPO), as described in `docs/ENTERPRISE-DEPLOYMENT.md`. The verification host
+had no elevation available, so the MSI was not installed there.
+
+The installers remain unsigned; SmartScreen may warn on first run. Verify the SHA-256 against the
+release `SHA256SUMS.txt` (and optionally the build provenance) before installing, as documented in
+the READMEs and `docs/SIGNING.md`.
+
 ## Sada 3.8.0 — distribution, offline install and benchmark regression gate
 
 - **Date:** 18 November 2026 (Asia/Baghdad)

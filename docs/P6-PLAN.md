@@ -1,7 +1,8 @@
 # P6 — trust and enterprise readiness (v3.9.0 Wave 1)
 
-Status: in progress (opened 2026-11-19, implementation landed for v3.9.0). Milestone: P6 Wave 1 —
-trust and enterprise readiness (#7). Issues: #27–#35. See "Delivered" below for the map from
+Status: **shipped as v3.9.0 on 2026-11-19** ([release](https://github.com/alshahia/sada/releases/tag/v3.9.0),
+source `c46809c`, evidence in [VERIFICATION.md](VERIFICATION.md)). Milestone: P6 Wave 1 —
+trust and enterprise readiness (#7). Issues: #27–#35 (all closed). See "Delivered" below for the map from
 workstream to code/docs. This plan covers exactly what can be done without the owner: no purchases, no
 certificate application, no external audit and no hardware acquisition. Items that need the owner
 are listed at the end and are **not** activated by this plan.

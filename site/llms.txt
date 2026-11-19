@@ -13,9 +13,10 @@
 - Repository: https://github.com/alshahia/sada
 - Latest release: https://github.com/alshahia/sada/releases/latest
 - Version: 3.9.0 · License: MIT · Platform: Windows 10/11 x64
-- Distribution: two unsigned NSIS installers per release — `Sada_3.9.0_x64-setup.exe` (~45 MB,
-  downloads WebView2) and `Sada_3.9.0_x64-setup-offline.exe` (~250 MB, embeds WebView2 for offline
-  Windows 10); the NSIS hook fetches the VC++ 2015-2022 runtime from Microsoft when missing
+- Distribution: three unsigned installers per release — `Sada_3.9.0_x64-setup.exe` (~45 MB,
+  downloads WebView2), `Sada_3.9.0_x64-setup-offline.exe` (~250 MB, embeds WebView2 for offline
+  Windows 10) and `Sada_3.9.0_x64_en-US.msi` (~71 MB, per-machine for Intune/SCCM/GPO); the NSIS
+  hook fetches the VC++ 2015-2022 runtime from Microsoft when missing
 - Engine: whisper.cpp via bundled vibe-server v0.6.16 (built by Sada from `server/` as
   v0.6.16-sada.1 with a loopback Host/Origin guard); FFmpeg 9.0.2 GPLv3 bundled (notices in repo)
 - GPU: optional Vulkan acceleration (device picker in Settings → Models → Hardware), CPU fallback,
@@ -27,6 +28,8 @@
 - MCP: `Sada.exe --mcp` (stdio only) — tools sada_transcribe, sada_transcripts, sada_transcript,
   sada_info. `sada_info` reports model capabilities (engine, languages, VAD, translation, prompts).
   Register in Claude Code, Codex or any MCP client; no HTTP port is opened.
+- Enterprise controls (v3.9.0): machine-wide offline policy, DPAPI-sealed AI keys, transcript
+  retention/purge, build provenance attestations + CycloneDX SBOM on every release.
 
 ## Pages
 
@@ -35,12 +38,13 @@
 - [English README](https://github.com/alshahia/sada/blob/master/README.md)
 - [Arabic README](https://github.com/alshahia/sada/blob/master/README.ar.md)
 - [Verification report](https://github.com/alshahia/sada/blob/master/docs/VERIFICATION.md)
+- [Security whitepaper](https://github.com/alshahia/sada/blob/master/docs/SECURITY-WHITEPAPER.md) · [Network egress](https://github.com/alshahia/sada/blob/master/docs/NETWORK.md) · [Enterprise deployment](https://github.com/alshahia/sada/blob/master/docs/ENTERPRISE-DEPLOYMENT.md) · [Supply chain](https://github.com/alshahia/sada/blob/master/docs/SUPPLY-CHAIN.md)
 - [Clean-machine acceptance](https://github.com/alshahia/sada/blob/master/docs/ACCEPTANCE.md) · [Code signing](https://github.com/alshahia/sada/blob/master/docs/SIGNING.md)
 - [Upstream delta](https://github.com/alshahia/sada/blob/master/docs/UPSTREAM-PATCHES.md)
 - [MCP guide](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.md) · [دليل MCP](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.ar.md)
 - [Voicebox review](https://github.com/alshahia/sada/blob/master/docs/VOICEBOX-REVIEW.md)
 - [Models council](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.md) · [مجلس النماذج](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.ar.md)
-- [Release notes v3.6.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.6.0.md) · [v3.5.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.5.0.md) · [v3.4.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.4.0.md) · [v3.3.1](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.1.md) · [v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
+- [Release notes v3.9.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.9.0.md) · [v3.8.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.8.0.md) · [v3.7.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.7.0.md) · [v3.6.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.6.0.md) · [v3.5.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.5.0.md) · [v3.4.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.4.0.md) · [v3.3.1](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.1.md) · [v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
 - [Privacy](https://github.com/alshahia/sada/blob/master/PRIVACY.md)
 - [Third-party notices](https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md)
 

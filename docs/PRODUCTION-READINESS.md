@@ -1,7 +1,9 @@
 # Production readiness — Sada 3.9.0
 
 An evidence-based answer to "can we use this, and is it production ready?", written 2026-11-19 for
-Sada 3.9.0 on Windows 10/11 x64. It is deliberately unflattering where the evidence is thin: every
+Sada 3.9.0 on Windows 10/11 x64. Sada 3.9.0 was released on 19 November 2026:
+[v3.9.0 release](https://github.com/alshahia/sada/releases/tag/v3.9.0) (source `c46809c`), with
+per-asset hashes in [VERIFICATION.md](VERIFICATION.md). It is deliberately unflattering where the evidence is thin: every
 claim below links to committed evidence, and every gap is named. If a category is not listed, it was
 not assessed.
 
@@ -141,9 +143,10 @@ word timestamps 100%, 27.3% of Latin names kept, RTF 0.38). Per-slice: MSA 22.09
 
 ## 8. Field evidence — real, but only from the maintainer
 
-- v3.6.0–v3.8.0 installers were re-downloaded from the release page, hash-matched, silently
-  installed and version-checked — see [VERIFICATION.md](VERIFICATION.md). v3.9.0 evidence is added
-  there on release.
+- v3.6.0–v3.9.0 installers were re-downloaded from the release page, hash-matched, silently
+  installed and version-checked; v3.9.0 also passed `gh attestation verify` on both NSIS installers,
+  the MSI and the SBOM, and its MSI database was checked as a per-machine en-US package — see
+  [VERIFICATION.md](VERIFICATION.md).
 - The maintainer's machine (Windows 11, GPU) is row A of [ACCEPTANCE.md](ACCEPTANCE.md). Rows B–E
   (offline Windows 10, CPU-only, AVX-only, AVX-less SSE4.2) remain unexecuted — the biggest field
   evidence gap. A script and evidence template now exist ([VALIDATION-RUNBOOK.md](VALIDATION-RUNBOOK.md)).

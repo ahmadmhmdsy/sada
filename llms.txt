@@ -21,8 +21,13 @@
   `Sada_3.9.0_x64-setup-offline.exe` (~250 MB, embeds the WebView2 installer). The NSIS hook
   installs the VC++ 2015-2022 runtime from Microsoft when missing, so fully offline machines must
   pre-install `vc_redist.x64.exe`
+- Managed deployment (v3.9.0): `Sada_3.9.0_x64_en-US.msi` (per-machine WiX, ~71 MB, admin rights)
+  plus a machine-wide policy (HKLM `SOFTWARE\Sada\Policy` / `%ProgramData%\Sada\policy.json`) that
+  can enforce offline mode and disable AI, URL import and model downloads; guides in
+  `docs/ENTERPRISE-DEPLOYMENT.md` and `docs/NETWORK.md`
 - Languages: Arabic `ar-IQ` first; 20+ inherited upstream locales available
-- Network: only user-requested actions (model download, pasted URL, optional summary provider)
+- Network: only user-requested actions (model download, pasted URL, optional summary provider);
+  the complete egress list is `docs/NETWORK.md`, and offline mode blocks the connectivity probe too
 - GPU: optional Vulkan acceleration on NVIDIA/AMD/Intel GPUs, selectable in Settings → Models →
   Hardware; falls back to the CPU automatically and ships no CUDA/ROCm dependency
 - MCP server: `Sada.exe --mcp` (stdio, no port) with four tools: `sada_transcribe`,
@@ -35,6 +40,8 @@
 - [Arabic README](README.ar.md)
 - [What differs from upstream Vibe](docs/UPSTREAM-PATCHES.md)
 - [Verification report](docs/VERIFICATION.md)
+- [Security whitepaper](docs/SECURITY-WHITEPAPER.md) · [Threat model](docs/THREAT-MODEL.md) · [Data handling](docs/DATA-HANDLING.md) · [AV/EDR](docs/AV-EDR.md)
+- [Supply chain and provenance](docs/SUPPLY-CHAIN.md) · [Network egress](docs/NETWORK.md) · [Enterprise deployment](docs/ENTERPRISE-DEPLOYMENT.md)
 - [Clean-machine acceptance](docs/ACCEPTANCE.md) · [Code signing](docs/SIGNING.md)
 - [Building from source](docs/BUILDING.md)
 - [Privacy](PRIVACY.md)
@@ -49,10 +56,10 @@
 ## For AI agents and researchers
 
 - Source layout: `desktop/` (React + Tauri shell), `i18n/desktop/` (catalogues incl.
-  `ar-IQ.json`, 704 keys), `server/` (Rust whisper.cpp sidecar), `docs/`, `site/`.
+  `ar-IQ.json`, 748 keys), `server/` (Rust whisper.cpp sidecar), `docs/`, `site/`.
 - Build/test: `chore setup x86_64-pc-windows-msvc`, `cd desktop && pnpm install && pnpm test && pnpm build`.
 - Tests: `pnpm test` = vitest (33 files / 204 tests); `cargo test --release` = 120 Rust tests;
-  `python -m unittest discover -s benchmarks/arabic-asr/tests` = 44 tests.
+  `python -m unittest discover -s benchmarks/arabic-asr/tests` = 62 tests.
 - Do not assume the model is included; a `ggml-*.bin` is required at runtime.
 - Agent integration: run `Sada.exe --mcp` as a stdio MCP server; no HTTP port is opened. The
   installed agent skill lives at `.claude|.codex/skills/sada/SKILL.md`.

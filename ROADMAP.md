@@ -6,8 +6,9 @@ model questions: **no model is curated without a licence, a size, a SHA-256 and 
 Arabic claim is made without the benchmark.
 
 Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete`,
-`P5 complete`, `P6 in progress` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0, v3.7.0
-and v3.8.0 shipped 2026-11-18 (all before their due dates). Last updated 2026-11-19.
+`P5 complete`, `P6 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0, v3.7.0
+and v3.8.0 shipped 2026-11-18, and v3.9.0 shipped 2026-11-19 (all before their due dates). Last
+updated 2026-11-19.
 
 ## Milestones
 
@@ -19,7 +20,7 @@ and v3.8.0 shipped 2026-11-18 (all before their due dates). Last updated 2026-11
 | **v3.6.0 — transcript quality & hardening** | 2027-02-15 | Arabic transcript post-processing earned in the benchmark, upstream v3.3.6 security audit ported, clean-machine offline acceptance + signing decision | #14 #15 #16 — **complete**, evidence below |
 | **v3.7.0 — dialect coverage & prompt biasing** | 2027-04-15 | Measured Gulf + Arabic/English technical code-switch slices from a commercial-use corpus, prompt-biasing measurement and app wiring if it wins, honest remaining-gap matrix | #19 #20 #21 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.7.0), evidence below |
 | **v3.8.0 — distribution, offline install & benchmark gate** | 2027-06-15 | Offline WebView2 installer variant as a second asset, signing pipeline staged but dormant (releases stay unsigned OSS), evidence-based production-readiness statement, benchmark regression gate | #22 #23 #24 #25 #26 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.8.0), evidence below |
-| **v3.9.0 — P6 Wave 1: trust & enterprise readiness** | 2027-09-15 | Assurance pack, keyless supply chain (provenance + SBOM), security operations, managed offline policy, DPAPI secrets, retention, per-machine MSI deployment kit, rows B–E runbook | #27–#35 — in progress (plan: [P6](docs/P6-PLAN.md)) |
+| **v3.9.0 — P6 Wave 1: trust & enterprise readiness** | 2027-09-15 | Assurance pack, keyless supply chain (provenance + SBOM), security operations, managed offline policy, DPAPI secrets, retention, per-machine MSI deployment kit, rows B–E runbook | #27 #28 #29 #30 #31 #32 #33 #34 #35 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.9.0), evidence below |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -268,41 +269,83 @@ against `SHA256SUMS.txt` and installed silently: both report Sada.exe 3.8.0, sid
 remain unexecuted (#17), the offline installer still downloads the VC++ runtime when missing, and
 signing stays dormant (#18) by owner decision.
 
-## Backlog after v3.8.0
+## Backlog after v3.9.0
 
 - [#17](https://github.com/alshahia/sada/issues/17) — with the offline installer variant shipped in
   P5, the only remaining part is running the clean-machine acceptance rows B–E (offline Windows 10,
   CPU-only, AVX-only, AVX-less SSE4.2) on hardware the maintainer does not control, then recording
   the evidence in `docs/ACCEPTANCE.md`.
 - [#18](https://github.com/alshahia/sada/issues/18) — code signing. Owner decision 2026-11-18: stay
-  unsigned while the project is open-source-only; P5 stages the workflow dormant, and the SignPath
-  Foundation application (then Azure Artifact Signing as fallback) happens later.
+  unsigned while the project is open-source-only; P5 stages the workflow dormant, and P6 prepared the
+  SignPath Foundation application packet (`docs/SIGNING.md` appendix — facts, draft answers, steps
+  once approved) without submitting it. Interim trust signals are SHA-256 + build provenance.
 - Iraqi/Levantine and spontaneous-dialect coverage: no commercial-use corpus with human
   transcripts was found as of 2026-11-18 (full matrix in `docs/P4-PLAN.md`); a paid vendor corpus
   is an owner purchase decision. Until measured, those regions stay explicitly unmeasured.
 - Upstream drift: upstream Vibe's latest release is v3.3.5 (2026-11-13) while this fork is based on
   v3.2.2 plus hand-ported deltas (`docs/UPSTREAM-PATCHES.md`). Plan an incremental rebase release
   (v3.10.0, after P6 v3.9.0) instead of ad-hoc cherry-picks.
+- Dependabot triage: .github/dependabot.yml opened a first batch of update PRs at v3.9.0 (Cargo,
+  npm, Actions); review and merge them deliberately with the full test matrix, not automatically.
 - Keep the benchmark gate honest: run the 90-clip suite and `sadabench compare` against the
   committed baseline for every release that touches the engine, models or Arabic post-processing.
 
-## P6 — trust and enterprise readiness (in progress, v3.9.0 Wave 1)
+## P6 — trust and enterprise readiness (complete, v3.9.0)
 
 Scope and rationale: [P6-PLAN.md](docs/P6-PLAN.md). Only work that needs no owner decision, purchase,
 certificate, audit or hardware is in this wave.
 
-- [ ] #27 Assurance pack: security whitepaper, threat model, data handling/DPIA, AV/EDR guidance.
-- [ ] #28 Keyless supply chain: GitHub build provenance attestations, CycloneDX SBOM, release verification script.
-- [ ] #29 Security operations: dependency scanning (cargo/pnpm), Dependabot, SECURITY.md response targets.
-- [ ] #30 Egress inventory and managed offline mode (ProgramData policy file, enforced in commands/UI).
-- [ ] #31 Protect AI provider keys with Windows DPAPI and migrate legacy plaintext keys.
-- [ ] #32 Transcript retention setting, safe purge command and data-hygiene review.
-- [ ] #33 Per-machine MSI asset plus Intune/SCCM/GPO deployment kit and detection scripts.
-- [ ] #34 Rows B–E acceptance runbook, scripts and evidence templates.
-- [ ] #35 v3.9.0 version bump, bilingual notes, full tests, release and evidence.
+- [x] #27 Assurance pack: `docs/SECURITY-WHITEPAPER.md`, `docs/THREAT-MODEL.md`,
+  `docs/DATA-HANDLING.md`, `docs/AV-EDR.md` (explicit limits; no external audit claimed).
+- [x] #28 Keyless supply chain: build provenance attestations on every asset (verified for both NSIS
+  installers, the MSI and the SBOM), enriched CycloneDX SBOM (1,939 components), and
+  `scripts/verify-release.ps1` (hash + attestation); `docs/SUPPLY-CHAIN.md`.
+- [x] #29 Security operations: `.github/workflows/security.yml` (production npm audit failing only
+  on critical advisories, RustSec audit of both cargo lockfiles, CodeQL), `.github/dependabot.yml`,
+  and acknowledgement/fix targets in `SECURITY.md`.
+- [x] #30 Egress inventory and managed offline mode: `docs/NETWORK.md` (+ AR) and the machine-wide
+  policy (`HKLM\SOFTWARE\Sada\Policy` + `%ProgramData%\Sada\policy.json`) enforced in the Rust
+  command layer and reflected in the UI, with `scripts/enterprise/` helpers.
+- [x] #31 DPAPI key storage: `secrets.rs`/`secrets.ts`, per-user encryption on Windows, one-time
+  plaintext migration, graceful decrypt failure; 5 Rust + 5 frontend tests.
+- [x] #32 Retention and data hygiene: `transcription.retentionDays` (0 = forever default), launch
+  purge, manual purge command limited to the transcripts folder, `docs/DATA-HANDLING.md`;
+  6 Rust tests and UI coverage.
+- [x] #33 Per-machine MSI and deployment kit: `tauri.enterprise.conf.json` target, CI builds it as
+  the third asset, `docs/ENTERPRISE-DEPLOYMENT.md` and `scripts/enterprise/` (silent install,
+  detection, policy, cleanup).
+- [x] #34 Rows B–E runbook: `docs/VALIDATION-RUNBOOK.md` and `scripts/acceptance/run-row-b-e.ps1`;
+  rows remain unexecuted only because the maintainer has no such hardware/VM (recorded, not hidden).
+- [x] #35 v3.9.0 docs, version bump, bilingual release notes, full test matrix (204 frontend / 120
+  Rust / 8 guard / 62 Python), tag, release verification and evidence in `docs/VERIFICATION.md`.
 
-Owner decisions still open and deliberately not activated: code-signing application (#18), paid
-support/SLA, external penetration test budget, and hardware for rows B–E.
+Owner decisions still open and deliberately not activated: code-signing application (#18 — the
+SignPath application packet is prepared in `docs/SIGNING.md`, not submitted), paid support/SLA,
+external penetration test budget, and hardware for rows B–E.
+
+**P6 evidence (2026-11-19):** released as [v3.9.0](https://github.com/alshahia/sada/releases/tag/v3.9.0)
+(source commit `c46809c`). CI run [44469317890](https://github.com/alshahia/sada/actions/runs/44469317890)
+passed in 8m 12s (desktop: 204 vitest, 120 Rust, 8 guard, engine sidecar built from `server/`;
+benchmark: 62 Python tests plus the committed-baseline self-comparison). Security run
+[44469317902](https://github.com/alshahia/sada/actions/runs/44469317902) passed in 1m 54s (no critical
+production npm advisories; RustSec report captured; CodeQL JS/TS). Release run
+[44470348142](https://github.com/alshahia/sada/actions/runs/44470348142) passed in 48m 44s, building
+the guarded engine, the offline-WebView2 NSIS variant, the per-machine MSI and the default NSIS
+installer, then generating the SBOM and provenance attestations; Authenticode verification was
+skipped because `SIGNING_ENABLED` is unset, and the release notes say the assets are unsigned.
+Deploy site run [44469317846](https://github.com/alshahia/sada/actions/runs/44469317846) passed.
+
+Assets: `Sada_3.9.0_x64-setup.exe` 44,939,266 bytes / SHA-256 `560b76c2…6133`,
+`Sada_3.9.0_x64-setup-offline.exe` 262,848,006 bytes / `674d58c2…b979`, and
+`Sada_3.9.0_x64_en-US.msi` 70,934,528 bytes / `751e74f3…6bad`, one line each in
+`SHA256SUMS.txt` (282 bytes), plus `sbom-cyclonedx.json` 3,741,404 bytes. All three were
+re-downloaded, hash-matched and passed `gh attestation verify`; both NSIS installers installed
+silently (exit 0, registry `Sada 3.9.0`, `Sada.exe` 15,916,544 bytes ProductVersion 3.9.0, sidecar
+`vibe-server v0.6.16-sada.1`, MCP banner `sada-mcp 3.9.0`). The MSI database reports
+`ProductVersion 3.9.0`, `ALLUSERS = 1`, en-US; installing it in the non-elevated verification
+session fails with error 1925 as designed for a per-machine package (managed deployment runs it
+elevated). Evidence and limitations in `docs/VERIFICATION.md`; readiness statement in
+`docs/PRODUCTION-READINESS.md`.
 
 ## Rules that do not move
 
