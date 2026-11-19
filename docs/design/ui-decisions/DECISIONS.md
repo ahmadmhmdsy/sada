@@ -148,7 +148,7 @@ Run from `app/desktop` on 19 Nov 2026:
 | Test suite | `pnpm test` | **34 files / 207 tests passed**, exit 0 |
 | i18n parity | key count in `i18n/desktop/en-US.json` and `ar-IQ.json` | 786 keys each, no missing Arabic keys |
 | Docs/metadata guard | `node scripts/seo/check-seo.mjs` | pass after this document landed (see repo CI) |
-| Runtime axe audit (WCAG 2.2 A/AA) | `node .dsh/a11y/audit2.mjs` — axe-core 4.14.1, headless Chrome 158, dev mock | **35 states / 0 violations**: idle, all 10 Settings sections, export dialog; EN + AR + dark |
+| Runtime axe audit (WCAG 2.2 A/AA) | workspace headless harness (axe-core 4.14.1, headless Chrome 158) over the dev mock; not shipped in the repo | **35 states / 0 violations**: idle, all 10 Settings sections, export dialog; EN + AR + dark |
 | Dialog focus behaviour | same script | focus trap holds (5/5 Tab stays inside); `Escape` closes the settings dialog; focus **restoration** not confirmed in the headless harness |
 
 Not covered by automation: the installed (Tauri) build, real model-download timing, screen-reader
