@@ -260,7 +260,7 @@ jobs:
           ./scripts/generate-sbom.ps1 -SbomPath release-assets/sbom-cyclonedx.json -AppVersion '${{ steps.vars.outputs.version }}' -SidecarVersion $sidecar -FfmpegPath $ffmpegPath
 
       - name: Attest build provenance (keyless, Sigstore)
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             release-assets/*.exe
