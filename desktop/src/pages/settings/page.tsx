@@ -175,7 +175,7 @@ export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps
 					<nav aria-label={m.settings()} className="flex-1 overflow-y-auto">
 						{groups.map((group, index) => (
 							<div key={group.label} className={index > 0 ? 'mt-3' : ''}>
-								<p className="px-2.5 pb-1 pt-1 text-[10px] font-semibold text-muted-foreground/55 uppercase tracking-[0.08em]">{group.label}</p>
+								<p className="px-2.5 pb-1 pt-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.08em]">{group.label}</p>
 								<div className="space-y-0.5">
 									{group.sections.map((section) => (
 										<button
@@ -185,7 +185,7 @@ export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps
 											onClick={() => goTo(section.id)}
 											className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm font-medium ${
 												activeSection === section.id
-													? 'bg-primary/10 text-primary'
+													? 'bg-primary/10 text-foreground'
 													: 'text-muted-foreground hover:bg-accent/50 hover:text-foreground'
 											}`}>
 											<span className={activeSection === section.id ? 'text-primary' : 'text-muted-foreground'}>{section.icon}</span>
@@ -203,7 +203,7 @@ export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps
 								<button
 									type="button"
 									onClick={() => openUrl(config.changelogURL(vm.appVersionNumber))}
-									className="group flex w-full cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60 transition-colors hover:text-foreground">
+									className="group flex w-full cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:text-foreground">
 									<span className="truncate">{vm.appVersion}</span>
 									<ArrowUpRight
 										aria-hidden="true"

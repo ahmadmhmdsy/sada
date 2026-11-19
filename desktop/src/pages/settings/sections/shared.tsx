@@ -1,6 +1,7 @@
-import type { ComponentProps, ReactNode } from 'react'
+import { useId, type ComponentProps, type ReactNode } from 'react'
 import { cn } from '~/lib/style'
 import { Button } from '~/components/ui/button'
+import { RowLabelProvider } from '~/components/ui/row-label-context'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
 import type { viewModel } from '../view-model'
 
@@ -38,10 +39,12 @@ export function SettingsGroup({
 }
 
 /** Label + optional one-line description, used on the left side of every row. */
-function RowLabel({ label, description, clamp = true }: { label: ReactNode; description?: ReactNode; clamp?: boolean }) {
+function RowLabel({ id, label, description, clamp = true }: { id?: string; label: ReactNode; description?: ReactNode; clamp?: boolean }) {
 	return (
 		<div className="min-w-0 space-y-0.5">
-			<div className="text-sm text-foreground">{label}</div>
+			<div id={id} className="text-sm text-foreground">
+				{label}
+			</div>
 			{description && <p className={cn('text-xs text-muted-foreground', clamp && 'line-clamp-1')}>{description}</p>}
 		</div>
 	)
@@ -61,10 +64,16 @@ export function SettingsRow({
 	className?: string
 	clampDescription?: boolean
 }) {
+	// The control in this row is usually a bare switch: hand it the visible label as its name.
+	const labelId = useId()
 	return (
 		<div className={cn('flex min-h-[52px] items-center justify-between gap-4 px-4 py-2.5', className)}>
-			<RowLabel label={label} description={description} clamp={clampDescription} />
-			{children && <div className="flex shrink-0 items-center gap-1.5">{children}</div>}
+			<RowLabel id={labelId} label={label} description={description} clamp={clampDescription} />
+			{children && (
+				<div className="flex shrink-0 items-center gap-1.5">
+					<RowLabelProvider labelId={labelId}>{children}</RowLabelProvider>
+				</div>
+			)}
 		</div>
 	)
 }
@@ -83,10 +92,11 @@ export function SettingsField({
 	footer?: ReactNode
 	className?: string
 }) {
+	const labelId = useId()
 	return (
 		<div className={cn('space-y-2 px-4 py-3', className)}>
-			{(label || description) && <RowLabel label={label} description={description} clamp={false} />}
-			{children}
+			{(label || description) && <RowLabel id={labelId} label={label} description={description} clamp={false} />}
+			<RowLabelProvider labelId={labelId}>{children}</RowLabelProvider>
 			{footer && <div className="text-end text-xs text-muted-foreground">{footer}</div>}
 		</div>
 	)

@@ -277,7 +277,7 @@ export default function TranscriptExportDialog({
 							<div className="space-y-3">
 								{formatGroups.map((group) => (
 									<div key={group.values.join('-')} role="group" aria-labelledby={`export-group-${group.values[0]}`} className="space-y-1.5">
-										<p id={`export-group-${group.values[0]}`} className="px-0.5 text-[10px] font-medium text-muted-foreground/60 uppercase">
+										<p id={`export-group-${group.values[0]}`} className="px-0.5 text-[10px] font-medium text-muted-foreground uppercase">
 											{group.label()}
 										</p>
 										<div className="grid grid-cols-3 gap-1.5">
@@ -300,7 +300,7 @@ export default function TranscriptExportDialog({
 														<span
 															className={cn(
 																'flex h-6 min-w-9 shrink-0 items-center justify-center rounded-md font-mono text-[9px] font-semibold tracking-tight',
-																selected ? 'bg-primary/20 text-primary' : 'bg-background/60 text-muted-foreground',
+																selected ? 'bg-primary text-primary-foreground' : 'bg-background/60 text-muted-foreground',
 															)}>
 															{option.extension}
 														</span>

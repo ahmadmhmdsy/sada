@@ -3,6 +3,7 @@ import * as SelectPrimitive from '@radix-ui/react-select'
 import { Check, ChevronDown, ChevronUp } from 'lucide-react'
 
 import { cn } from '~/lib/style'
+import { useRowLabelId } from '~/components/ui/row-label-context'
 
 const Select = SelectPrimitive.Root
 
@@ -11,20 +12,27 @@ const SelectGroup = SelectPrimitive.Group
 const SelectValue = SelectPrimitive.Value
 
 const SelectTrigger = React.forwardRef<React.ElementRef<typeof SelectPrimitive.Trigger>, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>>(
-	({ className, children, ...props }, ref) => (
-		<SelectPrimitive.Trigger
-			ref={ref}
-			className={cn(
-				'flex h-11 w-full cursor-pointer items-center justify-between rounded-xl border border-input/60 bg-muted/40 px-3.5 py-2 text-sm shadow-xs ring-offset-background data-[placeholder]:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/80 focus:bg-card disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
-				className,
-			)}
-			{...props}>
-			{children}
-			<SelectPrimitive.Icon asChild>
-				<ChevronDown className="h-4 w-4 opacity-50" />
-			</SelectPrimitive.Icon>
-		</SelectPrimitive.Trigger>
-	),
+	({ className, children, 'aria-labelledby': ariaLabelledBy, 'aria-label': ariaLabel, ...props }, ref) => {
+		// role="combobox" takes its name from the author, not its contents: when the trigger sits in
+		// a settings row, borrow that row's label so the trigger is not announced as an unnamed button.
+		const rowLabelId = useRowLabelId()
+		return (
+			<SelectPrimitive.Trigger
+				ref={ref}
+				aria-label={ariaLabel}
+				aria-labelledby={ariaLabelledBy ?? (ariaLabel ? undefined : rowLabelId)}
+				className={cn(
+					'flex h-11 w-full cursor-pointer items-center justify-between rounded-xl border border-input/60 bg-muted/40 px-3.5 py-2 text-sm shadow-xs ring-offset-background data-[placeholder]:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/80 focus:bg-card disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+					className,
+				)}
+				{...props}>
+				{children}
+				<SelectPrimitive.Icon asChild>
+					<ChevronDown className="h-4 w-4 opacity-50" />
+				</SelectPrimitive.Icon>
+			</SelectPrimitive.Trigger>
+		)
+	},
 )
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 

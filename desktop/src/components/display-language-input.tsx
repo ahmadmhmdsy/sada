@@ -52,7 +52,8 @@ export function DisplayLanguageInput({ value, onSelect, className }: { value: st
 			query={query}
 			onQueryChange={setQuery}
 			triggerLabel={triggerLabel}
-			ariaLabel={m.displayLanguage()}
+			// The visible value is part of the name, so it passes WCAG 2.5.3 (visible label in name)
+			ariaLabel={`${m.displayLanguage()}: ${triggerLabel}`}
 		/>
 	)
 }

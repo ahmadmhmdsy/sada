@@ -408,7 +408,7 @@ export default function IdleHero() {
 					<ShieldCheck aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-success" strokeWidth={1.75} />
 					{m.localOnlyTrust()}
 				</p>
-				<p className="text-[11px] leading-relaxed text-muted-foreground/80">{m.localOnlyDownloadCaveat()}</p>
+				<p className="text-[11px] leading-relaxed text-muted-foreground">{m.localOnlyDownloadCaveat()}</p>
 			</div>
 
 			<QuietRow />

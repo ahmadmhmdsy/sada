@@ -107,7 +107,8 @@ export default function LanguageInput({ variant = 'default' }: LanguageInputProp
 				query={query}
 				onQueryChange={setQuery}
 				triggerLabel={triggerLabel}
-				ariaLabel={m.language()}
+				// The visible value is part of the name, so it passes WCAG 2.5.3 (visible label in name)
+				ariaLabel={`${m.language()}: ${triggerLabel}`}
 			/>
 		</div>
 	)

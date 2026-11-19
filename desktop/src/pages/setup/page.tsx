@@ -67,7 +67,7 @@ function App() {
 								{sizeProgress && <span>{sizeProgress}</span>}
 								{timeLeft && <span>{timeLeft}</span>}
 							</div>
-							{!vm.location?.state?.downloadURL && <p className="text-[12px] text-muted-foreground/80">{m.thisHappensOnce()}</p>}
+							{!vm.location?.state?.downloadURL && <p className="text-[12px] text-muted-foreground">{m.thisHappensOnce()}</p>}
 						</>
 					)}
 					{(vm.downloadProgress === 0 || vm.isOnline === null) && <Spinner className="h-6 w-6 text-muted-foreground" />}
