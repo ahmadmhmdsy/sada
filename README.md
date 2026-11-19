@@ -300,7 +300,7 @@ services are a better fit when you need elastic scale, many languages or shared 
 | [Verification report](docs/VERIFICATION.md) | [Arabic benchmark](benchmarks/arabic-asr/) | [Security whitepaper](docs/SECURITY-WHITEPAPER.md) | [Supply chain](docs/SUPPLY-CHAIN.md) | [Upstream patches](docs/UPSTREAM-PATCHES.md) |
 | [Release notes](docs/releases/v3.9.0.md) | [GPU notes](docs/DEBUG.md) | [Threat model](docs/THREAT-MODEL.md) | [Signing plan](docs/SIGNING.md) | [Contributing](CONTRIBUTING.md) |
 
-Maintainer material: [discoverability and SEO plan](docs/DISCOVERABILITY.md), [release verification runbook](docs/VALIDATION-RUNBOOK.md), [acceptance matrix](docs/ACCEPTANCE.md).
+Maintainer material: [discoverability and SEO plan](docs/DISCOVERABILITY.md), [release verification runbook](docs/VALIDATION-RUNBOOK.md), [acceptance matrix](docs/ACCEPTANCE.md), [UI/UX review and council verdict](docs/UI-UX-REVIEW.md).
 
 Arabic documentation: [README.ar.md](README.ar.md), [Network](docs/NETWORK.ar.md),
 [models](docs/MODELS.ar.md), [MCP](docs/AGENT-MCP.ar.md).

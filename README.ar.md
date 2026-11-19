@@ -292,7 +292,7 @@ claude mcp add sada -- "C:\Users\<you>\AppData\Local\Sada\Sada.exe" --mcp
 | [تقرير التحقق](docs/VERIFICATION.md) | [القياس العربي](benchmarks/arabic-asr/) | [الورقة الأمنية](docs/SECURITY-WHITEPAPER.md) | [سلسلة التوريد](docs/SUPPLY-CHAIN.md) | [باتشات المنبع](docs/UPSTREAM-PATCHES.md) |
 | [ملاحظات الإصدار](docs/releases/v3.9.0.md) | [ملاحظات GPU](docs/DEBUG.md) | [نموذج التهديدات](docs/THREAT-MODEL.md) | [خطة التوقيع](docs/SIGNING.md) | [المساهمة](CONTRIBUTING.md) |
 
-مادة للمشرفين: [خطة الظهور والتحسين لمحركات البحث](docs/DISCOVERABILITY.md)، و[دليل التحقق من الإصدار](docs/VALIDATION-RUNBOOK.md)، و[مصفوفة القبول](docs/ACCEPTANCE.md).
+مادة للمشرفين: [خطة الظهور والتحسين لمحركات البحث](docs/DISCOVERABILITY.md)، و[دليل التحقق من الإصدار](docs/VALIDATION-RUNBOOK.md)، و[مصفوفة القبول](docs/ACCEPTANCE.md)، و[مراجعة الواجهة وتجربة الاستخدام](docs/UI-UX-REVIEW.md).
 
 التوثيق الإنجليزي: [README.md](README.md)، و[Network](docs/NETWORK.md)، و[models](docs/MODELS.md)،
 و[MCP](docs/AGENT-MCP.md).
