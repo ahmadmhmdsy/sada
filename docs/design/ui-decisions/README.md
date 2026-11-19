@@ -4,7 +4,23 @@ Visual prototypes for the four decisions left open by the [v3.9.0 UI/UX critique
 
 Open [index.html](index.html) in a browser, or read the PNGs in [shots/](shots/).
 
-## The recommended bundle
+## Owner decisions (19 November 2026)
+
+The owner answered all four questions; the answers and their mapping to releases are recorded in
+[DECISIONS.md](DECISIONS.md), with the implemented Wave-1 evidence in [shots/wave1/](shots/wave1/).
+Summary:
+
+| # | Question | Owner answer | Effect |
+|---|----------|--------------|--------|
+| Q1 | Which repair family leads? | **all of the options** — all four families are Wave 1 | 3.10 implements A–D together |
+| Q2 | How much do we take on now? | **الإصدار الأول: أربع إصلاحات فقط** | 3.10 stops at the five-user gate; no Wave 2 before it |
+| Q3 | How far do we move from the clone? | **C · هوية 4.0 — «الصدى»** | full Echo identity is the 4.0 direction; **not** implemented in 3.10 |
+| Q4 | Which sentence can survive the truth? | **قل ما هو صحيح فقط** (V3, scoped truth-only) | ships inside 3.10 with the trust/recovery work |
+
+The 4.0 direction is written as an implementable brief in
+[echo-identity-4.0.md](../echo-identity-4.0.md), gated on the five-user measurement.
+
+## The original recommendation (for the record)
 
 | # | Question | Recommended | Effort | Risk | Why |
 |---|----------|-------------|--------|------|-----|
@@ -29,9 +45,11 @@ Screenshots are rendered at 1440px width with headless Chrome, using the app’s
 
 These are **decision aids**, not implementation specs. They approximate the shipped UI closely enough to judge direction, density and copy, but they are static HTML with hand-built fragments. Any chosen direction still goes through the real components, tokens and i18n pipeline; estimates are focused build time (±30%), excluding review and release overhead.
 
-## If the recommendation is approved
+## What was decided
 
-1. Q4 copy lands with Q1’s trust/recovery work (one pass, not two).
-2. Q3’s echo layer is implemented as token and layout changes inside the existing shell, not as a new design system.
+1. Q4 copy landed with the trust/recovery work in 3.10 — one pass, not two.
+2. **No** echo-layer token work ships in 3.10: the owner chose the full identity for 4.0, so 3.10 keeps
+   the current shell and the identity question moves to the [4.0 brief](../echo-identity-4.0.md).
 3. 3.10 stops at the five-user test; do not start Wave 2 before the numbers.
-4. The 4.0 identity brief is written after positioning, using the echo motif already introduced.
+4. The 4.0 identity brief was written after the replies and stays gated on the measurement, using the
+   echo motif already introduced on the Q3 board.
