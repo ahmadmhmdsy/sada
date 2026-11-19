@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Sada — UI decision boards</title>
+<link rel="stylesheet" href="board.css">
+<style>
+  .wrap { width:1180px; margin:0 auto; padding:54px 0 70px; }
+  .lede { font-size:14px; line-height:1.8; color:var(--graphite); max-width:760px; margin-top:14px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:34px; }
+  a.cardlink { display:block; text-decoration:none; color:inherit; }
+  a.cardlink .card { padding:14px; transition:transform .15s ease, box-shadow .15s ease; }
+  a.cardlink:hover .card { transform:translateY(-2px); box-shadow:0 18px 44px rgba(22,21,19,.09); }
+  a.cardlink img { width:100%; display:block; border-radius:10px; border:1px solid var(--line); }
+  .k { font-size:10px; letter-spacing:.16em; color:var(--faint); font-weight:600; }
+  .t { font-size:18px; font-weight:600; margin-top:6px; }
+  .d { font-size:11px; line-height:1.65; color:var(--graphite); margin-top:5px; }
+  .meta { display:flex; gap:12px; margin-top:9px; font-size:10px; color:var(--faint); }
+  .meta b { color:var(--graphite); font-weight:500; }
+  .rec { background:var(--green-soft); border:1px solid #d7e6dd; border-radius:14px; padding:18px 22px; margin-top:30px; }
+  .rec h2 { direction:rtl; text-align:right; margin:0; font-family:'Plex AR'; font-size:20px; font-weight:600; }
+  .rec p { margin:7px 0 0; font-size:12px; line-height:1.8; color:var(--graphite); }
+  .foot { margin-top:36px; border-top:1px solid var(--line); padding-top:16px; font-size:10.5px; color:var(--faint); display:flex; justify-content:space-between; }
+</style></head>
+<body><div class="wrap">
+  <div class="brand"><span class="wordmark ar" style="font-size:22px">صدى</span><svg class="echo" viewBox="0 0 40 40" fill="none"><path d="M8 20a12 12 0 0 1 12-12" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round"/><path d="M4 20a16 16 0 0 1 16-16" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" opacity=".55"/><path d="M12 20a8 8 0 0 1 8-8" stroke="#2563eb" stroke-width="2.8" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#161513"/><path d="M20 24v10" stroke="#161513" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+  <div style="margin-top:22px" class="k">SADA · UI DECISION BOARD · 19 NOV 2026</div>
+  <h1 class="title" style="font-size:36px; margin:9px 0 0">Four decisions, one recommendation.</h1>
+  <p class="lede">Visual prototypes for the four open decisions after the v3.9.0 UI/UX critique and the Qiyas council. Each board shows the before/after fragment, impact, honest build effort, risk, and what the choice unlocks later. These are decision aids — not implementation specifications.</p>
+  <div class="rec"><h2 class="ar">الإصدار 3.10: الثقة، ثم الهوية</h2><p>Lead with trust &amp; recovery (Q1 A) · ship Wave 1 only, then measure (Q2 A) · add the restrained echo layer now and brief the full identity for 4.0 (Q3 B) · adopt the scoped two-sentence trust copy (Q4 V3). Total: 7–8 focused days for 3.10, 3–4 more for 3.11.</p></div>
+  <div class="grid">
+    <a class="cardlink" href="00-overview.html"><div class="card"><img src="shots/00-overview.png" alt="Overview board"><div class="k" style="margin-top:13px">00 · OVERVIEW</div><div class="t">The recommended bundle</div><div class="d">All four answers, the sequence 3.10 → gate → 3.11 → 4.0, and why this is the long-run choice.</div><div class="meta"><span>Total <b>10–12 focused days</b></span><span>Risk <b>low</b></span></div></div></a>
+    <a class="cardlink" href="01-q1-priority.html"><div class="card"><img src="shots/01-q1-priority.png" alt="Q1 board"><div class="k" style="margin-top:13px">01 · Q1 ORDER</div><div class="t">Which repair family leads?</div><div class="d">Trust &amp; recovery vs. finish line vs. settings/a11y vs. Arabic typography — with a before/after fragment per family.</div><div class="meta"><span>Recommended <b>A · trust leads</b></span><span>~6 days total</span></div></div></a>
+    <a class="cardlink" href="02-q2-scope.html"><div class="card"><img src="shots/02-q2-scope.png" alt="Q2 board"><div class="k" style="margin-top:13px">02 · Q2 SCOPE</div><div class="t">How much do we take on now?</div><div class="d">Wave 1 only (with a measurement gate) vs. three fixes only vs. two waves back to back — timelines and what gets deferred.</div><div class="meta"><span>Recommended <b>A · Wave 1 + gate</b></span><span>7–8 days</span></div></div></a>
+    <a class="cardlink" href="03-q3-identity.html"><div class="card"><img src="shots/03-q3-identity.png" alt="Q3 board"><div class="k" style="margin-top:13px">03 · Q3 IDENTITY</div><div class="t">How far do we move from the clone?</div><div class="d">Today’s borrowed shell, the restrained echo layer for 3.10, and a full 4.0 concept — side by side, with cost and risk.</div><div class="meta"><span>Recommended <b>B now, C briefed</b></span><span>2–3 days incremental</span></div></div></a>
+    <a class="cardlink" href="04-q4-trust.html"><div class="card"><img src="shots/04-q4-trust.png" alt="Q4 board"><div class="k" style="margin-top:13px">04 · Q4 TRUST COPY</div><div class="t">Which sentence can survive the truth?</div><div class="d">Hidden vs. absolute vs. scoped wording, each shown at the drop point and on the first-run download screen, with a claim audit.</div><div class="meta"><span>Recommended <b>V3 · scoped</b></span><span>0.5–1 day</span></div></div></a>
+    <div class="card" style="padding:22px"><div class="k">HOW TO USE</div><div class="d" style="font-size:12px; margin-top:9px; line-height:1.8">Open any board full-size in the browser, or read its PNG in <span class="mono">shots/</span>. The recommendation is a bundle, not four independent picks: Q1 and Q2 define order and capacity, Q3 adds a reversible visual layer, Q4 fixes the claim that ships. Override any ↑ with the alternatives on its board and the sequence can be recomputed.</div><div class="d" style="font-size:12px; margin-top:12px; line-height:1.8">Source files: <span class="mono">board.css</span>, one HTML per board, screenshots in <span class="mono">shots/</span>. Generated with headless Chrome at 1440px, RTL using the app’s bundled IBM Plex Sans Arabic.</div></div>
+  </div>
+  <div class="foot"><span>صدى · SADA — offline Arabic speech-to-text · MIT</span><span>19 Nov 2026 · Baghdad</span></div>
+</div></body></html>

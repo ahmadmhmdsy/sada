@@ -1,0 +1,220 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Q3 — Identity</title><link rel="stylesheet" href="board.css"><style>
+.appwin { position:relative; background:#fff; border:1px solid #d9d5cb; border-radius:13px; overflow:hidden; box-shadow:0 18px 40px rgba(22,21,19,.10), 0 2px 0 rgba(22,21,19,.02); }
+.winbar { height:30px; display:flex; align-items:center; gap:5px; padding:0 11px; border-bottom:1px solid var(--line-soft); background:#fcfbf8; }
+.winbar i { width:8px; height:8px; border-radius:50%; background:#ddd8ce; display:block; }
+.win-body { display:flex; height:430px; }
+.rail { width:176px; flex:none; display:flex; flex-direction:column; }
+.main { flex:1; display:flex; flex-direction:column; min-width:0; }
+.rail-head { height:46px; display:flex; align-items:center; gap:8px; padding:0 12px; }
+.toggle { width:24px; height:24px; display:flex; align-items:center; justify-content:center; border-radius:6px; color:#7a756c; font-size:13px; }
+.wordmark { font-family:'Plex AR'; font-weight:600; font-size:18px; letter-spacing:0; line-height:1; }
+.newrow { margin:2px 10px 0; height:34px; border-radius:9px; display:flex; align-items:center; gap:7px; padding:0 10px; font-family:'Plex AR'; font-size:12px; font-weight:500; }
+.lbl { font-family:'Plex AR'; font-size:9.5px; font-weight:500; color:#9a958c; padding:0 14px; margin-top:12px; }
+.emptyrail { padding:6px 14px 0; font-family:'Plex AR'; font-size:10px; line-height:1.7; color:#a8a29a; }
+.rail-foot { margin-top:auto; padding:9px 10px; border-top:1px solid rgba(0,0,0,.05); display:flex; align-items:center; gap:7px; font-family:'Plex AR'; font-size:10.5px; color:#6b665e; }
+.mainbar { height:34px; display:flex; align-items:center; padding:0 12px; gap:6px; border-bottom:1px solid transparent; }
+.content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 20px 14px; }
+.seg { display:inline-flex; padding:3px; border-radius:999px; gap:2px; }
+.seg span { height:24px; padding:0 11px; border-radius:999px; display:inline-flex; align-items:center; gap:4px; font-family:'Plex AR'; font-size:10.5px; color:#6e6e6e; }
+.drop { width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; text-align:center; }
+.dzone { width:100%; border:2px dashed #dcdcdc; border-radius:18px; padding:24px 16px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.dropicon { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.dropt { font-family:'Plex AR'; font-size:11.5px; font-weight:500; line-height:1.5; }
+.drops { font-family:'Plex AR'; font-size:10px; color:#8d8983; }
+.quiet { display:flex; align-items:center; gap:8px; margin-top:11px; }
+.pill { height:23px; padding:0 9px; border-radius:999px; display:inline-flex; align-items:center; gap:5px; font-family:'Plex AR'; font-size:9.5px; color:#6b665e; }
+.caption { margin-top:12px; }
+.cap-name { display:flex; align-items:center; justify-content:space-between; }
+.cap-name h2 { margin:0; font-family:'Plex AR'; font-size:19px; font-weight:600; }
+.cap-name .tag { height:20px; font-size:9px; }
+.cap-cost { display:flex; gap:14px; margin-top:8px; font-size:10.5px; color:var(--faint); }
+.cap-cost b { color:var(--graphite); font-weight:500; }
+.cap-note { margin:7px 0 0; font-size:10.5px; line-height:1.55; color:var(--graphite); min-height:32px; }
+.cap-chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:9px; }
+.cap-chips .tag { height:19px; font-size:9px; letter-spacing:.04em; text-transform:none; font-weight:500; }
+</style></head>
+<body><div class="board" style="height:1580px">
+  <div class="mast"><div class="brand"><svg class="echo" viewBox="0 0 40 40" fill="none"><path d="M8 20a12 12 0 0 1 12-12" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round"/><path d="M4 20a16 16 0 0 1 16-16" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" opacity=".55"/><path d="M12 20a8 8 0 0 1 8-8" stroke="#2563eb" stroke-width="2.8" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#161513"/><path d="M20 24v10" stroke="#161513" stroke-width="1.6" stroke-linecap="round"/></svg><div><div class="name ar">صدى</div><div class="sub">UI Decision Board</div></div></div><div class="mast-right">QUESTION 03 · VISUAL IDENTITY<br><b>3.9.0 → 4.0</b></div></div>
+
+  <div class="head">
+    <div>
+      <div class="eyebrow">Question 03 · Identity</div>
+      <h1 class="title">How far do we move from the clone?</h1>
+      <div style="margin-top:10px; display:flex; gap:8px"><span class="tag red">The full re-theme was dropped by the council</span><span class="tag green">Recommendation: B now, C briefed for 4.0</span></div>
+    </div>
+    <p class="lede">A fork of Vibe inherits its shell: left sidebar, cloud-blue SaaS accent, chat-app silhouette. The visual question is not “which logo” but <b>how much of the borrowed shell to keep</b> before Sada has its own positioning. Windows below are simplified to ~620px logical width for legibility; layout, type, colour and affordances are faithful.</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:20px">
+    <div class="card" style="padding:16px 16px 14px">
+      <div class="cap-name" style="margin-bottom:10px"><h2>A · اليوم</h2><span class="tag ghost">keep as-is</span></div>
+      
+<div class="appwin" style="direction:ltr; background:#fff">
+  <div class="winbar"><i></i><i></i><i></i></div>
+  <div class="win-body" style="background:#fff">
+    <div class="rail" style="background:#f9f9f9; border-right:1px solid #ececec">
+      <div class="rail-head"><span class="toggle">☰</span><span style="flex:1"></span><span class="wordmark ar">صدى</span></div>
+      <div class="newrow" style="color:#1a1c1f"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>تفريغ جديد</span></div>
+      <div class="lbl">الأخيرة</div>
+      <div class="emptyrail">ستظهر جلساتك هنا بعد أول تفريغ.</div>
+      <div class="rail-foot" style="direction:rtl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg><span>الإعدادات</span><span style="flex:1"></span><span class="mono" style="font-size:8.5px;color:#b5b0a8">3.9.0</span></div>
+    </div>
+    <div class="main">
+      <div class="content">
+        <div class="seg" style="background:#f4f4f4">
+          <span style="background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.08); color:#1a1c1f"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> ملف</span>
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg> تسجيل</span>
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg> من رابط</span>
+        </div>
+        <div class="drop" style="margin-top:12px">
+          <div class="dzone">
+            <div class="dropicon" style="background:#2563eb0f; color:#2563eb"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 20h16"/></svg></div>
+            <div class="dropt ar">أفلت ملفات الصوت أو الفيديو أو مجلداً هنا</div>
+            <div class="drops ar">أو انقر لتصفح ملفاتك</div>
+          </div>
+          <div class="drops ar" style="font-size:9px; color:#aaa">MP3 · WAV · M4A · MP4 · حتى 4 ساعات</div>
+        </div>
+        <div class="quiet">
+          <span class="pill" style="border:1px solid #e6e6e6; background:#fff">العربية</span>
+          <span class="pill" style="border:1px solid #e6e6e6; background:#fff">خيارات إضافية</span>
+        </div>
+        <div class="ar" style="font-size:9px; color:#bcb7af; margin-top:14px">لا يوجد بيان خصوصية مرئي في هذه الشاشة</div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="cap-cost"><span>Cost <b>0 days</b></span><span>Risk <b style="color:var(--green)">none</b></span><span>Identity <b>borrowed</b></span></div>
+      <p class="cap-note">Faithful to 3.9.0: nav on the left while the UI speaks RTL, cloud-blue primary, settings only in the sidebar footer, no trust line at the drop point. This is the low-risk baseline — and the clone debt the critique scored 20/40.</p>
+      <div class="cap-chips"><span class="tag ghost">LTR nav in RTL app</span><span class="tag ghost">SaaS blue</span><span class="tag ghost">chat shell</span></div>
+    </div>
+
+    <div class="card" style="padding:16px 16px 14px; border-color:#cfd9ec">
+      <div class="cap-name" style="margin-bottom:10px"><h2>B · طبقة الصدى</h2><span class="tag green">recommended for 3.10</span></div>
+      
+<div class="appwin" style="direction:rtl; background:#fbf8f2; border-color:#d8d0c1">
+  <div class="winbar" style="background:#f6f1e7; border-color:#e6dfd1"><i style="background:#d9cfbc"></i><i style="background:#d9cfbc"></i><i style="background:#d9cfbc"></i></div>
+  <div class="win-body" style="background:#fbf8f2">
+    <div class="rail" style="background:#f3ede2; border-left:1px solid #e2dacb">
+      <div class="rail-head"><span style="flex:1"></span><span style="display:flex;align-items:center;gap:6px"><svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+<path d="M8 20a12 12 0 0 1 12-12" stroke="#1c1917" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M2 20a18 18 0 0 1 18-18" stroke="#1c1917" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+<path d="M14 20a6 6 0 0 1 6-6" stroke="#1c1917" stroke-width="3" stroke-linecap="round"/>
+<circle cx="20" cy="20" r="2.4" fill="#1c1917"/></svg><span class="wordmark ar" style="color:#1c1917">صدى</span></span><span class="toggle" style="color:#8b8375">☰</span></div>
+      <div class="newrow" style="background:#1c1917; color:#fbf8f2; margin-top:4px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>تفريغ جديد</span></div>
+      <div class="lbl" style="color:#9b9384">الأخيرة</div>
+      <div class="emptyrail" style="color:#a49b8b">ستظهر جلساتك هنا بعد أول تفريغ.</div>
+      <div class="rail-foot" style="border-color:#e2dacb; direction:rtl; color:#5f574c"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg><span>الإعدادات</span><span style="flex:1"></span><span class="mono" style="font-size:8px;color:#b3a999">Ctrl+,</span></div>
+    </div>
+    <div class="main">
+      <div class="mainbar" style="justify-content:flex-start; border-color:#eee7d9; background:#fbf8f2; direction:rtl">
+        <span style="display:flex;align-items:center;gap:4px;height:24px;padding:0 8px;border:1px solid #e2dacb;border-radius:7px;color:#6b6357;background:#fff;font-family:'Plex AR';font-size:9px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg> الإعدادات</span>
+        <span class="ar" style="font-size:9px;color:#a49b8b">مرة واحدة، ثم يعمل دون إنترنت</span>
+      </div>
+      <div class="content" style="padding-bottom:10px">
+        <div style="display:flex; gap:18px; align-items:center; margin-bottom:12px">
+          <span class="ar" style="font-size:11.5px; font-weight:600; color:#1c1917; border-bottom:2px solid #1c1917; padding-bottom:5px; display:inline-flex; align-items:center; gap:5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> ملف</span>
+          <span class="ar" style="font-size:11.5px; color:#8a8174; padding-bottom:5px; display:inline-flex; align-items:center; gap:5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg> تسجيل</span>
+          <span class="ar" style="font-size:11.5px; color:#8a8174; padding-bottom:5px; display:inline-flex; align-items:center; gap:5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg> من رابط</span>
+        </div>
+        <div class="drop">
+          <div class="dzone" style="border-color:#cdbfa8; background:#fffdf8">
+            <div class="dropicon" style="background:#f1e7d6; color:#a96a2c"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 20h16"/></svg></div>
+            <div class="dropt ar" style="color:#1c1917">أفلت ملفات الصوت أو الفيديو أو مجلداً هنا</div>
+            <div class="drops ar" style="color:#8a8174">أو انقر لتصفح ملفاتك</div>
+          </div>
+          <div class="ar" style="display:flex;align-items:center;gap:5px; font-size:9.5px; color:#3f7d5f; margin-top:4px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.4 3 7.4 7 9 4-1.6 7-4.6 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span>التفريغ يتم على هذا الجهاز — لا يُرفع أي صوت أو نص</span></div>
+          <div class="ar" style="font-size:8.5px; color:#a49b8b">التنزيل الأول للنموذج يحتاج إنترنت، ثم يعمل صدى دون اتصال.</div>
+        </div>
+        <div class="quiet">
+          <span class="pill" style="border:1px solid #e2dacb; background:#fffdf8; color:#6b6357">العربية</span>
+          <span class="pill" style="border:1px solid #e2dacb; background:#fffdf8; color:#6b6357">خيارات إضافية</span>
+          <span style="flex:1"></span>
+          <span class="ar" style="font-size:8.5px; color:#b3a999">v3.10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="cap-cost"><span>Cost <b>2–3 days</b></span><span>Risk <b style="color:var(--amber)">low–medium</b></span><span>Identity <b>authored, restrained</b></span></div>
+      <p class="cap-note">Same shell, re-authored from tokens: nav moves to the RTL start edge, warm paper replaces cloud grey, ink replaces SaaS blue, sources become labelled, the settings door moves to the header, and the trust line appears under the dropzone with its first-run caveat.</p>
+      <div class="cap-chips"><span class="tag green">best effort/impact</span><span class="tag ghost">token-level, reversible</span><span class="tag ghost">RTL start edge</span><span class="tag ghost">trust line in situ</span></div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 318px; gap:22px; margin-top:22px; align-items:start">
+    <div class="card" style="padding:16px 16px 14px">
+      <div class="cap-name" style="margin-bottom:10px"><h2>C · هوية 4.0 — «الصدى»</h2><span class="tag amber">concept only, later</span></div>
+      
+<div class="appwin" style="direction:rtl; background:#f6f1e6; border-color:#cfc5b2; width:100%">
+  <div class="winbar" style="background:#efe8da; border-color:#ddd3c1"><i style="background:#cfc4ae"></i><i style="background:#cfc4ae"></i><i style="background:#cfc4ae"></i></div>
+  <div class="win-body" style="height:400px; background:#f6f1e6">
+    <div class="rail" style="width:196px; background:#17140f; border:0">
+      <div style="padding:20px 16px 6px; display:flex; align-items:center; gap:8px"><svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+<path d="M8 20a12 12 0 0 1 12-12" stroke="#c2603f" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M2 20a18 18 0 0 1 18-18" stroke="#c2603f" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+<path d="M14 20a6 6 0 0 1 6-6" stroke="#c2603f" stroke-width="3" stroke-linecap="round"/>
+<circle cx="20" cy="20" r="2.4" fill="#c2603f"/></svg><div><div class="wordmark ar" style="color:#f4ede0; font-size:21px">صدى</div><div class="mono" style="font-size:6.5px; letter-spacing:.32em; color:#8c8375; margin-top:4px">SADA · ECHO</div></div></div>
+      <div style="margin:16px 12px 0; height:34px; border-radius:999px; background:#c2603f; color:#fff7ef; display:flex; align-items:center; justify-content:center; gap:6px; font-family:'Plex AR'; font-size:11.5px; font-weight:500"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>تفريغ جديد</span></div>
+      <div style="margin:16px 16px 0; display:flex; flex-direction:column; gap:2px; direction:rtl">
+        <div class="ar" style="height:29px; display:flex; align-items:center; gap:7px; color:#f4ede0; font-size:11px; border-right:2px solid #c2603f; padding-right:9px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> التفريغات</div>
+        <div class="ar" style="height:29px; display:flex; align-items:center; gap:7px; color:#8c8375; font-size:11px; padding-right:9px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg> من رابط</div>
+        <div class="ar" style="height:29px; display:flex; align-items:center; gap:7px; color:#8c8375; font-size:11px; padding-right:9px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg> الإعدادات</div>
+      </div>
+      <div style="margin-top:auto; padding:14px 16px; display:flex; align-items:center; gap:6px; color:#8c8375; font-family:'Plex AR'; font-size:9px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.4 3 7.4 7 9 4-1.6 7-4.6 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span>محلي بالكامل · دون إنترنت</span></div>
+    </div>
+    <div class="main" style="position:relative; overflow:hidden">
+      <svg style="position:absolute; left:-90px; bottom:-160px" width="460" height="460" viewBox="0 0 460 460" fill="none">
+        <circle cx="230" cy="230" r="214" stroke="#e3d7c2" stroke-width="1"/>
+        <circle cx="230" cy="230" r="168" stroke="#e0d2ba" stroke-width="1"/>
+        <circle cx="230" cy="230" r="122" stroke="#dccbb0" stroke-width="1.4"/>
+        <circle cx="230" cy="230" r="78" stroke="#d5bf9e" stroke-width="1.6"/>
+        <circle cx="230" cy="230" r="38" stroke="#c2603f" stroke-width="2" opacity=".5"/>
+      </svg>
+      <div style="position:relative; display:flex; flex-direction:column; height:100%; padding:16px 26px 14px">
+        <div style="display:flex; align-items:center; justify-content:space-between">
+          <span class="ar" style="display:inline-flex; align-items:center; gap:5px; height:23px; padding:0 9px; border-radius:999px; border:1px solid #cfc2ac; background:#fbf7ee; font-size:9px; color:#6b6357"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.4 3 7.4 7 9 4-1.6 7-4.6 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg> محلي بالكامل · دون إنترنت</span>
+          <span class="mono" style="font-size:8px; letter-spacing:.22em; color:#a89c87">SADA 4.0 · CONCEPT</span>
+        </div>
+        <div style="margin-top:auto; margin-bottom:auto; padding-right:95px">
+          <div class="ar" style="font-size:25px; font-weight:600; color:#17140f; line-height:1.3">اسمع ما قيل،<br>واحتفظ بما كُتب.</div>
+          <div class="ar" style="font-size:10.5px; color:#7a7164; margin-top:7px">تفريغ عربي يعمل على جهازك، بلا حساب وبلا رفع.</div>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:16px">
+            <span class="ar" style="height:30px; padding:0 14px; border-radius:999px; background:#17140f; color:#f6f1e6; display:inline-flex; align-items:center; gap:6px; font-size:10.5px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 20h16"/></svg> أفلت ملفاً أو انقر</span>
+            <span class="ar" style="height:30px; padding:0 12px; border-radius:999px; border:1px solid #cfc2ac; color:#5f574c; display:inline-flex; align-items:center; gap:5px; font-size:10px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg> سجّل الآن</span>
+            <span class="ar" style="font-size:9px; color:#9b917f">MP3 · WAV · MP4</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; border-top:1px solid #e2d8c5; padding-top:9px">
+          <div style="display:flex; gap:5px; align-items:flex-end; height:22px">
+            <i style="width:2px;height:6px;background:#cbbda5;display:block"></i><i style="width:2px;height:12px;background:#cbbda5;display:block"></i><i style="width:2px;height:20px;background:#c2603f;display:block"></i><i style="width:2px;height:9px;background:#cbbda5;display:block"></i><i style="width:2px;height:16px;background:#cbbda5;display:block"></i><i style="width:2px;height:5px;background:#cbbda5;display:block"></i><i style="width:2px;height:13px;background:#cbbda5;display:block"></i><i style="width:2px;height:7px;background:#cbbda5;display:block"></i><i style="width:2px;height:18px;background:#cbbda5;display:block"></i><i style="width:2px;height:11px;background:#cbbda5;display:block"></i>
+          </div>
+          <span class="ar" style="font-size:8.5px; color:#9b917f">التنزيل الأول للنموذج يحتاج إنترنت · بعدها يعمل صدى دون اتصال</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <p class="cap-note" style="margin-top:12px">A full authored direction: ink rail replaces the sidebar, paper and sand replace white/grey, one terracotta signal replaces SaaS blue, and the echo — Sada’s name — becomes the structural motif: concentric rings behind the drop target, a waveform footline, a wordmark that reads as a transmission. This is a positioning artefact, not a release task: it should be briefed only after the privacy/trust story lands and five users have spoken.</p>
+      <div class="cap-chips"><span class="tag ghost">ink rail</span><span class="tag ghost">echo motif</span><span class="tag ghost">paper + sand + terracotta</span><span class="tag ghost">display wordmark</span><span class="tag ghost">no chat vocabulary</span></div>
+    </div>
+    <div>
+      <div class="card" style="padding:16px 18px">
+        <div style="font-size:9.5px; letter-spacing:.16em; color:var(--faint); font-weight:600">DECISION</div>
+        <div class="ar" style="font-size:17px; font-weight:600; margin-top:6px; line-height:1.5">اختر B الآن، واحجز C للإصدار 4.0</div>
+        <p style="margin:8px 0 0; font-size:11px; line-height:1.7; color:var(--graphite)">B is the only direction that fixes the RTL shell and the trust point without a rebrand. It costs 2–3 days and is reversible at token level. C is stronger but premature: it changes the product's silhouette and should follow positioning, not lead it.</p>
+        <div class="rule" style="margin:13px 0"></div>
+        <div style="display:flex; flex-direction:column; gap:9px; font-size:10.5px; color:var(--graphite)">
+          <div style="display:flex; justify-content:space-between"><span>If you want zero visual risk</span><b style="color:var(--ink)">A</b></div>
+          <div style="display:flex; justify-content:space-between"><span>If identity is this release's goal</span><b style="color:var(--ink)">B + C brief</b></div>
+          <div style="display:flex; justify-content:space-between"><span>If a rebrand is wanted now</span><b style="color:var(--red)">C — deferred by council</b></div>
+        </div>
+      </div>
+      <div class="card" style="padding:16px 18px; margin-top:14px">
+        <div style="font-size:9.5px; letter-spacing:.16em; color:var(--faint); font-weight:600">WHAT IDENTITY IS NOT</div>
+        <p style="margin:7px 0 0; font-size:10.5px; line-height:1.65; color:var(--graphite)">No logo, no rebrand, no font licensing, no asset pipeline. Identity here means the decisions a user feels on every screen: direction, accent, density, and the one motif that makes Sada recognisable.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><div class="l"><span><span class="dot"></span>Windows are illustrative prototypes, not implementation specs</span></div><div>19 Nov 2026</div></div>
+</div></body></html>

@@ -143,6 +143,11 @@ These are not agent tasks; they change scope, wording or product direction and n
    mirrored; the change touches layout utilities and screenshots, not just CSS direction.
 5. **Screenshot regeneration.** Regenerating docs/media images requires a live 3.9.0+ build and
    replacing committed assets; owner sign-off avoids accidental drift during the fix waves.
+
+Visual prototypes for all four decisions — with impact, effort, risk, long-run notes and a recommended
+bundle — are in [docs/design/ui-decisions/](design/ui-decisions/). Open its `index.html` to compare
+the options side by side.
+
 ## Council review — Qiyas (Mode C, merged)
 
 **Question put to the council:** Sada v3.9.0 scores 20/40 on the Impeccable critique. Which findings must be fixed, in what order, and what should be refused — for a solo maintainer shipping an offline, Arabic-first Windows app with no telemetry and release capacity measured in days, not sprints?

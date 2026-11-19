@@ -86,7 +86,7 @@ in [docs/DISCOVERABILITY.md](docs/DISCOVERABILITY.md); read it before changing R
 - [Voicebox review](docs/VOICEBOX-REVIEW.md) · [Voicebox review in Arabic](docs/VOICEBOX-REVIEW.ar.md)
 - [Models council](docs/MODELS-COUNCIL.md) · [Models council in Arabic](docs/MODELS-COUNCIL.ar.md)
 - [Model decisions (measured)](docs/MODELS-DECISIONS.md) · [Read-aloud evidence](docs/READ-ALOUD.md)
-- [Discoverability and SEO](docs/DISCOVERABILITY.md) · [UI/UX review](docs/UI-UX-REVIEW.md) · [Roadmap](ROADMAP.md) · [P4 plan](docs/P4-PLAN.md) · [P5 plan](docs/P5-PLAN.md)
+- [Discoverability and SEO](docs/DISCOVERABILITY.md) · [UI/UX review](docs/UI-UX-REVIEW.md) · [UI decision boards](docs/design/ui-decisions/) · [Roadmap](ROADMAP.md) · [P4 plan](docs/P4-PLAN.md) · [P5 plan](docs/P5-PLAN.md)
  · [P6 plan](docs/P6-PLAN.md)
   · [Changelog](CHANGELOG.md)
 - [Translations](docs/TRANSLATIONS.md) · [Privacy](PRIVACY.md) · [Security](SECURITY.md)
