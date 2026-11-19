@@ -38,6 +38,14 @@
 - MCP server: `Sada.exe --mcp` (stdio, no port) with four tools: `sada_transcribe`,
   `sada_transcripts`, `sada_transcript`, `sada_info`; `sada_info` reports the configured model's
   capabilities (engine, languages, VAD, translation, prompts); Arabic transcription defaults preserved
+- Capabilities beyond file transcription, all optional and mostly off by default: speaker
+  diarization up to 4 speakers (one-time ~25 MB model), meeting detection with auto-transcribe,
+  stable subtitle timestamps (one-time ~1 MB VAD model, about 4x slower), a 1,024-character custom
+  prompt, auto-export of every finished transcript, URL import through yt-dlp, and AI
+  summaries/notes/translation through a user-configured Claude or local Ollama setup
+- Explicitly not supported: read-aloud/text-to-speech, speech-to-speech, live captions, cloud sync
+  or accounts. Translation is Whisper translate-to-English only (medium/large models, not
+  large-v3-turbo)
 
 ## Documentation
 
@@ -54,6 +62,7 @@
 - [MCP guide](docs/AGENT-MCP.md) · [MCP guide in Arabic](docs/AGENT-MCP.ar.md)
 - [Voicebox review (why MCP, what was not copied)](docs/VOICEBOX-REVIEW.md)
 - [Models council (models, features and tools worth adding, with licences)](docs/MODELS-COUNCIL.md)
+- [Features council (STT/TTS/S2S verdicts, competitor and licence boards)](docs/FEATURES-COUNCIL.md) · [P7 plan](docs/P7-PLAN.md)
 - [Release notes v3.10.0](docs/releases/v3.10.0.md) · [v3.9.0](docs/releases/v3.9.0.md) · [v3.6.0](docs/releases/v3.6.0.md) · [v3.5.0](docs/releases/v3.5.0.md) ·
   [v3.4.0](docs/releases/v3.4.0.md) · [v3.3.1](docs/releases/v3.3.1.md) · [v3.3.0](docs/releases/v3.3.0.md)
 - [Website](https://alshahia.github.io/sada/)

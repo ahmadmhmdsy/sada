@@ -30,6 +30,12 @@
   Register in Claude Code, Codex or any MCP client; no HTTP port is opened.
 - Enterprise controls (v3.9.0): machine-wide offline policy, DPAPI-sealed AI keys, transcript
   retention/purge, build provenance attestations + CycloneDX SBOM on every release.
+- Beyond file transcription (optional, mostly off by default): speaker diarization up to 4
+  speakers (~25 MB model), meeting detection with auto-transcribe, stable subtitle timestamps
+  (~1 MB VAD model, ~4x slower), a 1,024-character custom prompt, auto-export, URL import via
+  yt-dlp, and AI summaries/notes/translation through the user's own Claude or Ollama setup.
+- Not supported: read-aloud/TTS, speech-to-speech, live captions, cloud sync/accounts; translation
+  is Whisper translate-to-English only (medium/large, not v3 Turbo).
 - UI and accessibility (v3.10.0): recovery-first error dialog, copy-all, export grouped into
   four families, Settings as a header dialog, Arabic tracking and bidi fixes, truth-only trust
   copy; runtime axe audit over 35 UI states found 0 violations. Four Wave-1 repairs only; the
@@ -48,6 +54,7 @@
 - [MCP guide](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.md) · [دليل MCP](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.ar.md)
 - [Voicebox review](https://github.com/alshahia/sada/blob/master/docs/VOICEBOX-REVIEW.md)
 - [Models council](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.md) · [مجلس النماذج](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.ar.md)
+- [Features council](https://github.com/alshahia/sada/blob/master/docs/FEATURES-COUNCIL.md) · [مجلس المزايا](https://github.com/alshahia/sada/blob/master/docs/FEATURES-COUNCIL.ar.md) · [P7 plan](https://github.com/alshahia/sada/blob/master/docs/P7-PLAN.md)
 - [Release notes v3.10.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.10.0.md) · [v3.9.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.9.0.md) · [v3.8.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.8.0.md) · [v3.7.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.7.0.md) · [v3.6.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.6.0.md) · [v3.5.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.5.0.md) · [v3.4.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.4.0.md) · [v3.3.1](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.1.md) · [v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
 - [Privacy](https://github.com/alshahia/sada/blob/master/PRIVACY.md)
 - [Third-party notices](https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md)

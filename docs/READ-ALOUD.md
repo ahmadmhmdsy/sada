@@ -6,6 +6,12 @@ on the evaluation machine. Read-aloud stays out of the app; no feature code was 
 This note records the evidence for milestone `v3.5.0`, issue #12, and the models council
 card F (`docs/MODELS-COUNCIL.md` section 4).
 
+> **2026-11-19 update.** The features council
+> ([FEATURES-COUNCIL.md](FEATURES-COUNCIL.md), card A and Step Zero A) keeps this no-go for OS
+> voices and narrows the TTS question to one named test: Habibi-TTS specialized Iraqi and MSA
+> models (Apache-2.0 weights) on ten transcripts with a written kill rule. Nothing in this file is
+> retracted; it remains the OS-voice evidence.
+
 ## Question
 
 Text-to-speech is the cheapest accessibility win left: Windows has local SAPI/OneCore

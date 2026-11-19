@@ -108,6 +108,8 @@
         "Recording and global-shortcut dictation",
         "Projects and search for saved transcripts",
         "Local MCP server for AI agents",
+        "Optional speaker diarization and meeting detection with auto-transcription",
+        "Custom vocabulary prompt, stable subtitle timestamps, auto-export and URL import",
         "Optional Vulkan acceleration with no telemetry"
       ],
       "author": {
@@ -318,6 +320,16 @@
             <h3>Agent-ready (MCP)</h3>
             <p>The app executable is a local MCP server over stdio: <code>Sada.exe --mcp</code> transcribes files, lists and reads saved transcripts, and reports the configured model's capabilities (engine, languages, VAD, translation, prompts) for Claude Code, Codex and other MCP clients.</p>
           </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">8</div>
+            <h3>Speakers and meetings</h3>
+            <p>Optional speaker labels put a speaker on each sentence (up to four speakers, one-time ~25 MB model). Optional meeting detection asks whether to record when a call starts using the microphone, and auto-transcribe turns the finished recording into a transcript. Both are off by default.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">9</div>
+            <h3>Built for long transcripts</h3>
+            <p>A custom 1,024-character vocabulary prompt for names and jargon, a stable-timestamps mode for tighter subtitle timing (about 4× slower, ~1 MB VAD model), auto-export of every finished transcript, and URL import through yt-dlp. Translation to English needs Whisper medium/large (not large-v3-turbo); AI notes and translation work only through your own Claude or local Ollama setup.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -365,6 +377,10 @@
         <details>
           <summary>Does it work offline?</summary>
           <p>Yes, after a one-time Whisper model download. Transcription is fully local; the network is used only for actions you request.</p>
+        </details>
+        <details>
+          <summary>Does it label speakers or record meetings?</summary>
+          <p>Optionally. Speaker diarization (up to four speakers, one-time ~25 MB model) and meeting detection with auto-transcription are built in but off by default. Sada does not offer live captions, read-aloud or speech-to-speech.</p>
         </details>
         <details>
           <summary>Does it support Iraqi Arabic?</summary>

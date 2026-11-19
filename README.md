@@ -21,10 +21,11 @@
 </div>
 
 Sada (صدى, "echo") turns Arabic audio and video into text **on your own Windows PC**, with no
-account, no cloud upload and no telemetry. Drop in a file and get a transcript, subtitles or an
-Arabic-styled PDF; the app opens in Arabic and right-to-left by default, and English plus the other
-upstream languages are one click away. It is free, MIT-licensed, and runs after a one-time model
-download even with the network cable unplugged.
+account, no cloud upload and no telemetry. Drop in a file or record a meeting and get a transcript,
+subtitles or an Arabic-styled PDF; optional speaker labels, subtitle timing, a vocabulary prompt,
+auto-export and URL import are built in. The app opens in Arabic and right-to-left by default, and
+English plus the other upstream languages are one click away. It is free, MIT-licensed, and runs
+after a one-time model download even with the network cable unplugged.
 
 It is an independent fork of [Vibe](https://github.com/thewh1teagle/vibe) (MIT) on upstream tag
 **v3.2.2**, with telemetry, the auto-updater and the phone relay removed, a complete Arabic
@@ -73,9 +74,15 @@ other way around:
 | **Whisper models** | Any `ggml-*.bin` Whisper model; download from Settings or point at a local file. Recommended for Arabic: `large-v3-turbo`. |
 | **Export** | SRT, VTT, TXT, HTML, PDF (embedded Arabic font), DOCX and JSON. |
 | **Dictation** | A global shortcut: hold to record, release to transcribe into the active app. |
-| **Recording** | Microphone and system-audio capture. |
+| **Recording and meetings** | Microphone and system-audio capture. Optional meeting detection notices a call using the microphone and asks whether to record it; optional auto-transcribe turns the finished recording into a transcript as soon as it ends. Both are off by default. |
+| **Speaker labels** | Optional speaker diarization adds the speaker to each sentence — up to four speakers, with a recognition threshold and an expected-speaker count. Needs a one-time ~25 MB model download; off by default. |
+| **Subtitle timing** | An optional stable-timestamps mode for tighter subtitle timing (about 4× slower); needs a one-time ~1 MB VAD model download. |
+| **Custom vocabulary** | A custom initial prompt of up to 1,024 characters biases recognition toward your names, jargon and spellings; models without prompt support ignore it. |
+| **Auto-export** | Every finished transcript can be exported automatically to the formats you choose — beside the recording, in the projects folder or in a folder you pick — with an optional replace rule. |
+| **Import from a link** | Paste a media URL; Sada downloads the audio locally with yt-dlp (installed or updated only when you agree) and transcribes it. |
 | **Projects** | Saved transcripts with search, reopen and re-export. |
-| **Optional summaries** | Claude or a local Ollama model with your own key — off by default. |
+| **Translation** | Whisper’s Translate to English, with medium/large models only (not large-v3-turbo); with Claude or a local Ollama model configured, AI tasks can translate as well. |
+| **Optional AI** | Claude or a local Ollama model with your own key — summaries, notes, translation and dictation cleanup; off by default. |
 | **Agents (MCP)** | `Sada.exe --mcp` exposes four stdio tools to Claude Code, Codex and other MCP clients; Arabic defaults, local only. |
 | **Languages** | Arabic (`ar-IQ`) plus 22 inherited interface locales; transcription covers the languages the engine supports. |
 | **GPU acceleration** | Optional Vulkan path, with automatic CPU fallback when a model does not fit on the GPU. |
@@ -301,7 +308,7 @@ services are a better fit when you need elastic scale, many languages or shared 
 | [Verification report](docs/VERIFICATION.md) | [Arabic benchmark](benchmarks/arabic-asr/) | [Security whitepaper](docs/SECURITY-WHITEPAPER.md) | [Supply chain](docs/SUPPLY-CHAIN.md) | [Upstream patches](docs/UPSTREAM-PATCHES.md) |
 | [Release notes](docs/releases/v3.10.0.md) | [GPU notes](docs/DEBUG.md) | [Threat model](docs/THREAT-MODEL.md) | [Signing plan](docs/SIGNING.md) | [Contributing](CONTRIBUTING.md) |
 
-Maintainer material: [discoverability and SEO plan](docs/DISCOVERABILITY.md), [release verification runbook](docs/VALIDATION-RUNBOOK.md), [acceptance matrix](docs/ACCEPTANCE.md), [UI/UX review and council verdict](docs/UI-UX-REVIEW.md).
+Maintainer material: [discoverability and SEO plan](docs/DISCOVERABILITY.md), [release verification runbook](docs/VALIDATION-RUNBOOK.md), [acceptance matrix](docs/ACCEPTANCE.md), [UI/UX review and council verdict](docs/UI-UX-REVIEW.md), [features council](docs/FEATURES-COUNCIL.md) and [P7 plan](docs/P7-PLAN.md).
 
 Arabic documentation: [README.ar.md](README.ar.md), [Network](docs/NETWORK.ar.md),
 [models](docs/MODELS.ar.md), [MCP](docs/AGENT-MCP.ar.md).

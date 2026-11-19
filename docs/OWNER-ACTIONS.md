@@ -6,7 +6,7 @@ draft and check every item, but it cannot click an account page, receive a verif
 a certificate or supply physical hardware.
 
 Status legend: **P0 = do this week**, **P1 = this month**, **P2 = decide later**.
-Track a box by changing `[ ]` to `[x]`. The two scheduled reminders (see the end) point back here.
+Track a box by changing `[ ]` to `[x]`. The scheduled reminders (see the end) point back here.
 
 | # | Action | Priority | Effort | Blocked by |
 | --- | --- | --- | --- | --- |
@@ -23,6 +23,9 @@ Track a box by changing `[ ]` to `[x]`. The two scheduled reminders (see the end
 | [A11](#a11--external-audit-sl-a-and-legal-optional) | External audit / SLA / legal review (optional) | P2 | weeks | budget |
 | [A12](#a12--measurement-review) | Measure results in Search Console / GitHub | **P0** | 15 min monthly | A2 + 4–6 weeks |
 | [A13](#a13--enable-github-discussions-optional) | Enable GitHub Discussions (optional) | P2 | 5 min | moderation capacity |
+| [A14](#a14--tag-v3100) | Tag v3.10.0 and verify the release | **P0** | 10 min | source be27bd5 pushed (done) |
+| [A15](#a15--authorise-the-two-step-zero-tests) | Authorise the two Step Zero tests (read-aloud, Arabic subtitle burn-in) | P1 | 1.5 days agent time, plus one listener | your go-ahead |
+| [A16](#a16--open-the-p7-milestone-and-issues) | Open the P7 milestone and FC-1…FC-9 issues | P1 | done 2026-11-19 | — |
 
 ---
 
@@ -235,6 +238,44 @@ fix the landing-page conversion before spending more on distribution.
 "أسئلة / Q&A", "الأفكار / Ideas", "أظهر إعدادك / Show your setup". Add the link to the README once it
 has a few answers.
 
+## A14 — Tag v3.10.0
+
+**Why:** the 3.10.0 source is pushed and CI-green at be27bd5; the release notes, metadata and version
+refs are prepared. Tagging is the only step the repository cannot do by policy.
+
+**Steps:**
+1. Confirm the release commit is be27bd5 and that [docs/releases/v3.10.0.md](releases/v3.10.0.md)
+   is the version you want.
+2. Decide code signing: leave SIGNING_ENABLED false for an unsigned build, or finish A5 first.
+3. Tag and push: `git tag v3.10.0` then `git push origin v3.10.0` (the Release workflow builds
+   two installers and creates the GitHub release with `SHA256SUMS.txt`, licence and notices).
+4. Watch the Release workflow to green and smoke-test the downloaded installer.
+
+**Done when:** GitHub release v3.10.0 exists with both installer assets and checksums, and the site
+still passes its docs check.
+
+## A15 — Authorise the two Step Zero tests
+
+**Why:** the features council left exactly two cheap falsification tests between us and a defensible
+TTS and subtitle-burn-in decision. Both are report-only; neither ships a model or UI.
+
+**Preflight (done 2026-11-19):** the bundled FFmpeg 9.0.2 build has libass, fribidi and harfBuzz
+(the hard requirement for Step Zero B), the host has a Quadro RTX 4000 with 8 GB and uv 0.7.18
+(enough to start Step Zero A), and the engine CLI was inspected. Both tests are ready to start on
+your go-ahead; nothing was downloaded or installed.
+
+**Steps:** say go; the agent runs Step Zero A (Habibi-TTS specialized IRQ/MSA on 10 transcripts,
+about one day) and Step Zero B (FFmpeg Arabic shaping on five clips, about half a day) and records
+pass/fail against the criteria in [FEATURES-COUNCIL.md](FEATURES-COUNCIL.md) section 6.2. If you can
+supply a native Iraqi listener for the 4/5 naturalness score, say so; otherwise the agent records
+its own ratings with the caveat.
+
+**Done when:** both reports are in the repository with a dated verdict and a kill/continue decision.
+
+## A16 — Open the P7 milestone and issues
+
+**Done 2026-11-19.** gh is authenticated as `alshahia`. Milestone [P7 — parity, proof & platform #8](https://github.com/alshahia/sada/milestone/8) contains nine issues, [#58](https://github.com/alshahia/sada/issues/58) (FC-1) through [#66](https://github.com/alshahia/sada/issues/66) (FC-9), each with its acceptance block, gate and evidence links. ROADMAP, [P7-PLAN.md](P7-PLAN.md) and this page carry the real numbers. FC-1 and FC-9 close when the pending docs commit lands; no tag or release is involved.
+
 ## Release sign-off (every release)
 
 The agent can prepare version bumps, notes, the build, provenance and verification. The owner's
@@ -247,7 +288,8 @@ step, and tag the release after the release branch is green. The release workflo
 - **2026-11-21** — quick wins: A1 (social preview), start A2/A3 (Search Console/Bing), decide A5
   (signing route).
 - **2026-12-19** — measurement baseline: A12 (Search Console/Bing/GitHub numbers), check whether
-  A5/A6 unblocked Winget, and whether A10 outreach got any answer.
+  A5/A6 unblocked Winget, whether A10 outreach got any answer, and whether the Step Zero A/B
+  verdicts are in (FC-1 was delivered 2026-11-19; FC-2/FC-3 wait on A15).
 
 The agent can also do on request: draft the launch posts (A4), prepare the Winget manifests (A6),
 triage the Dependabot PRs (A9), write the corpus outreach email (A10), run the clean-machine
