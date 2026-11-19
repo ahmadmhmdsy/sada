@@ -57,6 +57,9 @@ FAQ rich-result limitation is now stated so nobody optimizes for a snippet that 
 
 ## Owner-only actions (cannot be automated from the repository)
 
+> Step-by-step instructions for every owner task (with effort, dependencies and done criteria)
+> live in [OWNER-ACTIONS.md](OWNER-ACTIONS.md). Keep that page open while working through them.
+
 These need a person with access to the account or the community, and are deliberately left out of
 the agent's scope. They are ordered by impact per effort.
 
