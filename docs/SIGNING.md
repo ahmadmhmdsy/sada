@@ -1,13 +1,14 @@
 # Windows code signing
 
-The Windows installer and the app executable are **not signed** as of Sada v3.8.0. This page records
+The Windows installers and the app executable are **not signed** as of Sada v3.9.0. This page records
 the options, their real costs, what the fork already has in the repository, and the recommendation
 for when signing is funded. Nothing is purchased or enabled without the owner's decision.
 
-**Status (2026-11-18): the owner decided to keep releases unsigned while the project is
-open-source-only; the SignPath Foundation application comes later (issue #18). P5 staged the
-pipeline so enabling it is configuration, not a redesign — see *When signing is enabled* below.
-The released assets stay unsigned, and the release notes say so.
+**Status (2026-11-19): the owner decided to keep releases unsigned while the project is
+open-source-only; the SignPath Foundation application is prepared but not submitted (issue #18).
+P5 staged the pipeline so enabling it is configuration, not a redesign, and P6 added keyless build
+provenance attestations as the interim trust signal. The released assets stay unsigned, and the
+release notes say so. The application packet is in the appendix below.
 
 ## What users see today
 
@@ -90,16 +91,79 @@ Manual verification (same check the workflow runs):
     Get-AuthenticodeSignature .\Sada_<version>_x64-setup.exe | Format-List Status, SignerCertificate
     & "$env:ProgramFiles(x86)\Windows Kits\10\bin\*\x64\signtool.exe" verify /pa /v .\Sada_<version>_x64-setup.exe
 
-Repeat for `Sada_<version>_x64-setup-offline.exe`. Status must be **Valid**, and the signer must be
-the expected publisher. SmartScreen reputation still needs to build after the first signed release;
+Repeat for `Sada_<version>_x64-setup-offline.exe` and `Sada_<version>_x64_en-US.msi` (Windows can
+verify the MSI with `signtool verify /pa` too). Status must be **Valid**, and the signer must be the
+expected publisher. SmartScreen reputation still needs to build after the first signed release;
 signing removes the unknown-publisher warning, it does not create instant trust for a new file.
+
+## Appendix — SignPath Foundation application packet (prepared 2026-11-19, not submitted)
+
+This is the information the owner needs when they decide to apply. Nothing here is activated:
+signing stays dormant and the releases stay unsigned until `SIGNING_ENABLED` is set.
+
+### Project facts (ready to copy)
+
+| Field | Value |
+| --- | --- |
+| Project name | Sada (صدى) — Arabic-first offline transcription for Windows |
+| Repository | https://github.com/alshahia/sada (public, MIT) |
+| Upstream | https://github.com/thewh1teagle/vibe (MIT fork, based on v3.2.2) |
+| Licence | MIT for the app; bundled FFmpeg is GPLv3 as a separate executable; models are MIT/Apache |
+| What it does | Local Whisper transcription with Arabic-first defaults, fully offline, no telemetry/account/updater |
+| Distribution | GitHub Releases: NSIS per-user, offline-WebView2 NSIS, WiX per-machine MSI (v3.9.0+) |
+| Build | GitHub Actions `release.yml` on tag `v<version>`; deterministic inputs are lockfiles + pinned sidecar version |
+| Release cadence | Ad-hoc, roughly one per milestone (typically 1–2 per month while active) |
+| Downloads | See the repository release page (not required for the application) |
+| Existing integrity | SHA-256 sums, CycloneDX SBOM, GitHub build provenance attestations |
+| Volume estimate | Small: one release job per tag, a handful of tags per quarter |
+
+### Draft answers for the application form
+
+- **Why does the project need signing?** To remove the "unknown publisher" SmartScreen warning for
+  users who download an offline transcription app, and to satisfy managed-environment policies that
+  block unsigned installers. The app handles private audio and transcripts, so trust in the binary
+  matters.
+- **Is the project open source?** Yes: MIT, full source and release workflow public, third-party
+  licence notices committed. FFmpeg is shipped as a separate GPLv3 executable and is not linked
+  into the app.
+- **How is the build controlled?** Only the release workflow on GitHub-hosted Windows runners can
+  produce a release asset; the workflow verifies the tag equals the app version, runs the test
+  suites, builds the engine from source, and publishes only after attestation. No maintainer
+  machine builds release assets.
+- **What is signed?** The two NSIS installers and the WiX MSI (and the unpacked app/engine
+  executables when the signing overlay is enabled). SignPath signing is applied at the bundle step;
+  verification of the Authenticode signature is a required release step when signing is on.
+- **Who maintains it?** A single maintainer under the GitHub account `alshahia`; the project is a
+  fork of Vibe with attribution kept. Support is best-effort through GitHub issues.
+- **Anything unusual?** The app is fully offline by design (no update channel); the installers are
+  large when the offline WebView2 variant is built (~250 MB) because the WebView2 installer is
+  embedded. SignPath policy/profile definitions must allow that asset size.
+
+### Steps once approved
+
+1. Add the SignPath project/profile IDs to `.github/workflows/release.yml` (replace the YubiKey
+   overlay and `uv` setup), keep `SIGNING_ENABLED` as the switch and keep the Authenticode
+   verification step.
+2. Set `SIGNING_ENABLED=true` as a repository variable for the next release; run a dry-run release
+   from a test tag first and verify `Get-AuthenticodeSignature` on all three assets.
+3. Update README/PRIVACY/SIGNING/VERIFICATION and the release notes to say "signed by SignPath
+   Foundation on behalf of the project", and remove the unsigned SmartScreen caveat.
+4. Keep the hashes + attestations regardless: signing is not a replacement for the verification
+   script.
+
+### Owner decisions still needed before submitting
+
+- Legal contact identity/email and the account that will apply.
+- Confirmation that the project may be listed publicly as a SignPath Foundation user.
+- Acceptance of SignPath's terms (including their build and signing policy).
 
 ## Arabic summary
 
-الملف غير موقّع حتى الإصدار 3.8.0، لذلك يظهر تحذير SmartScreen ("ناشر غير معروف"). قرار المالك في
+الملفات غير موقّعة حتى الإصدار 3.9.0، لذلك يظهر تحذير SmartScreen ("ناشر غير معروف"). قرار المالك في
 2026-11-18 هو البقاء على إصدارات غير موقّعة ما دام المشروع مفتوح المصدر فقط، مع تجهيز المسار
-لكي يُفعَّل لاحقاً بمتغير واحد. الحماية الحالية هي نشر بصمة SHA-256 للمثبّتَين (الصغير ومثبّت
-WebView2 دون اتصال) مع كل إصدار. الخيار الموصى به عند التقديم هو **SignPath Foundation** المجاني
+لكي يُفعَّل لاحقاً بمتغير واحد. الحماية الحالية هي نشر بصمة SHA-256 للملفات الثلاثة (الصغير، ومثبّت
+WebView2 دون اتصال، وMSI) مع بيانات أصل البناء وملف SBOM في كل إصدار، إضافة إلى طلب تقديم
+**جاهز لكن غير مُرسَل** (الملحق في نهاية الوثيقة). الخيار الموصى به عند التقديم هو **SignPath Foundation** المجاني
 للمشاريع مفتوحة المصدر، ثم **Azure Artifact Signing** بحدود 10 دولارات شهرياً إذا كان الكيان
 مؤهلاً؛ ولا تُشترى شهادة OV/EV قبل قرار المالك. في v3.8.0 أصبح سير الإصدار يدمج ملف
 tauri.windows.signing.conf.json ويشغّل scripts/sign.py فقط عندما يكون المتغير SIGNING_ENABLED

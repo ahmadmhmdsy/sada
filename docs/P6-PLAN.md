@@ -1,7 +1,8 @@
 # P6 — trust and enterprise readiness (v3.9.0 Wave 1)
 
-Status: in progress (opened 2026-11-19). Milestone: P6 Wave 1 — trust and enterprise readiness (#7).
-Issues: #27–#35. This plan covers exactly what can be done without the owner: no purchases, no
+Status: in progress (opened 2026-11-19, implementation landed for v3.9.0). Milestone: P6 Wave 1 —
+trust and enterprise readiness (#7). Issues: #27–#35. See "Delivered" below for the map from
+workstream to code/docs. This plan covers exactly what can be done without the owner: no purchases, no
 certificate application, no external audit and no hardware acquisition. Items that need the owner
 are listed at the end and are **not** activated by this plan.
 
@@ -52,10 +53,14 @@ hardware for rows B–E.
 
 ### Managed policy (admin controls)
 
-A machine-wide JSON file, `%ProgramData%\Sada\policy.json` (override with
-`SADA_POLICY_PATH` for tests), is read by the Rust shell at startup and exposed to the UI via a
-Tauri command. Administrators deploy it with Intune/GPO/SCCM (file or script); no registry writes
-are needed by the app. Schema (all fields optional, missing = false/default):
+**Implemented.** The Rust shell reads machine-wide values from
+`HKLM\SOFTWARE\Sada\Policy` (DWORD values; `TranscriptsDir` as SZ) and merges a JSON file
+at `%ProgramData%\Sada\policy.json` (override with `SADA_POLICY_PATH` for tests); registry
+values win and restrictions are OR-ed, so no source can loosen another. The policy is exposed to the
+UI through the `get_managed_policy` command and re-read by the Rust command layer on every
+guarded action. Administrators deploy it with Intune/GPO/SCCM (registry preference or script);
+`scripts/enterprise/set-sada-policy.ps1` and `clear-sada-policy.ps1` implement it. Schema
+(all fields optional, missing = false/default):
 
     {
       "offlineMode": true,
@@ -70,33 +75,37 @@ Semantics:
 - `offlineMode` implies all other disable flags; the app hides/disables the AI section, URL
   import and model catalogue downloads, and guarded Rust commands refuse with a clear error.
 - `transcriptsDir` pins the transcript output directory; the Setting becomes read-only.
-- The file is read at startup and re-read when the config changes; malformed JSON is ignored with a
-  warning (fail-open for availability, documented as an admin responsibility).
+- The policy is re-read on every guarded operation; malformed JSON is ignored with a warning, and a
+  registry failure never disables file-based restrictions (fail-open for availability, documented as
+  an admin responsibility). The connectivity probe returns "offline" without opening a socket when
+  `OfflineMode` is set. URL import/download guards are covered by Rust tests.
 - Limit: policy is a management control inside the local-user trust boundary. A user who can edit
   files as themselves could bypass UI gating; guarded commands in Rust refuse regardless of UI state.
   Strong enforcement is a Windows policy/user-rights task (documented).
 
 ### DPAPI secrets
 
-Claude/OpenAI API keys are encrypted per Windows user with `CryptProtectData` (DPAPI, current
-user scope) in the Rust layer, stored as base64 blobs in `app_config.json`
-(`claudeApiKeyEnc`/`openaiApiKeyEnc`), and never written back as plaintext. On load, legacy
-plaintext keys are encrypted and redacted. Loss of the Windows profile means the key must be
-re-entered (documented). Ollama has no key; base URLs stay non-secret.
+**Implemented.** Claude/OpenAI API keys are encrypted per Windows user with `CryptProtectData`
+(caller-supplied FFI, current-user scope, `CRYPTPROTECT_UI_FORBIDDEN`), stored as hex blobs in
+`app_config.json` (`claudeApiKeyEnc`/`openaiApiKeyEnc`), and never written back as
+plaintext. On boot the frontend decrypts the blobs into memory and migrates legacy plaintext keys
+once, clearing them. Decryption failure (copied profile, tampered blob) yields an empty provider key
+so the user re-enters it. Loss of the Windows profile means re-entering the key (documented). Ollama
+has no key; base URLs stay non-secret.
 
-### Retention
-
-`transcription.retentionDays` (0 = off, default 0) plus a Settings action runs a Rust purge that
-deletes only files under the configured transcripts directory older than the cutoff, and reports how
-many were removed. No deletion runs outside that directory; symlink/junction resolution stays inside
-the root. Automatic purge (if enabled) runs once per launch in the background. Logs never include
-transcript text or media paths in release builds (audited under #32).
+**Implemented.** `transcription.retentionDays` (0 = off, default 0) plus a Settings action runs
+`purge_old_transcripts`, which deletes only project folders containing `transcript.vibe.json`
+and legacy `*.vibe.json` files under the configured transcripts directory that are older than the
+cutoff, and reports deleted count and freed bytes. No deletion runs outside that directory; symlinks
+and junctions are skipped; foreign files are left alone (covered by Rust tests). Automatic purge runs
+once per launch (2 s after boot) when a window is set. Logs never include transcript text or API keys
+in release builds (audited under #32).
 
 ### Supply chain
 
-- GitHub Artifact Attestations (keyless, Sigstore) for every release asset via
+- **Implemented:** GitHub Artifact Attestations (keyless, Sigstore) for every release asset via
   `actions/attest-build-provenance`; consumers run `gh attestation verify <asset> --repo
-  alshahia/sada`.
+  alshahia/sada` or the new `scripts/verify-release.ps1` (hash + attestation in one step).
 - CycloneDX SBOM (application + Rust workspace + npm production dependencies) published as a release
   asset; FFmpeg/WebView2 external components listed explicitly.
 - `SHA256SUMS.txt` stays as the offline verification path; `scripts/verify-release.ps1` checks
@@ -105,16 +114,20 @@ transcript text or media paths in release builds (audited under #32).
 
 ### MSI / enterprise deployment
 
-Keep NSIS per-user as the consumer default; add a per-machine MSI (WiX) third asset for managed
-deployment with public properties (INSTALLDIR, ALLUSERS=1), silent install `msiexec /i ... /qn`,
-detection rules for Intune/SCCM and a documented uninstall. Policy file and model pre-provisioning
-are deployed alongside. MSI requires administrator rights; the docs say so.
+**Implemented:** NSIS per-user stays the consumer default; a per-machine MSI (WiX) is built from
+`desktop/src-tauri/tauri.enterprise.conf.json` and published as the third asset. Silent install
+`msiexec /i ... /qn`, detection/uninstall, policy deployment and model pre-provisioning are
+documented in [ENTERPRISE-DEPLOYMENT.md](ENTERPRISE-DEPLOYMENT.md) with helper scripts under
+`scripts/enterprise/`. MSI requires administrator rights; the docs say so.
 
 ### Rows B–E
 
-Deliver `scripts/acceptance/run-row-b-e.ps1` (or equivalent) that performs the smoke steps,
-captures versions/hashes/GPU/CPU flags and writes an evidence block matching the ACCEPTANCE template.
-Rows that need hardware stay unchecked with explicit "blocked: no hardware" notes.
+**Implemented:** `scripts/acceptance/run-row-b-e.ps1` collects machine facts (OS/CPU/AVX/WebView2),
+verifies a local installer against `SHA256SUMS.txt`, optionally silent-installs it, records the
+installed version/sidecar hash, prints the manual checklist and writes an evidence block matching
+the template in [VALIDATION-RUNBOOK.md](VALIDATION-RUNBOOK.md). The rows themselves need hardware this
+host does not have, so they stay unchecked with explicit "blocked: no hardware" notes in
+VERIFICATION.md — the runbook and script let anyone with the hardware execute them.
 
 ## Release plan (v3.9.0)
 
@@ -127,6 +140,24 @@ Rows that need hardware stay unchecked with explicit "blocked: no hardware" note
    publishes provenance attestations, verifies both installers; CI runs the gate.
 5. Re-download every asset, verify SHA-256 + attestation, silent-install NSIS variants and MSI, record
    VERIFICATION.md evidence, close #27–#35, comment on #17/#18.
+
+## Delivered in v3.9.0 (map)
+
+| Workstream | Code / artifacts | Docs |
+| --- | --- | --- |
+| #27 Assurance pack | — (documentation) | SECURITY-WHITEPAPER.md, THREAT-MODEL.md, DATA-HANDLING.md, AV-EDR.md |
+| #28 Supply chain | release workflow attestations + SBOM, scripts/verify-release.ps1 | SUPPLY-CHAIN.md |
+| #29 Security ops | CI dependency scan workflow, .github/dependabot.yml, response targets | SECURITY.md |
+| #30 Egress + managed policy | src-tauri/src/policy.rs, src/lib/policy.ts, guards in download/ytdlp/handoff/is_online, UI gating | NETWORK.md (+ar), ENTERPRISE-DEPLOYMENT.md |
+| #31 DPAPI keys | src-tauri/src/secrets.rs, src/lib/ai/secrets.ts, boot migration | whitepaper §4, DATA-HANDLING.md |
+| #32 Retention | src-tauri/src/retention.rs, purge command + Settings/Privacy action, boot purge | DATA-HANDLING.md |
+| #33 MSI + deployment kit | tauri.enterprise.conf.json, scripts/enterprise/*.ps1 | ENTERPRISE-DEPLOYMENT.md |
+| #34 Rows B–E | scripts/acceptance/run-row-b-e.ps1 + evidence template | VALIDATION-RUNBOOK.md (rows stay blocked: no hardware) |
+| #35 Release | version bump, release notes, CHANGELOG/VERIFICATION/roadmap, full suites | docs/releases/v3.9.0.md |
+
+Test counts at delivery: 120 Rust tests (19 new), 204 frontend tests (11 new), 62 Python benchmark
+tests. Residual owner-level gaps are unchanged: signing (#18), rows B–E execution, external
+audit, SLA.
 
 ## Risks and residuals
 

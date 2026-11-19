@@ -1,0 +1,149 @@
+name: Security
+
+# Dependency hygiene and static analysis. This workflow is a signal, not a certification:
+# inherited upstream advisories are reported and tracked, and only critical npm advisories
+# fail the run automatically (an unfixed critical advisory in the shipped tree is a release
+# blocker; the rest are handled under SECURITY.md response targets).
+on:
+  push:
+    branches: [master]
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "desktop/pnpm-lock.yaml"
+      - "desktop/package.json"
+      - ".github/workflows/security.yml"
+  pull_request:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  npm-audit:
+    name: npm advisory scan
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: desktop/package.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: desktop/pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies (full report)
+        continue-on-error: true
+        run: pnpm audit --prod --json > npm-audit.json
+
+      - name: Fail only on critical advisories
+        shell: pwsh
+        run: |
+          if (-not (Test-Path npm-audit.json)) { Write-Output 'audit report missing; see previous step'; exit 0 }
+          $report = Get-Content npm-audit.json -Raw | ConvertFrom-Json
+          $critical = @()
+          foreach ($adv in $report.advisories.PSObject.Properties) {
+            if ($adv.Value.severity -eq 'critical') { $critical += "$($adv.Value.module_name): $($adv.Value.title)" }
+          }
+          if ($critical.Count -gt 0) {
+            Write-Output 'CRITICAL npm advisories in the production tree:'
+            $critical | ForEach-Object { Write-Output " - $_" }
+            exit 1
+          }
+          Write-Output 'no critical npm advisories in the production tree'
+          if ($report.metadata.vulnerabilities) {
+            Write-Output "reported: $($report.metadata.vulnerabilities | ConvertTo-Json -Compress)"
+          }
+
+      - name: Summarise audit counts
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path npm-audit.json) {
+            $report = Get-Content npm-audit.json -Raw | ConvertFrom-Json
+            if ($report.metadata.vulnerabilities) {
+              $report.metadata.vulnerabilities | ConvertTo-Json | Add-Content $env:GITHUB_STEP_SUMMARY
+            }
+          }
+
+  rust-audit:
+    name: Rust advisory scan (RustSec)
+    runs-on: windows-latest
+    # Reporting job: inherited upstream advisories are collected and summarised. Fixes are
+    # handled under SECURITY.md response targets, so a new upstream advisory is visible without
+    # blocking unrelated release work.
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-audit
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit
+
+      - name: Audit all cargo lockfiles
+        shell: pwsh
+        run: |
+          $failures = 0
+          $locks = @('Cargo.lock', 'server/Cargo.lock')
+          foreach ($lock in $locks) {
+            if (-not (Test-Path $lock)) { Write-Output "== $lock missing, skipped"; continue }
+            Write-Output "== cargo audit --file $lock"
+            cargo audit --file $lock
+            if ($LASTEXITCODE -ne 0) { $failures++ }
+          }
+          if ($failures -gt 0) {
+            Write-Output "$failures lockfile(s) reported advisories; see the log above"
+            Write-Output 'Advisory findings are tracked under SECURITY.md; the job stays green so a' | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding UTF8 -Append
+            Write-Output 'new upstream advisory is visible without blocking unrelated release work.' | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding UTF8 -Append
+          }
+          exit 0
+
+      - name: Summarise
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path 'Cargo.lock') {
+            Write-Output 'RustSec audit ran; see the job log and SECURITY.md for the response policy.' | Add-Content $env:GITHUB_STEP_SUMMARY
+          }
+
+  codeql:
+    name: CodeQL (frontend JavaScript/TypeScript)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialise CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+
+      - name: Analyse
+        uses: github/codeql-action/analyze@v3

@@ -7,7 +7,8 @@ once by installing the published installer on a machine that has never had Rust,
 FFmpeg or the app itself.
 
 The procedure is the script for an acceptance run (last attempted for v3.6.0; the next target is
-v3.8.0, where both installer variants exist). Record the evidence in the table at the end; the
+v3.9.0, where all three deployment assets exist — per-user NSIS, offline-WebView2 NSIS and the
+per-machine MSI). Record the evidence in the table at the end; the
 published results for each release live in docs/VERIFICATION.md.
 
 ## Machine matrix
@@ -25,6 +26,9 @@ installer (about 45 MB) uses Tauri's `downloadBootstrapper` mode, which needs a 
 to fetch WebView2. From v3.8.0 the release also publishes
 **`Sada_<version>_x64-setup-offline.exe`** (about 250 MB), whose bundle embeds the WebView2
 Evergreen installer; use that file for slot B, and verify both hashes against `SHA256SUMS.txt`.
+From v3.9.0 there is also a per-machine MSI (`Sada_<version>_x64_en-US.msi`) for managed
+environments; the acceptance rows below use the NSIS installers because they match the consumer
+download paths (the MSI has its own silent-install checks in [ENTERPRISE-DEPLOYMENT.md](ENTERPRISE-DEPLOYMENT.md)).
 Caveat: neither variant embeds the VC++ 2015-2022 runtime — the NSIS hook downloads it from
 Microsoft when missing or older than 14.40, so on a fully offline machine pre-install
 `vc_redist.x64.exe` (or let WebView2 setup pull it) before running the acceptance steps.
@@ -138,9 +142,9 @@ Pass: both checks behave as described; the Rust unit tests cover the same paths.
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Frontend tests | cd desktop; pnpm test | 31 files / 193 tests passed |
+| Frontend tests | cd desktop; pnpm test | 33 files / 204 tests passed |
 | Frontend build | cd desktop; pnpm build | exit 0, final vite bundle 1m 5s |
-| Rust tests | cd desktop/src-tauri; cargo test --release | 101 tests passed, exit 0 |
+| Rust tests | cd desktop/src-tauri; cargo test --release | 120 tests passed, exit 0 |
 | Engine guard tests | cargo test --release -p vibe-server guard:: | 8 tests passed, exit 0 |
 | Arabic benchmark tests | cd benchmarks/arabic-asr; python -m unittest discover -s tests | 62 tests passed (including regression-gate tests) |
 | i18n audit | python scripts/check_i18n.py | passed |
@@ -150,4 +154,7 @@ Pass: both checks behave as described; the Rust unit tests cover the same paths.
 
 The clean-machine runs above (slots B-E) need physical/VM machines the maintainer controls; until
 they are recorded this page is the procedure plus the automated evidence, and docs/VERIFICATION.md
-says exactly which rows were actually run for the release.
+says exactly which rows were actually run for the release. P6 (v3.9.0) adds a ready-to-run script
+for those rows — `scripts/acceptance/run-row-b-e.ps1` (invoked as `-Slot B`, `-Slot C`, `-Slot D`
+or `-Slot E`, with `-AssetDir`, optional `-Install` and `-EvidenceOut`) — plus the step list in
+[VALIDATION-RUNBOOK.md](VALIDATION-RUNBOOK.md). Rows B–E remain **blocked on hardware**, not on code.

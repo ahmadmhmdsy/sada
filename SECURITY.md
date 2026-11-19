@@ -7,14 +7,30 @@ Please report security issues privately through GitHub's
 vulnerability"). Do **not** open a public issue for a security report.
 
 Include: affected version, Windows version, steps to reproduce, impact, and any relevant logs
-(remove personal audio paths and transcripts first). You will get an acknowledgement as soon as
-possible and credit in the advisory once a fix ships, unless you prefer to stay anonymous.
+(remove personal audio paths and transcripts first). Do not include API keys, transcripts or audio
+you are not able to share.
+
+## Response targets
+
+Best-effort targets for a single-maintainer project, not a contractual SLA:
+
+| Stage | Target |
+| --- | --- |
+| Acknowledge a private report | 3 business days |
+| Triage + severity assessment | 10 business days |
+| Fix or documented mitigation for high severity (RCE, data disclosure, key theft, installer tampering) | 30 days from confirmation |
+| Fix for medium/low severity | next release where practical |
+| Public advisory + credit | after the fix ships, coordinated with the reporter |
+
+If a report is about a third-party dependency (Tauri, WebView2, whisper.cpp/ggml, FFmpeg, Rust/Node
+crates), the project will coordinate with upstream; the fix may land in an upstream release first.
 
 ## Supported versions
 
-Security fixes target the latest released `3.8.x` build. Older builds are not maintained.
-(3.7.0 is a measurement/documentation release and 3.8.0 is a distribution/documentation release;
-both have no runtime change. The 3.6.0 defence-in-depth work below is unchanged and still applies.)
+Security fixes target the latest released `3.9.x` build. Older builds are not maintained.
+(3.7.0 and 3.8.0 were measurement/distribution releases with no runtime change; 3.9.0 adds the
+managed policy, DPAPI key storage, transcript retention and supply-chain evidence described below.
+The 3.6.0 defence-in-depth work is unchanged and still applies.)
 
 ## Scope
 
@@ -55,6 +71,31 @@ Residual risk: a process running as the same user can still call the engine, lik
 software. The guard closes the browser path, not the local trust boundary; a per-run bearer token
 between the app and the engine is the next step if that boundary is ever considered too wide.
 
+## Trust and enterprise controls added in 3.9.0
+
+These are hardening features, not a claim that the app is certified. Details and the exact
+semantics are in [NETWORK.md](docs/NETWORK.md), [DATA-HANDLING.md](docs/DATA-HANDLING.md),
+[SECURITY-WHITEPAPER.md](docs/SECURITY-WHITEPAPER.md) and
+[ENTERPRISE-DEPLOYMENT.md](docs/ENTERPRISE-DEPLOYMENT.md).
+
+- **Managed policy**: an administrator can enforce offline mode and disable AI, URL import and
+  model downloads machine-wide (HKLM `SOFTWARE\Sada\Policy`, with a ProgramData JSON fallback).
+  The Rust command layer re-checks the policy on every guarded action, so UI hiding is never the
+  only enforcement; the connectivity probe returns "offline" without opening a socket when
+  offline mode is set. A local administrator can change the policy — that boundary is documented.
+- **DPAPI key storage**: Claude/OpenAI API keys are sealed with `CryptProtectData` (current-user
+  scope) and stored as `claudeApiKeyEnc`/`openaiApiKeyEnc`; legacy plaintext keys migrate once at
+  boot and are never written back in plaintext. Blobs do not decrypt on another account or machine.
+- **Retention**: an optional per-user transcript retention window (0 = forever, default) with a
+  purge that only deletes project folders/legacy transcript files under the transcripts folder,
+  never following symlinks; a manual "delete old transcripts now" action reports counts and bytes.
+- **Egress inventory**: every outbound path is documented in [NETWORK.md](docs/NETWORK.md), and the
+  phone-handoff endpoint is disabled unconditionally (the start command always refuses) rather than
+  left to a setting.
+- **Supply chain**: keyless GitHub build provenance attestations, a CycloneDX SBOM and
+  `scripts/verify-release.ps1` are published with each release; SHA-256 sums remain the offline
+  verification path. Releases are still unsigned (see below).
+
 ## Defences in depth added in 3.6.0
 
 Upstream v3.3.6 shipped a security audit; the parts that fit this fork were ported and are listed
@@ -86,12 +127,13 @@ in [UPSTREAM-PATCHES.md](docs/UPSTREAM-PATCHES.md). The behaviour they enforce:
 
 ## Release artifacts and code signing
 
-Every release publishes the installer together with `SHA256SUMS.txt`; `docs/VERIFICATION.md`
-records the size and SHA-256 of each installer. The Windows binaries are **unsigned** up to
-3.6.0, so SmartScreen shows an "unknown publisher" warning. Verify the hash before running the
-installer. The signing options, costs and the recommended (free, OSS) path are recorded in
-[SIGNING.md](docs/SIGNING.md); nothing is signed until the owner funds or is accepted for one of
-those programmes.
+Every release publishes the installers together with `SHA256SUMS.txt`, a CycloneDX SBOM and
+GitHub build provenance attestations; `docs/VERIFICATION.md` records the size and SHA-256 of each
+asset. From 3.9.0 the release also contains a per-machine MSI for managed deployment. The Windows
+binaries are **unsigned** up to 3.9.0, so SmartScreen shows an "unknown publisher" warning. Verify
+the hash (and, when available, `gh attestation verify`) before running an installer. The signing
+options, costs and the recommended (free, OSS) path are recorded in [SIGNING.md](docs/SIGNING.md);
+nothing is signed until the owner funds or is accepted for one of those programmes.
 
 ## Third-party dependencies
 

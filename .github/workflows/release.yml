@@ -13,6 +13,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 concurrency:
   group: release-${{ github.ref }}
@@ -166,6 +168,29 @@ jobs:
           Copy-Item $offline.FullName $target
           Write-Output "offline installer: $($offline.Length) bytes -> $target"
 
+      - name: Build the per-machine MSI (managed deployment)
+        working-directory: desktop
+        env:
+          SIGN_ENABLED: ${{ vars.SIGNING_ENABLED }}
+          SIGN_TUNNEL_URL: ${{ secrets.SIGN_TUNNEL_URL }}
+          SIGN_TUNNEL_SECRET: ${{ secrets.SIGN_TUNNEL_SECRET }}
+        run: >-
+          pnpm exec tauri build --bundles msi
+          --config src-tauri/tauri.enterprise.conf.json
+          ${{ steps.signing.outputs.config }}
+
+      - name: Stage the per-machine MSI as a separate asset
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force release-assets | Out-Null
+          $candidates = @('target/release/bundle/msi', 'desktop/src-tauri/target/release/bundle/msi')
+          $msi = Get-ChildItem -Path $candidates -Filter '*.msi' -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if (-not $msi) { throw 'the per-machine MSI was not produced by tauri build' }
+          $target = "release-assets/Sada_${{ steps.vars.outputs.version }}_x64_en-US.msi"
+          Copy-Item $msi.FullName $target
+          Write-Output "MSI: $($msi.Length) bytes -> $target"
+
       - name: Build the NSIS installer
         working-directory: desktop
         env:
@@ -189,10 +214,13 @@ jobs:
           Copy-Item $installer.FullName release-assets/
           $offline = "release-assets/Sada_${{ steps.vars.outputs.version }}_x64-setup-offline.exe"
           if (-not (Test-Path $offline)) { throw 'the offline installer asset was not staged' }
+          $msi = "release-assets/Sada_${{ steps.vars.outputs.version }}_x64_en-US.msi"
+          if (-not (Test-Path $msi)) { throw 'the per-machine MSI asset was not staged' }
           Copy-Item 'LICENSE', 'NOTICE', 'THIRD-PARTY-NOTICES.md' release-assets/
           $entries = @(
             @{ Path = $installer.FullName; Name = $installer.Name },
-            @{ Path = $offline; Name = (Split-Path $offline -Leaf) }
+            @{ Path = $offline; Name = (Split-Path $offline -Leaf) },
+            @{ Path = $msi; Name = (Split-Path $msi -Leaf) }
           )
           $lines = foreach ($entry in $entries) {
             $hash = (Get-FileHash $entry.Path -Algorithm SHA256).Hash
@@ -202,6 +230,42 @@ jobs:
           $lines | ForEach-Object { Write-Output $_ }
           Write-Output "signing enabled: ${{ steps.signing.outputs.enabled }}"
           Get-ChildItem release-assets | Format-Table Name, Length -AutoSize | Out-String
+
+      - name: Stage dependency lockfiles for the SBOM
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force .sbom/app, .sbom/server, .sbom/npm | Out-Null
+          Copy-Item Cargo.lock .sbom/app/Cargo.lock
+          Copy-Item server/Cargo.lock .sbom/server/Cargo.lock
+          Copy-Item desktop/pnpm-lock.yaml .sbom/npm/pnpm-lock.yaml
+          Copy-Item desktop/package.json .sbom/npm/package.json
+          Copy-Item .server-version .sbom/server-version.txt
+
+      - name: Generate CycloneDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .sbom
+          format: cyclonedx-json
+          output-file: release-assets/sbom-cyclonedx.json
+          upload-artifact: false
+          upload-release-assets: false
+
+      - name: Add bundled components to the SBOM
+        shell: pwsh
+        run: |
+          $sidecar = (Get-Content .server-version -Raw).Trim() + '-sada.1'
+          $ffmpeg = Get-ChildItem desktop/src-tauri/binaries -Filter 'ffmpeg-*.exe' -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          $ffmpegPath = if ($ffmpeg) { $ffmpeg.FullName } else { '' }
+          ./scripts/generate-sbom.ps1 -SbomPath release-assets/sbom-cyclonedx.json -AppVersion '${{ steps.vars.outputs.version }}' -SidecarVersion $sidecar -FfmpegPath $ffmpegPath
+
+      - name: Attest build provenance (keyless, Sigstore)
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            release-assets/*.exe
+            release-assets/*.msi
+            release-assets/sbom-cyclonedx.json
 
       # Runs only when signing is enabled: an unsigned artifact must not reach the release page.
       - name: Verify Authenticode signatures

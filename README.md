@@ -72,20 +72,27 @@ that:
 
 ## Install
 
-1. Download **`Sada_3.8.0_x64-setup.exe`** (about 45 MB) from the [latest release](https://github.com/alshahia/sada/releases/latest)
-   and verify its SHA-256 against the attached `SHA256SUMS.txt`.
+1. Download **`Sada_3.9.0_x64-setup.exe`** (about 45 MB) from the [latest release](https://github.com/alshahia/sada/releases/latest)
+   and verify it: SHA-256 against the attached `SHA256SUMS.txt`, and (optionally) build provenance
+   with `gh attestation verify Sada_3.9.0_x64-setup.exe --repo alshahia/sada` or the bundled
+   `scripts/verify-release.ps1`.
 2. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator rights
    are required.
 3. Launch **صدى / Sada** from the Start Menu.
 
 **Fully offline machine?** Windows 10 machines that have never run a modern app do not have the
 WebView2 Runtime, and the default installer asks Windows to download it. If the target machine
-cannot go online, download **`Sada_3.8.0_x64-setup-offline.exe`** instead (about 250 MB): it
+cannot go online, download **`Sada_3.9.0_x64-setup-offline.exe`** instead (about 250 MB): it
 embeds the WebView2 installer, so one file covers the app and the runtime. Both files are the same
 app and both hashes are listed in `SHA256SUMS.txt`. One caveat: neither file embeds the VC++
 2015-2022 runtime — Sada's installer fetches it from Microsoft when missing or outdated, so a fully
 offline machine should have `vc_redist.x64.exe` pre-installed (installing WebView2 first also pulls
 its dependencies).
+
+**Managed deployment?** v3.9.0 also publishes **`Sada_3.9.0_x64_en-US.msi`**, a per-machine
+installer for Intune/SCCM/GPO, and a machine-wide policy that can enforce offline mode and disable
+AI, URL import and model downloads. Silent install, detection, policy and cleanup are documented in
+[docs/ENTERPRISE-DEPLOYMENT.md](docs/ENTERPRISE-DEPLOYMENT.md).
 
 > **SmartScreen:** the installer is not code-signed (owner decision while the project is
 > open-source-only), so Windows may show "Windows protected your PC". Choose *More info → Run
@@ -150,13 +157,13 @@ source, not switched off at runtime.
 
 This release was built from the source in this repository and checked end-to-end:
 
-- 26 test files / 134 unit tests passing (`pnpm test`, exit 0), including Arabic text
-  normalization, Arabic PDF export, boot-locale and RTL tests.
-- Engine v0.6.16 smoke test: the four Arabic clips produced exactly the same text as on v0.6.10,
-  SRT/VTT timings were correct, Nemotron-3 diarization labelled 12/12 segments, and the CPU-only
-  path still transcribed.
-- Rust: 83 tests passing (`cargo test --release`), including 19 MCP protocol/tools tests and 9
-  Arabic normaliser tests.
+- 33 test files / 204 unit tests passing (`pnpm test`, exit 0), including Arabic text
+  normalization, Arabic PDF export, boot-locale/RTL tests, managed policy and DPAPI key sealing.
+- Engine v0.6.16-sada.1 smoke test: the four Arabic clips produced exactly the same text as on
+  v0.6.10, SRT/VTT timings were correct, Nemotron-3 diarization labelled 12/12 segments, and the
+  CPU-only path still transcribed.
+- Rust: 120 tests passing (`cargo test --release`), including MCP protocol/tools, Arabic
+  normaliser, managed policy, DPAPI and retention tests.
 - MCP verified end-to-end: `Sada.exe --mcp` answered initialize, tools/list, sada_info,
   sada_transcripts, sada_transcript and sada_transcribe over pipes with a real model and Arabic
   audio.
@@ -165,7 +172,9 @@ This release was built from the source in this repository and checked end-to-end
 - Arabic transcription verified with the app's own engine on Modern Standard Arabic and Iraqi
   Arabic clips; CLI transcription exits 0.
 - Idle network check on the installed app: only loopback sockets, no external endpoint.
-- Known limitations are listed in [docs/VERIFICATION.md](docs/VERIFICATION.md).
+- Known limitations are listed in [docs/VERIFICATION.md](docs/VERIFICATION.md); the security
+  assurance pack is in [docs/SECURITY-WHITEPAPER.md](docs/SECURITY-WHITEPAPER.md) and the complete
+  network egress list in [docs/NETWORK.md](docs/NETWORK.md).
 
 ## Build from source
 

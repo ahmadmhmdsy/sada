@@ -1,0 +1,11 @@
+{
+  "$schema": "./gen/schemas/desktop-schema.json",
+  "bundle": {
+    "targets": ["msi"],
+    "windows": {
+      "wix": {
+        "language": ["en-US"]
+      }
+    }
+  }
+}

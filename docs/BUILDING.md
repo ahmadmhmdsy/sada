@@ -68,10 +68,25 @@ pnpm exec tauri build --bundles nsis
 pnpm exec tauri build --bundles nsis --config src-tauri/tauri.offline.conf.json
 ```
 
-Both builds write the same `Sada_<version>_x64-setup.exe` file name, so the release workflow builds
-the offline variant first, renames it to `...-offline.exe`, then builds the default;
+Both NSIS builds write the same `Sada_<version>_x64-setup.exe` file name, so the release workflow
+builds the offline variant first, renames it to `...-offline.exe`, then builds the default;
 `SHA256SUMS.txt` gets one line per installer. The NSIS hook (`vc_redist.nsh`) installs the VC++
 2015-2022 runtime from the network when it is missing or too old — that applies to both variants.
+
+The third asset is a **per-machine WiX MSI** for managed deployment (Intune/SCCM/GPO). It merges
+`desktop/src-tauri/tauri.enterprise.conf.json` (MSI target, en-US installer language) and installs
+into `C:\Program Files\Sada` with administrator rights:
+
+```console
+cd desktop
+# per-machine MSI (published as Sada_<version>_x64_en-US.msi)
+pnpm exec tauri build --bundles msi --config src-tauri/tauri.enterprise.conf.json
+```
+
+The release workflow builds and verifies all three. Documentation for silent install, detection,
+policy and cleanup is in [ENTERPRISE-DEPLOYMENT.md](ENTERPRISE-DEPLOYMENT.md); the assurance and
+supply-chain documents are [SECURITY-WHITEPAPER.md](SECURITY-WHITEPAPER.md) and
+[SUPPLY-CHAIN.md](SUPPLY-CHAIN.md).
 
 Code signing is a **dormant overlay**, not part of a normal build:
 `desktop/src-tauri/tauri.windows.signing.conf.json` wires `scripts/sign.py` as
@@ -162,8 +177,11 @@ chore check-i18n   # translation coverage against en-US
    git push origin v<version>
    ```
 
-   The `Release` workflow checks that the tag matches the app version, builds both Windows
-   installers, publishes them with `SHA256SUMS.txt` and the licence files.
+   The `Release` workflow checks that the tag matches the app version, builds the offline NSIS
+   installer, the per-machine MSI and the default NSIS installer, generates the CycloneDX SBOM,
+   creates keyless build provenance attestations, publishes all assets with `SHA256SUMS.txt` and
+   the licence files, and verifies the published files with `scripts/verify-release.ps1` (hash +
+   attestation) as part of the release checklist.
 
 There is **no auto-updater** and the fork's release workflow publishes **Windows x64 only**; the
 upstream Linux/macOS matrix and `latest.json` do not apply.

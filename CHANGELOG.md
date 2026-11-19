@@ -4,6 +4,84 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.9.0 — 2026-11-19
+
+Trust and enterprise-control release (P6 Wave 1). The engine, models, catalogue and transcription
+behaviour are unchanged; the release adds the controls, evidence and packaging needed for sensitive
+and managed deployments: machine-wide managed policy, DPAPI-protected API keys, transcript
+retention, a network egress inventory, an assurance pack, a keyless supply chain (provenance
+attestations + SBOM) and a per-machine MSI. Installers remain unsigned by owner decision; no
+auto-updater, telemetry or account.
+
+### Added
+
+- **Managed machine policy** (`desktop/src-tauri/src/policy.rs`, `desktop/src/lib/policy.ts`):
+  `OfflineMode`, `DisableAi`, `DisableUrlImport`, `DisableModelDownloads` and `TranscriptsDir`
+  read from `HKLM\\SOFTWARE\\Sada\\Policy` with a `%ProgramData%\\Sada\\policy.json` fallback
+  (`SADA_POLICY_PATH` for tests); restrictions OR-ed, enforced in the Rust command layer on every
+  guarded action, and reflected in the UI (AI settings hidden, media-link tab hidden, download
+  controls hidden, transcripts folder pinned). The connectivity probe returns "offline" without
+  opening a socket under offline mode. Helper scripts under `scripts/enterprise/`.
+- **DPAPI-protected AI keys** (`desktop/src-tauri/src/secrets.rs`, `desktop/src/lib/ai/secrets.ts`):
+  Claude/OpenAI keys sealed with `CryptProtectData` (current-user scope) as
+  `claudeApiKeyEnc`/`openaiApiKeyEnc`; legacy plaintext keys migrate once at boot; decryption
+  failure yields an empty key instead of a crash.
+- **Transcript retention** (`desktop/src-tauri/src/retention.rs`): `transcription.retentionDays`
+  (0 = forever, default), automatic purge at launch and a "delete old transcripts now" action that
+  only touches transcript files under the transcripts folder (symlinks skipped, counts/bytes
+  reported, content never logged).
+- **Network egress inventory** `docs/NETWORK.md` (+ `NETWORK.ar.md`): every outbound path,
+  trigger, payload and policy switch; phone handoff is disabled unconditionally
+  (`handoff_start` always refuses), and the setup connectivity probe is policy-gated.
+- **Assurance pack**: `docs/SECURITY-WHITEPAPER.md`, `docs/THREAT-MODEL.md`,
+  `docs/DATA-HANDLING.md`, `docs/AV-EDR.md`.
+- **Supply-chain evidence**: GitHub build provenance attestations
+  (`actions/attest-build-provenance`) for every release asset, a CycloneDX SBOM
+  (`sbom-cyclonedx.json`, enriched with FFmpeg/WebView2/sidecar/yt-dlp by
+  `scripts/generate-sbom.ps1`), and `scripts/verify-release.ps1` for hash + attestation checks.
+  `docs/SUPPLY-CHAIN.md` documents the chain.
+- **Per-machine MSI** (`desktop/src-tauri/tauri.enterprise.conf.json`) published as a third asset,
+  plus `docs/ENTERPRISE-DEPLOYMENT.md` and `scripts/enterprise/` for silent install, detection,
+  policy, uninstall and user-data cleanup.
+- **Security operations**: `.github/workflows/security.yml` (RustSec audit of every cargo
+  lockfile, production npm audit failing only on critical advisories, CodeQL for the frontend),
+  `.github/dependabot.yml` (Cargo/npm/actions/Python), and response targets in `SECURITY.md`.
+- **Validation runbook**: `docs/VALIDATION-RUNBOOK.md` and
+  `scripts/acceptance/run-row-b-e.ps1` for clean-machine rows B–E (still unexecuted: no hardware).
+
+### Changed
+
+- Privacy/README/SECURITY/production-readiness documentation corrected and extended for the new
+  controls (managed-policy banner, retention setting, DPAPI keys, egress list, supply chain, MSI).
+  `docs/P6-PLAN.md` design sections now describe the implemented design (registry policy, hex
+  DPAPI blobs, retention semantics, MSI).
+- Release workflow: permissions for attestations, MSI build/staging, SBOM generation/enrichment,
+  provenance attestation, and SHA256SUMS now covers all three installers. Release is still signed
+  only when `SIGNING_ENABLED` is set.
+- Version bump to 3.9.0 across the app, Cargo manifests/lockfile and site metadata.
+
+### Verified
+
+- pnpm test: 33 files / 204 tests; pnpm build; pnpm exec tsc --noEmit; i18n audit.
+- cargo test --release: 120 tests (19 new: policy, DPAPI, retention); engine guard: 8 tests;
+  cargo check --tests.
+- python -m unittest discover -s tests (benchmarks/arabic-asr): 62 tests.
+- Three installers built from the same source; sizes and SHA-256 recorded in
+  `docs/VERIFICATION.md` after the release, with silent-install verification of each.
+
+### Known limitations
+
+- Installers remain unsigned (owner decision while open-source-only) → SmartScreen warning; verify
+  SHA-256/provenance. No external audit or certification.
+- Clean-machine rows B–E are unexecuted (no hardware); runbook/script provided.
+- Managed policy is enforced inside the app; a local administrator can change HKLM (documented).
+- No at-rest encryption of transcripts (BitLocker expected for sensitive data); only API keys are
+  DPAPI-encrypted.
+- MSI needs administrator rights and a WebView2 runtime; fully offline clean installs should use
+  the offline NSIS installer.
+- Iraqi/Levantine remain unmeasured; no accuracy claims beyond the published 90-clip suite.
+- No auto-update (by design).
+
 ## v3.8.0 — 2026-11-18
 
 Distribution and trust release. **No app runtime change**: the engine, models, catalogue and UI
