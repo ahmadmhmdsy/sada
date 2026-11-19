@@ -61,7 +61,7 @@ These need a person with access to the account or the community, and are deliber
 the agent's scope. They are ordered by impact per effort.
 
 1. **Upload the GitHub social preview.** Repository → *Settings → General → Social preview* →
-   upload `site/assets/social-card-en.png` (1200×630, 117 KB). GitHub has no API for this setting;
+   upload `site/assets/social-card-en.png` (1200×630, 121 KB). GitHub has no API for this setting;
    it is the image every link to the repository shows on social platforms.
 2. **Google Search Console.** Add a *URL prefix* property for
    `https://alshahia.github.io/sada/`; choose the HTML-tag verification. Send the verification
