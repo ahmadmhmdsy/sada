@@ -1,6 +1,7 @@
-import { ReactNode, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { m } from '~/paraglide/messages.js'
+import { aiDisabled } from '~/lib/policy'
 import {
 	ArrowLeft,
 	ArrowUpRight,
@@ -59,6 +60,9 @@ type SettingsGroup = SettingsSection[]
 export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps) {
 	const vm = viewModel()
 
+	const policy = vm.preference.managedPolicy
+	const showAi = !aiDisabled(policy)
+
 	const groups: SettingsGroup[] = [
 		[
 			{ id: 'general', label: m.general(), icon: <Globe className="h-4 w-4" /> },
@@ -72,7 +76,8 @@ export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps
 		[
 			{ id: 'recording', label: m.recordingSettings(), icon: <Mic className="h-4 w-4" /> },
 			{ id: 'dictation', label: m.navDictation(), icon: <Keyboard className="h-4 w-4" /> },
-			{ id: 'ai', label: m.aiSection(), icon: <Sparkles className="h-4 w-4" /> },
+			// A managed machine can turn AI off entirely; the page then does not exist.
+			...(showAi ? [{ id: 'ai' as const, label: m.aiSection(), icon: <Sparkles className="h-4 w-4" /> }] : []),
 		],
 		[
 			{ id: 'api', label: m.navAgents(), icon: <Terminal className="h-4 w-4" /> },
@@ -96,6 +101,10 @@ export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps
 	)
 	const [subpage, setSubpage] = useState<Subpage | null>(isSubpage(scrollTo) ? scrollTo : null)
 	const [focusModelDownload, setFocusModelDownload] = useState(false)
+	// A deep link (sada://settings?scrollTo=ai) can still point at a hidden page.
+	useEffect(() => {
+		if (!showAi && activeSection === 'ai') setActiveSection('general')
+	}, [showAi, activeSection])
 	// Where a subpage puts a control of its own on the title line.
 	const [headerSlot, setHeaderSlot] = useState<HTMLDivElement | null>(null)
 	const [animateInnerNavigation, setAnimateInnerNavigation] = useState(false)

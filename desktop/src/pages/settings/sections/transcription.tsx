@@ -8,7 +8,7 @@ import LanguageInput from '~/components/language-input'
 import { Button } from '~/components/ui/button'
 import { Switch } from '~/components/ui/switch'
 import { deleteAllTranscripts, listTranscripts, notifyTranscriptsChanged, TRANSCRIPTS_CHANGED_EVENT } from '~/lib/transcripts-store'
-import { ActionRow, SettingsGroup, SettingsRow, type SettingsViewModel } from './shared'
+import { ActionRow, SettingsGroup, SettingsNote, SettingsRow, type SettingsViewModel } from './shared'
 
 /** Bulk cleanup for the projects folder: one row, one confirmation, everything Vibe saved goes. */
 function DeleteAllProjectsRow({ projectsPath }: { projectsPath: string | null }) {
@@ -84,20 +84,23 @@ export function TranscriptionSection({ vm, onOpenAutoExport }: { vm: SettingsVie
 			</SettingsGroup>
 
 			<SettingsGroup title={m.projectsFolder()}>
+				{vm.preference.managedPolicy.transcriptsDir && <SettingsNote>{m.privacyManagedFolderLocked()}</SettingsNote>}
 				<SettingsRow
 					label={
 						<span title={projectsPath} className="block truncate font-mono text-xs text-muted-foreground">
 							{projectsPath}
 						</span>
 					}>
-					{vm.preference.projectsPath && (
+					{vm.preference.projectsPath && !vm.preference.managedPolicy.transcriptsDir && (
 						<Button variant="ghost" size="sm" onMouseDown={vm.resetProjectsPath}>
 							{m.resetToDefault()}
 						</Button>
 					)}
-					<Button variant="outline" size="sm" onMouseDown={vm.changeProjectsPath}>
-						{m.changeProjectsFolder()}
-					</Button>
+					{!vm.preference.managedPolicy.transcriptsDir && (
+						<Button variant="outline" size="sm" onMouseDown={vm.changeProjectsPath}>
+							{m.changeProjectsFolder()}
+						</Button>
+					)}
 				</SettingsRow>
 				<DeleteAllProjectsRow projectsPath={vm.preference.projectsPath} />
 			</SettingsGroup>

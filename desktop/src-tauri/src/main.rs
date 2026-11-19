@@ -17,6 +17,9 @@ mod keepawake;
 mod logging;
 mod mcp;
 mod meeting_prompt;
+mod policy;
+mod retention;
+mod secrets;
 mod server;
 mod setup;
 mod transcript;
@@ -96,6 +99,10 @@ async fn main() -> Result<()> {
     let app = builder
         .invoke_handler(tauri::generate_handler![
             cmd::ytdlp::download_ytdlp,
+            policy::get_managed_policy,
+            retention::purge_old_transcripts,
+            secrets::protect_secret,
+            secrets::unprotect_secret,
             cmd::handoff_cmd::handoff_status,
             cmd::handoff_cmd::handoff_start,
             cmd::handoff_cmd::handoff_stop,

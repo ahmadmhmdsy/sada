@@ -1,4 +1,5 @@
 import { ReactNode, SetStateAction, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { load } from '@tauri-apps/plugin-store'
 import * as config from '~/lib/config'
@@ -11,7 +12,8 @@ import { ModifyState } from '~/lib/types'
 import { supportedLanguages } from '~/lib/i18n'
 import { getLocale, getTextDirection, setLocale } from '~/paraglide/runtime.js'
 import { m } from '~/paraglide/messages.js'
-import { DEFAULT_AI, migrateLegacy, type AiSettings } from '~/lib/ai'
+import { DEFAULT_AI, hasPlaintextAiSecrets, migrateLegacy, openAiSecrets, sealAiSecrets, type AiSettings } from '~/lib/ai'
+import { UNMANAGED_POLICY, loadManagedPolicy, type ManagedPolicy } from '~/lib/policy'
 import { readConfig } from '~/lib/config-store'
 import { message } from '@tauri-apps/plugin-dialog'
 import { readModelMetadata, type ModelMetadata } from '~/lib/model'
@@ -83,6 +85,12 @@ export interface Preference {
 	setLanguageDirections: () => void
 	homeTab: HomeTab
 	setHomeTab: ModifyState<HomeTab>
+
+	/** Restrictions written by an administrator; unmanaged on a personal machine. */
+	managedPolicy: ManagedPolicy
+	/** Days to keep the app's own transcripts; 0 disables the automatic purge. */
+	retentionDays: number
+	setRetentionDays: ModifyState<number>
 
 	ai: AiSettings
 	setAi: ModifyState<AiSettings>
@@ -209,6 +217,20 @@ export function PreferenceProvider({ children }: { children: ReactNode }) {
 	const previousLanguage = useRef(getLocale())
 	const [language, setLanguage] = usePersisted(CONFIG_KEYS.displayLanguage, defaultDisplayLanguage)
 	const [isFirstRun, setIsFirstRun] = usePersisted(CONFIG_KEYS.firstRun, true)
+	const [retentionDays, setRetentionDays] = usePersisted<number>(CONFIG_KEYS.transcriptRetentionDays, 0)
+
+	// Read the administrator policy once at boot; the whole UI adapts from this snapshot and the
+	// Rust commands re-read the same source so hiding a control is never the only protection.
+	const [managedPolicy, setManagedPolicy] = useState<ManagedPolicy>(UNMANAGED_POLICY)
+	useEffect(() => {
+		let cancelled = false
+		loadManagedPolicy().then((policy) => {
+			if (!cancelled) setManagedPolicy(policy)
+		})
+		return () => {
+			cancelled = true
+		}
+	}, [])
 
 	const [modelPath, setModelPath] = usePersisted<string | null>(CONFIG_KEYS.modelPath, null)
 	const [modelMetadata, setModelMetadata] = useState<ModelMetadata | null>(null)
@@ -232,7 +254,7 @@ export function PreferenceProvider({ children }: { children: ReactNode }) {
 	const [projectsPath, setProjectsPath] = usePersisted<string | null>(CONFIG_KEYS.projectsPath, null)
 	const [autoExport, setAutoExport] = usePersisted<AutoExportSettings>(CONFIG_KEYS.autoExport, DEFAULT_AUTO_EXPORT)
 	// The pre-3.2 `summarize.llm` object is read once when `ai` is missing, so nobody loses a key or a prompt.
-	const [ai, setAi] = usePersisted<AiSettings>(
+	const [storedAi, setStoredAi] = usePersisted<AiSettings>(
 		CONFIG_KEYS.ai,
 		useMemo(
 			() =>
@@ -243,10 +265,38 @@ export function PreferenceProvider({ children }: { children: ReactNode }) {
 			[],
 		),
 	)
+	// Plaintext keys live only in memory; the config file keeps DPAPI blobs. Decrypt at boot, seal
+	// every save, and migrate a pre-DPAPI file once so no plaintext key stays on disk.
+	const [ai, setAiState] = useState<AiSettings>(storedAi)
+	useEffect(() => {
+		let cancelled = false
+		openAiSecrets(storedAi)
+			.then((opened) => {
+				if (cancelled) return
+				setAiState(opened)
+				if (hasPlaintextAiSecrets(opened)) void sealAiSecrets(opened).then(setStoredAi)
+			})
+			.catch((error) => console.error('could not unlock saved AI keys', error))
+		return () => {
+			cancelled = true
+		}
+	}, [storedAi, setStoredAi])
+	const setAi = useCallback<ModifyState<AiSettings>>(
+		(value) => {
+			setAiState((current) => {
+				const next = typeof value === 'function' ? (value as (state: AiSettings) => AiSettings)(current) : value
+				void sealAiSecrets(next)
+					.then(setStoredAi)
+					.catch((error) => console.error('could not save AI keys', error))
+				return next
+			})
+		},
+		[setStoredAi],
+	)
 	useEffect(() => {
 		// Once, at boot: writes the migrated shape so the file carries it from now on.
-		if (readConfig(CONFIG_KEYS.ai, null) === null && readConfig(CONFIG_KEYS.legacyLlmConfig, null) !== null) setAi(ai)
-	}, [ai, setAi])
+		if (readConfig(CONFIG_KEYS.ai, null) === null && readConfig(CONFIG_KEYS.legacyLlmConfig, null) !== null) setAi(storedAi)
+	}, [storedAi, setAi])
 	const [ytDlpVersion, setYtDlpVersion] = usePersisted<string | null>(CONFIG_KEYS.ytDlpVersion, null)
 	const [shouldCheckYtDlpVersion, setShouldCheckYtDlpVersion] = usePersisted<boolean>(CONFIG_KEYS.shouldCheckYtDlpVersion, true)
 	const [ytDlpLastUpdateCheck, setYtDlpLastUpdateCheck] = usePersisted<number>(CONFIG_KEYS.ytDlpLastUpdateCheck, 0)
@@ -405,6 +455,24 @@ export function PreferenceProvider({ children }: { children: ReactNode }) {
 		message(m.successAction())
 	}
 
+	// Retention runs once per launch, after the window has settled, and only touches the app's own
+	// transcript store (project folders plus legacy .vibe.json files), never exports.
+	useEffect(() => {
+		if (retentionDays <= 0) return
+		const configured = managedPolicy.transcriptsDir ?? projectsPath
+		const timer = window.setTimeout(() => {
+			void (async () => {
+				try {
+					const dir = configured ?? (await invoke<string>('get_default_projects_path'))
+					await invoke('purge_old_transcripts', { dir, days: retentionDays })
+				} catch (error) {
+					console.warn('transcript retention did not run', error)
+				}
+			})()
+		}, 2_000)
+		return () => window.clearTimeout(timer)
+	}, [retentionDays, managedPolicy.transcriptsDir, projectsPath])
+
 	const preference: Preference = {
 		enableSubtitlesPreset,
 		ai,
@@ -413,7 +481,8 @@ export function PreferenceProvider({ children }: { children: ReactNode }) {
 		setLanguageDirections: setLanguageDefaults,
 		modelOptions,
 		setModelOptions,
-		projectsPath,
+		// An administrator can pin the transcripts folder; Settings shows it as read-only then.
+		projectsPath: managedPolicy.transcriptsDir ?? projectsPath,
 		setProjectsPath,
 		textFormatTranscript,
 		setTextFormatTranscript,
@@ -481,6 +550,9 @@ export function PreferenceProvider({ children }: { children: ReactNode }) {
 		setMeetingDetectionEnabled,
 		autoTranscribeAfterRecording,
 		setAutoTranscribeAfterRecording,
+		managedPolicy,
+		retentionDays,
+		setRetentionDays,
 	}
 
 	return <PreferenceContext.Provider value={preference}>{children}</PreferenceContext.Provider>

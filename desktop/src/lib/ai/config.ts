@@ -26,10 +26,14 @@ export interface AiConnection {
 	platform: AiPlatform
 	model: string
 	contextTokens: number
+	/** Plaintext in memory only; sealed into the DPAPI fields below before saving. */
 	claudeApiKey: string
 	ollamaBaseUrl: string
 	openaiBaseUrl: string
 	openaiApiKey: string
+	/** DPAPI-encrypted hex blobs as stored in app_config.json. Never hold a plaintext key in a saved config. */
+	claudeApiKeyEnc?: string
+	openaiApiKeyEnc?: string
 }
 
 export interface AiTask {
@@ -156,6 +160,8 @@ export function migrateLegacy(legacy: LegacyLlmConfig | null | undefined, autoSu
 			ollamaBaseUrl: legacy.ollamaBaseUrl || DEFAULT_AI.connection.ollamaBaseUrl,
 			openaiBaseUrl: legacy.openaiBaseUrl || DEFAULT_AI.connection.openaiBaseUrl,
 			openaiApiKey: legacy.openaiApiKey ?? '',
+			claudeApiKeyEnc: '',
+			openaiApiKeyEnc: '',
 		},
 		tasks: {
 			summary: {

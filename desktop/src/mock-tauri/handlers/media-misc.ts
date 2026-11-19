@@ -25,6 +25,9 @@ const YTDLP_TICK_MS = 100
 let dictationIndicatorEnabled = false
 let meetingDetectionEnabled = false
 let meetingPromptState: { source: 'meet' | 'zoom' | 'teams' } | null = null
+// Stand-in for DPAPI in the browser mock: hex tokens mapping back to the value that was sealed.
+const mockSecrets = new Map<string, string>()
+let mockSecretCounter = 0
 
 function sleep(ms: number) {
 	return new Promise<void>((resolve) => setTimeout(resolve, ms))
@@ -183,6 +186,31 @@ export const mediaMiscHandlers: CommandHandlerMap = {
 
 	get_latest_ytdlp_version: () => '2026.08.19',
 
+
+	// --- Managed policy / DPAPI / retention -------------------------------------
+
+	get_managed_policy: () => ({
+		offlineMode: false,
+		disableAi: false,
+		disableUrlImport: false,
+		disableModelDownloads: false,
+		transcriptsDir: null,
+	}),
+
+	protect_secret: (args) => {
+		mockSecretCounter += 1
+		const token = `mock-dpapi-${mockSecretCounter.toString(16)}`
+		mockSecrets.set(token, String(args?.value ?? ''))
+		return token
+	},
+
+	unprotect_secret: (args) => {
+		const value = mockSecrets.get(String(args?.value ?? ''))
+		if (value === undefined) throw new Error('[mock] unknown DPAPI blob')
+		return value
+	},
+
+	purge_old_transcripts: (args) => ({ deleted: 0, freedBytes: 0, cutoffDays: Number(args?.days ?? 0) }),
 	// --- Shell / system no-ops --------------------------------------------------
 
 	open_path: (args) => {

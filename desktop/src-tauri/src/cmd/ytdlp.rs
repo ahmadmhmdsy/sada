@@ -40,6 +40,9 @@ fn get_binary_name() -> &'static str {
 
 #[tauri::command]
 pub async fn get_latest_ytdlp_version() -> Result<String> {
+    if crate::policy::load().url_import_disabled() {
+        bail!("URL import is disabled by the machine policy");
+    }
     let client = download_client()?;
     let resp = client
         .get("https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest")
@@ -146,6 +149,9 @@ fn parse_sha256_sums(sums: &str, asset: &str) -> Result<String> {
 /// SHA2-256SUMS before it replaces the installed one.
 #[tauri::command]
 pub async fn download_ytdlp(app_handle: AppHandle, version: String) -> Result<()> {
+    if crate::policy::load().url_import_disabled() {
+        bail!("URL import is disabled by the machine policy");
+    }
     validate_version_tag(&version)?;
     let asset = get_binary_name();
     let base = format!("https://github.com/yt-dlp/yt-dlp/releases/download/{version}");
@@ -175,6 +181,9 @@ pub async fn download_ytdlp(app_handle: AppHandle, version: String) -> Result<()
 #[tauri::command]
 pub async fn download_audio(app_handle: AppHandle, url: String, out_path: String) -> Result<()> {
     tracing::debug!("download audio {}", url);
+    if crate::policy::load().url_import_disabled() {
+        bail!("URL import is disabled by the machine policy");
+    }
     let url = validate_media_url(&url)?;
     let out_path = validate_out_path(&out_path, &get_vibe_temp_folder())?;
     let out_path = out_path.to_string_lossy().to_string();

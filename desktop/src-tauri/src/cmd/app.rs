@@ -6,6 +6,11 @@ use eyre::{Context, Result};
 /// timeout in ms
 #[tauri::command]
 pub async fn is_online(timeout: Option<u64>) -> Result<bool> {
+    // A fully offline managed machine must not probe the network at all, even to answer whether
+    // a probe would succeed; the setup screen then falls back to manual model installation.
+    if crate::policy::load().offline_mode {
+        return Ok(false);
+    }
     let timeout = std::time::Duration::from_millis(timeout.unwrap_or(2000));
     let targets = ["1.1.1.1:80", "1.1.1.1:53", "8.8.8.8:53", "8.8.8.8:80"];
 

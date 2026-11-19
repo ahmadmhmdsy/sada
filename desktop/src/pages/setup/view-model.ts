@@ -9,6 +9,8 @@ import { readModelMetadata } from '~/lib/model'
 import { ensureVadModel } from '~/lib/vad-gate'
 import * as osExt from '@tauri-apps/plugin-os'
 import * as config from '~/lib/config'
+import { loadManagedPolicy, modelDownloadsDisabled } from '~/lib/policy'
+import { m } from '~/paraglide/messages.js'
 
 export function viewModel() {
 	const location = useLocation()
@@ -46,6 +48,14 @@ export function viewModel() {
 	}
 
 	async function downloadModel() {
+		// A managed machine can forbid downloads; setup then sends the user to Settings to pick a
+		// model an administrator already installed instead of retrying a refused download.
+		if (modelDownloadsDisabled(await loadManagedPolicy())) {
+			preference.setSkippedSetup(true)
+			setErrorModal?.({ open: true, log: m.managedPolicyModelDownloads() })
+			navigate('/#settings', { replace: true, state: { disableBack: true } })
+			return
+		}
 		handleProgressEvenets()
 
 		let lastError = null
@@ -104,6 +114,12 @@ export function viewModel() {
 	}
 
 	async function downloadIfOnline() {
+		if (modelDownloadsDisabled(await loadManagedPolicy())) {
+			preference.setSkippedSetup(true)
+			setErrorModal?.({ open: true, log: m.managedPolicyModelDownloads() })
+			navigate('/#settings', { replace: true, state: { disableBack: true } })
+			return
+		}
 		// Check if online
 		const isOnlineResponse = await invoke<boolean>('is_online')
 		// If online download model

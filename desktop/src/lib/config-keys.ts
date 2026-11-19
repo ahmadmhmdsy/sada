@@ -38,6 +38,8 @@ export const CONFIG_KEYS = {
 	focusOnFinish: 'transcription.focusOnFinish',
 	saveTranscripts: 'transcription.saveTranscripts',
 	projectsPath: 'transcription.projectsPath',
+	/** Days to keep the app's own transcripts; 0 keeps them forever. */
+	transcriptRetentionDays: 'transcription.retentionDays',
 	/** Export every finished transcript automatically: formats, destination, replace rule. */
 	autoExport: 'transcription.autoExport',
 

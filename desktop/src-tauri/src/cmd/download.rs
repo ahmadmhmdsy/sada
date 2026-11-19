@@ -348,6 +348,13 @@ pub async fn download_model(
 ) -> Result<DownloadModelResult> {
     tracing::debug!("Download model invoked! with path {}", path);
 
+    let policy = crate::policy::load();
+    if policy.model_downloads_disabled() {
+        return Err(eyre!(
+            "Model downloads are disabled by the machine policy. Ask your administrator, or place the model file in the models folder manually."
+        ));
+    }
+
     let parsed = reqwest::Url::parse(&url).context("Invalid model URL")?;
     if parsed.scheme() != "https" {
         return Err(eyre!("Model downloads must use https, got {}", parsed.scheme()));

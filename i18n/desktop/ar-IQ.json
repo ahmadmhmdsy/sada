@@ -730,5 +730,21 @@
 	"phoneRevokeDeviceNamed": "إبطال {name}",
 	"whatsNew": "ما الجديد",
 	"privacyLocalOnly": "يعمل صدى على هذا الجهاز بالكامل: لا تحليلات ولا قياس عن بُعد ولا حساب، وتسجيلاتك وملفات التفريغ لا تغادر جهازك أبداً.",
-	"aboutUpstream": "صدى مبني على Vibe (MIT) — المشروع الأصلي: thewh1teagle/vibe"
+	"aboutUpstream": "صدى مبني على Vibe (MIT) — المشروع الأصلي: thewh1teagle/vibe",
+	"privacyRetentionTitle": "الاحتفاظ بالنصوص",
+	"privacyRetentionInfo": "حذف النصوص التي يحفظها التطبيق تلقائيًا بعد المدة المختارة. الملفات المصدّرة والوسائط التي نقلتها إلى مكان آخر لا تُمسّ.",
+	"privacyRetentionKeepForever": "الاحتفاظ إلى الأبد",
+	"privacyRetentionDaysOption": "{days} يومًا",
+	"privacyRetentionRun": "حذف النصوص القديمة الآن",
+	"privacyRetentionDone": "تم حذف {count} من النصوص القديمة.",
+	"privacyRetentionFailed": "تعذّر حذف النصوص القديمة.",
+	"privacyRetentionNote": "يُفرَّغ مجلد نصوص التطبيق فقط، وتُترك الملفات المصدّرة كما هي.",
+	"privacyManagedFolderLocked": "مثبّت من مؤسستك.",
+	"managedPolicyTitle": "تُدار بواسطة مؤسستك",
+	"managedPolicyInfo": "وضع المسؤول قيودًا على هذا الكمبيوتر. الميزات التي تخالفها مخفية أو ترفض العمل.",
+	"managedPolicyOffline": "وضع عدم الاتصال فقط — الميزات الشبكية معطّلة.",
+	"managedPolicyAi": "مزوّدو الذكاء الاصطناعي معطّلون حسب السياسة.",
+	"managedPolicyUrlImport": "الاستيراد من الروابط معطّل حسب السياسة.",
+	"managedPolicyModelDownloads": "تنزيل النماذج معطّل حسب السياسة. اطلب ملفات النموذج من مسؤول النظام.",
+	"managedPolicyTranscriptsDir": "تُحفظ النصوص في {path}."
 }

@@ -730,5 +730,21 @@
 	"phoneRevokeDeviceNamed": "Revoke {name}",
 	"whatsNew": "What's new",
 	"privacyLocalOnly": "صدى runs entirely on this computer. There is no analytics, no telemetry and no account: your recordings and transcripts never leave the machine.",
-	"aboutUpstream": "Built on Vibe (MIT) — the original project is thewh1teagle/vibe"
+	"aboutUpstream": "Built on Vibe (MIT) — the original project is thewh1teagle/vibe",
+	"privacyRetentionTitle": "Transcript retention",
+	"privacyRetentionInfo": "Automatically delete the app's own saved transcripts after the chosen window. Exported files and media you moved elsewhere are never touched.",
+	"privacyRetentionKeepForever": "Keep forever",
+	"privacyRetentionDaysOption": "{days} days",
+	"privacyRetentionRun": "Delete old transcripts now",
+	"privacyRetentionDone": "Deleted {count} old transcripts.",
+	"privacyRetentionFailed": "Could not delete old transcripts.",
+	"privacyRetentionNote": "Only the app's own transcripts folder is purged; exports are left alone.",
+	"privacyManagedFolderLocked": "Pinned by your organization.",
+	"managedPolicyTitle": "Managed by your organization",
+	"managedPolicyInfo": "An administrator set restrictions on this computer. Features that would break them are hidden or refuse to run.",
+	"managedPolicyOffline": "Offline only — network features are turned off.",
+	"managedPolicyAi": "AI providers are turned off by policy.",
+	"managedPolicyUrlImport": "Importing from links is turned off by policy.",
+	"managedPolicyModelDownloads": "Model downloads are turned off by policy. Ask your administrator for the model files.",
+	"managedPolicyTranscriptsDir": "Transcripts are stored in {path}."
 }

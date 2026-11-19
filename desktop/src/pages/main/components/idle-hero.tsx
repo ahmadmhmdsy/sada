@@ -11,6 +11,7 @@ import { Spinner } from '~/components/ui/spinner'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
 import { cn } from '~/lib/style'
 import { parseMediaLinks } from '~/lib/ytdlp'
+import { urlImportDisabled } from '~/lib/policy'
 import { useSession, type IdlePanel } from '../session'
 import QuietRow from './quiet-row'
 
@@ -319,7 +320,13 @@ function LinkPanel() {
 }
 
 export default function IdleHero() {
-	const { dragging, browse, collectingFolder, panel, setPanel, link, recording } = useSession()
+	const { dragging, browse, collectingFolder, panel, setPanel, link, recording, preference } = useSession()
+	const linkAllowed = !urlImportDisabled(preference.managedPolicy)
+
+	// A managed machine can forbid URL import; never leave the link panel reachable by state.
+	useEffect(() => {
+		if (!linkAllowed && panel === 'link') setPanel('none')
+	}, [linkAllowed, panel, setPanel])
 
 	function selectPanel(next: IdlePanel) {
 		if (recording.isRecording || next === panel) return
@@ -339,9 +346,11 @@ export default function IdleHero() {
 				<Segment active={panel === 'record'} label={m.record()} onClick={() => selectPanel('record')}>
 					<Mic className="h-[18px] w-[18px]" />
 				</Segment>
-				<Segment active={panel === 'link'} label={m.fromLink()} onClick={() => selectPanel('link')}>
-					<Link2 className="h-[18px] w-[18px]" />
-				</Segment>
+				{linkAllowed && (
+					<Segment active={panel === 'link'} label={m.fromLink()} onClick={() => selectPanel('link')}>
+						<Link2 className="h-[18px] w-[18px]" />
+					</Segment>
+				)}
 			</div>
 
 			{/* Fixed-height slot sized to the drop zone so switching sources never moves the pills or the quiet row. */}

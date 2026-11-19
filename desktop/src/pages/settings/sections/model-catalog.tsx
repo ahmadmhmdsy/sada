@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover
 import { ANY_LANGUAGE, describeModel, formatModelSize, type CatalogModel } from '~/lib/model-catalog'
 import { cn } from '~/lib/style'
 import { useModelCatalog, type ModelCatalogViewModel } from '../use-model-catalog'
+import { modelDownloadsDisabled } from '~/lib/policy'
 import type { SettingsViewModel } from './shared'
 
 function languageName(code: string, locale: string) {
@@ -274,6 +275,9 @@ interface ModelCatalogSectionProps {
 export function ModelCatalogSection({ vm, onAddModel, headerSlot }: ModelCatalogSectionProps) {
 	const catalog = useModelCatalog(vm)
 	const locale = vm.preference.displayLanguage
+	if (modelDownloadsDisabled(vm.preference.managedPolicy)) {
+		return <p className="px-1 text-center text-xs text-muted-foreground">{m.managedPolicyModelDownloads()}</p>
+	}
 	const { primary, multilingual } = catalog.view
 
 	return (

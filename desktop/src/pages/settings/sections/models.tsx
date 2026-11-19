@@ -8,7 +8,8 @@ import NumberField from '~/components/number-field'
 import { Input } from '~/components/ui/input'
 import { Switch } from '~/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
-import { ActionRow, IconAction, SettingsGroup, SettingsRow, rowControlClass, type SettingsViewModel } from './shared'
+import { ActionRow, IconAction, SettingsGroup, SettingsNote, SettingsRow, rowControlClass, type SettingsViewModel } from './shared'
+import { modelDownloadsDisabled } from '~/lib/policy'
 import { getFriendlyModelName } from '~/lib/model'
 import { ModelGlyph } from '~/components/brand-glyph'
 import { Progress } from '~/components/ui/progress'
@@ -62,6 +63,8 @@ export function ModelsSection({ vm, onOpenCatalog, focusDownload, onDownloadFocu
 	const [editingPath, setEditingPath] = useState<string | null>(null)
 	const [editingName, setEditingName] = useState('')
 	const currentModel = vm.models.find((model) => model.path === vm.preference.modelPath)
+	// A managed machine can forbid downloads; installed models remain selectable.
+	const downloadsAllowed = !modelDownloadsDisabled(vm.preference.managedPolicy)
 	const downloadUrlInput = useRef<HTMLInputElement>(null)
 	const displayName = (model: NamedPath) =>
 		vm.preference.modelDisplayNames[model.path] ?? catalogNameForFile(bundledCatalog.models, model.name) ?? getFriendlyModelName(model.name)
@@ -69,7 +72,7 @@ export function ModelsSection({ vm, onOpenCatalog, focusDownload, onDownloadFocu
 	useInstallCompleted(() => vm.loadModels())
 
 	useEffect(() => {
-		if (!focusDownload) return
+		if (!focusDownload || !downloadsAllowed) return
 		downloadUrlInput.current?.scrollIntoView({ block: 'center' })
 		downloadUrlInput.current?.focus({ preventScroll: true })
 		onDownloadFocused?.()
@@ -152,7 +155,7 @@ export function ModelsSection({ vm, onOpenCatalog, focusDownload, onDownloadFocu
 						</>
 					)}
 				</SettingsRow>
-				<CatalogRow onOpen={onOpenCatalog} />
+				{downloadsAllowed ? <CatalogRow onOpen={onOpenCatalog} /> : <SettingsNote>{m.managedPolicyModelDownloads()}</SettingsNote>}
 			</SettingsGroup>
 
 			<SettingsGroup title={m.settingsHardware()}>
@@ -202,7 +205,7 @@ export function ModelsSection({ vm, onOpenCatalog, focusDownload, onDownloadFocu
 							key={model.path}
 							label={<bdi>{getFriendlyModelName(model.name)}</bdi>}
 							description={m.modelFileCorruptDescription({ name: model.name })}>
-							<IconAction label={m.reDownload()} icon={<Download className="h-4 w-4" />} onClick={() => vm.redownloadModel(model)} />
+							{downloadsAllowed && <IconAction label={m.reDownload()} icon={<Download className="h-4 w-4" />} onClick={() => vm.redownloadModel(model)} />}
 							<IconAction label={m.showInFolder()} icon={<FolderOpen className="h-4 w-4" />} onClick={() => vm.openSelectedModel(model.path)} />
 						</SettingsRow>
 					))}
@@ -210,19 +213,26 @@ export function ModelsSection({ vm, onOpenCatalog, focusDownload, onDownloadFocu
 			)}
 
 			<SettingsGroup title={m.settingsModelFiles()}>
-				<SettingsRow label={m.downloadModel()}>
-					<Input
-						ref={downloadUrlInput}
-						type="text"
-						value={vm.downloadURL}
-						onChange={(event) => vm.setDownloadURL(event.target.value)}
-						placeholder={m.pasteModelLink()}
-						onKeyDown={(event) => (event.key === 'Enter' ? vm.downloadModel() : null)}
-						className={`w-56 ${rowControlClass}`}
-					/>
-					<IconAction label={m.downloadModel()} icon={<Download className="h-4 w-4" />} onClick={vm.downloadModel} disabled={!vm.downloadURL} />
-				</SettingsRow>
-				<ActionRow label={m.downloadModelsLink()} icon={<LinkIcon className="h-4 w-4" />} onClick={vm.openModelsUrl} />
+				{downloadsAllowed ? (
+					<>
+						<SettingsRow label={m.downloadModel()}>
+							<Input
+								ref={downloadUrlInput}
+								type="text"
+								value={vm.downloadURL}
+								onChange={(event) => vm.setDownloadURL(event.target.value)}
+								placeholder={m.pasteModelLink()}
+								onKeyDown={(event) => (event.key === 'Enter' ? vm.downloadModel() : null)}
+								className={`w-56 ${rowControlClass}`}
+							/>
+							<IconAction label={m.downloadModel()} icon={<Download className="h-4 w-4" />} onClick={vm.downloadModel} disabled={!vm.downloadURL} />
+						</SettingsRow>
+						<ActionRow label={m.downloadModelsLink()} icon={<LinkIcon className="h-4 w-4" />} onClick={vm.openModelsUrl} />
+					</>
+				) : (
+					// Managed machines may forbid downloads entirely; installed models stay usable.
+					<SettingsNote>{m.managedPolicyModelDownloads()}</SettingsNote>
+				)}
 				<ActionRow label={m.modelsFolder()} icon={<FolderIcon className="h-4 w-4" />} onClick={vm.openModelPath} />
 				<ActionRow label={m.changeModelsFolder()} icon={<WrenchIcon className="h-4 w-4" />} onClick={vm.changeModelsFolder} />
 			</SettingsGroup>

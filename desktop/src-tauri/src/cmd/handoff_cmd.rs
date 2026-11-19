@@ -49,6 +49,17 @@ pub async fn handoff_start(
     app_handle: tauri::AppHandle,
     runtime: State<'_, HandoffRuntime>,
 ) -> Result<HandoffStatus, CommandError> {
+    // Sada ships Arabic-first, fully offline desktop transcription. The upstream phone handoff is
+    // kept in the tree for a future rebase, but it is not exposed in Sada: no settings page mounts
+    // it, and this command is deliberately disabled so a stale caller (or a future UI bug) cannot
+    // open a listening iroh endpoint on a machine that promises no phone relay.
+    if crate::policy::load().handoff_disabled() {
+        return Err(CommandError {
+            code: "handoff_disabled".to_string(),
+            message: "Phone handoff is not available in Sada.".to_string(),
+        });
+    }
+
     let mut guard = runtime.lock().await;
     if guard.is_none() {
         let state = handoff::spawn(app_handle.clone()).await?;

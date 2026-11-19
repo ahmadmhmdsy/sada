@@ -22,9 +22,10 @@ Arabic typography (IBM Plex Sans Arabic) and Arabic-aware transcript cleanup. En
 other upstream languages are still one click away in Settings.
 
 It is an independent fork of [Vibe](https://github.com/thewh1teagle/vibe) (MIT), built on upstream
-tag **v3.2.2**, with the telemetry, auto-updater and phone relay removed and a complete Arabic
-localization added. Nothing is uploaded: the Whisper engine runs locally through the bundled
-`vibe-server` sidecar, and the installer bundles its own FFmpeg for audio decoding.
+tag **v3.2.2**, with telemetry and the auto-updater removed, the phone handoff deliberately
+disabled, and a complete Arabic localization added. Nothing is uploaded: the Whisper engine runs
+locally through the bundled `vibe-server` sidecar, and the installer bundles its own FFmpeg for
+audio decoding.
 
 Since 3.3.0 Sada is also **agent-ready**: `Sada.exe --mcp` runs a local MCP server over stdio,
 so Claude Code, Codex and other agents can transcribe Arabic audio and read saved transcripts
@@ -47,9 +48,10 @@ that:
   `;` → `؛`), collapses stray spaces, and restores common Latin acronyms (GPU, CPU, PDF, SRT, VTT,
   JSON, API, FFmpeg, Whisper) inside Arabic transcripts.
 - **Arabic PDF** — transcripts export to PDF with an embedded Arabic font and proper shaping.
-- **Truly offline and private** — no account, no analytics, no crash reporting, no auto-update, no
-  phone relay. The only network calls happen when *you* ask for them (model download, a URL you
-  paste, or a summary provider you configure with your own key).
+- **Truly offline and private** — no account, no analytics, no crash reporting, no auto-update.
+  Outbound traffic happens only for actions *you* start: downloading a model, importing from a
+  media link (yt-dlp), or a summary provider you configure with your own key. A managed offline
+  policy can forbid all of them at once — see [docs/NETWORK.md](docs/NETWORK.md).
 - **Agent-ready (MCP)** — `Sada.exe --mcp` gives agents Arabic ears over stdio: transcribe a
   file, list or read saved transcripts, inspect the install. No port, no toggle, no window.
 
