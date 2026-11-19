@@ -12,10 +12,10 @@
 - Website: https://alshahia.github.io/sada/
 - Repository: https://github.com/alshahia/sada
 - Latest release: https://github.com/alshahia/sada/releases/latest
-- Version: 3.9.0 · License: MIT · Platform: Windows 10/11 x64
-- Distribution: three unsigned installers per release — `Sada_3.9.0_x64-setup.exe` (~45 MB,
-  downloads WebView2), `Sada_3.9.0_x64-setup-offline.exe` (~250 MB, embeds WebView2 for offline
-  Windows 10) and `Sada_3.9.0_x64_en-US.msi` (~71 MB, per-machine for Intune/SCCM/GPO); the NSIS
+- Version: 3.10.0 · License: MIT · Platform: Windows 10/11 x64
+- Distribution: three unsigned installers per release — `Sada_3.10.0_x64-setup.exe` (~45 MB,
+  downloads WebView2), `Sada_3.10.0_x64-setup-offline.exe` (~250 MB, embeds WebView2 for offline
+  Windows 10) and `Sada_3.10.0_x64_en-US.msi` (~71 MB, per-machine for Intune/SCCM/GPO); the NSIS
   hook fetches the VC++ 2015-2022 runtime from Microsoft when missing
 - Engine: whisper.cpp via bundled vibe-server v0.6.16 (built by Sada from `server/` as
   v0.6.16-sada.1 with a loopback Host/Origin guard); FFmpeg 9.0.2 GPLv3 bundled (notices in repo)
@@ -30,6 +30,10 @@
   Register in Claude Code, Codex or any MCP client; no HTTP port is opened.
 - Enterprise controls (v3.9.0): machine-wide offline policy, DPAPI-sealed AI keys, transcript
   retention/purge, build provenance attestations + CycloneDX SBOM on every release.
+- UI and accessibility (v3.10.0): recovery-first error dialog, copy-all, export grouped into
+  four families, Settings as a header dialog, Arabic tracking and bidi fixes, truth-only trust
+  copy; runtime axe audit over 35 UI states found 0 violations. Four Wave-1 repairs only; the
+  4.0 Echo identity and Wave 2 wait on a five-user Arabic gate (docs/design/ui-decisions/GATE-KIT.md).
 
 ## Pages
 
@@ -44,7 +48,7 @@
 - [MCP guide](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.md) · [دليل MCP](https://github.com/alshahia/sada/blob/master/docs/AGENT-MCP.ar.md)
 - [Voicebox review](https://github.com/alshahia/sada/blob/master/docs/VOICEBOX-REVIEW.md)
 - [Models council](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.md) · [مجلس النماذج](https://github.com/alshahia/sada/blob/master/docs/MODELS-COUNCIL.ar.md)
-- [Release notes v3.9.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.9.0.md) · [v3.8.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.8.0.md) · [v3.7.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.7.0.md) · [v3.6.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.6.0.md) · [v3.5.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.5.0.md) · [v3.4.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.4.0.md) · [v3.3.1](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.1.md) · [v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
+- [Release notes v3.10.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.10.0.md) · [v3.9.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.9.0.md) · [v3.8.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.8.0.md) · [v3.7.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.7.0.md) · [v3.6.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.6.0.md) · [v3.5.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.5.0.md) · [v3.4.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.4.0.md) · [v3.3.1](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.1.md) · [v3.3.0](https://github.com/alshahia/sada/blob/master/docs/releases/v3.3.0.md)
 - [Privacy](https://github.com/alshahia/sada/blob/master/PRIVACY.md)
 - [Third-party notices](https://github.com/alshahia/sada/blob/master/THIRD-PARTY-NOTICES.md)
 

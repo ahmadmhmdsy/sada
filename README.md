@@ -31,9 +31,10 @@ It is an independent fork of [Vibe](https://github.com/thewh1teagle/vibe) (MIT) 
 localization added, and a local MCP server since 3.3.0 so AI agents can use it without a port or an
 account.
 
-> **New in 3.9.0:** managed offline policy, DPAPI-sealed API keys, transcript retention, a
-> per-machine MSI for Intune/SCCM/GPO, and keyless build provenance plus a CycloneDX SBOM on every
-> release asset. See the [release notes](https://github.com/alshahia/sada/releases/tag/v3.9.0).
+> **New in 3.10.0:** the first UI/UX release after the 3.9.0 critique — a recovery-first error
+> dialog, copy-all and grouped export, Settings as a header dialog, Arabic tracking and bidi fixes,
+> and trust copy that states only what the download screen can prove (runtime accessibility audited:
+> 35 states, 0 violations). See the [release notes](https://github.com/alshahia/sada/releases/tag/v3.10.0).
 
 ## What makes Sada Arabic-first
 
@@ -92,7 +93,7 @@ other way around:
 
 ### Standard installer (recommended)
 
-1. Download **`Sada_3.9.0_x64-setup.exe`** (about 45 MB) from the
+1. Download **`Sada_3.10.0_x64-setup.exe`** (about 45 MB) from the
    [latest release](https://github.com/alshahia/sada/releases/latest).
 2. Verify it (recommended — see [verify the download](#verify-the-download)).
 3. Run the installer. It installs per-user into `%LOCALAPPDATA%\Sada\`; no administrator
@@ -103,7 +104,7 @@ other way around:
 
 A Windows 10 machine that has never run a modern app does not have the WebView2 Runtime, and the
 standard installer asks Windows to download it. If the target machine cannot go online, download
-**`Sada_3.9.0_x64-setup-offline.exe`** (about 250 MB) instead: it embeds the WebView2 installer,
+**`Sada_3.10.0_x64-setup-offline.exe`** (about 250 MB) instead: it embeds the WebView2 installer,
 so one file covers both the app and the runtime.
 
 Neither file embeds the VC++ 2015-2022 runtime: the installer fetches it from Microsoft when it is
@@ -112,7 +113,7 @@ missing, so a completely offline machine should have `vc_redist.x64.exe` pre-ins
 
 ### Managed per-machine installer
 
-v3.9.0 also publishes **`Sada_3.9.0_x64_en-US.msi`**, a per-machine WiX installer for
+v3.10.0 also publishes **`Sada_3.10.0_x64_en-US.msi`**, a per-machine WiX installer for
 Intune/SCCM/GPO (administrator rights required), with machine-wide policy that can enforce offline
 mode and disable AI, URL import and model downloads. Silent install, detection, policy and cleanup
 are documented in [docs/ENTERPRISE-DEPLOYMENT.md](docs/ENTERPRISE-DEPLOYMENT.md).
@@ -124,13 +125,13 @@ SBOM. The short version:
 
 ```powershell
 # 1. Checksum against the published SHA-256
-Get-FileHash .\Sada_3.9.0_x64-setup.exe -Algorithm SHA256
+Get-FileHash .\Sada_3.10.0_x64-setup.exe -Algorithm SHA256
 
 # 2. Build provenance — GitHub CLI verifies the signature and the workflow identity
-gh attestation verify .\Sada_3.9.0_x64-setup.exe --repo alshahia/sada
+gh attestation verify .\Sada_3.10.0_x64-setup.exe --repo alshahia/sada
 
 # ...or verify every asset of a release and its hashes in one command
-pwsh -File scripts/verify-release.ps1 -Version 3.9.0 -Download
+pwsh -File scripts/verify-release.ps1 -Version 3.10.0 -Download
 ```
 
 Full details: [docs/SUPPLY-CHAIN.md](docs/SUPPLY-CHAIN.md) and
@@ -261,7 +262,7 @@ The upstream updater and Aptabase client were removed from the source, not switc
 
 Every release is built from this repository by GitHub Actions and then verified end-to-end:
 
-- 33 frontend test files / 204 tests, 120 Rust tests, 8 engine guard tests and 62 Python benchmark
+- 34 frontend test files / 207 tests, 120 Rust tests, 8 engine guard tests and 62 Python benchmark
   tests pass in CI; `tsc` and the production build are clean.
 - The v3.9.0 release run built the engine from `server/`, then the guarded offline NSIS
   installer, the per-machine MSI and the default NSIS installer, generated the SBOM, and signed
@@ -274,7 +275,7 @@ Every release is built from this repository by GitHub Actions and then verified 
 
 Evidence: [docs/VERIFICATION.md](docs/VERIFICATION.md) · [acceptance matrix](docs/ACCEPTANCE.md) ·
 [production-readiness statement](docs/PRODUCTION-READINESS.md) ·
-[v3.9.0 release](https://github.com/alshahia/sada/releases/tag/v3.9.0).
+[v3.10.0 release](https://github.com/alshahia/sada/releases/tag/v3.10.0).
 
 ## How Sada compares
 
@@ -298,7 +299,7 @@ services are a better fit when you need elastic scale, many languages or shared 
 | [Install and first run](README.md#first-run-choose-a-model) | [Models and hashes](docs/MODELS.md) | [Privacy policy](PRIVACY.md) | [Enterprise deployment](docs/ENTERPRISE-DEPLOYMENT.md) | [Building from source](docs/BUILDING.md) |
 | [Agent/MCP guide](docs/AGENT-MCP.md) | [Model decisions](docs/MODELS-DECISIONS.md) | [Network egress](docs/NETWORK.md) | [Managed policy and egress](docs/NETWORK.md) | [Architecture](docs/ARCHITECTURE.md) |
 | [Verification report](docs/VERIFICATION.md) | [Arabic benchmark](benchmarks/arabic-asr/) | [Security whitepaper](docs/SECURITY-WHITEPAPER.md) | [Supply chain](docs/SUPPLY-CHAIN.md) | [Upstream patches](docs/UPSTREAM-PATCHES.md) |
-| [Release notes](docs/releases/v3.9.0.md) | [GPU notes](docs/DEBUG.md) | [Threat model](docs/THREAT-MODEL.md) | [Signing plan](docs/SIGNING.md) | [Contributing](CONTRIBUTING.md) |
+| [Release notes](docs/releases/v3.10.0.md) | [GPU notes](docs/DEBUG.md) | [Threat model](docs/THREAT-MODEL.md) | [Signing plan](docs/SIGNING.md) | [Contributing](CONTRIBUTING.md) |
 
 Maintainer material: [discoverability and SEO plan](docs/DISCOVERABILITY.md), [release verification runbook](docs/VALIDATION-RUNBOOK.md), [acceptance matrix](docs/ACCEPTANCE.md), [UI/UX review and council verdict](docs/UI-UX-REVIEW.md).
 

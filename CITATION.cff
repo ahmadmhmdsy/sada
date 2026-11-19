@@ -13,8 +13,8 @@ authors:
     alias: alshahia
 repository-code: "https://github.com/alshahia/sada"
 url: "https://alshahia.github.io/sada/"
-version: 3.9.0
-date-released: "2026-11-18"
+version: 3.10.0
+date-released: "2026-11-19"
 license: MIT
 keywords:
   - Arabic

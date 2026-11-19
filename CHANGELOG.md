@@ -4,6 +4,75 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.10.0 — 2026-11-19
+
+UI/UX repair release (Wave 1, pre-gate). Implements the owner's 19 November 2026 decisions after
+the 3.9.0 UI/UX critique: all four repair families (A–D) plus the V3 scoped truth-only copy. No
+engine, model, identity or layout change; installers remain unsigned; no auto-updater, telemetry
+or account. The five-user gate is the next step and blocks Wave 2 (3.11) and the 4.0 "Echo"
+identity.
+
+### Added
+
+- **Error taxonomy and recovery** (`desktop/src/lib/error-kind.ts` + tests;
+  `desktop/src/components/error-modal.tsx`): fixed-precedence classification (disk → memory →
+  network → audio → file → model → managed → unknown), a kind-specific title/body and a contextual
+  primary action (open model settings, retry a network step, reload); the raw log is behind a
+  disclosure with an accessible **Copy details**, **Report issue** is secondary and **Reset** moved
+  under **Advanced**. Recording failures report as `audio`.
+- **Copy all** (`desktop/src/pages/main/components/transcript-toolbar.tsx`): filled-primary button
+  next to Export, `Ctrl+Shift+C`, full transcript as plain text, toast confirmation and tooltip
+  hint.
+- **Grouped export** (`transcript-export-dialog.tsx`): the nine formats stay, grouped under four
+  headings — Text (TXT, Markdown), Captions & timing (SRT, WebVTT), Document (HTML, DOCX, PDF),
+  Data (JSON, CSV); batch mode opens a menu.
+- **Settings dialog** (`desktop/src/components/settings-modal.tsx`,
+  `desktop/src/pages/settings/page.tsx`, `components/layout.tsx`, `components/ui/dialog.tsx`):
+  rebuilt on Radix `Dialog` with focus trap/restore, `Escape` and a labelled close button; header
+  gear, `Ctrl+,`, `vibe:open-settings` event and `#settings` deep link; four labelled navigation
+  groups instead of a flat list.
+- **Accessible row labels** (`desktop/src/components/ui/row-label-context.tsx`,
+  `settings/sections/shared.tsx`, `ui/switch.tsx`, `ui/select.tsx`): switches and Radix select
+  triggers inherit the visible row label as their accessible name.
+- **V3 truth-only trust copy** on the drop point (`idle-hero.tsx`), first-run
+  (`setup/page.tsx`) and Settings → Privacy, plus a bidi-safe download progress component with
+  aria values, live percent, "x of y" size and a calibrated ETA.
+- **Five-user gate kit** (`docs/design/ui-decisions/GATE-KIT.md`): materials, moderator rules,
+  five Arabic task cards, printable observation sheet, scoring table and pass/partial/fail path.
+- **Runtime accessibility evidence**: 35 UI states audited with axe-core 4.14.1 (WCAG 2.2 A/AA) in
+  English, Arabic and dark mode — 0 violations; Settings dialog focus trap (5/5) and `Escape`
+  verified.
+
+### Changed
+
+- Windows `setTheme` rejection is caught and `core:window:allow-set-theme` is granted, so a theme
+  change can no longer surface an unhandled promise error (`providers/preference.tsx`,
+  `src-tauri/capabilities/main.json`).
+- Arabic inverse tracking rule (`html[lang^='ar'] * { letter-spacing: 0 }` with mono/tabular and
+  uppercase-Latin exceptions) and bidi isolates around download sizes.
+- Contrast and naming fixes: selected Settings nav row (`bg-primary/10 text-foreground`), version
+  footer, selected export-format badge (`bg-primary text-primary-foreground`), display-language
+  and transcript-language trigger names that contain their visible labels.
+- Mock seed data moved from `Vibe/` to `Sada/` under the Documents folder; decision records,
+  boards and 11 screenshots under `docs/design/ui-decisions/` (05, 06 and 09 recaptured after
+the fixes).
+- Version bump to 3.10.0 across the app, Cargo manifests/lockfile and site/README/llms/CITATION
+  metadata.
+
+### Verified
+
+- `pnpm build` exit 0 (paraglide → tsc → Vite, 1m 19s); `pnpm test` 34 files / 207 tests.
+- i18n parity 786/786 keys; `node scripts/seo/check-seo.mjs` passed.
+- Runtime axe audit 35 states / 0 violations; Settings dialog focus trap and `Escape`.
+
+### Known limitations
+
+- Installers remain unsigned (owner decision) → SmartScreen warning; verify SHA-256/provenance.
+- The five-user gate has not been run; no measured usability claim until it completes.
+- Windows screen-reader behaviour and the installed (Tauri) build are not covered by the automated
+  audit; focus restoration after dialog close was not confirmed; acceptance rows B–E are still
+  unexecuted (no hardware/VM); ETA needs real-download calibration.
+
 ## v3.9.0 — 2026-11-19
 
 Trust and enterprise-control release (P6 Wave 1). The engine, models, catalogue and transcription
