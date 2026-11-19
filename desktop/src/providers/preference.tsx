@@ -400,11 +400,13 @@ export function PreferenceProvider({ children }: { children: ReactNode }) {
 		}
 		// Keep the native window appearance in sync so macOS vibrancy (glass sidebar)
 		// renders light glass in light mode instead of the system appearance.
-		try {
-			void getCurrentWebviewWindow().setTheme(theme)
-		} catch {
-			/* browser mode */
-		}
+		// The native window can disappear during shutdown, and a web/mock build has no theme API:
+		// catch the rejection, or every theme change would leave an unhandled promise error.
+		getCurrentWebviewWindow()
+			.setTheme(theme)
+			.catch((error) => {
+				console.error('failed to set the window theme:', error)
+			})
 	}, [theme])
 
 	function setLanguageDefaults() {
