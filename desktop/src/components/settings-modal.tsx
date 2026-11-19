@@ -1,5 +1,7 @@
-import { useEffect } from 'react'
+import { useRef } from 'react'
+import { m } from '~/paraglide/messages.js'
 import { ModifyState } from '~/lib/types'
+import { Dialog, DialogContent, DialogTitle } from '~/components/ui/dialog'
 import SettingsPage from '~/pages/settings/page'
 
 interface SettingsModalProps {
@@ -8,28 +10,32 @@ interface SettingsModalProps {
 	scrollTo?: string
 }
 
+/**
+ * Radix owns the dialog contract — role, aria-modal, focus trap, Escape and outside click — so
+ * the settings window behaves like every other dialog instead of a div that imitates one.
+ */
 export default function SettingsModal({ visible, setVisible, scrollTo }: SettingsModalProps) {
-	useEffect(() => {
-		if (!visible) return
-
-		const prevBodyOverflow = document.body.style.overflow
-		const prevHtmlOverflow = document.documentElement.style.overflow
-		document.body.style.overflow = 'hidden'
-		document.documentElement.style.overflow = 'hidden'
-
-		return () => {
-			document.body.style.overflow = prevBodyOverflow
-			document.documentElement.style.overflow = prevHtmlOverflow
-		}
-	}, [visible])
-
-	if (!visible) return null
+	const previousFocusRef = useRef<HTMLElement | null>(null)
 
 	return (
-		<div className="fixed inset-0 z-50 overflow-hidden bg-black/45 backdrop-blur-md" onMouseDown={() => setVisible(false)}>
-			<div className="h-full overflow-y-auto overscroll-contain" onMouseDown={() => setVisible(false)}>
+		<Dialog
+			open={visible}
+			onOpenChange={(open) => !open && setVisible(false)}>
+			<DialogContent
+				hideClose
+				aria-describedby={undefined}
+				onOpenAutoFocus={() => {
+					previousFocusRef.current = document.activeElement as HTMLElement | null
+				}}
+				onCloseAutoFocus={(event) => {
+					// Return focus to the control that opened settings, not to the document body.
+					event.preventDefault()
+					previousFocusRef.current?.focus?.()
+				}}
+				className="w-auto max-w-none gap-0 overflow-visible border-0 bg-transparent p-0 shadow-none">
+				<DialogTitle className="sr-only">{m.settings()}</DialogTitle>
 				<SettingsPage setVisible={setVisible} scrollTo={scrollTo} />
-			</div>
-		</div>
+			</DialogContent>
+		</Dialog>
 	)
 }

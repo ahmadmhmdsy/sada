@@ -1,9 +1,12 @@
 import { ReactNode, createContext, useState } from 'react'
+import type { ErrorKind } from '~/lib/error-kind'
 import { ModifyState } from '~/lib/types'
 
 export interface ErrorModalState {
 	open: boolean
 	log?: string
+	/** A source that already knows what failed can skip the text classifier. */
+	kind?: ErrorKind
 }
 interface ErrorModalContext {
 	state: ErrorModalState

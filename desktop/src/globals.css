@@ -640,12 +640,23 @@ html[lang^='ar'] h3 {
 	letter-spacing: 0;
 }
 
-html[lang^='ar'] .tracking-tight,
-html[lang^='ar'] .tracking-tighter,
-html[lang^='ar'] .tracking-wide,
-html[lang^='ar'] .tracking-wider,
-html[lang^='ar'] .tracking-widest {
+/* Inverse rule: in an Arabic interface tracking is zero everywhere by default, because Arabic
+   is a connected script; only Latin runs opt back in. This also catches arbitrary Tailwind
+   tracking values and variant classes that a list of named utilities would miss. */
+html[lang^='ar'] * {
 	letter-spacing: 0;
+}
+
+html[lang^='ar'] .font-mono,
+html[lang^='ar'] .tabular-nums {
+	letter-spacing: normal;
+}
+
+/* Uppercase is a Latin editorial gesture; Arabic has no case, and the tracking usually paired
+   with it has no place in an Arabic eyebrow either. */
+html[lang^='ar'] .eyebrow,
+html[lang^='ar'] [class*='uppercase'] {
+	text-transform: none;
 }
 
 /* Timestamps, versions and file sizes are Latin runs inside an RTL interface; keep their digits

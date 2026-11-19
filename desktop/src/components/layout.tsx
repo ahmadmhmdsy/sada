@@ -1,4 +1,4 @@
-import { PanelLeft } from 'lucide-react'
+import { PanelLeft, Settings } from 'lucide-react'
 import { platform } from '@tauri-apps/plugin-os'
 import { ReactNode, useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
@@ -101,6 +101,17 @@ export default function Layout({ children, sidebar, bottomBar }: LayoutProps) {
 	}
 
 	useEffect(() => {
+		// The one shortcut every desktop app has, and the door that opens settings at all.
+		function onShortcut(event: KeyboardEvent) {
+			if (!(event.ctrlKey || event.metaKey) || event.key !== ',') return
+			event.preventDefault()
+			openSettings()
+		}
+		window.addEventListener('keydown', onShortcut)
+		return () => window.removeEventListener('keydown', onShortcut)
+	}, [])
+
+	useEffect(() => {
 		// Vibrancy: the macOS window is transparent; html/body must not paint over it.
 		if (isMacOverlayTitlebar()) document.documentElement.classList.add('mac-vibrancy')
 	}, [])
@@ -132,7 +143,22 @@ export default function Layout({ children, sidebar, bottomBar }: LayoutProps) {
 			<div className="flex min-h-0 flex-1" style={{ direction: 'ltr' }}>
 				{sidebar}
 				<div className="flex min-h-0 min-w-0 flex-1 flex-col bg-background" style={{ direction: getTextDirection() }}>
-					<header data-tauri-drag-region className="flex h-14 shrink-0 items-center justify-end gap-4 pe-4"></header>
+					<header className="flex h-14 shrink-0 items-center justify-end gap-4 pe-4">
+						<div data-tauri-drag-region className="h-full flex-1" />
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button
+									variant="ghost"
+									size="icon"
+									aria-label={m.settings()}
+									onClick={() => openSettings()}
+									className="h-8 w-8 rounded-full text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground [&_svg]:size-[17px]">
+									<Settings strokeWidth={1.75} />
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>{m.settingsShortcut()}</TooltipContent>
+						</Tooltip>
+					</header>
 					{/*
 					 * The main page owns its scrolling (transcript pane, file rail), so the shell must not
 					 * scroll too — otherwise the rails drift away under the reader. Other pages scroll here.

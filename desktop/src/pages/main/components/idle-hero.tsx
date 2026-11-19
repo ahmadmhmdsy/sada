@@ -1,6 +1,6 @@
 import { listen } from '@tauri-apps/api/event'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FolderOpen, Link2, Mic, Plus, Square, Upload, X } from 'lucide-react'
+import { FolderOpen, Link2, Mic, Plus, ShieldCheck, Square, Upload, X } from 'lucide-react'
 import { siFacebook, siInstagram, siTiktok, siX, siYoutube } from 'simple-icons'
 import { useEffect, useRef, useState } from 'react'
 import { m } from '~/paraglide/messages.js'
@@ -400,6 +400,15 @@ export default function IdleHero() {
 						</motion.div>
 					)}
 				</AnimatePresence>
+			</div>
+
+			{/* The truth at the point of use: local processing, with the one network exception named. */}
+			<div className="mx-auto flex max-w-md flex-col items-center gap-1 text-center">
+				<p className="flex items-center gap-1.5 text-[12px] font-medium text-foreground/80">
+					<ShieldCheck aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-success" strokeWidth={1.75} />
+					{m.localOnlyTrust()}
+				</p>
+				<p className="text-[11px] leading-relaxed text-muted-foreground/80">{m.localOnlyDownloadCaveat()}</p>
 			</div>
 
 			<QuietRow />

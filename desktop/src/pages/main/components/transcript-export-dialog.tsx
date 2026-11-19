@@ -57,6 +57,18 @@ const formats: Array<{
 	{ value: 'pdf', extension: 'PDF', label: m.exportFormatPdf, description: m.exportFormatPdfDescription },
 ]
 
+/**
+ * Nine formats is a lot to scan as one undifferentiated grid. Grouping keeps every format but
+ * lets the common choice — plain text — carry the first row and the export payloads live further
+ * down, where they are found on purpose rather than by accident.
+ */
+const formatGroups: Array<{ label: () => string; values: TextFormat[] }> = [
+	{ label: m.formatGroupText, values: ['normal', 'md'] },
+	{ label: m.formatGroupCaptions, values: ['srt', 'vtt'] },
+	{ label: m.formatGroupDocument, values: ['html', 'docx', 'pdf'] },
+	{ label: m.formatGroupData, values: ['json', 'csv'] },
+]
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
 	return <h3 className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">{children}</h3>
 }
@@ -262,33 +274,43 @@ export default function TranscriptExportDialog({
 								<SectionLabel>{m.format()}</SectionLabel>
 							</div>
 							{/* One line per format: the description belongs to whichever is selected, below. */}
-							<div className="grid grid-cols-3 gap-1.5" role="radiogroup" aria-labelledby="export-format-heading">
-								{formats.map((option) => {
-									const selected = format === option.value
-									return (
-										<button
-											key={option.value}
-											type="button"
-											role="radio"
-											aria-checked={selected}
-											onClick={() => onFormatChange(option.value)}
-											className={cn(
-												'flex items-center gap-2 rounded-lg border px-2 py-1.5 text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80',
-												selected
-													? 'border-primary/60 bg-primary/10 text-foreground'
-													: 'border-transparent bg-muted/35 text-muted-foreground hover:bg-muted/60 hover:text-foreground',
-											)}>
-											<span
-												className={cn(
-													'flex h-6 min-w-9 shrink-0 items-center justify-center rounded-md font-mono text-[9px] font-semibold tracking-tight',
-													selected ? 'bg-primary/20 text-primary' : 'bg-background/60 text-muted-foreground',
-												)}>
-												{option.extension}
-											</span>
-											<span className="truncate text-[13px] font-medium">{option.label()}</span>
-										</button>
-									)
-								})}
+							<div className="space-y-3">
+								{formatGroups.map((group) => (
+									<div key={group.values.join('-')} role="group" aria-labelledby={`export-group-${group.values[0]}`} className="space-y-1.5">
+										<p id={`export-group-${group.values[0]}`} className="px-0.5 text-[10px] font-medium text-muted-foreground/60 uppercase">
+											{group.label()}
+										</p>
+										<div className="grid grid-cols-3 gap-1.5">
+											{group.values.map((value) => {
+												const option = formats.find((candidate) => candidate.value === value)
+												if (!option) return null
+												const selected = format === option.value
+												return (
+													<button
+														key={option.value}
+														type="button"
+														aria-pressed={selected}
+														onClick={() => onFormatChange(option.value)}
+														className={cn(
+															'flex items-center gap-2 rounded-lg border px-2 py-1.5 text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80',
+															selected
+																? 'border-primary/60 bg-primary/10 text-foreground'
+																: 'border-transparent bg-muted/35 text-muted-foreground hover:bg-muted/60 hover:text-foreground',
+														)}>
+														<span
+															className={cn(
+																'flex h-6 min-w-9 shrink-0 items-center justify-center rounded-md font-mono text-[9px] font-semibold tracking-tight',
+																selected ? 'bg-primary/20 text-primary' : 'bg-background/60 text-muted-foreground',
+															)}>
+															{option.extension}
+														</span>
+														<span className="truncate text-[13px] font-medium">{option.label()}</span>
+													</button>
+												)
+											})}
+										</div>
+									</div>
+								))}
 							</div>
 							<p className="min-h-[1.25rem] px-0.5 text-xs text-muted-foreground">{selectedFormat?.description()}</p>
 						</section>

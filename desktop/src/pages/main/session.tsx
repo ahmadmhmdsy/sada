@@ -208,7 +208,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 			recording.setIsRecording(false)
 			setPanel('none')
 			toast.error(m.error(), { description: message, position: 'bottom-center' })
-			setErrorModal?.({ log: message, open: true })
+			setErrorModal?.({ log: message, open: true, kind: 'audio' })
 		})
 		return () => {
 			unlisten.then((fn) => fn())

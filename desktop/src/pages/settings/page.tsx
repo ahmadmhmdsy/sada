@@ -54,8 +54,11 @@ interface SettingsSection {
 	icon: ReactNode
 }
 
-/** Sidebar items, split into visually separated runs — no group headings. */
-type SettingsGroup = SettingsSection[]
+/** Sidebar items, grouped under headings so ten destinations stay scannable. */
+interface SettingsGroup {
+	label: string
+	sections: SettingsSection[]
+}
 
 export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps) {
 	const vm = viewModel()
@@ -64,27 +67,39 @@ export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps
 	const showAi = !aiDisabled(policy)
 
 	const groups: SettingsGroup[] = [
-		[
-			{ id: 'general', label: m.general(), icon: <Globe className="h-4 w-4" /> },
-			{ id: 'privacy', label: m.privacy(), icon: <ShieldCheck className="h-4 w-4" /> },
-		],
-		[
-			{ id: 'transcription', label: m.transcription(), icon: <SlidersHorizontal className="h-4 w-4" /> },
-			{ id: 'models', label: m.navModels(), icon: <Bot className="h-4 w-4" /> },
-			{ id: 'tuning', label: m.navTuning(), icon: <Cpu className="h-4 w-4" /> },
-		],
-		[
-			{ id: 'recording', label: m.recordingSettings(), icon: <Mic className="h-4 w-4" /> },
-			{ id: 'dictation', label: m.navDictation(), icon: <Keyboard className="h-4 w-4" /> },
-			// A managed machine can turn AI off entirely; the page then does not exist.
-			...(showAi ? [{ id: 'ai' as const, label: m.aiSection(), icon: <Sparkles className="h-4 w-4" /> }] : []),
-		],
-		[
-			{ id: 'api', label: m.navAgents(), icon: <Terminal className="h-4 w-4" /> },
-			{ id: 'advanced', label: m.advanced(), icon: <Wrench className="h-4 w-4" /> },
-		],
+		{
+			label: m.settingsGroupApp(),
+			sections: [
+				{ id: 'general', label: m.general(), icon: <Globe className="h-4 w-4" /> },
+				{ id: 'privacy', label: m.privacy(), icon: <ShieldCheck className="h-4 w-4" /> },
+			],
+		},
+		{
+			label: m.settingsGroupTranscription(),
+			sections: [
+				{ id: 'transcription', label: m.transcription(), icon: <SlidersHorizontal className="h-4 w-4" /> },
+				{ id: 'models', label: m.navModels(), icon: <Bot className="h-4 w-4" /> },
+				{ id: 'tuning', label: m.navTuning(), icon: <Cpu className="h-4 w-4" /> },
+			],
+		},
+		{
+			label: m.settingsGroupInput(),
+			sections: [
+				{ id: 'recording', label: m.recordingSettings(), icon: <Mic className="h-4 w-4" /> },
+				{ id: 'dictation', label: m.navDictation(), icon: <Keyboard className="h-4 w-4" /> },
+				// A managed machine can turn AI off entirely; the page then does not exist.
+				...(showAi ? [{ id: 'ai' as const, label: m.aiSection(), icon: <Sparkles className="h-4 w-4" /> }] : []),
+			],
+		},
+		{
+			label: m.settingsGroupAdvanced(),
+			sections: [
+				{ id: 'api', label: m.navAgents(), icon: <Terminal className="h-4 w-4" /> },
+				{ id: 'advanced', label: m.advanced(), icon: <Wrench className="h-4 w-4" /> },
+			],
+		},
 	]
-	const sections = groups.flat()
+	const sections = groups.flatMap((group) => group.sections)
 
 	// Pages under a section, each with its own title and a way back; no dialog over the modal.
 	const subpages: Record<Subpage, { section: SectionId; title: string }> = {
@@ -146,35 +161,38 @@ export default function SettingsPage({ setVisible, scrollTo }: SettingsPageProps
 	const openPrompt = (task: AiTaskId) => openSubpage(task === 'summary' ? 'ai-summary' : 'ai-dictation')
 
 	return (
-		<div className="flex min-h-screen items-center justify-center p-6">
+		<div className="flex items-center justify-center p-3">
 			<div
 				onMouseDown={(event) => event.stopPropagation()}
 				className="flex h-[640px] max-h-[calc(100dvh-3rem)] w-full max-w-3xl overflow-hidden rounded-2xl border border-border/60 bg-card shadow-2xl">
 				<div className="flex w-56 shrink-0 flex-col border-r border-border/55 bg-muted/40 p-3">
 					<div className="mb-2 flex items-center justify-between px-1 pb-1">
 						<span className="text-sm font-semibold">{m.settings()}</span>
-						<Button onMouseDown={() => setVisible(false)} variant="ghost" size="iconSm" className="h-7 w-7 rounded-lg">
+						<Button onClick={() => setVisible(false)} aria-label={m.modalClose()} variant="ghost" size="iconSm" className="h-7 w-7 rounded-lg">
 							<X className="h-4 w-4" />
 						</Button>
 					</div>
 					<nav aria-label={m.settings()} className="flex-1 overflow-y-auto">
 						{groups.map((group, index) => (
-							<div key={group[0].id} className={`space-y-0.5 ${index > 0 ? 'mt-3 border-t border-border/50 pt-3' : ''}`}>
-								{group.map((section) => (
-									<button
-										key={section.id}
-										type="button"
-										aria-current={activeSection === section.id ? 'page' : undefined}
-										onClick={() => goTo(section.id)}
-										className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm font-medium ${
-											activeSection === section.id
-												? 'bg-primary/10 text-primary'
-												: 'text-muted-foreground hover:bg-accent/50 hover:text-foreground'
-										}`}>
-										<span className={activeSection === section.id ? 'text-primary' : 'text-muted-foreground'}>{section.icon}</span>
-										<span className="truncate">{section.label}</span>
-									</button>
-								))}
+							<div key={group.label} className={index > 0 ? 'mt-3' : ''}>
+								<p className="px-2.5 pb-1 pt-1 text-[10px] font-semibold text-muted-foreground/55 uppercase tracking-[0.08em]">{group.label}</p>
+								<div className="space-y-0.5">
+									{group.sections.map((section) => (
+										<button
+											key={section.id}
+											type="button"
+											aria-current={activeSection === section.id ? 'page' : undefined}
+											onClick={() => goTo(section.id)}
+											className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm font-medium ${
+												activeSection === section.id
+													? 'bg-primary/10 text-primary'
+													: 'text-muted-foreground hover:bg-accent/50 hover:text-foreground'
+											}`}>
+											<span className={activeSection === section.id ? 'text-primary' : 'text-muted-foreground'}>{section.icon}</span>
+											<span className="truncate">{section.label}</span>
+										</button>
+									))}
+								</div>
 							</div>
 						))}
 					</nav>

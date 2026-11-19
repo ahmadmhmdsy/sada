@@ -7,8 +7,35 @@ import { Button } from '~/components/ui/button'
 import { Dialog, DialogContent } from '~/components/ui/dialog'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
 
+/**
+ * Bytes travel between Rust and the UI as a number; one decimal is enough for a progress line.
+ * The isolate marks keep "25 MB" one left-to-right run: inside an Arabic sentence the bidi
+ * algorithm would otherwise draw the unit before the number.
+ */
+function formatBytes(bytes: number) {
+	const size =
+		bytes >= 1_000_000_000
+			? `${(bytes / 1_000_000_000).toFixed(1)} GB`
+			: bytes >= 10_000_000
+				? `${Math.round(bytes / 1_000_000)} MB`
+				: `${(bytes / 1_000_000).toFixed(1)} MB`
+	return `\u2066${size}\u2069`
+}
+
 function App() {
 	const vm = viewModel()
+	const percent = Math.round(vm.downloadProgress)
+	const sizeProgress = vm.downloadBytes
+		? m.downloadSizeProgress({ done: formatBytes(vm.downloadBytes.done), total: formatBytes(vm.downloadBytes.total) })
+		: null
+	const timeLeft =
+		vm.estimatedMinutesLeft === null
+			? null
+			: vm.estimatedMinutesLeft <= 1
+				? m.downloadAlmostDone()
+				: m.downloadTimeLeft({ minutes: String(vm.estimatedMinutesLeft) })
+	// The progressbar carries one readable value text; a live region per tick would spam a screen reader.
+	const progressText = [`${percent}%`, sizeProgress, timeLeft].filter(Boolean).join(' · ')
 
 	return (
 		<div className="flex min-h-screen items-center justify-center px-5 py-10">
@@ -19,20 +46,28 @@ function App() {
 				className="w-full max-w-lg text-center">
 				<p className="eyebrow">{m.setup({ defaultValue: 'Setup' })}</p>
 				<h1 className="mt-4 text-balance text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] md:text-[36px]">{m.downloadingModel()}</h1>
+				{/* First run is the one moment the download exception matters most; say it before the bytes. */}
+				<p className="mx-auto mt-3 max-w-md text-balance text-[13px] leading-relaxed text-muted-foreground">{m.setupTrust()}</p>
 
 				<div className="mt-9 flex flex-col items-center gap-4">
 					{vm.downloadProgress > 0 && (
 						<>
-							<Progress className="progress-aurora h-1.5 w-full max-w-sm bg-muted" value={vm.downloadProgress} />
-							<div className="flex items-center gap-3 text-[13px] text-muted-foreground">
-								<span className="tabular-nums">{Math.round(vm.downloadProgress)}%</span>
-								{!vm?.location?.state?.downloadURL && (
-									<>
-										<span className="h-1 w-1 rounded-full bg-border" />
-										<span>{m.thisHappensOnce()}</span>
-									</>
-								)}
+							<div
+								role="progressbar"
+								aria-label={m.downloadingModel()}
+								aria-valuemin={0}
+								aria-valuemax={100}
+								aria-valuenow={percent}
+								aria-valuetext={progressText}
+								className="w-full max-w-sm">
+								<Progress className="progress-aurora h-1.5 w-full bg-muted" value={vm.downloadProgress} />
 							</div>
+							<div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[13px] text-muted-foreground">
+								<span className="font-medium tabular-nums text-foreground">{percent}%</span>
+								{sizeProgress && <span>{sizeProgress}</span>}
+								{timeLeft && <span>{timeLeft}</span>}
+							</div>
+							{!vm.location?.state?.downloadURL && <p className="text-[12px] text-muted-foreground/80">{m.thisHappensOnce()}</p>}
 						</>
 					)}
 					{(vm.downloadProgress === 0 || vm.isOnline === null) && <Spinner className="h-6 w-6 text-muted-foreground" />}

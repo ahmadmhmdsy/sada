@@ -9,12 +9,16 @@ import { readModelMetadata } from '~/lib/model'
 import { ensureVadModel } from '~/lib/vad-gate'
 import * as osExt from '@tauri-apps/plugin-os'
 import * as config from '~/lib/config'
+import { classifyError } from '~/lib/error-kind'
 import { loadManagedPolicy, modelDownloadsDisabled } from '~/lib/policy'
 import { m } from '~/paraglide/messages.js'
 
 export function viewModel() {
 	const location = useLocation()
 	const [downloadProgress, setDownloadProgress] = useState(0)
+	// Real bytes let setup show a size and a remaining-time estimate instead of a bare percentage.
+	const [downloadBytes, setDownloadBytes] = useState<{ done: number; total: number } | null>(null)
+	const downloadStartedAtRef = useRef<number | null>(null)
 	const [isOnline, setIsOnline] = useState<boolean | null>(null)
 	const downloadProgressRef = useRef(0)
 	const { setState: setErrorModal } = useContext(ErrorModalContext)
@@ -27,6 +31,11 @@ export function viewModel() {
 			// event.payload is the payload object
 			const [current, total] = event.payload as [number, number]
 			const newDownloadProgress = Number(current / total) * 100
+
+			if (total > 0) {
+				if (downloadStartedAtRef.current === null) downloadStartedAtRef.current = Date.now()
+				setDownloadBytes({ done: current, total })
+			}
 
 			if (newDownloadProgress > downloadProgressRef.current) {
 				// for some reason it jumps if not
@@ -52,7 +61,7 @@ export function viewModel() {
 		// model an administrator already installed instead of retrying a refused download.
 		if (modelDownloadsDisabled(await loadManagedPolicy())) {
 			preference.setSkippedSetup(true)
-			setErrorModal?.({ open: true, log: m.managedPolicyModelDownloads() })
+			setErrorModal?.({ open: true, log: m.managedPolicyModelDownloads(), kind: 'managed' })
 			navigate('/#settings', { replace: true, state: { disableBack: true } })
 			return
 		}
@@ -109,14 +118,14 @@ export function viewModel() {
 			throw new Error(`All model downloads failed. Last error: ${lastError}`)
 		} catch (err) {
 			console.error(`[model] Unhandled error:`, err)
-			setErrorModal?.({ open: true, log: String(err) })
+			setErrorModal?.({ open: true, log: String(err), kind: classifyError(String(err)) })
 		}
 	}
 
 	async function downloadIfOnline() {
 		if (modelDownloadsDisabled(await loadManagedPolicy())) {
 			preference.setSkippedSetup(true)
-			setErrorModal?.({ open: true, log: m.managedPolicyModelDownloads() })
+			setErrorModal?.({ open: true, log: m.managedPolicyModelDownloads(), kind: 'managed' })
 			navigate('/#settings', { replace: true, state: { disableBack: true } })
 			return
 		}
@@ -141,11 +150,26 @@ export function viewModel() {
 		downloadIfOnline()
 	}, [])
 
+	/**
+	 * Remaining minutes from the observed average speed. Hidden until there is enough
+	 * measurement to be honest: an early estimate would jump around.
+	 */
+	function estimatedMinutesLeft(): number | null {
+		if (!downloadBytes || downloadStartedAtRef.current === null || downloadBytes.done <= 0) return null
+		const seconds = (Date.now() - downloadStartedAtRef.current) / 1000
+		if (seconds < 8) return null
+		const bytesPerSecond = downloadBytes.done / seconds
+		if (!Number.isFinite(bytesPerSecond) || bytesPerSecond <= 0) return null
+		return Math.max(1, Math.ceil((downloadBytes.total - downloadBytes.done) / bytesPerSecond / 60))
+	}
+
 	return {
 		navigate,
 		cancelSetup,
 		setErrorModal,
 		downloadProgress,
+		downloadBytes,
+		estimatedMinutesLeft: estimatedMinutesLeft(),
 		downloadIfOnline,
 		setDownloadProgress,
 		downloadProgressRef,

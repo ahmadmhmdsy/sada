@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronDown, Download, NotebookPen, Pencil, PilcrowLeft, PilcrowRight, Plus, Search, Settings2, Sparkles, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { ChevronDown, Copy, Download, NotebookPen, Pencil, PilcrowLeft, PilcrowRight, Plus, Search, Settings2, Sparkles, X } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import * as clipboard from '@tauri-apps/plugin-clipboard-manager'
+import { toast } from 'sonner'
 import { m } from '~/paraglide/messages.js'
 import { usePreferenceProvider } from '~/providers/preference'
 import { Button } from '~/components/ui/button'
@@ -10,6 +12,7 @@ import { Spinner } from '~/components/ui/spinner'
 import { Switch } from '~/components/ui/switch'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
 import { cn } from '~/lib/style'
+import { asText } from '~/lib/transcript'
 import type { TextFormat } from '~/components/format-select'
 import type { Job } from '../hooks/use-transcribe-queue'
 import type { TranscriptTab, TranscriptTextSize, TranscriptViewOptions } from '../hooks/use-transcript-view'
@@ -272,6 +275,31 @@ export default function TranscriptToolbar({
 	const hasText = (job?.segments.length ?? 0) > 0
 	const hasExportContent = hasText || Boolean(job?.summary)
 
+	/** The finish line: the transcript as plain text, ready to paste, with no dialog in between. */
+	const copyAll = useCallback(async () => {
+		if (!job || job.segments.length === 0) return
+		try {
+			await clipboard.writeText(asText(job.segments, m.speakerPrefix(), job.speakerNames))
+			toast.success(m.copyAllDone(), { position: 'bottom-center' })
+		} catch (error) {
+			console.error('copy all failed', error)
+			toast.error(m.error())
+		}
+	}, [job])
+
+	useEffect(() => {
+		function onKeyDown(event: KeyboardEvent) {
+			if (!(event.ctrlKey || event.metaKey) || !event.shiftKey || event.key.toLowerCase() !== 'c') return
+			const target = event.target as HTMLElement | null
+			if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+			if (!hasText) return
+			event.preventDefault()
+			void copyAll()
+		}
+		window.addEventListener('keydown', onKeyDown)
+		return () => window.removeEventListener('keydown', onKeyDown)
+	}, [copyAll, hasText])
+
 	return (
 		<>
 			<div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-1 border-b border-border bg-background/85 px-4 backdrop-blur-md">
@@ -351,6 +379,21 @@ export default function TranscriptToolbar({
 									{m.exportDialogTitle()}
 								</Button>
 							)}
+
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										variant="default"
+										size="sm"
+										onClick={() => void copyAll()}
+										disabled={!hasText}
+										className="rounded-full px-3 text-[13px] font-medium">
+										<Copy className="h-3.5 w-3.5" />
+										{m.copyAll()}
+									</Button>
+								</TooltipTrigger>
+								<TooltipContent>{m.copyAllHint()}</TooltipContent>
+							</Tooltip>
 
 							<Button
 								variant="ghost"

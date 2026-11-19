@@ -27,8 +27,10 @@ const DialogOverlay = React.forwardRef<React.ElementRef<typeof DialogPrimitive.O
 )
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
-const DialogContent = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Content>, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>>(
-	({ className, children, ...props }, ref) => (
+const DialogContent = React.forwardRef<
+	React.ElementRef<typeof DialogPrimitive.Content>,
+	React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { hideClose?: boolean }
+>(({ className, children, hideClose, ...props }, ref) => (
 		<DialogPortal>
 			<DialogOverlay />
 			<DialogPrimitive.Content
@@ -39,10 +41,12 @@ const DialogContent = React.forwardRef<React.ElementRef<typeof DialogPrimitive.C
 				)}
 				{...props}>
 				{children}
-				<DialogPrimitive.Close className="absolute end-4 top-4 rounded-md border border-transparent p-1.5 text-muted-foreground/85 transition-colors hover:border-border/70 hover:bg-accent/55 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/80 disabled:pointer-events-none data-[state=open]:bg-accent/55">
-					<X className="h-4 w-4" />
-					<span className="sr-only">{m.modalClose()}</span>
-				</DialogPrimitive.Close>
+				{!hideClose && (
+					<DialogPrimitive.Close className="absolute end-4 top-4 rounded-md border border-transparent p-1.5 text-muted-foreground/85 transition-colors hover:border-border/70 hover:bg-accent/55 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/80 disabled:pointer-events-none data-[state=open]:bg-accent/55">
+						<X className="h-4 w-4" />
+						<span className="sr-only">{m.modalClose()}</span>
+					</DialogPrimitive.Close>
+				)}
 			</DialogPrimitive.Content>
 		</DialogPortal>
 	),
