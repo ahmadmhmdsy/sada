@@ -33,7 +33,7 @@ function record(name: string, texts: string[], audioFile?: string) {
 
 /** A project folder: the record plus the copy of the media it was transcribed from. */
 function seedProject(name: string, stamp: string, texts: string[]) {
-	const folder = `${DOCUMENTS_FOLDER}/Vibe/${name}-${stamp}`
+	const folder = `${DOCUMENTS_FOLDER}/Sada/${name}-${stamp}`
 	virtualFs.set(`${folder}/transcript.vibe.json`, record(name, texts, 'audio.mp3'))
 	virtualFs.set(`${folder}/audio.mp3`, null)
 }
@@ -51,7 +51,7 @@ seedProject('podcast-episode', '20260818-174200', [
 
 // One save in the pre-project-folder layout, so the mock keeps exercising back-compat.
 virtualFs.set(
-	`${DOCUMENTS_FOLDER}/Vibe/legacy-interview-20260810-101500.vibe.json`,
+	`${DOCUMENTS_FOLDER}/Sada/legacy-interview-20260810-101500.vibe.json`,
 	record('legacy-interview', ['This transcript was saved as a flat file by an older build.', 'It still opens, renames and deletes in place.']),
 )
 
