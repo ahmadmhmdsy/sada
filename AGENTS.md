@@ -76,6 +76,7 @@ inside both `index.html` files in sync with the repository facts (version, links
 - [Models council](docs/MODELS-COUNCIL.md) · [Models council in Arabic](docs/MODELS-COUNCIL.ar.md)
 - [Model decisions (measured)](docs/MODELS-DECISIONS.md) · [Read-aloud evidence](docs/READ-ALOUD.md)
 - [Roadmap](ROADMAP.md) · [P4 plan](docs/P4-PLAN.md) · [P5 plan](docs/P5-PLAN.md)
+ · [P6 plan](docs/P6-PLAN.md)
   · [Changelog](CHANGELOG.md)
 - [Translations](docs/TRANSLATIONS.md) · [Privacy](PRIVACY.md) · [Security](SECURITY.md)
 - [Clean-machine acceptance](docs/ACCEPTANCE.md) · [Production readiness](docs/PRODUCTION-READINESS.md)

@@ -6,8 +6,8 @@ model questions: **no model is curated without a licence, a size, a SHA-256 and 
 Arabic claim is made without the benchmark.
 
 Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete`,
-`P5 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0, v3.7.0 and v3.8.0 shipped
-2026-11-18 (all before their due dates). Last updated 2026-11-18.
+`P5 complete`, `P6 in progress` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0, v3.7.0
+and v3.8.0 shipped 2026-11-18 (all before their due dates). Last updated 2026-11-19.
 
 ## Milestones
 
@@ -19,6 +19,7 @@ Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete
 | **v3.6.0 — transcript quality & hardening** | 2027-02-15 | Arabic transcript post-processing earned in the benchmark, upstream v3.3.6 security audit ported, clean-machine offline acceptance + signing decision | #14 #15 #16 — **complete**, evidence below |
 | **v3.7.0 — dialect coverage & prompt biasing** | 2027-04-15 | Measured Gulf + Arabic/English technical code-switch slices from a commercial-use corpus, prompt-biasing measurement and app wiring if it wins, honest remaining-gap matrix | #19 #20 #21 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.7.0), evidence below |
 | **v3.8.0 — distribution, offline install & benchmark gate** | 2027-06-15 | Offline WebView2 installer variant as a second asset, signing pipeline staged but dormant (releases stay unsigned OSS), evidence-based production-readiness statement, benchmark regression gate | #22 #23 #24 #25 #26 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.8.0), evidence below |
+| **v3.9.0 — P6 Wave 1: trust & enterprise readiness** | 2027-09-15 | Assurance pack, keyless supply chain (provenance + SBOM), security operations, managed offline policy, DPAPI secrets, retention, per-machine MSI deployment kit, rows B–E runbook | #27–#35 — in progress (plan: [P6](docs/P6-PLAN.md)) |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -281,9 +282,27 @@ signing stays dormant (#18) by owner decision.
   is an owner purchase decision. Until measured, those regions stay explicitly unmeasured.
 - Upstream drift: upstream Vibe's latest release is v3.3.5 (2026-11-13) while this fork is based on
   v3.2.2 plus hand-ported deltas (`docs/UPSTREAM-PATCHES.md`). Plan an incremental rebase release
-  (v3.9.0) instead of ad-hoc cherry-picks.
+  (v3.10.0, after P6 v3.9.0) instead of ad-hoc cherry-picks.
 - Keep the benchmark gate honest: run the 90-clip suite and `sadabench compare` against the
   committed baseline for every release that touches the engine, models or Arabic post-processing.
+
+## P6 — trust and enterprise readiness (in progress, v3.9.0 Wave 1)
+
+Scope and rationale: [P6-PLAN.md](docs/P6-PLAN.md). Only work that needs no owner decision, purchase,
+certificate, audit or hardware is in this wave.
+
+- [ ] #27 Assurance pack: security whitepaper, threat model, data handling/DPIA, AV/EDR guidance.
+- [ ] #28 Keyless supply chain: GitHub build provenance attestations, CycloneDX SBOM, release verification script.
+- [ ] #29 Security operations: dependency scanning (cargo/pnpm), Dependabot, SECURITY.md response targets.
+- [ ] #30 Egress inventory and managed offline mode (ProgramData policy file, enforced in commands/UI).
+- [ ] #31 Protect AI provider keys with Windows DPAPI and migrate legacy plaintext keys.
+- [ ] #32 Transcript retention setting, safe purge command and data-hygiene review.
+- [ ] #33 Per-machine MSI asset plus Intune/SCCM/GPO deployment kit and detection scripts.
+- [ ] #34 Rows B–E acceptance runbook, scripts and evidence templates.
+- [ ] #35 v3.9.0 version bump, bilingual notes, full tests, release and evidence.
+
+Owner decisions still open and deliberately not activated: code-signing application (#18), paid
+support/SLA, external penetration test budget, and hardware for rows B–E.
 
 ## Rules that do not move
 
