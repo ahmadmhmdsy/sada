@@ -101,7 +101,7 @@ objc2-av-foundation = { version = "0.3.2", default-features = false, features = 
 objc2-foundation = { version = "0.3.2", features = ["NSArray", "NSString", "NSURL"] }
 tauri-nspanel = { git = "https://github.com/ahkohd/tauri-nspanel.git", rev = "c9ec2130422200f0863b23dfdad02b133a529b07" }
 block2 = "0.6.2"
-window-vibrancy = "0.6"
+window-vibrancy = "0.8"
 
 [features]
 default = []
