@@ -83,7 +83,7 @@ openssl = { version = "0.10.75", features = ["vendored"] }
 
 # Windows
 [target.'cfg(windows)'.dependencies]
-winreg = "0.55.0"
+winreg = "0.56.0"
 # Used to attach to console
 windows = { version = "0.62.2", features = [
 	"Win32_System_Console",
