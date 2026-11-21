@@ -43,6 +43,11 @@ the `/docs` route), not a drive-by bump and **not** a “utoipa 7” task. Keep 
 (or retitle it) and open one “utoipa 5 to 6 coordinated upgrade” task. The alternative — hold
 `utoipa-swagger-ui` at 9 until that task lands — is acceptable too; both options are the owner’s call.
 
+As of 2026-11-21 the coordinated path is **unblocked**: `utoipa` 6.0.0 is released, `utoipa-axum` 0.3.0
+requires `utoipa = "6.0.0"`, and `utoipa-swagger-ui` 10.0.2 requires `utoipa = "6.0.0"` (verified with
+`cargo info`). Bump all three together in one PR and fix the derive/API fallout there — that PR is the
+coordinated upgrade task.
+
 ## Why CI did not catch #44
 
 | Coverage | What it proves | Gap |

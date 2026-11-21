@@ -62,3 +62,12 @@ cargo check --all-targets (from server/ at each PR head)
 - `session.json` — structured review-room session (28 blocks, standard mode, check_session exit 0).
 - `review-room-transcript.html` — self-contained transcript (build_transcript.py; check_session --html exit 0).
 - `ruling.md` — the implementable ruling reproduced for the owner.
+
+## Post-review verification (2026-11-21, crates.io)
+
+- `cargo info utoipa` → 6.0.0 (released; rust-version 1.88).
+- `cargo info utoipa-axum@0.3.0` → depends on `utoipa = "6.0.0"` (crate manifest read from the local registry cache).
+- `cargo info utoipa-swagger-ui` → 10.0.2; its manifest also requires `utoipa = "6.0.0"`.
+- Consequence: the #44 rework is a coordinated three-crate bump (`utoipa` 5→6, `utoipa-axum` 0.2→0.3,
+  `utoipa-swagger-ui` 9→10) plus whatever derive/API fallout `cargo check` reports. The trigger written in
+  the ruling is met; the upgrade task can start without waiting on upstream.

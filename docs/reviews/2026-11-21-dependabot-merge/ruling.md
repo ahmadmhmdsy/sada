@@ -81,7 +81,7 @@ Release-side findings that shaped the plan: dispatching `release.yml` against v3
 | Server compile job in CI | next workflow change, before the utoipa upgrade | a second server bump escapes the local matrix, or the v3.11 tag fails building server/ |
 | Linux/macOS compile validation for #48/#50 | first non-Windows build or cross-target job | a platform build fails on x11rb or window-vibrancy |
 | Tauri upgrade gate for #53 | before v3.11.0, release prep | installer build fails, offline installer fails on a clean machine, or the CLI stays at 2.10 while the crate is 2.12 |
-| Coordinated utoipa 5→6 upgrade (#44 rework) | v3.11 cycle | a utoipa-axum release accepting utoipa 6, or a /docs/OpenAPI change |
+| Coordinated utoipa 5→6 upgrade (#44 rework) | now unblocked — can start immediately | utoipa 6.0.0 + utoipa-axum 0.3.0 + utoipa-swagger-ui 10.0.2 are published and all align on utoipa 6.0.0 (verified 2026-11-21); the task is a bump of all three plus derive/API fixes |
 | setup-uv 7 (#37) and attest v4 (#39) validation | first signed release; v3.11 tag rehearsal | signing enabled without a green setup-uv 7 run; tag run fails after builds (fix and re-run, no assets published) |
 | Sidecar suffix `-sada.2` + SHA256SUMS attestation subject | v3.11.0 release prep | third binary under the same `-sada.1`; user cannot `gh attestation verify SHA256SUMS.txt` |
 | Dependabot grouping (patch/minor per ecosystem) | after this train, next cycle 2026-11-30 | backlog returns above 5 PRs in one ecosystem |
