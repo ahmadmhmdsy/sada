@@ -1,6 +1,6 @@
 # P7 — post-3.10: parity, proof & platform (planned)
 
-**Status:** started 2026-11-19 — **FC-1 truth-parity documentation delivered**; **M4 governance done** (milestone #8, issues #58–#66); M1–M3 remain gated as below.
+**Status:** started 2026-11-19 — **M0 truth parity, M1 falsification and M4 governance are delivered.** Step Zero B **passed 5/5** (2026-11-19) and Step Zero A **failed** (2026-11-21, Python-only runtime and CPU speed; naturalness unevaluated), so read-aloud stays closed and burn-in is a gated candidate. M2/M3 remain gated as below.
 Decision record: [FEATURES-COUNCIL.md](FEATURES-COUNCIL.md) (+ [Arabic](FEATURES-COUNCIL.ar.md)). Milestone: [P7 #8](https://github.com/alshahia/sada/milestone/8). Workstream IDs: FC-1…FC-9 map to issues [#58](https://github.com/alshahia/sada/issues/58)…[#66](https://github.com/alshahia/sada/issues/66) in order. Living status lives in [ROADMAP.md](../ROADMAP.md#p7--post-310-parity-proof--platform-planned).
 
 This plan separates three things that must not be mixed: **truth parity** (documentation of what already shipped), **Step Zero tests** (falsification before any promise), and **next-wave features** (only what passes its test and only after the five-user gate). Nothing here is a commitment to ship a capability; nothing here bundles a model.
@@ -33,7 +33,7 @@ Close the **perceived** parity gap honestly, falsify the two real feature candid
 | Milestone | Exit criterion | Workstreams | Gate |
 | --- | --- | --- | --- |
 | **M0 — truth parity** | Both READMEs, landing-page copy and onboarding name the shipped capabilities; every claim maps to code; docs check green — **delivered 2026-11-19**, onboarding nudge deferred | FC-1 | None — documentation only |
-| **M1 — falsification** | Step Zero A and B reports exist with pass/fail verdicts and dated evidence | FC-2, FC-3 | Owner authorises the test time |
+| **M1 — falsification** | Step Zero A and B reports exist with pass/fail verdicts and dated evidence — **delivered 2026-11-21**: B PASS 5/5 ([report](STEP-ZERO-B-BURN-IN.md)), A FAIL ([report](STEP-ZERO-A-READ-ALOUD.md)); issues [#59](https://github.com/alshahia/sada/issues/59)/[#60](https://github.com/alshahia/sada/issues/60) closed | FC-2, FC-3 | Done — owner authorised 2026-11-19 (A15) |
 | **M2 — next-wave features** | Only passers from M1, plus meeting-notes polish and translation/AI copy — copy delivered via FC-1, local AI QA still open (no Ollama runtime in the build environment), scoped into the next feature release | FC-4, FC-5 | Five-user gate for UI work; owner approves release scope |
 | **M3 — learn tracks** | Written state of the art and a decision for each: live captions blocked, dialect corpus pending licensing, watch folders evaluated — states recorded 2026-11-19 in [P7-LEARN-TRACKS.md](P7-LEARN-TRACKS.md); corpus still gated | FC-6, FC-7, FC-8 | Owner purchase/outreach for the corpus |
 | **M4 — governance** | P7 milestone and FC issues open on GitHub; ROADMAP, this plan and OWNER-ACTIONS agree; reminders set — **done 2026-11-19**: milestone [#8](https://github.com/alshahia/sada/milestone/8), issues [#58](https://github.com/alshahia/sada/issues/58)–[#66](https://github.com/alshahia/sada/issues/66) | FC-9 | Done — authenticated as alshahia |
@@ -43,8 +43,8 @@ Close the **perceived** parity gap honestly, falsify the two real feature candid
 | ID | Milestone | Deliverable | Acceptance | Depends on | Release vehicle |
 | --- | --- | --- | --- | --- | --- |
 | **FC-1** | M0 | Truth-parity documentation: diarization (opt-in, 25 MB model, up to 4 speakers), meeting detection → record → auto-transcribe, stable timestamps, 1,024-char custom prompt, URL import, auto-export, MCP, translation-to-English limits, AI cleanup/summary; onboarding nudge for the diarization model (deferred) | Every sentence traceable to code or a measured number; node scripts/seo/check-seo.mjs green; no new capability claimed; Arabic and English READMEs agree — **delivered 2026-11-19**, evidence in [CLAIM-LEDGER.md](CLAIM-LEDGER.md) | — | Docs-only commit; no version bump |
-| **FC-2** | M1 | Step Zero A — read-aloud falsification report: Habibi-TTS specialized IRQ and MSA on 10 transcripts, native-listener score, intelligibility CER drift, RTF on GPU and CPU, runtime/size/voice-provenance assessment | Five pass criteria from the council recorded one by one; verdict and dated kill/continue decision; exact model files listed | Owner authorises test time; optional native listener | Evidence commit (report only) |
-| **FC-3** | M1 | Step Zero B — Arabic subtitle burn-in feasibility: bundled FFmpeg libass/HarfBuzz/bidi check, five clips burned and reviewed | 5/5 clips correctly shaped and readable at 720p, or a dated close with the failing detail | Bundled FFmpeg build | Evidence commit (report only) |
+| **FC-2** | M1 | Step Zero A — read-aloud falsification report: Habibi-TTS specialized IRQ and MSA on 10 transcripts, native-listener score, intelligibility CER drift, RTF on GPU and CPU, runtime/size/voice-provenance assessment | Five pass criteria from the council recorded one by one; verdict and dated kill/continue decision; exact model files listed — **delivered 2026-11-21: FAIL** ([report](STEP-ZERO-A-READ-ALOUD.md)): Python-only runtime, CPU RTF 58–67 vs ≤3.0, GPU mean 0.87 with 3/10 clips >1.0, naturalness unevaluated; MSA CER drift 0 % passed | Owner authorises test time; optional native listener | Evidence commit (report only) |
+| **FC-3** | M1 | Step Zero B — Arabic subtitle burn-in feasibility: bundled FFmpeg libass/HarfBuzz/bidi check, five clips burned and reviewed | 5/5 clips correctly shaped and readable at 720p, or a dated close with the failing detail — **delivered 2026-11-19: PASS 5/5** ([report](STEP-ZERO-B-BURN-IN.md)) with a native-typography caveat | Bundled FFmpeg build | Evidence commit (report only) |
 | **FC-4** | M2 | Meeting-notes polish: a finished auto-transcribed meeting produces a local summary/notes template; settings copy explains detection and auto-transcribe | Works offline with a local model or clearly requires the user's AI setup; truth-only copy; no cloud default | Five-user gate for UI wave; AI/meeting code exists | Next feature release (v3.11.0 candidate) |
 | **FC-5** | M2 | Translation/AI copy and QA: state Whisper translate→English (medium/large, not turbo); document local Ollama path for AI translation; label AI output | Copy reviewed against code; no implication of an offline Arabic translation engine; QA on 5 transcripts for the AI path | FC-1 | Next feature release (v3.11.0 candidate) |
 | **FC-6** | M3 | Live-captions learn track: current engine streaming state, Arabic real-time quality evidence, decision to wait or start an engine probe | Written state; no UI code; explicit "no fake captions" rule — **state recorded 2026-11-19** in [P7-LEARN-TRACKS.md](P7-LEARN-TRACKS.md) | Engine ships streaming mode (upstream) | None |
@@ -99,6 +99,12 @@ Whisper translation is English-only and medium/large only; AI tasks can translat
 | A — read-aloud | Native-listener mean ≥ 4/5; re-transcription CER drift ≤ 10%; RTF ≤ 1.0 GPU / ≤ 3.0 CPU; no Python at runtime and optional download ≤ 2 GB; user-owned or licensed reference voice | Keep the no-go; record date; re-check only when a GGUF/ONNX Arabic TTS exists |
 | B — burn-in | 5/5 clips correctly shaped and readable at 720p | Close with a dated note; no feature |
 
+**Outcomes (2026-11-21).** Step Zero B **passed** — 5/5 clips shaped and readable at 720p; one
+native-typography caveat ([report](STEP-ZERO-B-BURN-IN.md)). Step Zero A **failed** — the
+Python-only runtime fails criterion 4 outright, CPU RTF is ~20× the limit, GPU real-time is
+borderline (mean 0.87, 3/10 clips > 1.0) and the native-listener criterion could not be measured
+([report](STEP-ZERO-A-READ-ALOUD.md)). Read-aloud keeps its no-go; no TTS code, model or claim.
+
 ## Step Zero preflight (2026-11-19, environment check only)
 
 Recorded before the tests so the owner can decide on facts; this is **not** the formal test and
@@ -116,26 +122,28 @@ changes no verdict.
 - The bundled engine CLI confirms the batch surface used by FC-6: vibe-server transcribe takes a
   model plus an audio file and exposes no streaming or microphone option.
 
-Both formal tests remain blocked on the owner go-ahead (OWNER-ACTIONS A15).
+Both formal tests were authorised (OWNER-ACTIONS A15) and run: Step Zero B on 2026-11-19
+(**PASS 5/5**) and Step Zero A on 2026-11-21 (**FAIL**). Reports:
+[STEP-ZERO-B-BURN-IN.md](STEP-ZERO-B-BURN-IN.md) · [STEP-ZERO-A-READ-ALOUD.md](STEP-ZERO-A-READ-ALOUD.md).
 
 ## Release mapping
 
 - **FC-1** ships as a docs-only commit; the site deploy workflow publishes it. No version bump, no tag, no release.
-- **FC-2/FC-3** ship as evidence documents; no product code, so no release requirement.
+- **FC-2/FC-3** shipped as evidence documents on 2026-11-21 (A FAIL, B PASS); no product code, so no release requirement. The Step Zero A fail keeps read-aloud closed for v3.11.
 - **FC-4/FC-5** are candidates for the next feature release, planned here as **v3.11.0** (milestone row in ROADMAP), due 2027-01-15 unless the owner moves it. That release requires the five-user gate results for any Wave-2 UI work and the usual full test matrix, bilingual notes and tag discipline.
 - **FC-6/FC-7/FC-8** may never ship; they are decision records, not promises.
-- **v3.10.0 tag remains an owner action** (see OWNER-ACTIONS A14); this plan does not tag.
+- **v3.10.0 shipped 2026-11-19** (tag verified 2026-11-21, OWNER-ACTIONS A14 closed); this plan does not tag any further release.
 
 ## Owner gates
 
 | Gate | Why it needs the owner | Where recorded |
 | --- | --- | --- |
-| Authorise Step Zero A/B | Spends about 1.5 days of attention and fixes the TTS decision path | OWNER-ACTIONS A15 |
+| Authorise Step Zero A/B | **Done 2026-11-21**: both run — B PASS, A FAIL — and reports committed; spend was ~1.5 agent days | OWNER-ACTIONS A15 |
 | Approve FC-1 copy | Public-facing truth claims carry the owner's credibility | This plan + review |
 | GitHub authentication for issues | **Done 2026-11-19**: gh authenticated as alshahia; milestone #8 and issues #58–#66 created | OWNER-ACTIONS A16 |
 | Corpus purchase/outreach | Money/relationships only the owner can commit | OWNER-ACTIONS A10 |
 | Five-user gate execution | Human-only usability test | docs/design/ui-decisions/GATE-KIT.md |
-| Tag v3.10.0 and later releases | Release sign-off is always the owner's | OWNER-ACTIONS A14 |
+| Tag v3.10.0 and later releases | **v3.10.0 done 2026-11-19** (verified 2026-11-21); later releases still need the owner's sign-off | OWNER-ACTIONS A14 |
 
 ## Dependencies and blockers
 
@@ -166,7 +174,10 @@ Both formal tests remain blocked on the owner go-ahead (OWNER-ACTIONS A15).
 
 ## First action
 
-FC-1 only: produce the claim ledger and draft the truth-parity README changes. The issue-opening gate is answered (milestone #8, issues #58–#66); nothing else starts until the owner answers the Step Zero gate.
+FC-1 produced the claim ledger and the truth-parity README changes (delivered 2026-11-19, commit
+`b7a85d3`). The Step Zero gate is answered: M1 is delivered (B PASS, A FAIL) and M0/M4 are done.
+The next owner decision is M2 scope — the five-user gate and the v3.11 release plan — not another
+test.
 
 ## Issue and milestone mapping
 

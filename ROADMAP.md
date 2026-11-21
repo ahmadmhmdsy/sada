@@ -8,10 +8,11 @@ Arabic claim is made without the benchmark.
 
 Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete`,
 `P5 complete`, `P6 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0, v3.7.0
-and v3.8.0 shipped 2026-11-18, v3.9.0 shipped 2026-11-19, and v3.10.0 was prepared on 2026-11-19
-(source pushed; the tag is an owner action). `P7` is planned, not started:
-[P7-PLAN.md](docs/P7-PLAN.md), from the [features council](docs/FEATURES-COUNCIL.md). Last updated
-2026-11-19.
+and v3.8.0 shipped 2026-11-18, v3.9.0 and **v3.10.0 shipped 2026-11-19** (tag `v3.10.0` at
+`be27bd5`; release assets, checksums and Sigstore provenance verified 2026-11-21). `P7` M0/M1/M4
+are delivered — FC-1 docs, FC-2 FAIL and FC-3 PASS evidence reports — and M2/M3 stay gated:
+[P7-PLAN.md](docs/P7-PLAN.md), from the [features council](docs/FEATURES-COUNCIL.md).
+Last updated 2026-11-21.
 
 ## Milestones
 
@@ -24,8 +25,8 @@ and v3.8.0 shipped 2026-11-18, v3.9.0 shipped 2026-11-19, and v3.10.0 was prepar
 | **v3.7.0 — dialect coverage & prompt biasing** | 2027-04-15 | Measured Gulf + Arabic/English technical code-switch slices from a commercial-use corpus, prompt-biasing measurement and app wiring if it wins, honest remaining-gap matrix | #19 #20 #21 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.7.0), evidence below |
 | **v3.8.0 — distribution, offline install & benchmark gate** | 2027-06-15 | Offline WebView2 installer variant as a second asset, signing pipeline staged but dormant (releases stay unsigned OSS), evidence-based production-readiness statement, benchmark regression gate | #22 #23 #24 #25 #26 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.8.0), evidence below |
 | **v3.9.0 — P6 Wave 1: trust & enterprise readiness** | 2027-09-15 | Assurance pack, keyless supply chain (provenance + SBOM), security operations, managed offline policy, DPAPI secrets, retention, per-machine MSI deployment kit, rows B–E runbook | #27 #28 #29 #30 #31 #32 #33 #34 #35 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.9.0), evidence below |
-| **v3.10.0 — Wave 1 UI repairs & truth-only copy** | 2026-11-19 | Four repair families (A–D) + V3 truth-only copy; axe 35 states / 0 violations; release notes and metadata prepared | — **complete (source be27bd5), tag pending owner** |
-| **v3.11.0 — P7: parity, proof & platform** | 2027-01-15 | Truth-parity documentation for shipped capabilities, Step Zero A/B outcomes, meeting-notes polish and translation copy; ships only what passes evidence — no new engine, no TTS/S2S claim | FC-1…FC-5 ([#58](https://github.com/alshahia/sada/issues/58)–[#62](https://github.com/alshahia/sada/issues/62)) — **planned**, [P7-PLAN.md](docs/P7-PLAN.md) |
+| **v3.10.0 — Wave 1 UI repairs & truth-only copy** | 2026-11-19 | Four repair families (A–D) + V3 truth-only copy; axe 35 states / 0 violations; release notes and metadata prepared | — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.10.0) published 2026-11-19 (tag at `be27bd5`, assets + checksums + provenance verified 2026-11-21) |
+| **v3.11.0 — P7: parity, proof & platform** | 2027-01-15 | Truth-parity documentation for shipped capabilities, Step Zero A/B outcomes, meeting-notes polish and translation copy; ships only what passes evidence — no new engine, no TTS/S2S claim | FC-1…FC-5 ([#58](https://github.com/alshahia/sada/issues/58)–[#62](https://github.com/alshahia/sada/issues/62)) — **in progress**: M0/M1 done (FC-1 delivered, FC-2 FAIL, FC-3 PASS), M2 gated by the five-user gate and the owner release decision, [P7-PLAN.md](docs/P7-PLAN.md) |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -241,10 +242,14 @@ closes the trust and regression gaps left by P4.
    MSA models (Apache-2.0 weights) on 10 transcripts: native-listener mean ≥4/5, re-transcription
    CER drift ≤10%, RTF ≤1.0 GPU / ≤3.0 CPU, no Python at runtime, optional download ≤2 GB,
    user-owned or licensed reference voice. Any fail keeps the no-go and closes TTS for the cycle.
-   Report required; no integration code.
+   Report required; no integration code. **Result (2026-11-21): FAIL** — Python-only runtime (hard
+   fail), CPU RTF 58–67 against ≤ 3.0, GPU mean 0.87 but 3/10 clips > 1.0 (max 1.15), naturalness
+   unevaluated; MSA CER drift 0 % and model licences passed. Evidence:
+   [STEP-ZERO-A-READ-ALOUD.md](docs/STEP-ZERO-A-READ-ALOUD.md). The no-go stays; no integration.
 5. **E5 — Arabic subtitle burn-in (Step Zero B).** Bundled FFmpeg libass/HarfBuzz/bidi check plus five
    burned clips: 5/5 correctly shaped and readable at 720p, or close with a dated note. Report
-   required; no UI code.
+   required; no UI code. **Result (2026-11-19): PASS — 5/5 clips** with a native-typography caveat.
+   Evidence: [STEP-ZERO-B-BURN-IN.md](docs/STEP-ZERO-B-BURN-IN.md).
 
 ## Decision records
 
@@ -293,17 +298,20 @@ signing stays dormant (#18) by owner decision.
 - **P7 truth parity (FC-1)** — document the six shipped-but-invisible capabilities in both READMEs,
   the landing page and onboarding; evidence rule only, no new claims. See
   [P7-PLAN.md](docs/P7-PLAN.md).
-- **Step Zero A/B reports (FC-2, FC-3)** — run the read-aloud and Arabic subtitle burn-in tests
-  before any feature claim; the results decide the next cycle.
+- **Step Zero A/B reports (FC-2, FC-3)** — done: [Step Zero B PASS 5/5](docs/STEP-ZERO-B-BURN-IN.md) (2026-11-19) and [Step Zero A FAIL](docs/STEP-ZERO-A-READ-ALOUD.md) (2026-11-21); read-aloud stays closed, burn-in becomes a gated candidate.
 - **GitHub milestone + issues for P7** — FC-1…FC-9 are the canonical IDs until gh authentication is
   available (OWNER-ACTIONS A16); then open milestone P7 and one issue per ID.
-- **v3.10.0 tag** — source be27bd5 is pushed and CI-green; tagging and release verification remain
-  the owner call (OWNER-ACTIONS A14).
+- **v3.10.0 tag** — done: tag `v3.10.0` points at `be27bd5`, the Release workflow
+  (44526120606) is green, and the published assets were re-downloaded and verified on 2026-11-21
+  (SHA-256 matches `SHA256SUMS.txt`, Sigstore attestation verifies); OWNER-ACTIONS A14 is closed.
 - **Five-user gate** — human-only test, blocks Wave 2 UI and the 4.0 Echo identity
   ([GATE-KIT](docs/design/ui-decisions/GATE-KIT.md)). Run it before FC-4 UI work.
-- **Read-aloud watch-list** — Habibi-TTS specialized IRQ/MSA (Apache-2.0) first; Chatterbox ar (MIT,
-  retired commercial service, GPU/watermark) fallback; revisit only with an ONNX/GGUF runtime or a
-  passed Step Zero.
+- **Read-aloud watch-list** — Habibi-TTS specialised IRQ/MSA (Apache-2.0) tested and failed the Step
+  Zero A gate on runtime and CPU speed (2026-11-21); the quality result was good (MSA CER drift 0 %,
+  Iraqi raw CER 3.6 %), so the open condition is a non-Python runtime — candidates are the ONNX
+  exports and the Apache-2.0 community `audio.cpp` GGUF port, neither evaluated. Chatterbox ar (MIT,
+  retired commercial service, GPU/watermark) remains the fallback. Revisit only after a passed
+  re-test; no read-aloud claim meanwhile.
 - **TTS/S2S claims stay off** — no read-aloud claim until Step Zero A passes; S2S is not a roadmap
   item (no licensed Arabic speech-output model).
 - [#17](https://github.com/alshahia/sada/issues/17) — with the offline installer variant shipped in
@@ -382,7 +390,7 @@ session fails with error 1925 as designed for a per-machine package (managed dep
 elevated). Evidence and limitations in `docs/VERIFICATION.md`; readiness statement in
 `docs/PRODUCTION-READINESS.md`.
 
-## P7 — post-3.10: parity, proof & platform (planned)
+## P7 — post-3.10: parity, proof & platform (in progress — M0, M1, M4 done)
 
 GitHub: milestone [#8](https://github.com/alshahia/sada/milestone/8) with one issue per FC ID ([#58](https://github.com/alshahia/sada/issues/58)–[#66](https://github.com/alshahia/sada/issues/66)). Scope, milestones and acceptance: [P7-PLAN.md](docs/P7-PLAN.md). Decision record:
 [FEATURES-COUNCIL.md](docs/FEATURES-COUNCIL.md) (+[AR](docs/FEATURES-COUNCIL.ar.md)). Nothing in
@@ -397,16 +405,10 @@ five-user gate ([GATE-KIT](docs/design/ui-decisions/GATE-KIT.md)) still blocks W
   auto-export, MCP, translation limits, AI cleanup/summary — and state plainly what is not offered
   (read-aloud, speech-to-speech, live captions). Evidence: [CLAIM-LEDGER.md](docs/CLAIM-LEDGER.md),
   one row per claim. `node scripts/seo/check-seo.mjs` green; no new capability claimed. The
-  onboarding nudge for the diarization model was deferred (not a one-line change); the commit is
-  pending the owner.
-- [ ] **FC-2 — Step Zero A, read-aloud falsification** (M1, one day, report only, [#59](https://github.com/alshahia/sada/issues/59)): Habibi-TTS
-  specialized IRQ/MSA on 10 transcripts against the E4 criteria; pass/fail recorded with exact model
-  files and licences; no integration code. Preflight 2026-11-19: GPU (8 GB) and uv are present,
-  nothing downloaded; pending owner go-ahead (A15).
-- [ ] **FC-3 — Step Zero B, Arabic subtitle burn-in** (M1, half day, report only, [#60](https://github.com/alshahia/sada/issues/60)): bundled FFmpeg
-  libass/HarfBuzz/bidi on five clips against the E5 criteria; no UI code. Preflight 2026-11-19: the
-  bundled FFmpeg 9.0.2 build has libass, fribidi and harfBuzz; visual check pending owner go-ahead
-  (A15).
+  onboarding nudge for the diarization model was deferred (not a one-line change); the docs commit
+  landed as `b7a85d3` (2026-11-21) and FC-1 is closed.
+- [x] **FC-2 — Step Zero A, read-aloud falsification** (M1, report only, [#59](https://github.com/alshahia/sada/issues/59)) — **delivered 2026-11-21: FAIL.** Habibi-TTS specialised IRQ/MSA on 10 sentences (5 MSA + 5 Iraqi); exact checkpoints, licences, sizes and SHA-256 in the report. MSA CER drift 0.0 %, Iraqi raw CER 3.6 % mean; CPU RTF 58–67 (limit 3.0), GPU mean 0.87 with 3/10 clips over 1.0 (max 1.15); Python-only runtime; naturalness unevaluated (no listener). Evidence: [STEP-ZERO-A-READ-ALOUD.md](docs/STEP-ZERO-A-READ-ALOUD.md). No integration code; no-go retained.
+- [x] **FC-3 — Step Zero B, Arabic subtitle burn-in** (M1, report only, [#60](https://github.com/alshahia/sada/issues/60)) — **delivered 2026-11-19: PASS 5/5.** Bundled FFmpeg 9.0.2 (libass/fribidi/harfBuzz) burned five 720p clips with correct shaping, RTL order, diacritics, mixed Latin and digit placement; caveat: native typography review of `%` placement and bracket mirroring. Evidence: [STEP-ZERO-B-BURN-IN.md](docs/STEP-ZERO-B-BURN-IN.md). No UI code.
 - [ ] **FC-4 — meeting-notes polish** (M2, after the five-user gate, [#61](https://github.com/alshahia/sada/issues/61)): local summary/notes template
   after an auto-transcribed meeting; truth-only copy; no cloud summarisation.
 - [ ] **FC-5 — translation/AI copy and QA** (M2, [#62](https://github.com/alshahia/sada/issues/62)): Whisper translate → English only (medium/large,

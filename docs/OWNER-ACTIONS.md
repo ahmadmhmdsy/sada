@@ -23,8 +23,8 @@ Track a box by changing `[ ]` to `[x]`. The scheduled reminders (see the end) po
 | [A11](#a11--external-audit-sl-a-and-legal-optional) | External audit / SLA / legal review (optional) | P2 | weeks | budget |
 | [A12](#a12--measurement-review) | Measure results in Search Console / GitHub | **P0** | 15 min monthly | A2 + 4–6 weeks |
 | [A13](#a13--enable-github-discussions-optional) | Enable GitHub Discussions (optional) | P2 | 5 min | moderation capacity |
-| [A14](#a14--tag-v3100) | Tag v3.10.0 and verify the release | **P0** | 10 min | source be27bd5 pushed (done) |
-| [A15](#a15--authorise-the-two-step-zero-tests) | Authorise the two Step Zero tests (read-aloud, Arabic subtitle burn-in) | P1 | 1.5 days agent time, plus one listener | your go-ahead |
+| [A14](#a14--tag-v3100) | Tag v3.10.0 and verify the release | **P0** | done 2026-11-19, verified 2026-11-21 | — |
+| [A15](#a15--authorise-the-two-step-zero-tests) | Authorise the two Step Zero tests (read-aloud, Arabic subtitle burn-in) | P1 | done 2026-11-21 (B pass, A fail) | — |
 | [A16](#a16--open-the-p7-milestone-and-issues) | Open the P7 milestone and FC-1…FC-9 issues | P1 | done 2026-11-19 | — |
 
 ---
@@ -240,37 +240,51 @@ has a few answers.
 
 ## A14 — Tag v3.10.0
 
-**Why:** the 3.10.0 source is pushed and CI-green at be27bd5; the release notes, metadata and version
-refs are prepared. Tagging is the only step the repository cannot do by policy.
+**Done 2026-11-19, verified 2026-11-21.** The owner authorised the tag in the "Docs commit and push
+then A14 then A15" instruction, so the release was tagged and verified exactly as this action
+described; code signing stayed dormant (unsigned build, owner decision).
 
-**Steps:**
-1. Confirm the release commit is be27bd5 and that [docs/releases/v3.10.0.md](releases/v3.10.0.md)
-   is the version you want.
-2. Decide code signing: leave SIGNING_ENABLED false for an unsigned build, or finish A5 first.
-3. Tag and push: `git tag v3.10.0` then `git push origin v3.10.0` (the Release workflow builds
-   two installers and creates the GitHub release with `SHA256SUMS.txt`, licence and notices).
-4. Watch the Release workflow to green and smoke-test the downloaded installer.
-
-**Done when:** GitHub release v3.10.0 exists with both installer assets and checksums, and the site
-still passes its docs check.
+**Result:**
+- Tag `v3.10.0` (`ab6b1dea71494c66df7d73541e29dbd7b2f88abf`) points at release commit `be27bd5`.
+- Release workflow [44526120606](https://github.com/alshahia/sada/actions/runs/44526120606) green
+  (44m49s), publishing [release v3.10.0](https://github.com/alshahia/sada/releases/tag/v3.10.0) on
+  2026-11-19T13:24:05Z with the Arabic notes from [releases/v3.10.0.md](releases/v3.10.0.md).
+- Assets: `Sada_3.10.0_x64-setup.exe` (44,942,730 B), `Sada_3.10.0_x64-setup-offline.exe`
+  (262,848,448 B), `Sada_3.10.0_x64_en-US.msi` (70,942,720 B), `SHA256SUMS.txt`,
+  `sbom-cyclonedx.json`, `THIRD-PARTY-NOTICES.md`, `NOTICE`, `LICENSE`.
+- Re-downloaded all three installers on 2026-11-21; each SHA-256 matches its `SHA256SUMS.txt` line.
+- `gh attestation verify` succeeds for the default and offline installers: the Sigstore bundle names
+  `.github/workflows/release.yml@refs/tags/v3.10.0` and the tag's commit `be27bd5`.
+- Docs guard and site deploy were green on the same source before tagging; nothing in this step
+  changed app code, dependencies or version.
+- Remaining human step: smoke-test the downloaded installer on a clean machine — tracked separately
+  as A8 (clean-machine acceptance), not part of A14.
 
 ## A15 — Authorise the two Step Zero tests
 
-**Why:** the features council left exactly two cheap falsification tests between us and a defensible
-TTS and subtitle-burn-in decision. Both are report-only; neither ships a model or UI.
+**Done 2026-11-21.** The owner authorised the tests in the "then A14 then A15" instruction, so both
+ran report-only and are in the repository with dated verdicts:
 
-**Preflight (done 2026-11-19):** the bundled FFmpeg 9.0.2 build has libass, fribidi and harfBuzz
-(the hard requirement for Step Zero B), the host has a Quadro RTX 4000 with 8 GB and uv 0.7.18
-(enough to start Step Zero A), and the engine CLI was inspected. Both tests are ready to start on
-your go-ahead; nothing was downloaded or installed.
+- **Step Zero B (subtitle burn-in) — PASS 5/5, tested 2026-11-19.** The bundled FFmpeg 9.0.2
+  (libass/fribidi/harfBuzz) burned five 720p clips with correct Arabic shaping, RTL order,
+  diacritics, mixed Latin and digits. One caveat for native typography review (percent placement,
+  bracket mirroring). Report: [STEP-ZERO-B-BURN-IN.md](STEP-ZERO-B-BURN-IN.md).
+- **Step Zero A (read-aloud, Habibi-TTS) — FAIL, tested 2026-11-21.** The Python-only runtime fails
+  the "no Python at runtime" criterion outright; CPU RTF 58–67 against a ≤ 3.0 limit; GPU mean 0.87
+  but 3/10 clips over 1.0 (max 1.15); the native-listener naturalness score was not evaluated (no
+  listener available). Quality itself was good: MSA re-transcription drift 0.0 %, Iraqi raw CER
+  3.6 % mean, and the Apache-2.0 licences/1.26 GiB checkpoints are suitable. Report:
+  [STEP-ZERO-A-READ-ALOUD.md](STEP-ZERO-A-READ-ALOUD.md).
 
-**Steps:** say go; the agent runs Step Zero A (Habibi-TTS specialized IRQ/MSA on 10 transcripts,
-about one day) and Step Zero B (FFmpeg Arabic shaping on five clips, about half a day) and records
-pass/fail against the criteria in [FEATURES-COUNCIL.md](FEATURES-COUNCIL.md) section 6.2. If you can
-supply a native Iraqi listener for the 4/5 naturalness score, say so; otherwise the agent records
-its own ratings with the caveat.
+**Decision:** read-aloud keeps its no-go for this cycle — no TTS code, model or UI in v3.11.
+Re-check needs a non-Python runtime proven on these checkpoints (candidates: ONNX exports, the
+Apache-2.0 community `audio.cpp` GGUF port — neither tested), plus a native listener and new speed
+measurements. The burned-in-subtitle result is a gated candidate for the next UI wave after the
+five-user gate.
 
-**Done when:** both reports are in the repository with a dated verdict and a kill/continue decision.
+**Optional owner action:** the ten test WAVs are preserved on this host (scratch, not committed);
+listen to them if you want to judge naturalness yourself. Nothing else is needed from you — the
+test results are recorded either way.
 
 ## A16 — Open the P7 milestone and issues
 
@@ -285,11 +299,12 @@ step, and tag the release after the release branch is green. The release workflo
 
 ## Scheduled reminders
 
-- **2026-11-21** — quick wins: A1 (social preview), start A2/A3 (Search Console/Bing), decide A5
-  (signing route).
+- **2026-11-21** — quick wins (reminder sent): A1 (social preview), start A2/A3
+  (Search Console/Bing), decide A5 (signing route).
 - **2026-12-19** — measurement baseline: A12 (Search Console/Bing/GitHub numbers), check whether
-  A5/A6 unblocked Winget, whether A10 outreach got any answer, and whether the Step Zero A/B
-  verdicts are in (FC-1 was delivered 2026-11-19; FC-2/FC-3 wait on A15).
+  A5/A6 unblocked Winget, whether A10 outreach got any answer, then act on the Step Zero verdicts
+  (delivered 2026-11-21: A FAIL, B PASS; FC-2/FC-3 closed) and decide whether to schedule the
+  non-Python runtime re-check or the five-user gate.
 
 The agent can also do on request: draft the launch posts (A4), prepare the Winget manifests (A6),
 triage the Dependabot PRs (A9), write the corpus outreach email (A10), run the clean-machine

@@ -84,6 +84,17 @@ pass/fail row passes.
   feature. Revisit only with a measured quality win and a licence-compatible watermark
   story.
 
+## Step Zero A — Arabic read-aloud with permissive weights (2026-11-21)
+
+**Still a no-go.** The Step Zero A falsification test ran the Habibi-TTS specialised IRQ and MSA
+checkpoints (Apache-2.0) in a scratch Python environment. Quality and licence were promising —
+MSA re-transcription CER drift 0.0 %, Iraqi raw CER mean 3.6 %, one 1.26 GiB checkpoint per
+dialect — but the gate fails on infrastructure: the only working runtime is Python (7.3 GB
+environment), CPU RTF is 58–67 against a ≤ 3.0 limit, and the GPU mean 0.87 hides 3/10 clips
+over 1.0 (max 1.15). The native-listener naturalness score was not evaluated (no listener).
+Report and full evidence: [STEP-ZERO-A-READ-ALOUD.md](STEP-ZERO-A-READ-ALOUD.md). The OS-voice
+retest path above is unaffected; the permissive-weights route needs a non-Python runtime first.
+
 ## Retest path
 
 On a machine with the Arabic voice installed (`Settings -> Time & language -> Speech ->
@@ -101,4 +112,9 @@ $synth.Dispose()
 
 Score the resulting WAV against the rubric; if the verdict flips to go, add a
 voice-availability-gated read-aloud action (no cloning, local only) as a separate issue.
+
+For the permissive-weights route the retest is different: it needs a non-Python runtime proven
+for the specialised Habibi checkpoints (the 2026-11-21 candidates are the ONNX exports and the
+Apache-2.0 community `audio.cpp` GGUF port — neither tested), followed by the same CER, RTF and
+native-listener measurements. Read-aloud stays closed until that happens.
 
