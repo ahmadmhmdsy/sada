@@ -43,9 +43,9 @@ tokio-stream = "0.1"
 tower-http = { version = "0.7", features = ["trace"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-utoipa = "5"
-utoipa-axum = "0.2"
-utoipa-swagger-ui = { version = "9", features = ["axum"] }
+utoipa = "6"
+utoipa-axum = "0.3"
+utoipa-swagger-ui = { version = "10", features = ["axum"] }
 
 [dev-dependencies]
 http-body-util = "0.1"
