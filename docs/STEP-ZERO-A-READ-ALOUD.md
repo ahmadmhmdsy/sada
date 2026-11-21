@@ -224,7 +224,7 @@ used in this run; model URLs are the Hugging Face source.
 | `models/IRQ/vocab.txt` | 11,829 | `55484bc3dda8b8e6a7fbf04261b47a8788d4b553a85b93dc46dac6fd39c9fd88` |
 | MSA reference voice (`msa-cv-010.wav`) | 152,910 | `ae920026f088a71ef15449644ea8d622aa594365e87dba9bcd46b8268adcbd60` |
 | Iraqi reference voice (`assets/IRQ.wav`) | 265,854 | `d6180049f407364cc6667ad6903ba5e55a2b00f002d17ffe16a685199859fca4` |
-| `msa_cuda/msa-01.wav` … `msa-05.wav` | 196,652–276,012 | recorded in `out/hashes.json` |
+| `msa_cuda/msa-01.wav` … `msa-05.wav` | 178,220–276,012 | recorded in `out/hashes.json` |
 | `iraqi_cuda/irq-01.wav` … `irq-05.wav` | 195,116–235,564 | recorded in `out/hashes.json` |
 | `out/cer_msa.json`, `out/cer_iraqi.json`, `out/timings_*.json`, `out/env.json` | small JSON | measurement inputs (not committed) |
 
