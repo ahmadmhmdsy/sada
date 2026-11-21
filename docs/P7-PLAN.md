@@ -86,11 +86,15 @@ Inspect the bundled FFmpeg for libass, HarfBuzz and bidi support; use a font tha
 
 The meeting workflow exists but is invisible and unpolished. Keep the scope to: summary/notes template after auto-transcription, settings copy that explains detection and auto-transcribe, and a clear offline/local-AI boundary. No new capture engine, no cloud summarisation, no live captions.
 
+**Status (2026-11-21).** Scoping record posted on [#61](https://github.com/alshahia/sada/issues/61): inventory of what already ships (meeting preset, auto-on-finish, summary panel), the smallest truthful slice (meeting-notes default, settings copy, discoverable notes action, AI label + provider boundary), non-goals and the test/acceptance list. No UI code before the gate.
+
 ### FC-5 — translation/AI copy and QA
 
 Whisper translation is English-only and medium/large only; AI tasks can translate when the user configures Claude or Ollama. Document exactly that, label AI output, and QA the local path on five transcripts. This is a truth fix, not a new engine.
 
 **Status (2026-11-19).** The copy half was delivered with FC-1 (README rows, landing FAQ, llms.txt, claim ledger). The local-path QA could not run in the build environment: no Ollama runtime is installed and the local API is unreachable, so it stays open for a machine with Ollama or the owner's configured provider. No offline Arabic translation engine is implied.
+
+**Status (2026-11-21).** QA pack prepared and posted on [#62](https://github.com/alshahia/sada/issues/62): five committed benchmark clips (MSA, Gulf, Egyptian, technical code-switching), exact engine commands, a 15-run rubric where one fabricated fact fails the whole QA, the error-path check, and the verdict/artefact rule. Still blocked on a machine with Ollama; nothing was installed or downloaded.
 
 ## Step Zero criteria (copy of record)
 

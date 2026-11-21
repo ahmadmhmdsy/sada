@@ -18,7 +18,7 @@ Track a box by changing `[ ]` to `[x]`. The scheduled reminders (see the end) po
 | [A6](#a6--winget--chocolatey-after-signing) | Submit to Winget / Chocolatey | P2 | 1–2 h | A5 |
 | [A7](#a7--microsoft-store-optional) | Microsoft Store listing (optional) | P2 | 1 day | A5 |
 | [A8](#a8--clean-machine-acceptance-issue-17) | Clean-machine acceptance rows B–E (#17) | P1 | 1 day | physical machines |
-| [A9](#a9--triage-dependabot-prs-36-57) | Triage the 22 Dependabot PRs (#36–#57) | P1 | 1–2 h | your review/merge decision |
+| [A9](#a9--triage-dependabot-prs-36-57) | Triage the 22 Dependabot PRs (#36–#57) | P1 | 30–40 min merge decision | triage ready — approve batches |
 | [A10](#a10--dialect-benchmark-corpus) | Find an Iraqi/Gulf/Levantine benchmark corpus | P2 | ongoing | outreach + licence |
 | [A11](#a11--external-audit-sl-a-and-legal-optional) | External audit / SLA / legal review (optional) | P2 | weeks | budget |
 | [A12](#a12--measurement-review) | Measure results in Search Console / GitHub | **P0** | 15 min monthly | A2 + 4–6 weeks |
@@ -168,13 +168,21 @@ replaces the NSIS installer for Store users.
 **Why:** 22 dependency PRs are open; the longer they sit the harder the upgrade and the larger the
 audit surface.
 
+**Status (2026-11-21).** Agent triage complete — [DEPENDABOT-TRIAGE.md](DEPENDABOT-TRIAGE.md): 21 of
+22 PRs are mergeable in four batches (Actions → npm → root Rust → server), with lockfile-conflict
+handling and verification steps. **#44 does not compile**: `utoipa-swagger-ui` 9→10 needs `utoipa` 7
+while the server pins 6 through `utoipa-axum` 0.2, so it must be closed/reworked as a coordinated
+`utoipa` 7 upgrade. The six server PRs were compile-checked locally because CI never builds
+`server/`; the five others pass. **No PR was merged** — approve the batch order and the agent will
+execute it.
+
 **Steps:**
 1. Group them: GitHub Actions (safe, merge after CI), frontend npm (run `pnpm build` + `pnpm test`
    locally first), Rust/cargo (run `cargo test --release`), server crates.
 2. Merge low-risk groups one at a time; close PRs that are superseded by a major bump with a comment.
 3. For majors that need code changes (e.g. Tauri plugins), open a tracking issue instead of merging
    blind.
-4. Ask the agent to run the triage and prepare a merge order when you are ready.
+4. ~~Ask the agent to run the triage and prepare a merge order~~ — done: batches and commands are in [DEPENDABOT-TRIAGE.md](DEPENDABOT-TRIAGE.md).
 
 **Done when:** no Dependabot PR is older than one release cycle and CI is green on each merge.
 
