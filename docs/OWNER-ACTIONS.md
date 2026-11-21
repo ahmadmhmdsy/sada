@@ -18,7 +18,7 @@ Track a box by changing `[ ]` to `[x]`. The scheduled reminders (see the end) po
 | [A6](#a6--winget--chocolatey-after-signing) | Submit to Winget / Chocolatey | P2 | 1–2 h | A5 |
 | [A7](#a7--microsoft-store-optional) | Microsoft Store listing (optional) | P2 | 1 day | A5 |
 | [A8](#a8--clean-machine-acceptance-issue-17) | Clean-machine acceptance rows B–E (#17) | P1 | 1 day | physical machines |
-| [A9](#a9--triage-dependabot-prs-36-57) | Triage the 22 Dependabot PRs (#36–#57) | P1 | 30–40 min merge decision | triage ready — approve batches |
+| [A9](#a9--triage-dependabot-prs-36-57) | Triage the 22 Dependabot PRs (#36–#57) | P1 | review done 2026-11-21; 2–3 h to execute | confirm the merge train |
 | [A10](#a10--dialect-benchmark-corpus) | Find an Iraqi/Gulf/Levantine benchmark corpus | P2 | ongoing | outreach + licence |
 | [A11](#a11--external-audit-sl-a-and-legal-optional) | External audit / SLA / legal review (optional) | P2 | weeks | budget |
 | [A12](#a12--measurement-review) | Measure results in Search Console / GitHub | **P0** | 15 min monthly | A2 + 4–6 weeks |
@@ -168,13 +168,18 @@ replaces the NSIS installer for Store users.
 **Why:** 22 dependency PRs are open; the longer they sit the harder the upgrade and the larger the
 audit surface.
 
-**Status (2026-11-21).** Agent triage complete — [DEPENDABOT-TRIAGE.md](DEPENDABOT-TRIAGE.md): 21 of
-22 PRs are mergeable in four batches (Actions → npm → root Rust → server), with lockfile-conflict
-handling and verification steps. **#44 does not compile**: `utoipa-swagger-ui` 9→10 needs `utoipa` 7
-while the server pins 6 through `utoipa-axum` 0.2, so it must be closed/reworked as a coordinated
-`utoipa` 7 upgrade. The six server PRs were compile-checked locally because CI never builds
-`server/`; the five others pass. **No PR was merged** — approve the batch order and the agent will
-execute it.
+**Status (2026-11-21, after review).** Triage complete and independently reviewed by a review room
+([report](reviews/2026-11-21-dependabot-merge/ruling.md), [triage](DEPENDABOT-TRIAGE.md)): **20 of 22
+PRs mergeable in four gated batches** (npm → root Rust → server → workflows last), with per-merge
+freshness checks, a checkpoint SHA after each batch, a revert recipe and a kill-date (2026-11-28).
+Corrections found by the review: the PR checks are from 2026-11-19 and predate v3.10.0 (master moved
+20 commits / 104 files); the printed order has four hidden conflict points (#54, #48, #40, #46); #48
+and #50 are platform-gated and unverifiable on Windows; and #53 is a Tauri runtime jump, not a
+notification bump, so it is **held out** until an installer rehearsal before v3.11.0.
+**#44 does not compile**: `utoipa-swagger-ui` 10.0.2 pulls `utoipa` 6 while the server pins
+`utoipa = "5"` (lock 5.5.0), so it is a coordinated 5→6 upgrade — close/retitle #44 and open that task,
+or hold `utoipa-swagger-ui` at 9 until it lands. The five other server PRs compile locally; CI never
+builds `server/`. **No PR was merged** — approve the batch order and the agent will execute it.
 
 **Steps:**
 1. Group them: GitHub Actions (safe, merge after CI), frontend npm (run `pnpm build` + `pnpm test`
@@ -184,7 +189,7 @@ execute it.
    blind.
 4. ~~Ask the agent to run the triage and prepare a merge order~~ — done: batches and commands are in [DEPENDABOT-TRIAGE.md](DEPENDABOT-TRIAGE.md).
 
-**Done when:** no Dependabot PR is older than one release cycle and CI is green on each merge.
+**Done when:** no Dependabot PR is older than one release cycle and CI is green on each merge. Workflow-batch PRs are last; #53 is merged only after its Tauri installer gate, and #44 only through the coordinated utoipa 5→6 task.
 
 ## A10 — Dialect benchmark corpus
 

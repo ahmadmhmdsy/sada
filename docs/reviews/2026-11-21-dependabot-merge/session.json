@@ -1,0 +1,664 @@
+{
+  "title": "Sada - The Review Room - Dependabot merge plan (2026-11-21)",
+  "brand": "The Review Room",
+  "target": "alshahia/sada / master / d68c5b1 / 2026-11-21",
+  "session": "session RR-SADA-01",
+  "recorded": "2026-11-21 / 00:00",
+  "stamp": "maestro silent until the room closes",
+  "kicker": "live transcript / objective: is the 22-PR Dependabot merge plan safe to execute today?",
+  "headline": "Twenty-two green pull requests against a master that moved <em>twenty commits and 104 files</em> after they were checked.",
+  "lede": "A backlog-cleaning merge train, reviewed by four independent read-only subagents, five role voices and a silent Maestro. The plan survives with corrections: wrong facts rewritten, hidden conflict pairs exposed, a freshness gate per merge, #53 held out as a Tauri runtime upgrade, #48 and #50 marked platform-unverified, a rollback rule, and #44 kept out. The owner confirms before the first merge.",
+  "mode": "standard",
+  "stats": [
+    {
+      "value": "22",
+      "label": "open PRs, 0 merged"
+    },
+    {
+      "value": "20",
+      "label": "master commits since base",
+      "tone": "bad"
+    },
+    {
+      "value": "4",
+      "label": "hidden conflict points"
+    },
+    {
+      "value": "57",
+      "label": "packages moved by #53",
+      "tone": "bad"
+    },
+    {
+      "value": "#44",
+      "label": "never merged",
+      "tone": "bad"
+    }
+  ],
+  "roles": {
+    "expert": {
+      "name": "Nadia Rahim",
+      "handle": "NR",
+      "desc": "shipped three Windows installers / broke one release with an untested workflow",
+      "color": "#b07bff"
+    },
+    "engineer": {
+      "name": "The Engineer",
+      "handle": "EN",
+      "desc": "owns the merge train and its gates",
+      "color": "#5b9dff"
+    },
+    "advocate": {
+      "name": "Devil's Advocate",
+      "handle": "DA",
+      "desc": "has watched green pull requests break a master branch",
+      "color": "#e4574f"
+    },
+    "customer": {
+      "name": "The Next Installer",
+      "handle": "NI",
+      "desc": "installs v3.11.0, five minutes, no context",
+      "color": "#38b88a"
+    },
+    "maestro": {
+      "name": "The Maestro",
+      "handle": "MA",
+      "desc": "silent / observer / ruling",
+      "color": "#e8a33d"
+    }
+  },
+  "sidebar": {
+    "rulings": [
+      {
+        "tag": "EX-1",
+        "text": "The boundary is the first merge no CI run has seen."
+      },
+      {
+        "tag": "DA-1",
+        "text": "Fatal: every green check predates the v3.10.0 commit."
+      },
+      {
+        "tag": "NI-1",
+        "text": "Fatal: most of the \"smoke\" list cannot be observed on Windows."
+      },
+      {
+        "tag": "DA-2",
+        "text": "Fatal: merge-tree does not cross a batch boundary; CI cancels itself."
+      },
+      {
+        "tag": "MA-1",
+        "text": "Correct the record, merge 20 in four gated batches, hold #53 and #44, dispatch no release."
+      }
+    ],
+    "evidence": [
+      "Individual merge-tree: 22/22 clean one at a time; chained replay in the printed order conflicts at #54, #48, #40, #46 (pnpm-lock.yaml, Cargo.lock, server/Cargo.lock).",
+      "PR checks all SUCCESS but last completed 2026-11-19 06:23Z; be27bd5 (v3.10.0) 2026-11-19 11:38Z; 104 files changed since base.",
+      "Master CI durations measured 7-12 min; concurrency cancel-in-progress true; one cancelled run already in the last 15.",
+      "Server lock: utoipa 5.5.0 on master; PR #44 adds utoipa 6.0.0 via swagger-ui 10.0.2; cargo check exit 101 at crates/vibe-server/src/server/mod.rs:149.",
+      "No branch protection (404); squash/merge/rebase all enabled; ci.yml builds the desktop crate only (no --workspace), so meeting-detect tests never run and no job ever runs pnpm exec tauri build.",
+      "#48 is cfg(linux), #50 is cfg(macos): windows-latest compiles neither. #53 moves tauri 2.10.3 -> 2.12.7, wry 0.54.2 -> 0.57.3, webview2-com 0.38.2 -> 0.39.1 and adds 48 packages.",
+      "release.yml dispatch can re-publish v3.10.0 (tag/version check passes) with the same tag and different digests; setup-uv runs only when signing is enabled; attest v4 runs before the release step."
+    ]
+  },
+  "blocks": [
+    {
+      "kind": "beat",
+      "time": "00:00",
+      "title": "The room opens / the Expert is called before the plan is presented"
+    },
+    {
+      "kind": "note",
+      "text": "[recorder] The target is master at d68c5b1, clean, with 22 open Dependabot pull requests and no branch protection. The triage document is handed to the Expert, not the plan. The Engineer waits with the merge order. The Maestro takes the corner seat and says nothing."
+    },
+    {
+      "kind": "msg",
+      "role": "expert",
+      "label": "The Expert / called first",
+      "time": "00:03",
+      "paras": [
+        "I read the tree and the document. This is not a release decision. It is a merge train: 22 machine-written branches, a master that has moved 20 commits and 104 files since they were cut, and no branch protection to catch a mistake.",
+        "The boundary that decides the outcome is the smallest irreversible step: the first merge onto master that no CI run has ever seen. Everything else is recoverable with `git revert`; that step is recoverable too, but only if somebody notices.",
+        "I will judge every plan against one observable: **after each batch, is there a green CI run on the exact master commit the batch produced, can the batch be reverted in one command, and is every claim in the document true of the tree it describes?**",
+        "I will dissect it twice - once for what it claims about its evidence, once for what it guarantees on release day."
+      ],
+      "foot": "first principles / the merge train, not the milestone"
+    },
+    {
+      "kind": "msg",
+      "role": "engineer",
+      "label": "The Engineer / presenting",
+      "time": "00:07",
+      "paras": [
+        "Measured state. 22 open PRs, six checks each, all SUCCESS; the last check on any of them completed **2026-11-19 06:23Z**. Every branch is cut from `c46809c` (the v3.9.0 release commit); master is 20 commits ahead at `d68c5b1`, including the v3.10.0 version bump `be27bd5` and 104 changed files.",
+        "Mergeability today: `git merge-tree --write-tree HEAD refs/pull/N/head` is clean for 22 of 22 taken one at a time. Server local checks: #38 #40 #42 #46 #47 pass, #44 fails; that is the only red branch.",
+        "Plan v1, four batches: (1) Actions #36 #37 #39 #41 #45 - no lockfiles, no app code; (2) npm #49 #52 #54 #56 #57; (3) root Rust #43 #48 #50 #51 #53 #55; (4) server #38 #40 #42 #46 #47, with #44 kept out.",
+        "Safety logic: cheapest failures first, the release is not touched because no tag is cut, and after each group CI on master is the gate."
+      ],
+      "foot": "draft v1 / four batches, actions first"
+    },
+    {
+      "kind": "msg",
+      "role": "advocate",
+      "label": "Devil's Advocate",
+      "time": "00:11",
+      "paras": [
+        "Rejected. The evidence sentence in the plan is already false at the time it is spoken.",
+        "**Every one of those green checks finished before the v3.10.0 version bump.** The branches describe a tree that no longer exists on master; the lockfiles they touch were regenerated after they were tested. You are proposing to merge 21 unverified deltas and call it \"green\".",
+        "Mechanism: master moved, check runs did not. Consequence: each merge lands a combination no job has compiled, and this repository has **no branch protection** - nothing will stop it. The plan has no precondition that says \"refresh the evidence first\".",
+        "Cost of my demand: one merge-tree pass and one CI window per batch. That is minutes, not a rebase of 22 branches."
+      ],
+      "fatal": true,
+      "evidence": [
+        "PR #49 check runs started 2026-11-19 06:06-06:13Z; latest on any PR 06:23Z",
+        "git rev-list --count c46809c..HEAD = 20; 104 files changed",
+        "be27bd5 (v3.10.0 bump) 2026-11-19 11:38Z",
+        "gh api repos/alshahia/sada/branches/master/protection = 404, rulesets = []"
+      ],
+      "falsification": "find one check run on any of the 22 PRs with started_at after 2026-11-21, or a base SHA other than c46809c; the timestamps say one does not exist",
+      "foot": "fatal flaw: the green evidence predates the tree"
+    },
+    {
+      "kind": "msg",
+      "role": "customer",
+      "label": "The Next Installer",
+      "time": "00:14",
+      "paras": [
+        "I am the person who installs v3.11.0 in a month. Your plan lists six \"smoke\" items and I can execute exactly one of them.",
+        "**Settings tabs do not exist in the product** - the tabs component has no importer outside itself, so #54 changes a component nobody can reach while the plan books a verification for it. The window vibrancy is macOS-only code, on a Windows-only release. \"Open folder\" is a Rust `showfile` call, not the opener plugin. And every notification failure is swallowed by a `catch` that logs to a console I will never see.",
+        "Mechanism: the smoke list is a wish list, not an instrument. Consequence: a visible regression in the select menus, the transcript virtualization, the notification plugin or the Tauri framework jump ships because the only check that could catch it is a person hoping.",
+        "Cheapest fix: replace the six items with five sentences that can be false, each with a before/after artefact: mic and settings selects driven by keyboard only; a notification toast observed in Action Center with the new plugin version; a 60-row transcript that scrolls to the composer and keeps row edits anchored; the licence link opening the browser; the app launching and transcribing after the Tauri jump."
+      ],
+      "fatal": true,
+      "evidence": [
+        "git grep \"components/ui/tabs\" = 0 importers; ui/button has 33 importers, ui/select has 7",
+        "no *.test.* mounts Select/Tabs/Button primitives",
+        "desktop/src-tauri/Cargo.toml:97-104: window-vibrancy under cfg(target_os=\"macos\")",
+        "desktop/src-tauri/src/cmd/files.rs:122: showfile, not opener; #56 only touches openUrl",
+        "desktop/src/lib/notify.ts:16-18: catch logs and returns; release.yml builds windows-latest only"
+      ],
+      "falsification": "write the five pass/fail sentences, run them before and after the batches that change those surfaces, attach both artefacts; if every sentence passes identically the concern is met",
+      "foot": "customer / the smoke list observes nothing"
+    },
+    {
+      "kind": "beat",
+      "time": "00:17",
+      "title": "The audit lands / independent read-only reviewers return findings"
+    },
+    {
+      "kind": "note",
+      "text": "[recorder] Independent subagents were briefed before the debate and worked read-only - an auditor, a product first-contact reviewer, a maintenance reviewer and a release/supply-chain reviewer. Their findings enter as ammunition, not as votes. The top ones:"
+    },
+    {
+      "kind": "msg",
+      "role": "expert",
+      "label": "The Expert / reading the audit",
+      "time": "00:19",
+      "paras": [
+        "The audit changes the classification, not the intent. This is a backlog-cleaning train, and the document that authorises it contains wrong facts about its own blocker, its own conflicts and its own coverage. That is worse than a slow merge plan: the owner is being asked to approve a record that misdescribes the terrain.",
+        "The #44 diagnosis is wrong on both sides: `server/crates/vibe-server/Cargo.toml:46` pins `utoipa = \"5\"`, the lock is 5.5.0, and the bump pulls 6.0.0 - not \"pins 6, needs 7\". A task titled \"utoipa 7 upgrade\" re-creates the same duplicate-crate error. The remedy is 5-to-6 plus a `utoipa-axum` that accepts 6.",
+        "The \"one real blocker\" claim is false. Replaying the document order produces at least four conflicts: #38 against #40, #42 against #46 and #47 in the server lock; #50 against #53 and #52 against #54. The document has a rebase rule for two groups and none for the server group.",
+        "The coverage claim at line 84 is false: `ci.yml:70-72` builds only the desktop crate with no `--workspace`, so `meeting-detect` tests never run; #48 is Linux-only code and #50 is macOS-only code, and windows-latest compiles neither. The promised vibrancy check cannot be performed on the platform that ships.",
+        "The rest: #53 is not a notification bump but a 607/164-line lockfile jump moving 57 packages including tauri 2.10.3 to 2.12.7; only 8 of 15 server tests run before publish and never the tower-http path #47 changes; `doc:6` dates the green checks to 2026-11-21 when they are from 2026-11-19; #37 is inert until signing exists; #39 fails late in a real publish.",
+        "The release reviewer contributed the sharpest fact of the room: **no CI job ever runs an installer build.** `pnpm exec tauri build` appears only in release.yml:155-201. #53 moves tauri 2.10.3 to 2.12.7, wry, tao and webview2-com, so the v3.11.0 NSIS, MSI and offline installers would be the first ever produced by that stack - and the offline installer is exactly the path that changed. Putting that inside a dependency batch means discovering a bundling break on release day. Hold it out and gate it separately.",
+        "Two more release facts belong in the record: dispatching release.yml against v3.10.0 does not dry-run, it re-publishes the live tag with different digests; and the server is first compiled with `--release` at tag time, so `cargo check` without linking is not the release gate. The corrected plan adds a release build to the server phase, forbids the release dispatch, and moves the sidecar suffix and attestation-subject fixes to release prep."
+      ],
+      "foot": "audit / wrong facts are a precondition, not a footnote"
+    },
+    {
+      "kind": "msg",
+      "role": "engineer",
+      "label": "The Engineer / revision v2",
+      "time": "00:25",
+      "paras": [
+        "I concede five things, each proved by an attack or the audit: the check timestamps are stale relative to `be27bd5`; the #44 versions are wrong on both sides and the remedy is 5-to-6; the document hides four real conflict pairs and has no server rebase rule; #48 and #50 have no compile coverage on Windows and #50 has no visible check; the plan has no checkpoint, revert recipe, merge method, kill-date or honest time budget.",
+        "What changes: a phase zero that corrects nine lines of the document and records a surface baseline; a freshness check before every single merge, not per batch - fetch the head, merge-tree against current master, read `gh pr view --json mergeable`; a rebase rule when any of those says conflict - `@dependabot rebase`, wait for the fresh checks, re-fetch, re-verify; a checkpoint SHA recorded after every batch; a note that release.yml is never dispatched because dispatching it re-publishes v3.10.0; and one CI window per batch, with the next batch held until the previous master run is green.",
+        "The batch map changes too: #53 comes out of the train entirely. It is a Tauri runtime jump, not a notification bump, and no job here has ever built an installer; it gets a dedicated gate - build the installer from the PR branch, clean-machine offline-installer test, align the Tauri CLI to 2.12, then merge before v3.11.0. #50 merges in the root batch without it; the server batch adds a `--release` build because cargo check never links; the workflow batch stays last.",
+        "What I refuse: rebasing all 21 branches and re-running 21 PR pipelines before starting. That is roughly three hours of CI - measured at 8-12 minutes per run - and it buys little, because the rebase must happen at conflict time anyway and the master CI run after each batch is the gate that matters. I also refuse adding the server CI job inside this train: it is a follow-up with a trigger, and a new workflow would itself be unrehearsed."
+      ],
+      "revision": true,
+      "foot": "revision v2 / per-merge freshness, #53 isolated, workflows last"
+    },
+    {
+      "kind": "msg",
+      "role": "advocate",
+      "label": "Devil's Advocate / second pass",
+      "time": "00:29",
+      "paras": [
+        "Rejected again, and this time the hole is in the revision.",
+        "**\"merge-tree clean today\" cannot survive a batch boundary.** It tested 22 branches against `d68c5b1`; after batch one squash-merges a lockfile, every remaining branch must be measured against a different master, and the plan carries yesterday's result forward. The audit already found four conflict pairs inside the set - one fresh check per batch is not enough, the check has to be per merge.",
+        "**The CI gate is also cancelled by design.** `ci.yml:17-19` uses `concurrency` on the ref with `cancel-in-progress: true`. Merge a batch faster than a CI run and the only surviving run is the last one; \"after each group: CI green\" silently degrades to \"after the last group\". The maintenance reviewer measured runs of 9 to 12 minutes and found a cancelled run already in the last fifteen.",
+        "Both have cheap fixes and both have to be steps, not assumptions: re-run the freshness check immediately before each merge, rebase and re-verify when it fails, record the checkpoint SHA, and do not open the next batch until the current master run finishes. Without that the revision repeats the original mistake with better vocabulary."
+      ],
+      "fatal": true,
+      "evidence": [
+        "docs/DEPENDABOT-TRIAGE.md:106-114: one \"CI green\" per group; no per-merge check",
+        "ci.yml:17-19: concurrency + cancel-in-progress: true; master runs measured 9-12 min, one cancelled run in the last 15",
+        "merge-tree replay: #38 x #40 exit 1, #42 x #46 exit 1 (server/Cargo.lock); #50 x #53 exit 1 (Cargo.lock); #52 x #54 exit 1 (desktop/pnpm-lock.yaml)"
+      ],
+      "falsification": "merge two batches back to back and show two completed green runs on the two intermediate master commits; with cancel-in-progress true the first is cancelled, so you cannot",
+      "foot": "fatal flaw: batch-boundary evidence and cancelled CI"
+    },
+    {
+      "kind": "msg",
+      "role": "customer",
+      "label": "The Next Installer / second pass",
+      "time": "00:32",
+      "paras": [
+        "The revision still has no acceptance test I could argue with. \"Smoke: settings tabs and selects, the transcript list, open-folder\" - no pass sentence, no threshold, no baseline, and at least three of those surfaces cannot be observed at all.",
+        "**A smoke test without a sentence that can be false is a vibe check.** I want five: the main mic select and the settings selects commit a value when driven by Tab, Enter, ArrowDown, Enter, and Esc leaves the page scroll unlocked; a notification appears in Action Center with the new plugin and the app title is \"صدى\", not a PowerShell host; a 60-row transcript scrolls so the last row sits above the composer, search remeasures it and a row edit stays anchored; the licence link in Settings, About opens the browser; and after the Tauri jump the app launches and transcribes a 30-second clip.",
+        "If all five pass identically after the batches that change them, the visible risk is nil and I will say so in writing. And the installer: if #53 rides in the train, the first NSIS, MSI and offline installer ever built with the new Tauri stack is the one I am asked to download. Twenty minutes of rehearsal beats a broken installer on release day."
+      ],
+      "fatal": true,
+      "evidence": [
+        "docs/DEPENDABOT-TRIAGE.md:70,85: smoke lists with no pass/fail, no threshold, no owner",
+        "transcript-view.tsx:417-441: measureElement, gap 4 and scrollMargin - the math 3.14.11+ patched",
+        "notify.ts:16-18: every notification error is swallowed; UI shows nothing",
+        "ui/tabs.tsx has no importer; vibrancy cfg(macos); open-folder is showfile not opener",
+        "no *.test.* mounts Select/Tabs/Button; pnpm test cannot see these paths"
+      ],
+      "falsification": "write the five sentences with thresholds, run them before and after the batches, attach screenshots and the toast observation; if every sentence passes identically, the concern is met",
+      "foot": "customer / acceptance must be falsifiable"
+    },
+    {
+      "kind": "msg",
+      "role": "engineer",
+      "label": "The Engineer / revision v3",
+      "time": "00:38",
+      "paras": [
+        "I concede the batch-boundary point, the cancellation point and the smoke sentences. They become steps and acceptance criteria: per-merge freshness, rebase-and-re-verify when it fails, one surviving master CI run per batch must be green before the next batch, and five pass/fail sentences with before/after artefacts.",
+        "I also concede #53 is a Tauri runtime jump and that no installer is built anywhere before a tag. It leaves this train completely: it gets its own gate - installer build from the PR branch, clean-machine offline-installer test, Tauri CLI aligned to 2.12 - before v3.11.0. The release dispatch is forbidden in this train: dispatching release.yml against v3.10.0 re-publishes the live tag with different digests. The server phase gains a `--release` build because `cargo check` never links, and the sidecar suffix and attestation-subject fixes move to release prep.",
+        "What I refuse: waiting for a server CI job or a cross-platform CI job before merging. Both are worth building; both need workflow decisions and a cost review; both are follow-ups with triggers in \"what waits\". The server batch runs full `cargo test --release -p vibe-server` on the merged tree, and #48/#50 are recorded as platform-unverified rather than pretended-green.",
+        "The plan, one sentence: correct the record and record a baseline; merge npm, root Rust and server in three gated batches with a checkpoint SHA each; merge the workflow batch last and dispatch only security and pages; hold #53 for its Tauri gate; close #44 and open its coordinated 5-to-6 upgrade; no tag, no version, no release."
+      ],
+      "revision": true,
+      "foot": "revision v3 / a gate per merge, a sentence per surface"
+    },
+    {
+      "kind": "note",
+      "text": "[recorder] The room goes quiet. The Advocate has nothing left that the revision does not answer; the Customer has five falsifiable sentences and a baseline. Every audit finding is fixed, preconditioned, or deferred with a trigger. The Maestro takes the paper."
+    },
+    {
+      "kind": "verdict_open",
+      "title": "The Maestro's ruling - the implementable merge train",
+      "subtitle": "built from the corrections above / the owner confirms before the first merge"
+    },
+    {
+      "kind": "section",
+      "kicker": "0 / the decision",
+      "title": "Correct the record, then merge 20 of the 22 pull requests in four gated batches; hold #53 for its Tauri gate, never merge #44, and dispatch no release.",
+      "paras": [
+        "The triage document is not yet safe to execute: wrong facts about its own blocker, four hidden conflict points, a smoke list that observes surfaces this platform cannot reach, and no checkpoint, revert recipe, merge method or kill-date. Fix the record first; then run the train, with the owner confirming the first merge and every later gate being a command with an exit code.",
+        "Clock: four batches, each followed by a master CI window of 7-12 minutes, plus a rebase wait when a conflict point forces a new head - plan 2-3 hours of elapsed time across one working session, not 30-40 minutes. The batch that fails is reverted the same day, not debugged forward."
+      ],
+      "callout": {
+        "label": "",
+        "text": "A green pull request is a claim about a branch. A green run on the master commit the batch produced is a claim about the product."
+      }
+    },
+    {
+      "kind": "table",
+      "kicker": "1 / preconditions",
+      "title": "",
+      "headers": [
+        "check",
+        "command / evidence",
+        "state"
+      ],
+      "rows": [
+        [
+          "clean tree",
+          "git status --porcelain on master",
+          "done (d68c5b1)"
+        ],
+        [
+          "triage record corrected",
+          "docs/DEPENDABOT-TRIAGE.md lines 6, 11, 24, 26, 55, 68, 79, 81, 84, 98, 106, 111, 130 fixed and committed",
+          "in flight"
+        ],
+        [
+          "conflict pairs written down",
+          "#38 x #40, #42 x #46, #50 x #53, #52 x #54; rebase rule for every group",
+          "decision, this ruling"
+        ],
+        [
+          "mergeability re-measured per merge",
+          "git merge-tree --write-tree HEAD refs/pull/N/head + gh pr view --json mergeable",
+          "done once, must repeat per merge"
+        ],
+        [
+          "a red PR has a written disposition",
+          "#44 closed with the measured 5.5.0 / 6.0.0 split and a 5-to-6 upgrade task opened",
+          "owner action"
+        ],
+        [
+          "merge method chosen",
+          "gh pr merge --squash: one revert target per PR",
+          "decision, this ruling"
+        ],
+        [
+          "checkpoint and rollback written",
+          "record git rev-parse HEAD per batch; git revert the batch in reverse order",
+          "decision, this ruling"
+        ],
+        [
+          "surface baseline recorded",
+          "app launch, toast observation, mic and settings selects, licence link, 60-row transcript",
+          "in flight"
+        ],
+        [
+          "release dispatch forbidden",
+          "gh workflow run release.yml against v3.10.0 re-publishes the tag with new digests; no release command appears in this train",
+          "decision, this ruling"
+        ],
+        [
+          "no release in scope",
+          "no tag, no version bump, no release; v3.10.0 assets untouched",
+          "scope fence"
+        ]
+      ],
+      "note": "The record correction and the baseline are not cleanup. They are the evidence the owner reads before approving the first merge."
+    },
+    {
+      "kind": "phase",
+      "num": "1",
+      "title": "Correct the record and freeze the baseline",
+      "when": "day 0 / 45 minutes",
+      "steps": [
+        {
+          "head": "Fix the wrong facts",
+          "text": "`docs/DEPENDABOT-TRIAGE.md`: `:6` - green checks are 2026-11-19 and predate v3.10.0; `:11` - \"the one real blocker\" is false, four conflict points exist; `:24`/`:26`/`:98`/`:111` - server pins utoipa 5.5.0 and the bump pulls 6.0.0, the remedy is 5-to-6 with a compatible utoipa-axum, not a \"utoipa 7\" task; `:55` - \"watch the next release run\" cannot verify setup-uv 7 while signing is off; `:68` - write the measured conflict list and rebase rule; `:79`/`:81` - #48/#50 are platform-gated and #53 is a Tauri runtime jump, not a notification bump; `:84` - coverage is the desktop crate only, meeting-detect never runs; `:106` - replace the 30-40 minute estimate and add checkpoint/revert/kill-date; `:130` - replace `gh pr view 36..57` with the commands actually run."
+        },
+        {
+          "head": "Add the missing decisions",
+          "text": "merge method `--squash`; the rebase-and-re-verify rule; the per-batch checkpoint SHA; the revert recipe; the kill-date 2026-11-28."
+        },
+        {
+          "head": "Record the surface baseline",
+          "text": "current build: app launches, one notification toast observed in Action Center, main mic select and settings selects driven by keyboard, licence link opens the browser, 60-row transcript scrolled to the composer and a row edited mid-list. Store under `docs/reviews/2026-11-21-dependabot-merge/`."
+        },
+        {
+          "head": "Write the #44 disposition",
+          "text": "close #44 with the measured 5.5.0-vs-6.0.0 evidence and open the coordinated upgrade task (utoipa 6 + compatible utoipa-axum + swagger-ui 10); the issue is the trigger, not the retry."
+        }
+      ],
+      "accept": [
+        "AC-1: the nine cited lines in docs/DEPENDABOT-TRIAGE.md are corrected and committed; the document states the measured 5.5.0/6.0.0 split, the four conflict pairs and the true CI coverage.",
+        "AC-2: a baseline record with app launch, notification toast, keyboard selects, licence link and 60-row transcript artefacts exists under docs/reviews/2026-11-21-dependabot-merge/.",
+        "AC-3: #44 is closed (or retitled) and the coordinated utoipa 5-to-6 upgrade task exists with the measured diagnosis."
+      ]
+    },
+    {
+      "kind": "phase",
+      "num": "2",
+      "title": "Merge the npm batch",
+      "when": "day 0 / 20 minutes + one CI window",
+      "steps": [
+        {
+          "head": "Freshness before every merge",
+          "text": "fetch the PR head; `git merge-tree --write-tree HEAD <head>` must be exit 0 against current master; `gh pr view N --json mergeable,mergeStateStatus` must report MERGEABLE. If either fails: `gh pr comment N --body \"@dependabot rebase\"`, wait for the fresh checks, re-fetch and re-verify. #52 and #54 are a known pair - expect one rebase there."
+        },
+        {
+          "head": "Merge in order",
+          "text": "#49, #52, #54, #56, #57 with `gh pr merge N --squash`; record the squash SHA and `git rev-parse HEAD` after the batch."
+        },
+        {
+          "head": "One CI gate for the batch",
+          "text": "after the fifth merge, wait for the single master CI run that survives the concurrency group; the earlier runs are cancelled by design. Green means every job completed successfully."
+        },
+        {
+          "head": "Smoke with pass/fail lines",
+          "text": "main mic select and settings selects by keyboard only; licence link opens the browser; the 60-row transcript scrolls to the composer, search remeasures and a row edit stays anchored. Each written pass or fail against the baseline."
+        }
+      ],
+      "accept": [
+        "AC-4: #49 #52 #54 #56 #57 merged (5/5), each preceded by a clean merge-tree and MERGEABLE check or a rebase + fresh checks.",
+        "AC-5: the master CI run for the post-batch checkpoint SHA is green (all jobs completed, conclusion success).",
+        "AC-6: three smoke lines recorded pass/fail for the selects, licence link and transcript virtualization, with before/after artefacts."
+      ]
+    },
+    {
+      "kind": "phase",
+      "num": "3",
+      "title": "Merge the root Rust batch without #53",
+      "when": "day 0 / 20 minutes + one CI window",
+      "steps": [
+        {
+          "head": "Same gate, one PR at a time",
+          "text": "#43, #51, #55, #48, #50 with squash; merge-tree and MERGEABLE re-read before each; record checkpoint SHA after the batch."
+        },
+        {
+          "head": "Do not pretend coverage for the platform-gated bumps",
+          "text": "#48 is Linux-only code (`crates/meeting-detect/src/window_title.rs` under cfg(linux)) and #50 macOS-only (`desktop/src-tauri/Cargo.toml:97-104`, cfg(macos)); windows-latest compiles neither, and the \"window transparency\" smoke has no code path to observe. They merge as dependency hygiene and are recorded platform-unverified; the baseline has no vibrancy item to compare."
+        },
+        {
+          "head": "Wait for the master run",
+          "text": "one surviving CI run for the batch; it compiles the desktop crate and runs its tests, which is the compile gate the PR checks no longer provide."
+        }
+      ],
+      "accept": [
+        "AC-7: #43 #51 #55 #48 #50 merged (5/5) and the post-batch master CI run is green.",
+        "AC-8: #48 and #50 are recorded in the report as platform-unverified with the trigger that reopens them; no vibrancy or Linux smoke claim is made."
+      ]
+    },
+    {
+      "kind": "phase",
+      "num": "4",
+      "title": "Merge the server batch and run the full server suite",
+      "when": "day 0-1 / 25 minutes + one CI window",
+      "steps": [
+        {
+          "head": "Rebase before merge, recompile after rebase",
+          "text": "#38 x #40 and #42 x #46 conflict on `server/Cargo.lock`; trigger `@dependabot rebase` for each conflicting PR, wait for fresh checks, re-fetch, then re-run the local compile at the NEW head - the earlier pass rows no longer describe the rebased commit."
+        },
+        {
+          "head": "Merge the five, keep #44 out",
+          "text": "#38 #40 #42 #46 #47 with squash; #44 never appears in a merge command; checkpoint SHA recorded."
+        },
+        {
+          "head": "Full server suite, not only guard",
+          "text": "from `server/`: `cargo test --release -p vibe-server` (all tests, not just the 8 guard tests) and `cargo check --all-targets`; this is the only execution of the tower-http 0.7 path #47 moves before the next tag."
+        },
+        {
+          "head": "Build the release profile once",
+          "text": "`cargo build --release -p vibe-server` from `server/` on the merged tree. `cargo check` does not link and release.yml is the only place that has ever compiled the server in release; this is the cheapest rehearsal of that step before the tag."
+        }
+      ],
+      "accept": [
+        "AC-9: #38 #40 #42 #46 #47 merged (5/5) after rebase + recompile where needed; post-batch master CI green.",
+        "AC-10: `cargo test --release -p vibe-server` (full crate suite), `cargo check --all-targets` and `cargo build --release -p vibe-server` exit 0 on the merged server tree."
+      ]
+    },
+    {
+      "kind": "phase",
+      "num": "5",
+      "title": "Merge the workflow batch last and dispatch what can run",
+      "when": "day 1 / 15 minutes + dispatch runs",
+      "steps": [
+        {
+          "head": "Merge #41 and #45 first, then #36",
+          "text": "these can be exercised immediately: CI runs on push; security.yml and pages.yml have workflow_dispatch."
+        },
+        {
+          "head": "Merge #37 and #39 last",
+          "text": "release.yml has no safe dry run; setup-uv only runs when signing is enabled (currently not, owner action A5), and attest-build-provenance runs before the release is created, so a failure fails the tag run before any asset is published. Validation is deferred to the v3.11 tag rehearsal."
+        },
+        {
+          "head": "Dispatch the two runnable workflows",
+          "text": "`gh workflow run security.yml --ref master` and `gh workflow run pages.yml --ref master`; wait for both and record the conclusions."
+        }
+      ],
+      "accept": [
+        "AC-11: #41 #45 #36 #37 #39 merged (5/5) and the following master CI run is green.",
+        "AC-12: security.yml and pages.yml dispatch runs complete successfully.",
+        "AC-13: release.yml is not dispatched in this train; its action validation is recorded as deferred with the v3.11 tag as trigger, and the v3.10.0 re-publish hazard is written into the record."
+      ]
+    },
+    {
+      "kind": "table",
+      "kicker": "2 / task rows",
+      "title": "",
+      "headers": [
+        "id",
+        "title",
+        "owner",
+        "scope",
+        "gate"
+      ],
+      "rows": [
+        [
+          "TR-1",
+          "Correct the triage record (facts + decisions)",
+          "agent",
+          "docs/DEPENDABOT-TRIAGE.md",
+          "AC-1"
+        ],
+        [
+          "TR-2",
+          "Record the surface baseline",
+          "agent",
+          "docs/reviews/2026-11-21-dependabot-merge/",
+          "AC-2"
+        ],
+        [
+          "TR-3",
+          "Close #44 and open the coordinated utoipa 5-to-6 upgrade task",
+          "agent",
+          "server/crates/vibe-server/Cargo.toml, issue tracker",
+          "AC-3"
+        ],
+        [
+          "TR-4",
+          "Merge npm batch with per-merge freshness checks",
+          "owner",
+          "desktop/pnpm-lock.yaml",
+          "AC-4 AC-5 AC-6"
+        ],
+        [
+          "TR-5",
+          "Merge root Rust batch (#53 excluded)",
+          "owner",
+          "Cargo.lock",
+          "AC-7 AC-8"
+        ],
+        [
+          "TR-6",
+          "Merge server batch, rebase conflicts, full suite + release build",
+          "owner",
+          "server/Cargo.lock, server/crates/**",
+          "AC-9 AC-10"
+        ],
+        [
+          "TR-7",
+          "Merge workflow batch and dispatch security/pages only",
+          "owner",
+          ".github/workflows/**",
+          "AC-11 AC-12 AC-13"
+        ],
+        [
+          "TR-8",
+          "Gate #53: installer build, clean-machine offline test, CLI alignment",
+          "agent, then owner",
+          "desktop/package.json, Cargo.lock, release assets",
+          "Tauri gate trigger"
+        ]
+      ]
+    },
+    {
+      "kind": "table",
+      "kicker": "3 / what waits, and why",
+      "title": "",
+      "headers": [
+        "item",
+        "when",
+        "the evidence that reopens it"
+      ],
+      "rows": [
+        [
+          "Server compile job in CI",
+          "next workflow change, before the utoipa upgrade",
+          "a second server bump escapes the local matrix, or the v3.11 tag fails building server/"
+        ],
+        [
+          "Linux/macOS compile validation for #48 and #50",
+          "first non-Windows build or a cross-target CI job",
+          "a platform build fails on x11rb or window-vibrancy; until then they are platform-unverified"
+        ],
+        [
+          "Tauri upgrade gate for #53",
+          "before v3.11.0, as release prep",
+          "installer build fails, offline installer fails on a clean machine, or the Tauri CLI stays at 2.10 while the crate moves to 2.12"
+        ],
+        [
+          "Coordinated utoipa 5-to-6 upgrade (#44 rework)",
+          "v3.11 cycle",
+          "a released utoipa-axum that accepts utoipa 6, or a /docs or OpenAPI change"
+        ],
+        [
+          "setup-uv 7 validation (#37) and attest v4 rehearsal (#39)",
+          "first signed release and the v3.11 tag rehearsal",
+          "signing is enabled without a green setup-uv 7 run, or the tag run fails after the builds - tag exists, release not yet published, fix and re-run"
+        ],
+        [
+          "Sidecar suffix bump to -sada.2 and SHA256SUMS attestation subject",
+          "v3.11.0 release prep",
+          "the next release ships a third distinct server binary under the same -sada.1 string, or a user cannot verify SHA256SUMS.txt with gh attestation"
+        ],
+        [
+          "Dependabot grouping (patch/minor per ecosystem)",
+          "after this train, next scheduled cycle 2026-11-30",
+          "the backlog returns above 5 PRs in one ecosystem"
+        ],
+        [
+          "Dead tabs component removal",
+          "next UI cleanup, outside this train",
+          "someone imports ui/tabs, or the next radix tab bump forces the question"
+        ]
+      ],
+      "note": "Deferred does not mean dropped: each row names the external trigger that reopens it."
+    },
+    {
+      "kind": "commands",
+      "kicker": "4 / the command sequence",
+      "title": "",
+      "code": "# from E:/rea/vibe_app/app, master, clean tree\ngit status --porcelain && git log -1 --format=%h\n\n# freshness: repeat BEFORE EVERY merge (example #49)\ngit fetch origin refs/pull/49/head:refs/depcheck/pr-49\ngit merge-tree --write-tree HEAD refs/depcheck/pr-49\ngh pr view 49 --json mergeable,mergeStateStatus\n\n# if conflict (expected for #52x#54, #38x#40, #42x#46, #50x#53)\ngh pr comment 54 --body \"@dependabot rebase\"\ngh pr checks 54 --watch\ngit fetch origin refs/pull/54/head:refs/depcheck/pr-54\ngit merge-tree --write-tree HEAD refs/depcheck/pr-54\n\n# batch 1 - npm\ngh pr merge 49 --squash && gh pr merge 52 --squash && gh pr merge 54 --squash\ngh pr merge 56 --squash && gh pr merge 57 --squash\ngh run list --workflow ci.yml --branch master --limit 1 --json databaseId,status,conclusion,headSha\ngh run watch <databaseId> --exit-status && git rev-parse HEAD\n\n# batch 2 - root Rust, #53 excluded\ngh pr merge 43 --squash && gh pr merge 51 --squash && gh pr merge 55 --squash\ngh pr merge 48 --squash && gh pr merge 50 --squash\n\n\n# batch 3 - server, rebase conflicts and recompile at the new head\ngh pr comment 38 --body \"@dependabot rebase\"\ngh pr merge 38 --squash && gh pr merge 40 --squash && gh pr merge 42 --squash\ngh pr merge 46 --squash && gh pr merge 47 --squash\ncd server && cargo test --release -p vibe-server && cargo check --all-targets && cargo build --release -p vibe-server && cd ..\n\n# batch 4 - workflows last, then dispatch\ngh pr merge 41 --squash && gh pr merge 45 --squash && gh pr merge 36 --squash\ngh pr merge 37 --squash && gh pr merge 39 --squash\ngh workflow run security.yml --ref master\ngh workflow run pages.yml --ref master\n# never: gh workflow run release.yml (it re-publishes v3.10.0 with new digests)\n\n# rollback a failing batch: revert its squash commits in reverse order\ngit revert <last-squash-sha> <prev-squash-sha> && git push origin master",
+      "note": "Wait for the surviving CI run at the end of each batch before starting the next. The rebase wait is the variable cost; the master CI window is the gate. #53 is not in any merge command."
+    },
+    {
+      "kind": "scope",
+      "kicker": "5 / the scope fence",
+      "title": "",
+      "items": [
+        "No tag, no version bump, no release, and no release.yml dispatch: dispatching it against v3.10.0 re-publishes the live tag with different digests.",
+        "No merge of #44: it needs a coordinated utoipa 5-to-6 upgrade, and its failure is reproduced evidence, not a flake.",
+        "No merge of #53 in this train: it is a Tauri runtime jump and the first installer built with that stack must be rehearsed, not shipped blind.",
+        "No rebase of all 20 branches up front: rebase at conflict time, re-verify the new head, and let the master CI run after each batch be the gate.",
+        "No new CI job in this pass, including the server compile job: it is a follow-up with a trigger, and adding workflows inside the workflow batch would make both unrehearsed.",
+        "No macOS or Linux smoke claim: #48 and #50 are platform-unverified and recorded as such; pretending otherwise is worse than the gap.",
+        "No sidecar suffix change, no attestation-subject change, no branch-protection change: all three are release-prep or owner decisions with their own triggers.",
+        "No documentation scope beyond the corrected facts, the baseline record and this report."
+      ]
+    },
+    {
+      "kind": "section",
+      "kicker": "6 / the kill-criterion",
+      "title": "2026-11-28 - the date the merge train is declared done or failed.",
+      "paras": [
+        "If the batches are not complete by 2026-11-28, the triage is stale again: refresh mergeability for every remaining PR, fix the check timestamps, and re-run this ruling instead of picking up where it stopped. Dependabot keeps producing branches; a train that waits a week is a new decision.",
+        "If a batch fails CI or smoke, revert it the same day. A batch that is green on the branch, red on the merged master and not reverted within one working day means the gate is decorative and the plan is wrong - not the dependency."
+      ]
+    },
+    {
+      "kind": "section",
+      "kicker": "7 / the owner confirmation",
+      "title": "One sentence from the owner starts the train.",
+      "paras": [
+        "The merge decision belongs to the owner (OWNER-ACTIONS A9). The report does not merge anything. Reply \"approved, merge batches\" and the train starts at phase 1; reply \"hold\" and the PRs stay open, with the record corrections and the baseline still worth committing.",
+        "Nothing in this ruling depends on a person being available beyond the initial confirmation; every later gate is a command with an exit code."
+      ],
+      "accept": []
+    }
+  ],
+  "footer": [
+    "Review room run 2026-11-21 on d68c5b1 with an evidence pack; independent read-only subagents (auditor, product first-contact, maintenance/process, release/supply-chain) supplied the audit beat.",
+    "No pull request was merged, no tag was created, no version was bumped. The merge decision remains with the owner under OWNER-ACTIONS A9."
+  ]
+}
