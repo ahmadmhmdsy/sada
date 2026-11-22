@@ -19,6 +19,10 @@ and the build-provenance attestations cover `SHA256SUMS.txt` as well as the inst
   attest-build-provenance 4, configure-pages 6, codeql-action 4 and others), plus the server’s
   OpenAPI stack moved to utoipa 6 (`utoipa-axum` 0.3, `utoipa-swagger-ui` 10). No product
   behaviour change; lockfiles updated.
+- **Tauri 2.12 stack:** the desktop runtime moved from tauri 2.10 to **2.12.7** (wry 0.57.3,
+  tao 0.37.3) with the aligned plugin and CLI packages (`tauri-plugin-notification` 2.8.1,
+  `tauri-plugin-opener` 2.7.3, `@tauri-apps/api` 2.12.5, `@tauri-apps/cli` 2.12.6). Upstream fixes
+  only; no intended UI or transcription change.
 - **CI builds and tests the engine:** a `server` job in `ci.yml` runs `cargo check --all-targets`
   and `cargo test --release -p vibe-server` on every change after fetching the pinned native
   libraries. It closes the CI gap that let the engine breakage in #44 pass CI and fail only at
