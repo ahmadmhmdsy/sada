@@ -26,6 +26,7 @@ Track a box by changing `[ ]` to `[x]`. The scheduled reminders (see the end) po
 | [A14](#a14--tag-v3100) | Tag v3.10.0 and verify the release | **P0** | done 2026-11-19, verified 2026-11-21 | — |
 | [A15](#a15--authorise-the-two-step-zero-tests) | Authorise the two Step Zero tests (read-aloud, Arabic subtitle burn-in) | P1 | done 2026-11-21 (B pass, A fail) | — |
 | [A16](#a16--open-the-p7-milestone-and-issues) | Open the P7 milestone and FC-1…FC-9 issues | P1 | done 2026-11-19 | — |
+| [A17](#a17--approve-and-ship-v3110) | Approve the v3.11.0 release plan and run the five-user gate | P1 | 2–4 h + test day | five-user test, #53 gate |
 
 ---
 
@@ -299,6 +300,27 @@ test results are recorded either way.
 ## A16 — Open the P7 milestone and issues
 
 **Done 2026-11-19.** gh is authenticated as `alshahia`. Milestone [P7 — parity, proof & platform #8](https://github.com/alshahia/sada/milestone/8) contains nine issues, [#58](https://github.com/alshahia/sada/issues/58) (FC-1) through [#66](https://github.com/alshahia/sada/issues/66) (FC-9), each with its acceptance block, gate and evidence links. ROADMAP, [P7-PLAN.md](P7-PLAN.md) and this page carry the real numbers. FC-1 and FC-9 close when the pending docs commit lands; no tag or release is involved.
+
+## A17 — Approve and ship v3.11.0
+
+**Why:** v3.11.0 is gated on human evidence (the five-user Arabic test) and on the last dependency jump
+(#53, the Tauri runtime). The agent can prepare and verify everything else; the scope call, the gate result
+and the tag are yours.
+
+**Plan:** [docs/releases/v3.11.0-plan.md](releases/v3.11.0-plan.md) — gates G1–G7, the version-bump file
+list, the tag sequence and the rollback notes.
+
+**Steps:**
+1. Read the plan; tell the agent if the scope or the target date changes.
+2. Run the five-user gate with the [GATE-KIT](design/ui-decisions/GATE-KIT.md) and send the result — it
+   decides whether FC-4 meeting notes ship in 3.11.
+3. After the agent reports G2–G6 green, run the clean-machine rows (A8) on the 3.11.0 installer.
+4. Give the explicit tag approval; the agent tags `v3.11.0` and watches the Release workflow.
+5. Verify the published assets with `scripts/verify-release.ps1 -Version 3.11.0 -Download` and close the
+   release.
+
+**Done when:** v3.11.0 is published, every asset hash/attestation verifies, the clean-machine rows pass and
+the five-user result is recorded.
 
 ## Release sign-off (every release)
 
