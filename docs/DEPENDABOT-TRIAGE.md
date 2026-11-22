@@ -190,6 +190,9 @@ tag is otherwise the first release-profile compile). Keep #44 out.
   sidecar suffix from `-sada.1` to `-sada.2` (`release.yml:110`, ACCEPTANCE, SECURITY-WHITEPAPER) because a
   third distinct server binary now shares that string; add `SHA256SUMS.txt` to the attestation subjects;
   validate `setup-uv` 7 and `attest` 4 at the tag rehearsal — never dispatch `release.yml` against v3.10.0.
+  **Done 2026-11-22:** the engine builds `-sada.2` (docs synced), `SHA256SUMS.txt` is in the attestation
+  subjects, and CI has a server job; `setup-uv` 7 and `attest` 4 are still first exercised by the v3.11.0
+  tag run.
 - **Audit the other workflows.** After the workflow batch, dispatch `security.yml` once and confirm one
   green run before the next tag; `pages.yml` once. `release.yml` changes remain untested until v3.11.0.
 

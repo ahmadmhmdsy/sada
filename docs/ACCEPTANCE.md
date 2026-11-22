@@ -11,6 +11,11 @@ v3.9.0, where all three deployment assets exist — per-user NSIS, offline-WebVi
 per-machine MSI). Record the evidence in the table at the end; the
 published results for each release live in docs/VERIFICATION.md.
 
+The engine reports its build through the `-sada.N` suffix: 3.4.0 through 3.10.0 shipped
+`vibe-server v0.6.16-sada.1`, and from 3.11.0 the release builds `v0.6.16-sada.2` — check the version
+the installer actually ships instead of assuming it. From 3.11.0 the provenance attestations also
+cover `SHA256SUMS.txt`, so the hash list itself is attested.
+
 ## Machine matrix
 
 | Slot | Machine | Purpose |
