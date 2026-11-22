@@ -328,9 +328,11 @@ signing stays dormant (#18) by owner decision.
 - Upstream drift: upstream Vibe's latest release is v3.3.5 (2026-11-13) while this fork is based on
   v3.2.2 plus hand-ported deltas (`docs/UPSTREAM-PATCHES.md`). Plan an incremental rebase release
   (next minor, after v3.10.0) instead of ad-hoc cherry-picks.
-- Dependabot triage: 22 update PRs triaged on 2026-11-21 (`docs/DEPENDABOT-TRIAGE.md`) — four merge
-  batches ready (Actions, npm, root Cargo, server Cargo); #44 is blocked on a coordinated `utoipa` 7
-  upgrade. Owner approves the order (OWNER-ACTIONS A9); nothing is merged yet and v3.10.0 is unchanged.
+- Dependabot triage: **executed 2026-11-21** (`docs/DEPENDABOT-TRIAGE.md`,
+  [execution report](docs/reviews/2026-11-21-dependabot-merge/execution-report.md)) — 20 of 20 cleared PRs
+  merged in four batches (npm, root Cargo, server Cargo, workflows last); #44 closed and replaced by the
+  coordinated `utoipa` 5→6 upgrade (#68, merged); #53 held for its Tauri installer gate before v3.11.0. No
+  tag or release; v3.10.0 is unchanged.
 - CI gap found in that triage: no job builds `server/`, so a server dependency bump can pass every PR
   check and break the next release (as #44 shows). Add a server compile job to `ci.yml` before the next
   server upgrade.

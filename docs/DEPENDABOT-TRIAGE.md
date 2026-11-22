@@ -1,7 +1,8 @@
 # Dependabot triage — 22 open updates (2026-11-21)
 
-Prepared for [OWNER-ACTIONS A9](OWNER-ACTIONS.md#a9--triage-dependabot-prs-36-57). This is the triage
-and merge order; **no pull request was merged** — the merge decision stays with the owner.
+Prepared for [OWNER-ACTIONS A9](OWNER-ACTIONS.md#a9--triage-dependabot-prs-36-57). This is the reviewed triage
+and merge order, **executed on 2026-11-21** — see the execution record below and the
+[execution report](reviews/2026-11-21-dependabot-merge/execution-report.md).
 
 > **Reviewed by a review room on 2026-11-21** (four independent read-only reviewers + five role voices).
 > Verdict: *approve with corrections*. The facts below are the corrected ones; the full ruling, evidence
@@ -9,6 +10,22 @@ and merge order; **no pull request was merged** — the merge decision stays wit
 > What changed: the #44 diagnosis (utoipa 5.5.0 to 6.0.0, not “pins 6, needs 7”), four hidden conflict
 > points, the check-age warning, the platform-blind smoke list, #53 moved out of the train as a Tauri
 > runtime jump, and a real clock, merge method, checkpoint/revert recipe and kill-date.
+
+## Execution record (2026-11-21)
+
+**Executed and green.** Option A was approved, the reviewed plan ran, and the outcome is:
+
+- **20 of 20 cleared PRs merged** in four batches (npm, root Rust, server, workflows last); the four
+  predicted conflict points (`#54`, `#48`, `#40`, `#46`) were rebased and re-checked before merging.
+- **#44 closed and replaced by #68** — the coordinated `utoipa` 5 to 6 upgrade (`utoipa` 6.0.0,
+  `utoipa-axum` 0.3.0, `utoipa-swagger-ui` 10.0.2), merged as `c2b8012`. Tracking task: #67.
+- **#53 stays open and held** for its Tauri installer gate before v3.11.0.
+- **No tag, no version bump, no release and no `release.yml` dispatch**; v3.10.0 is unchanged.
+- Final master head `c2b8012`; final CI run 44907699041 green; security and pages dispatch runs green.
+
+Full evidence and the two recorded deviations (compressed CI gates, no interactive smoke) are in the
+[execution report](reviews/2026-11-21-dependabot-merge/execution-report.md). The rest of this page is the
+reviewed plan, retained as the record of what was decided before execution.
 
 ## Where the 22 PRs stand
 
