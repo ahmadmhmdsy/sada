@@ -110,7 +110,9 @@ for the engine on its own.
 Since 3.4.0 the release workflow runs the same two steps: the installer ships an engine
 built from this tree, because the fork's loopback request guard lives in
 `server/crates/vibe-server/src/server/guard.rs` (see [SECURITY.md](../SECURITY.md)).
-That build is versioned `<.server-version>-sada.1`; the upstream sidecar fetched by
+That build is versioned `<.server-version>-sada.2` from 3.11.0 (the `-sada.N` suffix is bumped when a
+new engine build ships under one upstream version, so every installer reports a unique engine build);
+the upstream sidecar fetched by
 `setup` is only used for FFmpeg and for local dev before `server-build` runs.
 The guard has unit tests (`cargo test -p vibe-server guard::`) that the release workflow runs.
 

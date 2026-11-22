@@ -54,7 +54,8 @@ The app talks to its transcription engine (`vibe-server`, the `serve` subcommand
 HTTP on an ephemeral port. That port is reachable by anything on the machine, including a web
 page: a DNS-rebinding page can resolve its own domain to `127.0.0.1` and POST to the port without
 the user noticing. The fork ships an engine built from `server/` with a request guard (see
-`server/crates/vibe-server/src/server/guard.rs`) and reports version `v0.6.16-sada.1`:
+`server/crates/vibe-server/src/server/guard.rs`) and reports the fork build version
+(`v0.6.16-sada.2` from 3.11.0; earlier releases shipped `v0.6.16-sada.1`):
 
 - The app starts the engine with an explicit `--host 127.0.0.1` and port `0` (an ephemeral port),
   so the listener is loopback-only.

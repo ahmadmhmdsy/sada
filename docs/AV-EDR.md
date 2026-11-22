@@ -24,7 +24,7 @@ Last updated: 2026-11-19.
 | Process | Behaviour | Notes |
 |---------|-----------|-------|
 | `Sada.exe` | Tauri shell; WebView2; local file IO | No service, no drivers, no auto-start unless the user enabled a global shortcut |
-| `vibe-server.exe` | Child process; reads model + media; loopback only; exits with the app | Bundled sidecar, version `0.6.16-sada.1` |
+| `vibe-server.exe` | Child process; reads model + media; loopback only; exits with the app | Bundled sidecar, version `0.6.16-sada.2` from 3.11.0 (3.4.0–3.10.0 shipped `0.6.16-sada.1`) |
 | `ffmpeg.exe` | Child process; decodes local media to WAV | Only on transcribe/import; exits when done |
 | `yt-dlp.exe` | Child process; only when the user imports a URL; downloads media | Absent until first URL import unless provisioned |
 | Installer | Per-user NSIS to `%LOCALAPPDATA%\Sada` (or per-machine MSI) | No kernel components, no services |

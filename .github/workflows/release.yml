@@ -107,7 +107,10 @@ jobs:
           VIBE_SERVER_COMMIT: ${{ github.sha }}
         run: |
           $version = (Get-Content .server-version -Raw).Trim()
-          $env:VIBE_SERVER_VERSION = "$version-sada.1"
+          # The suffix separates rebuilds of one upstream version: 3.4.0 through 3.10.0 shipped
+          # three distinct engines that all reported v0.6.16-sada.1, so 3.11.0 ships
+          # v0.6.16-sada.2 and each installer's engine version stays unique.
+          $env:VIBE_SERVER_VERSION = "$version-sada.2"
           chore server-build x86_64-pc-windows-msvc
 
       - name: Test the engine request guard
@@ -253,7 +256,7 @@ jobs:
       - name: Add bundled components to the SBOM
         shell: pwsh
         run: |
-          $sidecar = (Get-Content .server-version -Raw).Trim() + '-sada.1'
+          $sidecar = (Get-Content .server-version -Raw).Trim() + '-sada.2'
           $ffmpeg = Get-ChildItem desktop/src-tauri/binaries -Filter 'ffmpeg-*.exe' -ErrorAction SilentlyContinue |
             Sort-Object LastWriteTime -Descending | Select-Object -First 1
           $ffmpegPath = if ($ffmpeg) { $ffmpeg.FullName } else { '' }
@@ -262,9 +265,12 @@ jobs:
       - name: Attest build provenance (keyless, Sigstore)
         uses: actions/attest-build-provenance@v4
         with:
+          # Attest the checksum list too: SHA256SUMS.txt is generated on the runner, so its
+          # contents inherit the same provenance as the installers they describe.
           subject-path: |
             release-assets/*.exe
             release-assets/*.msi
+            release-assets/SHA256SUMS.txt
             release-assets/sbom-cyclonedx.json
 
       # Runs only when signing is enabled: an unsigned artifact must not reach the release page.

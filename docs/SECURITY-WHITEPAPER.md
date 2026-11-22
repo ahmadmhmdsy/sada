@@ -15,7 +15,8 @@ Arabic ASR defaults, and a deliberately reduced feature surface: telemetry and t
 are removed, and the upstream phone-handoff endpoint is disabled.
 
 The transcription engine (whisper.cpp / GGML models) runs as a bundled local sidecar
-(`vibe-server`, v0.6.16-sada.1). Audio decoding uses a bundled FFmpeg. Export writes local
+(`vibe-server`, v0.6.16-sada.2 from 3.11.0; earlier releases shipped v0.6.16-sada.1). Audio
+decoding uses a bundled FFmpeg. Export writes local
 PDF/DOCX/SRT/VTT/TXT files. A local MCP server over stdio lets agents transcribe and read
 transcripts with no port. There is no server component, account, licence check or cloud service.
 
