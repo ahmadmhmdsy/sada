@@ -118,6 +118,17 @@ jobs:
         with:
           workspaces: server
 
+      - name: Setup chore (native ggml library fetcher)
+        uses: getchore/setup-chore@v1
+        with:
+          version: v1.6.0
+
+      # server/libs/lib is not committed: ggml ships prebuilt static libraries per platform,
+      # fetched by chore. Without this step cargo check fails in ggml-rs-sys with
+      # "missing native libraries; run chore fetch-libs".
+      - name: Fetch the prebuilt ggml native libraries
+        run: chore fetch-libs
+
       - name: Check the server workspace
         run: cargo check --all-targets
 
