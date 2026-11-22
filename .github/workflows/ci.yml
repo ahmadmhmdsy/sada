@@ -96,3 +96,41 @@ jobs:
           python -m sadabench compare
           --baseline results/results-2026-11-18-v2.json
           --candidate results/results-2026-11-18-v2.json
+
+  server:
+    name: Server build & tests
+    # Triage follow-up (docs/DEPENDABOT-TRIAGE.md): no job used to build server/, so a server
+    # dependency bump could pass every PR check and break the next release -- which is exactly how
+    # the utoipa-swagger-ui 10 / utoipa 5 mismatch (PR #44) reached a red build. This job closes that gap.
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: server
+
+      - name: Setup chore (native ggml library fetcher)
+        uses: getchore/setup-chore@v1
+        with:
+          version: v1.6.0
+
+      # server/libs/lib is not committed: ggml ships prebuilt static libraries per platform,
+      # fetched by chore. Without this step cargo check fails in ggml-rs-sys with
+      # "missing native libraries; run chore fetch-libs".
+      - name: Fetch the prebuilt ggml native libraries
+        run: chore fetch-libs
+
+      - name: Check the server workspace
+        run: cargo check --all-targets
+
+      - name: Run server tests
+        run: cargo test --release -p vibe-server
