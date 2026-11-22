@@ -33,10 +33,12 @@ PDF بتنسيق عربي؛ ومعها تسميات المتحدّثين وتو�
 **v3.2.2**، أُزيلت منها القياسات والتحديث التلقائي ونقل الهاتف، وأُضيف تعريب كامل، ومنذ 3.3.0
 أُضيف خادم MCP محلي ليتمكن وكلاء الذكاء الاصطناعي من استخدامه بلا منفذ وبلا حساب.
 
-> **الجديد في 3.10.0:** أول إصدار يعالج تقييم واجهة 3.9.0 — نافذة أخطاء تُصلح المشكلة بدل أن تكتفي
-> بالاعتذار، وزر «نسخ الكل» وتصدير مُجمَّع بأربع مجموعات، وإعدادات كنافذة من ترويسة التطبيق، وإصلاح
-> تتبّع الحروف العربية واتجاه الأرقام، ونصوص ثقة تقول ما يمكن إثباته فقط. واختُبرت الإتاحة وقت
-> التشغيل: 35 حالة، 0 مخالفة axe. انظر [ملاحظات الإصدار](https://github.com/alshahia/sada/releases/tag/v3.10.0).
+> **الجديد في 3.11.0:** إصدار صيانة وتقوية إصدار، لا إصدار ميزات — عشرون تحديثاً للاعتماديات
+> (Rust وnpm وسير عمل GitHub Actions) إضافة إلى utoipa 6، ومهمة تكامل مستمر تبني محرّك التفريغ
+> وتختبره على كل تغيير، وسلسلة إصدار أقوى (المحرّك يعرّف نفسه `v0.6.16-sada.2`، وقائمة
+> `SHA256SUMS.txt` مشمولة ببصمة البناء). لا تغيير في الواجهة أو المحرّك أو النماذج أو الميزات؛
+> وبوابة الخمسة مستخدمين ما زالت الخطوة التالية في الواجهة. انظر
+> [ملاحظات الإصدار](https://github.com/alshahia/sada/releases/tag/v3.11.0).
 
 ## لماذا صدى عربي أولاً؟
 
@@ -98,7 +100,7 @@ PDF بتنسيق عربي؛ ومعها تسميات المتحدّثين وتو�
 
 ### المثبّت القياسي (المستحسن)
 
-1. نزّل **`Sada_3.10.0_x64-setup.exe`** (نحو 45 ميغابايت) من
+1. نزّل **`Sada_3.11.0_x64-setup.exe`** (نحو 45 ميغابايت) من
    [أحدث إصدار](https://github.com/alshahia/sada/releases/latest).
 2. تحقّق منه (مستحسن — انظر [التحقق من التنزيل](#التحقق-من-التنزيل)).
 3. شغّل المثبّت. يُثبّت لكل مستخدم في `%LOCALAPPDATA%\Sada\` ولا يحتاج صلاحيات مدير.
@@ -107,7 +109,7 @@ PDF بتنسيق عربي؛ ومعها تسميات المتحدّثين وتو�
 ### المثبّت الذي يعمل بلا إنترنت
 
 جهاز Windows 10 الذي لم يشغّل تطبيقاً حديثاً لا يحتوي WebView2، والمثبّت القياسي يطلب من Windows
-تنزيله. إذا تعذّر اتصال الجهاز بالشبكة، نزّل **`Sada_3.10.0_x64-setup-offline.exe`**
+تنزيله. إذا تعذّر اتصال الجهاز بالشبكة، نزّل **`Sada_3.11.0_x64-setup-offline.exe`**
 (نحو 250 ميغابايت) بدلاً منه: يضمّن مثبّت WebView2، فيكفي ملف واحد للتطبيق والواجهة.
 
 لا يضمّ أي من الملفين حزمة VC++ 2015-2022؛ يثبّتها المثبّت من مايكروسوفت عند نقصها، فعلى جهاز
@@ -116,7 +118,7 @@ PDF بتنسيق عربي؛ ومعها تسميات المتحدّثين وتو�
 
 ### مثبّت MSI لكل الجهاز (للإدارة المؤسسية)
 
-يصدر v3.10.0 أيضاً **`Sada_3.10.0_x64_en-US.msi`**، مثبّت WiX لكل الجهاز مناسب لـ
+يصدر v3.11.0 أيضاً **`Sada_3.11.0_x64_en-US.msi`**، مثبّت WiX لكل الجهاز مناسب لـ
 Intune/SCCM/GPO (يحتاج صلاحيات مدير)، مع سياسة على مستوى الجهاز تفرض وضع عدم الاتصال وتعطّل
 الذكاء الاصطناعي واستيراد الروابط وتنزيل النماذج. التثبيت الصامت والاكتشاف والسياسة والتنظيف
 موثّقة في [docs/ENTERPRISE-DEPLOYMENT.md](docs/ENTERPRISE-DEPLOYMENT.md).
@@ -128,13 +130,13 @@ CycloneDX. باختصار:
 
 ```powershell
 # 1. بصمة SHA-256 مقابل القيمة المنشورة
-Get-FileHash .\Sada_3.10.0_x64-setup.exe -Algorithm SHA256
+Get-FileHash .\Sada_3.11.0_x64-setup.exe -Algorithm SHA256
 
 # 2. بصمة البناء — يتحقق GitHub CLI من التوقيع وهوية سير العمل
-gh attestation verify .\Sada_3.10.0_x64-setup.exe --repo alshahia/sada
+gh attestation verify .\Sada_3.11.0_x64-setup.exe --repo alshahia/sada
 
 # ...أو تحقّق من كل أصول الإصدار وبصماتها بأمر واحد
-pwsh -File scripts/verify-release.ps1 -Version 3.10.0 -Download
+pwsh -File scripts/verify-release.ps1 -Version 3.11.0 -Download
 ```
 
 التفاصيل الكاملة: [docs/SUPPLY-CHAIN.md](docs/SUPPLY-CHAIN.md) و
@@ -275,7 +277,7 @@ claude mcp add sada -- "C:\Users\<you>\AppData\Local\Sada\Sada.exe" --mcp
 
 الأدلة: [docs/VERIFICATION.md](docs/VERIFICATION.md) · [مصفوفة القبول](docs/ACCEPTANCE.md) ·
 [بيان الجاهزية للإنتاج](docs/PRODUCTION-READINESS.md) ·
-[إصدار v3.10.0](https://github.com/alshahia/sada/releases/tag/v3.10.0).
+[إصدار v3.11.0](https://github.com/alshahia/sada/releases/tag/v3.11.0).
 
 ## مقارنة سريعة
 
@@ -299,7 +301,7 @@ claude mcp add sada -- "C:\Users\<you>\AppData\Local\Sada\Sada.exe" --mcp
 | [التثبيت وأول تشغيل](README.ar.md#أول-تشغيل-اختر-نموذجاً) | [النماذج والبصمات](docs/MODELS.ar.md) | [سياسة الخصوصية](PRIVACY.md) | [النشر المؤسسي](docs/ENTERPRISE-DEPLOYMENT.md) | [البناء من المصدر](docs/BUILDING.md) |
 | [دليل الوكلاء/MCP](docs/AGENT-MCP.ar.md) | [قرارات النماذج](docs/MODELS-DECISIONS.md) | [حركة الشبكة](docs/NETWORK.ar.md) | [السياسة والشبكة](docs/NETWORK.ar.md) | [البنية](docs/ARCHITECTURE.md) |
 | [تقرير التحقق](docs/VERIFICATION.md) | [القياس العربي](benchmarks/arabic-asr/) | [الورقة الأمنية](docs/SECURITY-WHITEPAPER.md) | [سلسلة التوريد](docs/SUPPLY-CHAIN.md) | [باتشات المنبع](docs/UPSTREAM-PATCHES.md) |
-| [ملاحظات الإصدار](docs/releases/v3.10.0.md) | [ملاحظات GPU](docs/DEBUG.md) | [نموذج التهديدات](docs/THREAT-MODEL.md) | [خطة التوقيع](docs/SIGNING.md) | [المساهمة](CONTRIBUTING.md) |
+| [ملاحظات الإصدار](docs/releases/v3.11.0.md) | [ملاحظات GPU](docs/DEBUG.md) | [نموذج التهديدات](docs/THREAT-MODEL.md) | [خطة التوقيع](docs/SIGNING.md) | [المساهمة](CONTRIBUTING.md) |
 
 مادة للمشرفين: [خطة الظهور والتحسين لمحركات البحث](docs/DISCOVERABILITY.md)، و[دليل التحقق من الإصدار](docs/VALIDATION-RUNBOOK.md)، و[مصفوفة القبول](docs/ACCEPTANCE.md)، و[مراجعة الواجهة وتجربة الاستخدام](docs/UI-UX-REVIEW.md)، و[مجلس المزايا](docs/FEATURES-COUNCIL.ar.md)، و[خطة P7](docs/P7-PLAN.md).
 

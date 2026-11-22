@@ -11,21 +11,24 @@
 ## Key facts
 
 - Name: Sada (صدى) — "echo"
-- Version: 3.10.0
+- Version: 3.11.0
 - Platform: Windows 10/11 x64 (Tauri 2 desktop app)
 - License: MIT (fork of Vibe v3.2.2, MIT); bundled FFmpeg is GPLv3 (mere aggregation, see notices)
 - Engine: whisper.cpp via the bundled `vibe-server` sidecar (v0.6.16; built by Sada from
-  `server/` as `v0.6.16-sada.1`, adding a loopback Host/Origin guard); models are NOT bundled
-- Installers (v3.10.0, GitHub Releases, unsigned, per-user `%LOCALAPPDATA%\Sada\`):
-  `Sada_3.10.0_x64-setup.exe` (~45 MB, downloads WebView2 at install) and
-  `Sada_3.10.0_x64-setup-offline.exe` (~250 MB, embeds the WebView2 installer). The NSIS hook
+  `server/` as `v0.6.16-sada.2` since 3.11.0, adding a loopback Host/Origin guard); models are NOT bundled
+- Installers (v3.11.0, GitHub Releases, unsigned, per-user `%LOCALAPPDATA%\Sada\`):
+  `Sada_3.11.0_x64-setup.exe` (~45 MB, downloads WebView2 at install) and
+  `Sada_3.11.0_x64-setup-offline.exe` (~250 MB, embeds the WebView2 installer). The NSIS hook
   installs the VC++ 2015-2022 runtime from Microsoft when missing, so fully offline machines must
   pre-install `vc_redist.x64.exe`
-- Managed deployment (since v3.9.0): `Sada_3.10.0_x64_en-US.msi` (per-machine WiX, ~71 MB, admin rights)
+- Managed deployment (since v3.9.0): `Sada_3.11.0_x64_en-US.msi` (per-machine WiX, ~71 MB, admin rights)
   plus a machine-wide policy (HKLM `SOFTWARE\Sada\Policy` / `%ProgramData%\Sada\policy.json`) that
   can enforce offline mode and disable AI, URL import and model downloads; guides in
   `docs/ENTERPRISE-DEPLOYMENT.md` and `docs/NETWORK.md`
-- UI and accessibility (v3.10.0): recovery-first error dialog with kind-specific actions,
+- Release engineering (v3.11.0): twenty dependency updates plus utoipa 6; a CI server job that
+  builds and tests the engine; the engine reports `v0.6.16-sada.2` and `SHA256SUMS.txt` is now
+  included in the build-provenance attestations
+- UI and accessibility (v3.10.0, unchanged in 3.11.0): recovery-first error dialog with kind-specific actions,
   copy-all, export grouped into four families, Settings as a header dialog (gear / `Ctrl+,`),
   Arabic tracking and bidi fixes, truth-only trust copy; runtime axe audit over 35 UI states
   found 0 violations. Four Wave-1 repairs only — the 4.0 "Echo" identity is not in this release,
@@ -63,7 +66,7 @@
 - [Voicebox review (why MCP, what was not copied)](docs/VOICEBOX-REVIEW.md)
 - [Models council (models, features and tools worth adding, with licences)](docs/MODELS-COUNCIL.md)
 - [Features council (STT/TTS/S2S verdicts, competitor and licence boards)](docs/FEATURES-COUNCIL.md) · [P7 plan](docs/P7-PLAN.md)
-- [Release notes v3.10.0](docs/releases/v3.10.0.md) · [v3.9.0](docs/releases/v3.9.0.md) · [v3.6.0](docs/releases/v3.6.0.md) · [v3.5.0](docs/releases/v3.5.0.md) ·
+- [Release notes v3.11.0](docs/releases/v3.11.0.md) · [v3.10.0](docs/releases/v3.10.0.md) · [v3.9.0](docs/releases/v3.9.0.md) · [v3.6.0](docs/releases/v3.6.0.md) · [v3.5.0](docs/releases/v3.5.0.md) ·
   [v3.4.0](docs/releases/v3.4.0.md) · [v3.3.1](docs/releases/v3.3.1.md) · [v3.3.0](docs/releases/v3.3.0.md)
 - [Website](https://alshahia.github.io/sada/)
 

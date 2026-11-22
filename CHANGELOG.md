@@ -4,6 +4,36 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## v3.11.0 — 2026-11-22
+
+Maintenance and release-engineering release. No UI, engine (code), model, identity or feature
+change; installers remain unsigned and there is no auto-updater, telemetry or account. The
+five-user Arabic gate is still the next UX step and this release makes no Wave-2 or 4.0 claim.
+The bundled engine now reports `v0.6.16-sada.2` so each installer’s engine build is identifiable,
+and the build-provenance attestations cover `SHA256SUMS.txt` as well as the installers and SBOM.
+
+### Changed
+
+- **Dependency refresh:** twenty Dependabot updates merged on 20–21 November 2026 (Rust crates,
+  npm packages and GitHub Actions: checkout 7, setup-node 7, cache 4,
+  attest-build-provenance 4, configure-pages 6, codeql-action 4 and others), plus the server’s
+  OpenAPI stack moved to utoipa 6 (`utoipa-axum` 0.3, `utoipa-swagger-ui` 10). No product
+  behaviour change; lockfiles updated.
+- **CI builds and tests the engine:** a `server` job in `ci.yml` runs `cargo check --all-targets`
+  and `cargo test --release -p vibe-server` on every change after fetching the pinned native
+  libraries. It closes the CI gap that let the engine breakage in #44 pass CI and fail only at
+  release time.
+- **Release supply chain:** the patched engine is built as `v0.6.16-sada.2` (release workflow, SBOM,
+  AV/EDR and security docs) because 3.4.0–3.10.0 shipped three distinct engines that all reported
+  `v0.6.16-sada.1`; `SHA256SUMS.txt` is now in the keyless build-provenance attestation subjects
+  alongside the three installers and the CycloneDX SBOM.
+- **Version bump to 3.11.0** across the app, Cargo manifests/lockfile and site/README/llms/CITATION
+  metadata.
+
+### Fixed
+
+- Nothing user-facing in this release; it is a maintenance cut.
+
 ## v3.10.0 — 2026-11-19
 
 UI/UX repair release (Wave 1, pre-gate). Implements the owner's 19 November 2026 decisions after
