@@ -147,20 +147,20 @@ Pass: both checks behave as described; the Rust unit tests cover the same paths.
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Frontend tests | cd desktop; pnpm test | 33 files / 204 tests passed |
-| Frontend build | cd desktop; pnpm build | exit 0, final vite bundle 1m 5s |
+| Frontend tests | cd desktop; pnpm test | 34 files / 207 tests passed (release run 45024992661) |
+| Frontend build | cd desktop; pnpm build | exit 0 |
 | Rust tests | cd desktop/src-tauri; cargo test --release | 120 tests passed, exit 0 |
 | Engine guard tests | cargo test --release -p vibe-server guard:: | 8 tests passed, exit 0 |
 | Arabic benchmark tests | cd benchmarks/arabic-asr; python -m unittest discover -s tests | 62 tests passed (including regression-gate tests) |
 | i18n audit | python scripts/check_i18n.py | passed |
 | Rust type check | cd app; cargo check --tests | exit 0 |
-| Installers | release workflow artifacts, 3.9.0 | default 44,939,266 bytes · SHA-256 `560b76c2…6133`; offline-WebView2 262,848,006 bytes · SHA-256 `674d58c2…b979`; MSI 70,934,528 bytes · SHA-256 `751e74f3…6bad`; all three hash-matched `SHA256SUMS.txt`, NSIS silent-install verified (Sada.exe 3.9.0, sidecar v0.6.16-sada.1, MCP sada-mcp 3.9.0), MSI database verified as per-machine en-US (`ALLUSERS=1`, ProductVersion 3.9.0) |
-| Build provenance | `gh attestation verify` on all three installers + `sbom-cyclonedx.json` | passed (keyless Sigstore) |
-| SBOM | `sbom-cyclonedx.json` from the release | CycloneDX 1.6, 1,939 components, bundled FFmpeg/WebView2/vibe-server/yt-dlp listed |
-| Release verification script | `scripts/verify-release.ps1 -Version 3.9.0 -Download` | hashes and attestations passed, exit 0 |
+| Installers | release workflow artifacts, 3.11.0 | default 44,013,711 bytes · SHA-256 `57742cf2…2929`; offline-WebView2 341,955,674 bytes · SHA-256 `996a04d1…34de5`; MSI 69,128,192 bytes · SHA-256 `02e638f2…4aad`; all three hash-matched `SHA256SUMS.txt` and passed `gh attestation verify`. The published default NSIS asset was installed silently in an isolated directory: `Sada.exe` reports 3.11.0, the bundled sidecar reports `vibe-server v0.6.16-sada.2`, the app started, silent uninstall exited 0 and removed the directory cleanly; the existing 3.10.0 installation was untouched. The MSI was not install-tested (needs admin) |
+| Build provenance | `gh attestation verify` on all three installers + `sbom-cyclonedx.json` + `SHA256SUMS.txt` | passed (keyless Sigstore; the hash list itself is attested for the first time in 3.11.0) |
+| SBOM | `sbom-cyclonedx.json` from the release | CycloneDX, 2,018 components, bundled FFmpeg/WebView2/vibe-server v0.6.16-sada.2/yt-dlp listed |
+| Release verification script | `scripts/verify-release.ps1 -Version 3.11.0 -Download` | hashes and attestations passed, exit 0 |
 | Benchmark regression gate | cd benchmarks/arabic-asr; python -m sadabench compare --baseline results/results-2026-11-18-v2.json --candidate results/results-2026-11-18-v2.json | passed, all deltas 0.00 pp; CI runs the same self-comparison |
 
-The recorded values are for the v3.9.0 release (19 November 2026); the same commands were run for v3.8.0 in the previous cycle (193 frontend tests, 101 Rust tests, two installers). The clean-machine runs above (slots B-E) need physical/VM machines the maintainer controls; until
+The recorded values are for the v3.11.0 release (22 November 2026); the previous cycle (v3.9.0) recorded 33/204 frontend tests and 120 Rust tests. The clean-machine runs above (slots B-E) need physical/VM machines the maintainer controls; until
 they are recorded this page is the procedure plus the automated evidence, and docs/VERIFICATION.md
 says exactly which rows were actually run for the release. P6 (v3.9.0) adds a ready-to-run script
 for those rows — `scripts/acceptance/run-row-b-e.ps1` (invoked as `-Slot B`, `-Slot C`, `-Slot D`

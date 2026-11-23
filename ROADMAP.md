@@ -9,10 +9,13 @@ Arabic claim is made without the benchmark.
 Status: `P0 complete`, `P1 complete`, `P2 complete`, `P3 complete`, `P4 complete`,
 `P5 complete`, `P6 complete` — v3.3.1 and v3.4.0 shipped 2026-11-17, v3.5.0, v3.6.0, v3.7.0
 and v3.8.0 shipped 2026-11-18, v3.9.0 and **v3.10.0 shipped 2026-11-19** (tag `v3.10.0` at
-`be27bd5`; release assets, checksums and Sigstore provenance verified 2026-11-21). `P7` M0/M1/M4
+`be27bd5`; release assets, checksums and Sigstore provenance verified 2026-11-21). **v3.11.0 shipped
+2026-11-22** as a maintenance and release-engineering cut (dependency refresh, CI engine job, attested
+`SHA256SUMS.txt`, Tauri 2.12 stack); its P7 feature scope is deferred to 3.12 pending the five-user gate.
+`P7` M0/M1/M4
 are delivered — FC-1 docs, FC-2 FAIL and FC-3 PASS evidence reports — and M2/M3 stay gated:
 [P7-PLAN.md](docs/P7-PLAN.md), from the [features council](docs/FEATURES-COUNCIL.md).
-Last updated 2026-11-21.
+Last updated 2026-11-23.
 
 ## Milestones
 
@@ -26,7 +29,7 @@ Last updated 2026-11-21.
 | **v3.8.0 — distribution, offline install & benchmark gate** | 2027-06-15 | Offline WebView2 installer variant as a second asset, signing pipeline staged but dormant (releases stay unsigned OSS), evidence-based production-readiness statement, benchmark regression gate | #22 #23 #24 #25 #26 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.8.0), evidence below |
 | **v3.9.0 — P6 Wave 1: trust & enterprise readiness** | 2027-09-15 | Assurance pack, keyless supply chain (provenance + SBOM), security operations, managed offline policy, DPAPI secrets, retention, per-machine MSI deployment kit, rows B–E runbook | #27 #28 #29 #30 #31 #32 #33 #34 #35 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.9.0), evidence below |
 | **v3.10.0 — Wave 1 UI repairs & truth-only copy** | 2026-11-19 | Four repair families (A–D) + V3 truth-only copy; axe 35 states / 0 violations; release notes and metadata prepared | — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.10.0) published 2026-11-19 (tag at `be27bd5`, assets + checksums + provenance verified 2026-11-21) |
-| **v3.11.0 — P7: parity, proof & platform** | 2027-01-15 | Truth-parity documentation for shipped capabilities, Step Zero A/B outcomes, meeting-notes polish and translation copy; ships only what passes evidence — no new engine, no TTS/S2S claim | FC-1…FC-5 ([#58](https://github.com/alshahia/sada/issues/58)–[#62](https://github.com/alshahia/sada/issues/62)) — **in progress**: M0/M1 done (FC-1 delivered, FC-2 FAIL, FC-3 PASS), M2 gated by the five-user gate and the owner release decision, [P7-PLAN.md](docs/P7-PLAN.md), [release plan](docs/releases/v3.11.0-plan.md) |
+| **v3.11.0 — maintenance & release engineering** | 2026-11-22 | Dependency refresh (20 Dependabot updates + utoipa 6), CI engine job, engine build identity `-sada.2`, attested `SHA256SUMS.txt`, Tauri 2.12 stack; no UI, engine, model or transcription change | — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.11.0) published 2026-11-22 (tag `c7acdc8`, run 45024992661, assets + hashes + attestations verified 2026-11-22); P7 feature scope (FC-4 etc.) deferred to 3.12 pending the five-user gate, [P7-PLAN.md](docs/P7-PLAN.md), [release plan](docs/releases/v3.11.0-plan.md) |
 
 ## P0 — engine & GPU foundation (complete)
 
@@ -293,7 +296,7 @@ against `SHA256SUMS.txt` and installed silently: both report Sada.exe 3.8.0, sid
 remain unexecuted (#17), the offline installer still downloads the VC++ runtime when missing, and
 signing stays dormant (#18) by owner decision.
 
-## Backlog after v3.10.0
+## Backlog after v3.11.0
 
 - **P7 truth parity (FC-1)** — document the six shipped-but-invisible capabilities in both READMEs,
   the landing page and onboarding; evidence rule only, no new claims. See
@@ -304,6 +307,10 @@ signing stays dormant (#18) by owner decision.
 - **v3.10.0 tag** — done: tag `v3.10.0` points at `be27bd5`, the Release workflow
   (44526120606) is green, and the published assets were re-downloaded and verified on 2026-11-21
   (SHA-256 matches `SHA256SUMS.txt`, Sigstore attestation verifies); OWNER-ACTIONS A14 is closed.
+- **v3.11.0 tag** — done: tag `v3.11.0` points at `c7acdc8`; Release workflow run 45024992661 is green
+  (Tauri 2.12 build) and the published assets were re-downloaded and verified on 2026-11-22 (hashes,
+  installer attestations and the new `SHA256SUMS.txt` attestation); OWNER-ACTIONS A17 is closed for the
+  release half, with the five-user gate and the A8 clean-machine rows still open as documented gaps.
 - **Five-user gate** — human-only test, blocks Wave 2 UI and the 4.0 Echo identity
   ([GATE-KIT](docs/design/ui-decisions/GATE-KIT.md)). Run it before FC-4 UI work.
 - **Read-aloud watch-list** — Habibi-TTS specialised IRQ/MSA (Apache-2.0) tested and failed the Step
@@ -327,15 +334,15 @@ signing stays dormant (#18) by owner decision.
   is an owner purchase decision. Until measured, those regions stay explicitly unmeasured.
 - Upstream drift: upstream Vibe's latest release is v3.3.5 (2026-11-13) while this fork is based on
   v3.2.2 plus hand-ported deltas (`docs/UPSTREAM-PATCHES.md`). Plan an incremental rebase release
-  (next minor, after v3.10.0) instead of ad-hoc cherry-picks.
+  (next minor, after v3.11.0) instead of ad-hoc cherry-picks.
 - Dependabot triage: **executed 2026-11-21** (`docs/DEPENDABOT-TRIAGE.md`,
   [execution report](docs/reviews/2026-11-21-dependabot-merge/execution-report.md)) — 20 of 20 cleared PRs
   merged in four batches (npm, root Cargo, server Cargo, workflows last); #44 closed and replaced by the
-  coordinated `utoipa` 5→6 upgrade (#68, merged); #53 held for its Tauri installer gate before v3.11.0. No
-  tag or release; v3.10.0 is unchanged.
-- CI gap found in that triage: no job builds `server/`, so a server dependency bump can pass every PR
-  check and break the next release (as #44 shows). Add a server compile job to `ci.yml` before the next
-  server upgrade.
+  coordinated `utoipa` 5→6 upgrade (#68, merged); #53 was held for its Tauri installer gate and merged for
+  v3.11.0 (`a232dbd`, 2026-11-22) after the isolated installer rehearsal; v3.11.0 shipped the same day.
+- CI gap found in that triage — **fixed**: the `server` job in `ci.yml` (#69, merged `be4e8bd`) runs
+  `cargo check --all-targets` and `cargo test --release -p vibe-server` on every change, so a server
+  dependency bump can no longer pass CI and break the next release (as #44 did).
 - Keep the benchmark gate honest: run the 90-clip suite and `sadabench compare` against the
   committed baseline for every release that touches the engine, models or Arabic post-processing.
 

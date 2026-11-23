@@ -26,7 +26,7 @@ Track a box by changing `[ ]` to `[x]`. The scheduled reminders (see the end) po
 | [A14](#a14--tag-v3100) | Tag v3.10.0 and verify the release | **P0** | done 2026-11-19, verified 2026-11-21 | — |
 | [A15](#a15--authorise-the-two-step-zero-tests) | Authorise the two Step Zero tests (read-aloud, Arabic subtitle burn-in) | P1 | done 2026-11-21 (B pass, A fail) | — |
 | [A16](#a16--open-the-p7-milestone-and-issues) | Open the P7 milestone and FC-1…FC-9 issues | P1 | done 2026-11-19 | — |
-| [A17](#a17--approve-and-ship-v3110) | Approve the v3.11.0 release plan and run the five-user gate | P1 | 2–4 h + test day | five-user test, #53 gate |
+| [A17](#a17--approve-and-ship-v3110) | Approve the v3.11.0 release plan and run the five-user gate | P1 | released 2026-11-22; five-user gate still open | five-user test |
 
 ---
 
@@ -175,9 +175,9 @@ audit surface.
 conflict points (#54, #48, #40, #46) were rebased and re-checked before merging. **#44** was closed (it could
 not compile: `utoipa-swagger-ui` 10.0.2 pulls `utoipa` 6 while the server pinned 5) and replaced by **#68**,
 the coordinated `utoipa` 5 to 6 upgrade (`utoipa` 6.0.0, `utoipa-axum` 0.3.0, `utoipa-swagger-ui` 10.0.2),
-which is merged. **#53** remains open and held for its Tauri installer gate before v3.11.0. Final master
-`c2b8012`, final CI green; **no tag, version bump, release or `release.yml` dispatch** — v3.10.0 is
-unchanged.
+which is merged. **#53** was held for its Tauri installer gate and merged for v3.11.0 (`a232dbd`,
+2026-11-22) after the isolated install rehearsal. Final master at the time `c2b8012`, final CI green;
+**no tag, version bump, release or `release.yml` dispatch** happened then — v3.10.0 was unchanged.
 
 **Steps:**
 1. Group them: GitHub Actions (safe, merge after CI), frontend npm (run `pnpm build` + `pnpm test`
@@ -187,7 +187,7 @@ unchanged.
    blind.
 4. ~~Ask the agent to run the triage and prepare a merge order~~ — done: batches and commands are in [DEPENDABOT-TRIAGE.md](DEPENDABOT-TRIAGE.md).
 
-**Done when:** no Dependabot PR is older than one release cycle and CI is green on each merge. Met for 20 of 22 on 2026-11-21 (all merge CI green); #53 is the deliberate exception, held to its Tauri installer gate before v3.11.0.
+**Done when:** no Dependabot PR is older than one release cycle and CI is green on each merge. Met for 20 of 22 on 2026-11-21 (all merge CI green); #53 was the deliberate exception, held to its Tauri installer gate and merged in v3.11.0 on 2026-11-22.
 
 ## A10 — Dialect benchmark corpus
 
@@ -303,6 +303,12 @@ test results are recorded either way.
 
 ## A17 — Approve and ship v3.11.0
 
+**Done 2026-11-22 (release half).** The owner approved after the #53 installer rehearsal; the annotated
+tag `v3.11.0` was created on `c7acdc8`, Release run 45024992661 published the release at 13:42 UTC, and
+`scripts/verify-release.ps1 -Version 3.11.0 -Download` passed on all three installers plus the new
+`SHA256SUMS.txt` attestation. The five-user Arabic gate was not run — it remains the documented gap
+before Wave 2 and 4.0, and does not gate this maintenance cut.
+
 **Why:** v3.11.0 is gated on human evidence (the five-user Arabic test) and on the last dependency jump
 (#53, the Tauri runtime). The agent can prepare and verify everything else; the scope call, the gate result
 and the tag are yours.
@@ -320,7 +326,8 @@ list, the tag sequence and the rollback notes.
    release.
 
 **Done when:** v3.11.0 is published, every asset hash/attestation verifies, the clean-machine rows pass and
-the five-user result is recorded.
+the five-user result is recorded. The release half is done (2026-11-22); the clean-machine rows and the
+five-user result remain open as tracked gaps.
 
 ## Release sign-off (every release)
 

@@ -134,9 +134,9 @@ Both formal tests were authorised (OWNER-ACTIONS A15) and run: Step Zero B on 20
 
 - **FC-1** ships as a docs-only commit; the site deploy workflow publishes it. No version bump, no tag, no release.
 - **FC-2/FC-3** shipped as evidence documents on 2026-11-21 (A FAIL, B PASS); no product code, so no release requirement. The Step Zero A fail keeps read-aloud closed for v3.11.
-- **FC-4/FC-5** are candidates for the next feature release, planned here as **v3.11.0** (milestone row in ROADMAP), due 2027-01-15 unless the owner moves it. That release requires the five-user gate results for any Wave-2 UI work and the usual full test matrix, bilingual notes and tag discipline.
+- **FC-4/FC-5** are candidates for the next feature release. v3.11.0 shipped 2026-11-22 as a maintenance cut **without** them (deps/CI/supply-chain/Tauri only), so they move to **v3.12**, still gated on the five-user result for any Wave-2 UI work plus the usual full test matrix, bilingual notes and tag discipline.
 - **FC-6/FC-7/FC-8** may never ship; they are decision records, not promises.
-- **v3.10.0 shipped 2026-11-19** (tag verified 2026-11-21, OWNER-ACTIONS A14 closed); this plan does not tag any further release.
+- **v3.10.0 shipped 2026-11-19** (tag verified 2026-11-21, OWNER-ACTIONS A14 closed); **v3.11.0 shipped 2026-11-22** as the maintenance cut (tag `c7acdc8`, release verified 2026-11-22); no P7 feature work has shipped yet.
 
 ## Owner gates
 

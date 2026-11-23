@@ -34,6 +34,7 @@ server/fixtures/**/*.txt
 pnpm-workspace.yaml
 desktop/src-tauri/binaries/vibe-server-*
 github-issues/
+/release-verify/
 dedup_report.json
 ISSUES-REPORT.md
 desktop/src-tauri/binaries/

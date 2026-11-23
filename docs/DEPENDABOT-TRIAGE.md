@@ -19,8 +19,10 @@ and merge order, **executed on 2026-11-21** — see the execution record below a
   predicted conflict points (`#54`, `#48`, `#40`, `#46`) were rebased and re-checked before merging.
 - **#44 closed and replaced by #68** — the coordinated `utoipa` 5 to 6 upgrade (`utoipa` 6.0.0,
   `utoipa-axum` 0.3.0, `utoipa-swagger-ui` 10.0.2), merged as `c2b8012`. Tracking task: #67.
-- **#53 stays open and held** for its Tauri installer gate before v3.11.0.
-- **No tag, no version bump, no release and no `release.yml` dispatch**; v3.10.0 is unchanged.
+- **#53 was held** for its Tauri installer gate and merged in v3.11.0 (`a232dbd`, 2026-11-22) after the
+  isolated installer rehearsal; v3.11.0 shipped the same day.
+- **No tag, no version bump, no release and no `release.yml` dispatch** happened at the time; v3.10.0
+  was unchanged.
 - Final master head `c2b8012`; final CI run 44907699041 green; security and pages dispatch runs green.
 
 Full evidence and the two recorded deviations (compressed CI gates, no interactive smoke) are in the
@@ -191,10 +193,12 @@ tag is otherwise the first release-profile compile). Keep #44 out.
   third distinct server binary now shares that string; add `SHA256SUMS.txt` to the attestation subjects;
   validate `setup-uv` 7 and `attest` 4 at the tag rehearsal — never dispatch `release.yml` against v3.10.0.
   **Done 2026-11-22:** the engine builds `-sada.2` (docs synced), `SHA256SUMS.txt` is in the attestation
-  subjects, and CI has a server job; `setup-uv` 7 and `attest` 4 are still first exercised by the v3.11.0
-  tag run.
+  subjects, and CI has a server job. **Exercised at the v3.11.0 tag:** `attest` 4 succeeded and published
+  attestation 70763655 (now covering `SHA256SUMS.txt` as well as the three installers and the SBOM);
+  `setup-uv` 7 was skipped because signing is disabled, so it remains unexercised until a signed build.
 - **Audit the other workflows.** After the workflow batch, dispatch `security.yml` once and confirm one
-  green run before the next tag; `pages.yml` once. `release.yml` changes remain untested until v3.11.0.
+  green run before the next tag; `pages.yml` once. `release.yml` changes were exercised by the green
+  v3.11.0 release run 45024992661.
 
 ## Evidence
 

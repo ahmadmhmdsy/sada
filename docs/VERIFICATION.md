@@ -3,6 +3,63 @@
 This page summarises how the Windows builds in this repository were verified.
 It is written in English for reviewers; the Arabic summary follows.
 
+## Sada 3.11.0 — maintenance and release-engineering release
+
+- **Date:** 22 November 2026 (Asia/Baghdad)
+- **Source:** `master`, tagged `v3.11.0` (`c7acdc8`); Release workflow run
+  [45024992661](https://github.com/alshahia/sada/actions/runs/45024992661) built and published the
+  assets on 2026-11-22 13:42 UTC. No UI, engine, model or transcription change: the release refreshes
+  dependencies (twenty Dependabot updates plus utoipa 6), adds the CI engine job, moves the bundled
+  engine identity to `v0.6.16-sada.2`, attests `SHA256SUMS.txt`, and moves the desktop stack to
+  Tauri 2.12.7 (wry 0.57.3, tao 0.37.3, notification plugin 2.8.1, @tauri-apps/api 2.12.5, CLI 2.12.6).
+- **Build host:** GitHub-hosted `windows-latest`; verification on Windows 11 10.0.26300 · WebView2
+  157.0.4341.60.
+
+### Tests (Release run 45024992661)
+
+| Suite | Result |
+| --- | --- |
+| pnpm test (vitest) | **34 files / 207 tests passed**, exit 0 |
+| cargo test --release (desktop) | **120 passed**, exit 0 |
+| cargo test --release -p vibe-server guard:: | **8 passed**, exit 0 |
+| Engine sidecar build (`VIBE_SERVER_VERSION=v0.6.16-sada.2`) | success; SBOM records `v0.6.16-sada.2` |
+| CI on the parent commit (`a232dbd`, master run 45024071826) | desktop, server, benchmarks, advisories and CodeQL green |
+| Docs & metadata on `c7acdc8` (run 45024154475) | green (`check-seo.mjs` version/JSON-LD/link checks) |
+| i18n audit (`python scripts/check_i18n.py`) | passed 2026-11-23 (fallback warnings only) |
+
+### Artifacts and published installers
+
+| Asset | Bytes | SHA-256 |
+| --- | --- | --- |
+| `Sada_3.11.0_x64-setup.exe` | 44,013,711 | `57742CF25CC73BBF62E2775035658B1D5194FB2F5DE8252B04676E5D083D2929` |
+| `Sada_3.11.0_x64-setup-offline.exe` | 341,955,674 | `996A04D1A591E36D6B8FABD22BDF4EBF2CC39C438B0F9493CD929220ED634DE5` |
+| `Sada_3.11.0_x64_en-US.msi` | 69,128,192 | `02E638F204669D16B71610D374643208A5BDE0C6958DB9CAD2872CFC38EE4AAD` |
+| `SHA256SUMS.txt` | 285 | `c0c1122fcfe1c87429bf487203a1029995354b6288c2de0fb37f598436a67b22` (the file itself is attested) |
+| `sbom-cyclonedx.json` | 3,937,326 | `ef09544f6f0d1be30dd79f567517484ceebade5958823280745326d09199d4c0` |
+
+Attestation and verification, 2026-11-22:
+
+- `scripts/verify-release.ps1 -Version 3.11.0 -Download` → **"VERIFICATION PASSED: all hashes and
+  attestations match"** for the three installers.
+- `gh attestation verify .\SHA256SUMS.txt --repo alshahia/sada` → exit 0: the hash list is attested,
+  which is the new supply-chain property of this release.
+- SBOM: CycloneDX, app `Sada 3.11.0`, 2,018 components, bundled `vibe-server v0.6.16-sada.2`.
+
+### Install rehearsal (published default NSIS asset)
+
+Run in an isolated directory so the existing 3.10.0 installation on the host was never touched:
+
+- `Sada_3.11.0_x64-setup.exe /S /D=<temp dir>` → exit 0; payload `Sada.exe` reports **3.11.0** and the
+  bundled sidecar reports **`vibe-server v0.6.16-sada.2`**; `ffmpeg.exe` and `uninstall.exe` present.
+- Launched from the installed path, stayed running, closed cleanly.
+- `uninstall.exe /S` → exit 0, install directory removed with no leftovers; the HKCU uninstall key and
+  the Start-menu/desktop shortcuts were restored, and the existing installation hashes are unchanged.
+- Not run here: the MSI (needs admin), the offline-variant install, and the pristine-OS/offline rows —
+  those remain the owner A8 clean-machine rows.
+
+No Wave-2, FC-4, 4.0 or five-user claim is made by this release; the full limitations list is in the
+release notes.
+
 ## Sada 3.9.0 — trust and enterprise readiness (P6 Wave 1)
 
 - **Date:** 19 November 2026 (Asia/Baghdad)
