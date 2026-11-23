@@ -27,6 +27,11 @@ async function start() {
 	await loadConfigStore()
 	runMigrations()
 	applyBootLocale()
+	// Echo 4.0 preview: opt-in paper-and-ink token layer, off in every shipped build.
+	// See docs/design/ui-decisions/ECHO-PREVIEW.md and echo-identity-4.0.md §3.
+	if (import.meta.env.VITE_ECHO_PREVIEW === 'true') {
+		document.documentElement.dataset.echoPreview = 'true'
+	}
 	// Native registrations outlive a webview reload, including their dead JS callbacks.
 	// Clear them before either shortcut provider mounts. Auxiliary windows must never
 	// clear the main window's live shortcuts when their own webviews start.
