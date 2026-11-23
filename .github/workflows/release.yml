@@ -56,7 +56,7 @@ jobs:
           echo "notes=$NOTES" >> "$GITHUB_OUTPUT"
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           package_json_file: desktop/package.json
 
