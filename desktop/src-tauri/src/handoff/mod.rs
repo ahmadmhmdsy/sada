@@ -71,7 +71,7 @@ impl HandoffState {
 
 /// Correlate successful authentication with the current QR without emitting its secret.
 pub(crate) fn pairing_id(token: &str) -> String {
-    format!("{:x}", Sha256::digest(token.as_bytes()))
+    hex::encode(Sha256::digest(token.as_bytes()))
 }
 
 /// `<pwa_origin>/#<endpoint_id>:<token>` — the exact string the QR encodes.
