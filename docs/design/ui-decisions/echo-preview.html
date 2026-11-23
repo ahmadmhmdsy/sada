@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Echo 4.0 preview — paper & ink</title>
+<style>
+	:root {
+		--paper-0: #FBF8F2; --paper-1: #F6F1E6; --sand-1: #EFE8DA; --sand-2: #E2D8C5; --sand-3: #CFC2AC;
+		--ink-900: #17140F; --ink-500: #7A7164; --signal-500: #C2603F; --signal-600: #A94E2F; --verify-700: #3F7D5F;
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0; background: var(--paper-1); color: var(--ink-900);
+		font: 15px/1.7 'IBM Plex Sans Arabic', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+		letter-spacing: 0;
+	}
+	.wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 72px; }
+	header.hero { background: var(--paper-0); border: 1px solid var(--sand-2); border-radius: 20px; padding: 40px; }
+	.eyebrow { color: var(--signal-600); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+	h1 { font-size: 30px; line-height: 1.3; margin: 10px 0 8px; letter-spacing: -0.02em; }
+	h2 { font-size: 19px; margin: 48px 0 6px; letter-spacing: -0.01em; }
+	.lede { color: var(--ink-500); max-width: 70ch; margin: 0; }
+	.note { color: var(--ink-500); font-size: 13px; }
+	.grid { display: grid; gap: 16px; }
+	.cols-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+	.cols-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+	.card { background: var(--paper-0); border: 1px solid var(--sand-2); border-radius: 16px; padding: 20px; }
+	.swatch { border-radius: 12px; height: 84px; border: 1px solid rgb(23 20 15 / .08); }
+	.swatch-row { display: flex; align-items: center; gap: 12px; }
+	.token { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--ink-500); direction: ltr; }
+	.value { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--ink-900); direction: ltr; }
+	table { width: 100%; border-collapse: collapse; background: var(--paper-0); border: 1px solid var(--sand-2); border-radius: 16px; overflow: hidden; }
+	th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--sand-1); font-size: 14px; }
+	th { background: var(--sand-1); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-500); }
+	tr:last-child td { border-bottom: 0; }
+	.motif { background: var(--paper-0); border: 1px solid var(--sand-2); border-radius: 16px; padding: 28px; display: grid; gap: 24px; }
+	.rings-a { display: flex; justify-content: center; }
+	.footline { display: flex; align-items: flex-end; gap: 4px; height: 28px; }
+	.footline i { display: block; width: 2px; background: var(--ink-500); border-radius: 2px; }
+	.footline i.mid { background: var(--signal-500); }
+	button.cta { background: var(--signal-600); color: var(--paper-0); border: 0; border-radius: 10px; padding: 10px 18px; font: inherit; font-size: 13px; font-weight: 600; }
+	button.ghost { background: transparent; color: var(--ink-900); border: 1px solid var(--sand-3); border-radius: 10px; padding: 10px 16px; font: inherit; font-size: 13px; }
+	.mock { display: flex; min-height: 330px; border-radius: 18px; overflow: hidden; border: 1px solid var(--sand-2); }
+	.mock .rail { width: 88px; background: var(--ink-900); color: var(--paper-0); padding: 16px 10px; display: flex; flex-direction: column; gap: 10px; }
+	.mock .rail b { font-size: 13px; font-weight: 600; }
+	.mock .rail span { font-size: 11px; color: var(--signal-500); }
+	.mock .rail .item { font-size: 11px; color: var(--sand-3); opacity: .85; border-top: 1px solid var(--sidebar-border, #3A3327); padding-top: 8px; }
+	.mock .canvas { flex: 1; background: var(--paper-0); padding: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; }
+	.mock h3 { margin: 0; font-size: 26px; letter-spacing: -0.02em; }
+	.drop { width: min(380px, 90%); border: 2px dashed var(--sand-3); border-radius: 16px; padding: 26px 18px; color: var(--ink-500); font-size: 13px; background: var(--paper-1); }
+	.trust { font-size: 12px; color: var(--ink-500); }
+	.pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--sand-2); border-radius: 999px; padding: 4px 10px; font-size: 11px; color: var(--ink-500); background: var(--paper-1); }
+	.check { color: var(--verify-700); font-weight: 700; }
+	.transcript { background: var(--paper-0); border: 1px solid var(--sand-2); border-radius: 16px; padding: 8px; }
+	.seg { display: flex; gap: 14px; padding: 12px; border-radius: 10px; }
+	.seg:hover { background: var(--paper-1); }
+	.seg .time { direction: ltr; font-variant-numeric: tabular-nums; font-size: 12px; color: var(--ink-500); min-width: 52px; }
+	.seg .text { flex: 1; }
+	.seg .text[dir="rtl"] { font-size: 15px; line-height: 1.75; }
+	.seg .spk { font-size: 11px; color: var(--signal-600); border: 1px solid var(--sand-2); background: var(--paper-1); border-radius: 999px; padding: 2px 8px; align-self: flex-start; }
+	.scale div { padding: 10px 0; border-bottom: 1px dashed var(--sand-2); }
+	.scale div:last-child { border-bottom: 0; }
+	.scale small { display: block; color: var(--ink-500); font-size: 11px; font-family: ui-monospace, Consolas, monospace; }
+	ul.review { margin: 6px 0 0; padding-inline-start: 20px; }
+	ul.review li { margin: 6px 0; color: var(--ink-500); }
+	ul.review li b { color: var(--ink-900); }
+	footer { margin-top: 56px; color: var(--ink-500); font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+	<header class="hero">
+		<div class="eyebrow">Sada · Echo 4.0 · preview</div>
+		<h1>Paper &amp; ink — token layer</h1>
+		<p class="lede">The first migration step of the Echo direction: the brief's paper-and-ink ramp applied to the
+		existing shell, one signal colour, and the concentric-arc motif. <b>Non-shipping.</b> This board is for review;
+		nothing here is approved for a release.</p>
+		<p class="note">Direction brief: <span class="token">docs/design/echo-identity-4.0.md</span> · Guide:
+		<span class="token">docs/design/ui-decisions/ECHO-PREVIEW.md</span></p>
+	</header>
+
+	<h2>1 · Palette and semantic mapping</h2>
+	<p class="note">Values are proposals from brief §3; the token layer only repaints, it does not move anything.</p>
+	<div class="grid cols-3" style="margin-top:14px">
+		<div class="card"><div class="swatch" style="background:#FBF8F2"></div><div class="swatch-row"><span class="token">--paper-0</span><span class="value">#FBF8F2</span></div><span class="note">main window surface</span></div>
+		<div class="card"><div class="swatch" style="background:#F6F1E6"></div><div class="swatch-row"><span class="token">--paper-1</span><span class="value">#F6F1E6</span></div><span class="note">canvas behind panels</span></div>
+		<div class="card"><div class="swatch" style="background:#EFE8DA"></div><div class="swatch-row"><span class="token">--sand-1</span><span class="value">#EFE8DA</span></div><span class="note">chrome, toolbars</span></div>
+		<div class="card"><div class="swatch" style="background:#E2D8C5"></div><div class="swatch-row"><span class="token">--sand-2</span><span class="value">#E2D8C5</span></div><span class="note">hairline borders</span></div>
+		<div class="card"><div class="swatch" style="background:#CFC2AC"></div><div class="swatch-row"><span class="token">--sand-3</span><span class="value">#CFC2AC</span></div><span class="note">strong borders · border only, never text</span></div>
+		<div class="card"><div class="swatch" style="background:#17140F"></div><div class="swatch-row"><span class="token">--ink-900</span><span class="value">#17140F</span></div><span class="note">rail, primary text</span></div>
+		<div class="card"><div class="swatch" style="background:#7A7164"></div><div class="swatch-row"><span class="token">--ink-500</span><span class="value">#7A7164</span></div><span class="note">secondary text ≥14 px</span></div>
+		<div class="card"><div class="swatch" style="background:#C2603F"></div><div class="swatch-row"><span class="token">--signal-500</span><span class="value">#C2603F</span></div><span class="note">rings, selection, waveform centre</span></div>
+		<div class="card"><div class="swatch" style="background:#A94E2F"></div><div class="swatch-row"><span class="token">--signal-600</span><span class="value">#A94E2F</span></div><span class="note">links, primary CTA, focus ring</span></div>
+		<div class="card"><div class="swatch" style="background:#3F7D5F"></div><div class="swatch-row"><span class="token">--verify-700</span><span class="value">#3F7D5F</span></div><span class="note">trust check icon and line</span></div>
+	</div>
+
+	<h2>2 · Contrast pairs</h2>
+	<table>
+		<thead><tr><th>Pair</th><th>Ratio</th><th>Rule</th></tr></thead>
+		<tbody>
+			<tr><td><span class="token">ink-900 on paper-0</span></td><td>17.1:1</td><td>primary text ✓</td></tr>
+			<tr><td><span class="token">ink-500 on paper-0</span></td><td>4.6:1</td><td>secondary text, ≥14 px only ✓</td></tr>
+			<tr><td><span class="token">signal-600 on paper-0</span></td><td>5.2:1</td><td>links, primary CTA, focus ✓</td></tr>
+			<tr><td><span class="token">signal-500 on paper-0</span></td><td>3.9:1</td><td>decorative and ≥24 px text only — never small text</td></tr>
+			<tr><td><span class="token">verify-700 on paper-0</span></td><td>4.6:1</td><td>trust check + line ✓</td></tr>
+			<tr><td><span class="token">paper-0 on signal-600</span></td><td>5.5:1</td><td>button label ✓</td></tr>
+		</tbody>
+	</table>
+
+	<h2>3 · Motif</h2>
+	<div class="motif">
+		<div class="rings-a">
+			<svg width="260" height="150" viewBox="0 0 260 150" role="img" aria-label="Concentric echo arcs decaying from a solid centre">
+				<circle cx="130" cy="75" r="11" fill="#C2603F"/>
+				<path d="M 130 44 A 31 31 0 0 1 130 106" fill="none" stroke="#C2603F" stroke-width="6" stroke-linecap="round" opacity=".92"/>
+				<path d="M 130 26 A 49 49 0 0 1 130 124" fill="none" stroke="#C2603F" stroke-width="5" stroke-linecap="round" opacity=".62"/>
+				<path d="M 130 8 A 67 67 0 0 1 130 142" fill="none" stroke="#C2603F" stroke-width="4" stroke-linecap="round" opacity=".38"/>
+			</svg>
+		</div>
+		<div>
+			<div class="note" style="margin-bottom:6px">Continuity footline — only the centre bar carries the signal colour, bars are flat and 2 px:</div>
+			<div class="footline" aria-hidden="true">
+				<i style="height:8px"></i><i style="height:14px"></i><i style="height:20px"></i><i style="height:26px"></i>
+				<i style="height:16px"></i><i class="mid" style="height:28px"></i>
+				<i style="height:12px"></i><i style="height:18px"></i><i style="height:10px"></i><i style="height:6px"></i>
+			</div>
+		</div>
+		<p class="note" style="margin:0">Three uses only (brief §2): wordmark, empty-state rings behind the drop target clipped at one edge, and a 10-bar waveform footline. Never a spinner, never a background pattern, never a decorative border.</p>
+	</div>
+
+	<h2>4 · Mini composition (tokens only — no layout change is part of this branch)</h2>
+	<div class="mock">
+		<div class="canvas">
+			<div class="pill"><span class="check">✓</span> يعمل دون اتصال بعد تنزيل النموذج</div>
+			<h3>صدى يحتفظ بما قيل.</h3>
+			<div class="drop">أفلِت ملف صوت أو فيديو هنا · Drop an audio or video file<br />أو استخدم «اختيار ملف»</div>
+			<div class="trust">التفريغ يتم على هذا الجهاز — لا يُرفع أي صوت أو نص. أول تنزيل للنموذج يحتاج الإنترنت؛ بعد ذلك يعمل صدى دون اتصال.</div>
+			<button class="cta" type="button">ابدأ التسجيل</button>
+			<button class="ghost" type="button">اختيار ملف</button>
+		</div>
+		<div class="rail" dir="rtl">
+			<b>صدى</b><span>المنطقة</span>
+			<div class="item">التفريغات الأخيرة</div>
+			<div class="item">جلسة · 21 نوفمبر</div>
+			<div class="item">جلسة · 19 نوفمبر</div>
+			<div class="item" style="margin-top:auto;border-top:0">الإعدادات</div>
+		</div>
+	</div>
+
+	<h2>5 · Transcript on paper</h2>
+	<div class="transcript" dir="rtl">
+		<div class="seg"><span class="time">00:12</span><span class="spk">متحدث ١</span><span class="text" dir="rtl">كان الاجتماع حول مشروع المكتبة الجديدة، واتفقنا على أن التنفيذ يبدأ بعد العيد.</span></div>
+		<div class="seg" style="background:#F6F1E6"><span class="time">00:27</span><span class="spk">متحدث ٢</span><span class="text" dir="rtl">تمام، وسأرسل الملخص إلى الفريق اليوم حتى نراجع الخطة قبل الاجتماع القادم.</span></div>
+	</div>
+
+	<h2>6 · Type scale</h2>
+	<div class="card scale">
+		<div style="font-size:28px;line-height:1.3;font-weight:600">صدى يحتفظ بما قيل. <small>Display · 25–28 / 1.3 · Plex AR SemiBold</small></div>
+		<div style="font-size:17px;line-height:1.4;font-weight:600">الإعدادات والنماذج <small>Section title · 16–18 / 1.4</small></div>
+		<div style="font-size:15px;line-height:1.7">التفريغ يتم على هذا الجهاز، ويبقى النص بعد انتهاء الصوت. <small>Body · 14–15 / 1.7 Arabic</small></div>
+		<div style="font-size:13px;line-height:1.5;font-weight:500">ابدأ التسجيل <small>Label / button · 12–13 / 1.5</small></div>
+		<div style="font-size:12px;font-variant-numeric:tabular-nums;color:#7A7164" dir="ltr">00:12 · 108,541,632 bytes · 5.2% <small>Timestamp / technical · 11–12 / 1.4 · tabular</small></div>
+	</div>
+
+	<h2>7 · What to review</h2>
+	<div class="card">
+		<ul class="review">
+			<li><b>Temperature.</b> Is paper calmer than the current chat-app neutrals, or too warm?</li>
+			<li><b>Signal discipline.</b> Terracotta as one accent per screen — signal, not theme?</li>
+			<li><b>Ink rail.</b> Right direction for the eventual rail restyle next to paper?</li>
+			<li><b>Arabic reading.</b> Body 14–15 / 1.7 on paper comfortable at arm's length?</li>
+			<li><b>Motif.</b> Rings + footline worth building the shell around?</li>
+			<li><b>Trust.</b> Does anything weaken the literal privacy line? It must stay its own slot.</li>
+		</ul>
+		<p class="note" style="margin-bottom:0">Report the exact screen and problem. Components the brief did not audit may have weak pairs in a
+		token-only pass — that is expected. Dark theme is out of scope: preview in light mode.</p>
+	</div>
+
+	<footer>Echo 4.0 preview · prepared 2026-11-23 · non-shipping · branch <span class="token">design/echo-4.0-preview</span></footer>
+</div>
+</body>
+</html>

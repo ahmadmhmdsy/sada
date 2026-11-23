@@ -217,6 +217,94 @@ html.dictation-indicator-window #root {
 	--shadow-2xl: 0 40px 80px rgb(0 0 0 / 0.65);
 }
 
+/* ── Echo 4.0 preview — paper-and-ink token layer (non-shipping) ──────────────
+   Direction brief: docs/design/echo-identity-4.0.md §3. Enabled only when the
+   dev build is started with VITE_ECHO_PREVIEW=true (bootstrap.tsx sets
+   html[data-echo-preview]). It changes colour tokens, selection and scrollbar
+   only — no layout, rail, wordmark or artwork moves. Dark theme is deliberately
+   out of scope for this pass: preview in light mode. Rejecting the direction is
+   a one-commit revert; nothing here runs in a default build. */
+html[data-echo-preview] {
+	/* paper-and-ink ramp from the brief */
+	--paper-0: #fbf8f2;
+	--paper-1: #f6f1e6;
+	--sand-1: #efe8da;
+	--sand-2: #e2d8c5;
+	--sand-3: #cfc2ac;
+	--ink-900: #17140f;
+	--ink-500: #7a7164;
+	--signal-500: #c2603f;
+	--signal-600: #a94e2f;
+	--verify-700: #3f7d5f;
+
+	/* semantic mapping the components already consume */
+	--background: var(--paper-0);
+	--foreground: var(--ink-900);
+	--card: var(--paper-0);
+	--card-foreground: var(--ink-900);
+	--popover: var(--paper-0);
+	--popover-foreground: var(--ink-900);
+	--primary: var(--signal-600);
+	--primary-foreground: var(--paper-0);
+	--secondary: var(--paper-1);
+	--secondary-foreground: var(--ink-900);
+	--muted: var(--paper-1);
+	--muted-foreground: var(--ink-500);
+	--accent: var(--sand-1);
+	--accent-foreground: var(--ink-900);
+	--destructive: #a8433a;
+	--destructive-foreground: var(--paper-0);
+	--success: var(--verify-700);
+	--success-foreground: var(--paper-0);
+	--border: var(--sand-2);
+	--input: var(--sand-2);
+	--ring: rgb(169 78 47 / 0.35);
+
+	/* the old aurora was the only chroma; Echo replaces it with one signal */
+	--aurora-1: var(--signal-500);
+	--aurora-2: var(--sand-2);
+	--aurora-3: var(--ink-500);
+	--aurora-4: var(--verify-700);
+	--chart-1: var(--signal-500);
+	--chart-2: var(--ink-500);
+	--chart-3: var(--verify-700);
+	--chart-4: var(--sand-3);
+	--chart-5: var(--ink-900);
+
+	/* ink rail at the reading start, paper labels */
+	--sidebar: var(--ink-900);
+	--sidebar-foreground: var(--paper-0);
+	--sidebar-primary: var(--signal-500);
+	--sidebar-primary-foreground: var(--paper-0);
+	--sidebar-accent: #2a241b;
+	--sidebar-accent-foreground: var(--paper-0);
+	--sidebar-border: #3a3327;
+	--sidebar-ring: rgb(194 96 63 / 0.4);
+
+	/* warm shadows instead of neutral black */
+	--shadow-2xs: 0 1px 1px rgb(23 20 15 / 0.04);
+	--shadow-xs: 0 1px 2px rgb(23 20 15 / 0.05);
+	--shadow-sm: 0 2px 8px rgb(23 20 15 / 0.05);
+	--shadow: 0 6px 18px rgb(23 20 15 / 0.06);
+	--shadow-md: 0 10px 26px rgb(23 20 15 / 0.07);
+	--shadow-lg: 0 16px 36px rgb(23 20 15 / 0.09);
+	--shadow-xl: 0 24px 56px rgb(23 20 15 / 0.11);
+	--shadow-2xl: 0 32px 72px rgb(23 20 15 / 0.13);
+}
+
+html[data-echo-preview] ::selection {
+	background: rgb(169 78 47 / 0.16);
+	color: var(--ink-900);
+}
+
+html[data-echo-preview] ::-webkit-scrollbar-thumb {
+	background: rgb(23 20 15 / 0.16);
+}
+
+html[data-echo-preview] :hover::-webkit-scrollbar-thumb {
+	background: rgb(23 20 15 / 0.24);
+}
+
 @layer base {
 	html,
 	body,
