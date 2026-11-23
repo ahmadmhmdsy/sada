@@ -1,4 +1,8 @@
 version: 2
+
+# Group patch/minor updates per ecosystem so a weekly cycle produces a few reviewable
+# PRs instead of ~20 single-package PRs (docs/DEPENDABOT-TRIAGE.md, follow-up 2026-11-21).
+# Major updates stay ungrouped: they need their own compatibility review.
 updates:
   - package-ecosystem: "cargo"
     directory: "/"
@@ -6,6 +10,10 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 5
     labels: ["dependencies", "rust"]
+    groups:
+      rust-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "cargo"
     directory: "/desktop/src-tauri"
@@ -13,6 +21,10 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 5
     labels: ["dependencies", "rust"]
+    groups:
+      tauri-rust-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "cargo"
     directory: "/server"
@@ -20,6 +32,10 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 5
     labels: ["dependencies", "rust"]
+    groups:
+      server-rust-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "npm"
     directory: "/desktop"
@@ -27,6 +43,10 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 5
     labels: ["dependencies", "npm"]
+    groups:
+      npm-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "pip"
     directory: "/benchmarks/arabic-asr"
@@ -36,9 +56,17 @@ updates:
     labels: ["dependencies", "python"]
     allow:
       - dependency-type: "direct"
+    groups:
+      python-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
     labels: ["dependencies", "ci"]
+    groups:
+      actions-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
