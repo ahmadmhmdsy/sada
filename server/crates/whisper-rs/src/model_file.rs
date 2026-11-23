@@ -160,7 +160,9 @@ pub(crate) fn check_available_memory(path: &Path, size: u64) -> Result<()> {
 }
 
 fn available_memory() -> u64 {
-    let mut system = sysinfo::System::new();
+    let Ok(mut system) = sysinfo::System::new() else {
+        return 0;
+    };
     system.refresh_memory();
     system.available_memory()
 }
