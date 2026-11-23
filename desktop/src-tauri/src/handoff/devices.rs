@@ -59,7 +59,7 @@ fn constant_time_equal(left: &str, right: &str) -> bool {
 }
 
 fn token_hash(token: &str) -> String {
-    format!("{:x}", Sha256::digest(token.as_bytes()))
+    hex::encode(Sha256::digest(token.as_bytes()))
 }
 
 fn normalize_name(name: &str) -> String {
