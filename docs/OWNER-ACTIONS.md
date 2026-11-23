@@ -180,6 +180,13 @@ which is merged. **#53** was held for its Tauri installer gate and merged for v3
 2026-11-22) after the isolated install rehearsal. Final master at the time `c2b8012`, final CI green;
 **no tag, version bump, release or `release.yml` dispatch** happened then — v3.10.0 was unchanged.
 
+**Status (2026-11-23, first grouped batch).** The grouping configuration opened 20 PRs (#74–#93);
+19 merged the same day in the recommended order (npm → root Rust → server → workflows last) and were
+validated locally (`pnpm test` 34 files / 207 tests, `pnpm build`, release build). Two bumps needed
+source adaptations (sha2 hex encoding, fallible sysinfo constructors). #79 (bindgen 0.73.2) is
+blocked by an upstream `syn` conflict and stays open with an evidence comment — no owner action
+needed. Again no tag, version bump or release.
+
 **Steps:**
 1. Group them: GitHub Actions (safe, merge after CI), frontend npm (run `pnpm build` + `pnpm test`
    locally first), Rust/cargo (run `cargo test --release`), server crates.
@@ -188,7 +195,7 @@ which is merged. **#53** was held for its Tauri installer gate and merged for v3
    blind.
 4. ~~Ask the agent to run the triage and prepare a merge order~~ — done: batches and commands are in [DEPENDABOT-TRIAGE.md](DEPENDABOT-TRIAGE.md).
 
-**Done when:** no Dependabot PR is older than one release cycle and CI is green on each merge. Met for 20 of 22 on 2026-11-21 (all merge CI green); #53 was the deliberate exception, held to its Tauri installer gate and merged in v3.11.0 on 2026-11-22.
+**Done when:** no Dependabot PR is older than one release cycle and CI is green on each merge. Met for 20 of 22 on 2026-11-21 (all merge CI green); #53 was the deliberate exception, held to its Tauri installer gate and merged in v3.11.0 on 2026-11-22. The first grouped batch on 2026-11-23 merged 19 of 20 in one day; #79 is upstream-blocked (bindgen 0.73.2) and documented in [DEPENDABOT-TRIAGE.md](DEPENDABOT-TRIAGE.md).
 
 ## A10 — Dialect benchmark corpus
 

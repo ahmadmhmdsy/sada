@@ -1,9 +1,11 @@
 # Echo 4.0 preview — review guide
 
-**Status: non-shipping preview, prepared 2026-11-23 on branch `design/echo-4.0-preview`.
-Nothing here is approved, merged or released.** The direction itself is
-[echo-identity-4.0.md](../echo-identity-4.0.md); this branch lets the owner see the first migration
-step from brief §8, not the finished identity.
+**Status: merged behind the build flag on 2026-11-23 (`83e464a`, PR
+[#83](https://github.com/alshahia/sada/pull/83)) — still non-shipping.** The flag is off in every
+normal build, the release workflow never sets it, and no installer contains this preview. The
+direction itself is [echo-identity-4.0.md](../echo-identity-4.0.md); this preview lets the owner see
+the first migration step from brief §8, not the finished identity. Merge approval covered the token
+layer only; every other step still needs its own review.
 
 ## What the branch changes (product code: 2 files)
 

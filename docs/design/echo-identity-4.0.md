@@ -1,6 +1,6 @@
 # Echo identity — 4.0 direction brief
 
-Status: **direction brief only — not implemented in 3.10 or 3.11.** A non-shipping preview ([#83](https://github.com/alshahia/sada/pull/83), branch `design/echo-4.0-preview`: tokens + motif behind a build flag) was prepared on 2026-11-23 for owner review; nothing from this brief is in a release.
+Status: **direction brief — not implemented in 3.10 or 3.11.** The token layer from this brief landed on master as a non-shipping preview behind the build flag `VITE_ECHO_PREVIEW=true` ([#83](https://github.com/alshahia/sada/pull/83), merged 2026-11-23 as `83e464a`); default builds are unchanged and nothing from this brief is in a release. The rest of the direction (shell, rail, wordmark, in-app motif, dark theme) has not been implemented.
 Owner decision (19 Nov 2026): Q3 → **C · هوية 4.0 — «الصدى»**. The full Echo identity is the 4.0
 release direction, starting only after the five-user measurement gate on 3.10 (see
 [DECISIONS.md](ui-decisions/DECISIONS.md)). No token, layout or logo change from this brief ships in

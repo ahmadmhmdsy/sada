@@ -4,6 +4,28 @@ Sada is an Arabic-first fork of [Vibe](https://github.com/thewh1teagle/vibe) (MI
 project keeps its own detailed release history; this file records Sada releases and the fork's
 delta from upstream v3.2.2.
 
+## Unreleased — after v3.11.0
+
+Dependency and preview work only; no release, tag or version bump, and nothing here changes the
+default app the 3.11.0 installer runs.
+
+### Changed
+
+- **Dependabot batch #74–#93 (2026-11-23):** 19 of 20 PRs from the grouped configuration merged in
+  the recommended order — npm (`desktop/pnpm-lock.yaml`), root Rust (`Cargo.lock`), server Rust
+  (`server/Cargo.lock`), GitHub Actions last. The batch includes majors: framer-motion 14.14,
+  lucide-react 1.77, paraglide-js 3.2.2, format-duration 4.0, sha2 0.11, sysinfo 0.40, enigo 0.6.1,
+  reqwest 0.13.5 (server) and the checkout 7, setup-python 7, pnpm/action-setup 6, deploy-pages 5 and
+  upload-pages-artifact 5 actions. Two bumps needed source adaptations: sha2 0.11 hashes are encoded
+  with `hex::encode`, and sysinfo 0.40's fallible `System::new()` is handled without panicking.
+  [#79](https://github.com/alshahia/sada/pull/79) (bindgen 0.73.2) stays open — CI fails inside
+  bindgen itself (mixed `syn` 2/3 graph) and 0.73.2 is the latest published release.
+- **Echo 4.0 preview behind a build flag:** the paper-and-ink token layer from the Echo direction
+  brief landed as an opt-in preview ([#83](https://github.com/alshahia/sada/pull/83), `83e464a`).
+  It is compiled only when `VITE_ECHO_PREVIEW=true`; default builds and releases are unchanged. The
+  rest of the identity (shell, rail, wordmark, in-app motif, dark theme) is not started.
+- Lockfiles refreshed for the above; no intended product behaviour change.
+
 ## v3.11.0 — 2026-11-22
 
 Maintenance and release-engineering release. No UI, engine (code), model, identity or feature

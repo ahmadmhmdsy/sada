@@ -29,6 +29,46 @@ Full evidence and the two recorded deviations (compressed CI gates, no interacti
 [execution report](reviews/2026-11-21-dependabot-merge/execution-report.md). The rest of this page is the
 reviewed plan, retained as the record of what was decided before execution.
 
+## Execution record (2026-11-23) — first grouped batch, #74–#93
+
+The grouping configuration from #72 was exercised by the next Dependabot run: it opened **20 PRs on
+2026-11-23 13:38–13:51 +03** — three grouped minor/patch PRs (#89 npm, 45 updates; #84 root Rust, 29;
+#74 server, 9) and 17 single bumps, mostly majors.
+
+**Outcome: 19 of 20 merged the same day, in the recommended order (npm → root Rust → server →
+workflows last); #79 is blocked upstream.**
+
+| Batch | PRs merged | Result |
+| --- | --- | --- |
+| npm | #89 group, #90 framer-motion 14.14, #91 format-duration 4.0, #92 lucide-react 1.77, #93 paraglide-js 3.2.2 | Merged first. The majors conflicted with the group's lockfile after it landed; each was rebased with `@dependabot rebase` before merging. |
+| root Rust | #84 group, #85 crash-handler 0.8.1, #86 sha2 0.11, #87 enigo 0.6.1, #88 sysinfo 0.40.4 | #86 and #88 needed source fixes (below). Lockfiles refreshed and `cargo metadata` checked after each rebase. |
+| server Rust | #74 group, #77 sysinfo 0.40.4, #80 reqwest 0.13.5 | #77 needed the same sysinfo fix. |
+| workflows | #75 setup-python 7, #76 pnpm/action-setup 6, #78 checkout 7, #81 deploy-pages 5, #82 upload-pages-artifact 5 | Merged last, after the lockfile batches. |
+
+Two automated bumps required code changes, committed on the Dependabot branches before merging:
+
+- **sha2 0.11 (#86):** `Sha256::digest` no longer implements `LowerHex`; the handoff pairing/device
+  hashes now use `hex::encode(Sha256::digest(...))` (`desktop/src-tauri/src/handoff/mod.rs`,
+  `desktop/src-tauri/src/handoff/devices.rs`).
+- **sysinfo 0.40 (#88, #77):** `System::new()` is fallible. The meeting detector now degrades to "no
+  candidates"/"no PID attach" and the whisper memory check to "unknown" instead of panicking
+  (`crates/meeting-detect/src/process.rs`, `crates/meeting-detect/src/mic.rs`,
+  `server/crates/whisper-rs/src/model_file.rs`).
+
+**Blocked: #79 bindgen 0.73.2.** CI fails inside `bindgen` itself: its dependency graph mixes `syn`
+2 and `syn` 3, so `syn::file::File: syn::parse_quote::ParseQuote` is unsatisfied
+(`bindgen-0.73.2/lib.rs:1017`). 0.73.2 is the latest published release (crates.io index, 2026-11-23),
+so there is no fixed version to point the bump at. The PR stays open with an evidence comment; the
+next bindgen release unblocks it.
+
+Validation of the merged state on `master` (`2549afd0`): `pnpm install --frozen-lockfile`,
+`pnpm test` (34 files / 207 tests) and `pnpm build` pass locally, and a local `tauri build` with the
+Echo preview flag produced the NSIS installer without errors. Master CI run
+[45164806316](https://github.com/alshahia/sada/actions/runs/45164806316) is green on that head, as are
+Docs & metadata, Deploy site and Security. No tag, version bump, release or `release.yml` dispatch
+happened, and the installed app was not touched. Recorded deviation: no interactive desktop smoke —
+screenshots were taken headlessly against the browser dev mock, not the real Tauri window.
+
 ## Where the 22 PRs stand
 
 All 22 PRs (#36–#57) passed every check GitHub ran, but those runs last completed **2026-11-19 06:12–06:23Z**
