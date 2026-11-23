@@ -186,8 +186,10 @@ tag is otherwise the first release-profile compile). Keep #44 out.
 
 - **Add a server compile job to CI.** A `server` job in `ci.yml` (`cargo check --all-targets` or
   `cargo test --release -p vibe-server`) would have failed #44 and catches the next release-breaking bump.
-- **Group Dependabot updates.** `groups:` (patch/minor per ecosystem) in `.github/dependabot.yml` would turn
-  the next 22-PR backlog into 3–4 PRs; validate on the 2026-11-30 cycle.
+- **Group Dependabot updates.** `groups:` (patch/minor per ecosystem) in `.github/dependabot.yml` turns
+  the next 22-PR backlog into 3–4 PRs. **Done 2026-11-23:** [#72](https://github.com/alshahia/sada/pull/72)
+  merged as `e994e64` after CI, Docs and Security were green; the first real test is the 2026-11-30
+  cycle — check the grouped PRs run clean, then delete this follow-up.
 - **Release-prep fixes before v3.11.0.** Tauri gate for #53 (installer rehearsal + CLI alignment); bump the
   sidecar suffix from `-sada.1` to `-sada.2` (`release.yml:110`, ACCEPTANCE, SECURITY-WHITEPAPER) because a
   third distinct server binary now shares that string; add `SHA256SUMS.txt` to the attestation subjects;

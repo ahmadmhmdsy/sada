@@ -353,8 +353,9 @@ signing stays dormant (#18) by owner decision.
   committed baseline for every release that touches the engine, models or Arabic post-processing.
   A source-built engine whose label changes (`v0.6.16-sada.N`) counts as an engine change.
 - Dependabot grouping: `.github/dependabot.yml` now collects minor/patch updates per ecosystem into
-  3–4 grouped PRs instead of ~22 ([DEPENDABOT-TRIAGE](docs/DEPENDABOT-TRIAGE.md) follow-up, PR #72);
-  validate on the 2026-11-30 cycle before relying on it.
+  3–4 grouped PRs instead of ~22 ([#72](https://github.com/alshahia/sada/pull/72), merged `e994e64`
+  2026-11-23; [DEPENDABOT-TRIAGE](docs/DEPENDABOT-TRIAGE.md) follow-up). Validate on the 2026-11-30
+  cycle before relying on it.
 
 ## P6 — trust and enterprise readiness (complete, v3.9.0)
 

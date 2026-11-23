@@ -319,8 +319,9 @@ list, the tag sequence and the rollback notes.
 
 **Steps:**
 1. Read the plan; tell the agent if the scope or the target date changes.
-2. Run the five-user gate with the [GATE-KIT](design/ui-decisions/GATE-KIT.md) and send the result — it
-   decides whether FC-4 meeting notes ship in 3.11.
+2. Run the five-user gate with the [GATE-KIT](design/ui-decisions/GATE-KIT.md) and the
+   [GATE-RUN-3.11](design/ui-decisions/GATE-RUN-3.11.md) run pack, and send the result — it decides the
+   3.12 scope (Wave 2, FC-4/FC-5).
 3. After the agent reports G2–G6 green, run the clean-machine rows (A8) on the 3.11.0 installer.
 4. Give the explicit tag approval; the agent tags `v3.11.0` and watches the Release workflow.
 5. Verify the published assets with `scripts/verify-release.ps1 -Version 3.11.0 -Download` and close the
@@ -332,7 +333,8 @@ five-user result remain open as tracked gaps.
 
 ## A18 — Decide engine parity and speaker labels
 
-**Open 2026-11-23 (P1).** The assessment in [UPSTREAM-REBASE-3.3.8.md](UPSTREAM-REBASE-3.3.8.md) found
+**Open 2026-11-23 (P1).** The assessment in [UPSTREAM-REBASE-3.3.8.md](UPSTREAM-REBASE-3.3.8.md)
+([#73](https://github.com/alshahia/sada/issues/73)) found
 that the engine built since v3.4.0 is compiled from the upstream v3.2.2/v3.3.1 source snapshot (the
 fork's only source change is the loopback guard) while its reported version string comes from
 `.server-version` (`v0.6.16-sada.N`). The shipped Nemotron-3 diarization GGUF needs the upstream
