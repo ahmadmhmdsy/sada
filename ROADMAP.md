@@ -29,6 +29,7 @@ Last updated 2026-11-23.
 | **v3.8.0 — distribution, offline install & benchmark gate** | 2027-06-15 | Offline WebView2 installer variant as a second asset, signing pipeline staged but dormant (releases stay unsigned OSS), evidence-based production-readiness statement, benchmark regression gate | #22 #23 #24 #25 #26 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.8.0), evidence below |
 | **v3.9.0 — P6 Wave 1: trust & enterprise readiness** | 2027-09-15 | Assurance pack, keyless supply chain (provenance + SBOM), security operations, managed offline policy, DPAPI secrets, retention, per-machine MSI deployment kit, rows B–E runbook | #27 #28 #29 #30 #31 #32 #33 #34 #35 — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.9.0), evidence below |
 | **v3.10.0 — Wave 1 UI repairs & truth-only copy** | 2026-11-19 | Four repair families (A–D) + V3 truth-only copy; axe 35 states / 0 violations; release notes and metadata prepared | — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.10.0) published 2026-11-19 (tag at `be27bd5`, assets + checksums + provenance verified 2026-11-21) |
+| **v3.12.0 — next feature wave (planning)** | TBD after the five-user gate | Scope A/B/C — Wave 2 repairs, FC-4/FC-5, Echo preview, or engineering (engine parity); gates and work sequence in [v3.12.0-plan.md](docs/releases/v3.12.0-plan.md) | #61 #62 — planning, five-user gate open |
 | **v3.11.0 — maintenance & release engineering** | 2026-11-22 | Dependency refresh (20 Dependabot updates + utoipa 6), CI engine job, engine build identity `-sada.2`, attested `SHA256SUMS.txt`, Tauri 2.12 stack; no UI, engine, model or transcription change | — **complete**, [release](https://github.com/alshahia/sada/releases/tag/v3.11.0) published 2026-11-22 (tag `c7acdc8`, run 45024992661, assets + hashes + attestations verified 2026-11-22); P7 feature scope (FC-4 etc.) deferred to 3.12 pending the five-user gate, [P7-PLAN.md](docs/P7-PLAN.md), [release plan](docs/releases/v3.11.0-plan.md) |
 
 ## P0 — engine & GPU foundation (complete)
@@ -332,9 +333,14 @@ signing stays dormant (#18) by owner decision.
 - Iraqi/Levantine and spontaneous-dialect coverage: no commercial-use corpus with human
   transcripts was found as of 2026-11-18 (full matrix in `docs/P4-PLAN.md`); a paid vendor corpus
   is an owner purchase decision. Until measured, those regions stay explicitly unmeasured.
-- Upstream drift: upstream Vibe's latest release is v3.3.5 (2026-11-13) while this fork is based on
-  v3.2.2 plus hand-ported deltas (`docs/UPSTREAM-PATCHES.md`). Plan an incremental rebase release
-  (next minor, after v3.11.0) instead of ad-hoc cherry-picks.
+- Upstream drift: upstream Vibe's latest release is **v3.3.8** (2026-11-21; the v3.3.5 figure last
+  recorded here was stale) while this fork is based on v3.2.2 plus hand-ported deltas
+  (`docs/UPSTREAM-PATCHES.md`). Assessment: [UPSTREAM-REBASE-3.3.8.md](docs/UPSTREAM-REBASE-3.3.8.md) —
+  50 commits / 445 files since v3.2.2; port feature groups incrementally, do not rebase. The same
+  assessment found the **engine source is older than its `v0.6.16-sada.N` label** (source snapshot
+  through upstream v3.3.1, label stamped from `.server-version`), which likely regressed speaker labels
+  since v3.4.0 — issue [#73](https://github.com/alshahia/sada/issues/73), decision in
+  [OWNER-ACTIONS A18](docs/OWNER-ACTIONS.md#a18--decide-engine-parity-and-speaker-labels).
 - Dependabot triage: **executed 2026-11-21** (`docs/DEPENDABOT-TRIAGE.md`,
   [execution report](docs/reviews/2026-11-21-dependabot-merge/execution-report.md)) — 20 of 20 cleared PRs
   merged in four batches (npm, root Cargo, server Cargo, workflows last); #44 closed and replaced by the
@@ -345,6 +351,10 @@ signing stays dormant (#18) by owner decision.
   dependency bump can no longer pass CI and break the next release (as #44 did).
 - Keep the benchmark gate honest: run the 90-clip suite and `sadabench compare` against the
   committed baseline for every release that touches the engine, models or Arabic post-processing.
+  A source-built engine whose label changes (`v0.6.16-sada.N`) counts as an engine change.
+- Dependabot grouping: `.github/dependabot.yml` now collects minor/patch updates per ecosystem into
+  3–4 grouped PRs instead of ~22 ([DEPENDABOT-TRIAGE](docs/DEPENDABOT-TRIAGE.md) follow-up, PR #72);
+  validate on the 2026-11-30 cycle before relying on it.
 
 ## P6 — trust and enterprise readiness (complete, v3.9.0)
 

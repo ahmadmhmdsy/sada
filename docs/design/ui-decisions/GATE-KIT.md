@@ -1,8 +1,12 @@
-# Five-user gate kit — 3.10
+# Five-user gate kit — runs on 3.11.0
 
-Runnable moderator kit for the gate that must pass before 3.11 (Wave 2) and before any 4.0 work.
-The rules and pass thresholds live in [DECISIONS.md](DECISIONS.md) §6 — this file is the operating
-manual for running them, and the two must not disagree.
+Runnable moderator kit for the gate that must pass before the next UI wave (3.12 Wave 2) and before
+any 4.0 work. The rules and pass thresholds live in [DECISIONS.md](DECISIONS.md) §6 — this file is the
+operating manual for running them, and the two must not disagree.
+
+**Status 2026-11-23:** ready to run. The installer below is the published, verified 3.11.0 build, and
+[GATE-RUN-3.11.md](GATE-RUN-3.11.md) is the pre-flight and session pack. 3.11.0 shipped no UI change
+(maintenance only), so the 3.10-era tasks and thresholds still apply.
 
 **Why run it:** the four Wave 1 repairs were chosen from a critique, not from behaviour. This gate is
 the only evidence that they actually work for Iraqi-Arabic speakers before the project spends another
@@ -14,7 +18,7 @@ release on them.
 | --- | --- |
 | 5 participants | Iraqi-Arabic speakers, none of whom has seen the boards or these tasks; at least 3 installing Sada for the first time on their own Windows 10/11 device |
 | 1 moderator + 1 note-taker | Same two people for all five sessions (consistency beats convenience) |
-| 3.10 installer | Built from the 3.10 commit, not the dev server: `cd desktop; pnpm exec tauri build`, then take `target/release/bundle/nsis/*-setup.exe`. Record its SHA-256 on the sheet. |
+| 3.11.0 installer | The verified published asset (not the dev server): `Sada_3.11.0_x64-setup.exe`, 44,013,711 bytes, SHA-256 `57742cf25cc73bbf62e2775035658b1d5194fb2f5de8252b04676e5d083d2929`, from the [v3.11.0 release](https://github.com/alshahia/sada/releases/tag/v3.11.0). It can also be built from the tagged commit `c7acdc8`. Record its SHA-256 on every sheet. |
 | Sample audio for task 3 | One Arabic clip, 30–60 s (`sample-ar-30s.m4a`); a second copy on a USB stick in case the participant's device blocks the file |
 | Deliberately broken model for task 4 | A folder containing a fake `ggml-medium.bin` of a few KB (any text file renamed). Used to produce a real model-kind error without touching the participant's files. |
 | Wi-Fi | Task 1 covers the only online step: the first model download |
@@ -48,7 +52,7 @@ Print each card separately, in Arabic; the English line is for the note-taker on
 > ركّب صدى من هذا الملف، وكمّل الإعداد الأول حتى توصل لشاشة التنزيل. بعدها گلي: **شنو راح يصير
 > للتسجيل مالتك بعد ما تخلص؟** وشنو تحتاج حتى يشتغل التطبيق أول مرة؟
 
-English: install the 3.10 installer, complete first-run setup, and reach the model download. Then ask
+English: install the 3.11.0 installer, complete first-run setup, and reach the model download. Then ask
 what happens to their audio, and what the app needs for the first run.
 
 Record: did they reach the download screen unaided (Y/N)? What do they say happens to the audio —
@@ -161,8 +165,8 @@ met; rescued attempts count as failures.
 
 Decision (from [DECISIONS.md](DECISIONS.md) §6):
 
-- **Pass** (all five rows pass) → start 3.11 Wave 2; review the [4.0 identity brief](../echo-identity-4.0.md)
-  for a separate owner go.
+- **Pass** (all five rows pass) → start the 3.12 Wave 2 scope (see [v3.12.0-plan.md](../../releases/v3.12.0-plan.md));
+  review the [4.0 identity brief](../echo-identity-4.0.md) preview for a separate owner go.
 - **Partial** (one or two rows fail) → fix only the failing task, retest with the next five participants;
   Wave 2 waits.
 - **Fail** (three or more rows fail, or any critical safety/trust failure such as an unexpected upload
@@ -171,7 +175,7 @@ Decision (from [DECISIONS.md](DECISIONS.md) §6):
 Write the anonymised appendix into [DECISIONS.md](DECISIONS.md) §6 before changing any UI again:
 
 ```text
-### Gate results — 3.10 (dates)
+### Gate results — 3.11.0 (dates)
 Participants: P1…P5, Iraqi Arabic, n first-time installs = __
 Outcome: pass / partial / fail
 Row results: 1 __/5 · 2 __/5 (median __ s) · 3 __/5 · 4 __/5 · 5 __ critical, __ minor
@@ -182,8 +186,9 @@ Decision applied: ...
 
 ## 6. After the gate
 
-- **Pass** → the DECISIONS.md release map moves 3.11 to ready; record the exact 3.10 commit tested.
-- **Partial/fail** → do not start 3.11 and do not start the Echo identity. The failing task becomes the
-  only 3.10.x repair; everything else waits.
+- **Pass** → the DECISIONS.md release map moves the next UI wave (3.12) to ready; record the exact build
+  tested: 3.11.0, tag `c7acdc8`, installer SHA-256 `57742cf2…d2929`.
+- **Partial/fail** → do not start 3.12 and do not start the Echo identity. The failing task becomes the
+  only repair; everything else waits.
 - Keep the filled sheets and photos of the room state for six months; they are the evidence behind the
   decision. Do not publish participant names or faces anywhere.

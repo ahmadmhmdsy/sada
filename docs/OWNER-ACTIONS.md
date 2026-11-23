@@ -26,7 +26,8 @@ Track a box by changing `[ ]` to `[x]`. The scheduled reminders (see the end) po
 | [A14](#a14--tag-v3100) | Tag v3.10.0 and verify the release | **P0** | done 2026-11-19, verified 2026-11-21 | — |
 | [A15](#a15--authorise-the-two-step-zero-tests) | Authorise the two Step Zero tests (read-aloud, Arabic subtitle burn-in) | P1 | done 2026-11-21 (B pass, A fail) | — |
 | [A16](#a16--open-the-p7-milestone-and-issues) | Open the P7 milestone and FC-1…FC-9 issues | P1 | done 2026-11-19 | — |
-| [A17](#a17--approve-and-ship-v3110) | Approve the v3.11.0 release plan and run the five-user gate | P1 | released 2026-11-22; five-user gate still open | five-user test |
+| [A17](#a17--approve-and-ship-v3110) | Approve the v3.11.0 release plan and run the five-user gate | P1 | released 2026-11-22; five-user gate still open, run pack ready | five-user test |
+| [A18](#a18--decide-engine-parity-and-speaker-labels) | Decide engine parity and the speaker-label claim | **P1** | 1 decision + 1 test run | issue #73 evidence |
 
 ---
 
@@ -328,6 +329,31 @@ list, the tag sequence and the rollback notes.
 **Done when:** v3.11.0 is published, every asset hash/attestation verifies, the clean-machine rows pass and
 the five-user result is recorded. The release half is done (2026-11-22); the clean-machine rows and the
 five-user result remain open as tracked gaps.
+
+## A18 — Decide engine parity and speaker labels
+
+**Open 2026-11-23 (P1).** The assessment in [UPSTREAM-REBASE-3.3.8.md](UPSTREAM-REBASE-3.3.8.md) found
+that the engine built since v3.4.0 is compiled from the upstream v3.2.2/v3.3.1 source snapshot (the
+fork's only source change is the loopback guard) while its reported version string comes from
+`.server-version` (`v0.6.16-sada.N`). The shipped Nemotron-3 diarization GGUF needs the upstream
+v3.3.2+ `nemotron-diarize-rs` loader, which that tree does not contain, so speaker labels are likely
+silently absent and the 108 MB model is unused. This is both a behaviour and a version-truth issue.
+
+**Why it is yours:** restoring it means replacing the engine source tree and rebuilding the shipped
+sidecar, which changes the binary every installer carries and needs its own release plus fresh
+benchmark/diarization evidence; the alternative — correcting the documentation claims without fixing
+the engine — also needs your call.
+
+**Steps:**
+1. Run the reproduction (agent can prepare it): start the 3.11.0 installer, download the Nemotron-3
+   diarization GGUF, transcribe a two-speaker clip with speaker labels on, record whether any speaker
+   labels appear.
+2. Choose the vehicle: (a) **recommended** — engine-sync release next (port upstream v3.3.8 `server/`,
+   re-apply the guard, make the label truthful), or (b) claims-only correction now and parity later.
+3. Approve the README/CLAIM-LEDGER wording fix if speaker labels are confirmed unavailable.
+
+**Done when:** the installer's engine version label matches the source it was built from, and speaker
+labels either work again or are documented as unavailable with a dated note.
 
 ## Release sign-off (every release)
 

@@ -24,14 +24,15 @@ Consequences applied:
 ## 2. Release map
 
 ```text
-3.10 (this work)          five-user gate           3.11 Wave 2         4.0
-four repairs + V3   →     measure, decide     →    planned repairs  →  Echo identity (brief)
+3.10                     five-user gate          3.11 maintenance        3.12 (scope pending)      4.0
+four repairs + V3   →    measure, decide     →   shipped 2026-11-22  →   Wave 2 / engineering   →  Echo identity (brief)
 ```
 
 | Release | Content | Gate |
 | --- | --- | --- |
 | 3.10 | A error/recovery, B finish line, C settings door/hierarchy, D Arabic typography, V3 trust copy, `set_theme` fix | five-user test below; no Wave 2 before it passes |
-| 3.11 | Wave 2 repairs as planned in [00-overview.html](00-overview.html) | after 3.10 gate + owner go |
+| 3.11 | Maintenance release (dependency refresh, CI engine job, Tauri 2.12, engine build identity) — [release](https://github.com/alshahia/sada/releases/tag/v3.11.0) | none (no UI or engine change); the five-user gate is still required before Wave 2 |
+| 3.12 | Scope A/B/C — Wave 2 repairs, FC-4/FC-5, Echo preview, or engineering (engine parity) per [v3.12.0-plan.md](../../releases/v3.12.0-plan.md) | gate result + owner scope call |
 | 4.0 | Full Echo identity per [../echo-identity-4.0.md](../echo-identity-4.0.md) | after gate + separate owner approval of the identity preview |
 
 ## 3. What was implemented in 3.10
@@ -173,7 +174,7 @@ the first time. Moderated, think-aloud, ~30 minutes, recorded notes only (no tel
 
 Decision rules:
 
-- **Pass** → start 3.11 Wave 2 and review the 4.0 identity brief for a separate go.
+- **Pass** → start the 3.12 work (Wave 2 or the owner-chosen scope) and review the 4.0 identity brief for a separate go.
 - **Partial** → fix only the failing task, retest with the next five participants; Wave 2 waits.
 - **Fail** → stop the sequence and re-open the relevant Q1 family with the council.
 - Write the results (anonymised) as an appendix to this file; do not edit the pass rules afterwards.

@@ -172,8 +172,13 @@ loads behind the Silero VAD, and the CPU-only path still transcribes. The engine
 | `.github/workflows/release.yml` | builds the engine from `server/` after fetching the pinned sidecars (version `v0.6.16-sada.1`), runs the guard tests, and caches the engine workspace; the installer therefore ships the guarded engine, not the upstream binary |
 | `SECURITY.md` | new **Local engine boundary** section: threat, guard rules, residual local-process risk |
 
-This is the first release that changes `server/`. The engine tree is otherwise upstream v0.6.16
-code; the guard is the only behavioural delta and is upstreamable as-is.
+This is the first release that changes `server/`. The tree it starts from is the upstream engine
+snapshot unchanged through upstream v3.3.1 (the monorepo's `server/` copy was identical from v3.2.2 to
+v3.3.1); the guard is the only behavioural delta and is upstreamable as-is. Note for later releases:
+the release workflow compiles this tree and stamps `.server-version` (`VIBE_SERVER_VERSION`), so the
+`v0.6.16-sada.N` string is a build identity, **not** upstream source parity — upstream replaced this
+engine tree at v3.3.2 (Nemotron diarization, Zipformer, compression gate, CPU patches). The gap and the
+port plan are tracked in [UPSTREAM-REBASE-3.3.8.md](UPSTREAM-REBASE-3.3.8.md) and issue #73.
 ## 10. Security hardening ported from upstream v3.3.6 (added by Sada, v3.6.0)
 
 Upstream v3.3.6 hardened downloads, yt-dlp, the webview and keystroke injection. The fork
