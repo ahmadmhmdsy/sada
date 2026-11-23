@@ -189,7 +189,9 @@ mod platform {
             return;
         }
 
-        let mut system = System::new();
+        let Ok(mut system) = System::new() else {
+            return;
+        };
         system.refresh_processes_specifics(
             ProcessesToUpdate::All,
             true,
